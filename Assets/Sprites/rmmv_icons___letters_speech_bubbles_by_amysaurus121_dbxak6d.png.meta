@@ -1,0 +1,2168 @@
+fileFormatVersion: 2
+guid: 789a3daac0c6e4c49a07a0e54b8f77b4
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b95116c1ca4144051940b309eeeb07e7
+      internalID: 21539680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67705f019edc64155b7251d6a649fc4a
+      internalID: 53961452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9038ff6de2424964871c115d715e44c
+      internalID: 709374344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b6784d0b0d5e4151aec1c69f0f8eef1
+      internalID: 917335313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdb59c6ed0a9f41ea9daa737a046d921
+      internalID: -1217344575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c959d4de576a44bb993d1e7fb2a0636a
+      internalID: 1645655303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2285d1595f6a43d28e30ca92b481b0e
+      internalID: 1959537790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c27e675a3ba24962b3677e162cd3d05
+      internalID: 1364641563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ae786f103e874c51a826f1a9429ea84
+      internalID: -953369228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_9
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bbf67eeae96241b68fb88381bc99549
+      internalID: -545253459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_10
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d124d37b5f49046b285dcd6b5671901e
+      internalID: -358558493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_11
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22b404300ebef4ded9eeba1000abc200
+      internalID: -1048507837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_12
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be9529644649b4d268427e5e70b1c02f
+      internalID: -684398222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_13
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4d6cd3fb6a4f47ec86446051cf27705
+      internalID: 382992432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_14
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac4513c5198054562a1062e44910a3f8
+      internalID: -1287205499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_15
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb1bc461c453a4674b9a5c0d29ffbf59
+      internalID: 759942604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 296eb6c78e0414232905e95ffe376817
+      internalID: -1604947321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_17
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f6058e219c374c989994837a3c607ac
+      internalID: 1024744687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_18
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97972fae329534ea490c15deac8dccbf
+      internalID: 927283032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_19
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7e965ab6d9ec4061abc4af1fa326317
+      internalID: -455151659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_20
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 061e202e21ef84f4b80601b46ceb5762
+      internalID: -2138041461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_21
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4544b6e305831480383425041c7b6193
+      internalID: 196876442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_22
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e31e4b5ec5cf43f888d15bc765d7b73
+      internalID: -276162804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_23
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c10f7808f46384dd095b400ab3b2cb5a
+      internalID: -1804901296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_24
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22a76e4fd31d54d9ebcd9545cfd2c348
+      internalID: -1087402275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_25
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 450fa637d866249ff98970572a1f8180
+      internalID: -339527296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_26
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fffaeeb7ca3bb47b38cbbff18d0184dd
+      internalID: 66896584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_27
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1984e1b2fe6d04ccbbdbd1fee3b86fb5
+      internalID: -1392399677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_28
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f308971550a864309abf5cf9ba0c3623
+      internalID: 122352768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_29
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b22c4dc951a742f1856ba8ed5c77827
+      internalID: -104576551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_30
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a1234013d96245eeaeca346925ba2b9
+      internalID: -1696060968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_31
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fc5aeff2afeb45d0ad434b7a4d737df
+      internalID: 1192777056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d93443e160dc4964b8f6a9fccdbc5a6
+      internalID: -1812963732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_33
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4c92425a1c284e5e9894f7052544496
+      internalID: 761841040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_34
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 688bfb7cb5ff84016990d327809ae98c
+      internalID: -1904277933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_35
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 763d206538197482ca151e56ad57ea2e
+      internalID: 1071982142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_36
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 201e6fb1ffcac40dea514bf7307b482b
+      internalID: -981493568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_37
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4e7c2cd7829d482ba506c8bbca4e231
+      internalID: -647956241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_38
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 650c488ecef03489fb8c50b88cd1b75b
+      internalID: 570393465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_39
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a502824577379435289cb2b381834139
+      internalID: 234872543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_40
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f8562201f5504981a9501f292dacfbe
+      internalID: -402462480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_41
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2ab0163d32e24165acef874100c5638
+      internalID: 890485443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_42
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 181a5b84c1a0d4d69bd5056409e3cfd6
+      internalID: -1674031356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_43
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8b418d87f9164dcdad72ab562b13a90
+      internalID: 647686857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_44
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 512992811f7224bdb9ce6dd7a0dc05f9
+      internalID: -1192528203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_45
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ea72d3f201af4cbd84fffce3a2cbfb8
+      internalID: -1816458062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_46
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cfdcc74a1588d45f2b9a9c4baa40e971
+      internalID: -742354587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_47
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a230083f9ce3c452b9e5bb96329a5e55
+      internalID: -1200367801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b38f2ae6f34024be4b037e7109caa20f
+      internalID: 350874868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_49
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32df198d078e9410f811f86f7a9d8ffd
+      internalID: -834575021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_50
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ede9bf924b0a4d58bb6c4efdda1d008
+      internalID: -1246331222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_51
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36a77f2ccb5554aeb90e769fdc9f06aa
+      internalID: -1148283047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_52
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c0ab9316ecf74e69889fd71f343adeb
+      internalID: -1023038161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_53
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37e0d8d93e9e143dab3ec09e08e5f6b9
+      internalID: -1617703290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_54
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f5bd763f30b24c6bbe8f0f818bd5599
+      internalID: -593377944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_55
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a76460f57b607476994f98017cc93285
+      internalID: 87763263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_56
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c06a56e2c0bf8427693495085a943b52
+      internalID: 1012704683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_57
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a79935ceca6524cfea4fea916a675fb5
+      internalID: 670800686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_58
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 900a5b1d785014f9c94602e0e3607638
+      internalID: 270841696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_59
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f69a46f1dd51941a7bc6bcef5ce010f4
+      internalID: 141861976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_60
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fefcf5f19c6442ba98e053426f83849
+      internalID: 597688656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_61
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cacbaea046110452ca9fdd67497079ca
+      internalID: 1258460624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_62
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f60a7ecc239bc4d2b801dd161377d46c
+      internalID: -298852881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_63
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62c53931a60534a0cbf8ae52feba91f3
+      internalID: -1406343545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_64
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 393060813f4f94aef959981ce50fe55a
+      internalID: -1657676175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_65
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e308901a7edb54a95a10989354375ecb
+      internalID: 2086763405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_66
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7179099f137804cb8a53c30f6543ca89
+      internalID: -1511297180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_67
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e028b367d43d46929985c1f2f928888
+      internalID: 1400126339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_68
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a86fa7dfce06547cc9ba092328e1a816
+      internalID: 265577088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_69
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3eae8ec4114684a55bb50268d92ab6d7
+      internalID: -1457784142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_70
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d3b86f6e44ad42f39962cf1474c1249
+      internalID: 1410069208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_71
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74961ac3f704e4df486e1161d1c311e4
+      internalID: -524284083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_72
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2639b91c2758403b9464de9a1ab6fbc
+      internalID: -38606942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_73
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77cf6251efeaf4d88ab74a6ef1ccda07
+      internalID: 1201324186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_74
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e59526cd43ca84788a9eb6fe4faf6a29
+      internalID: 592782478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_75
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9da7aa0eb6b3478993bc9ead1d198e4
+      internalID: -1645608822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_76
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d910b66881467498f8e16ff22ea87d48
+      internalID: 2070382744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_77
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ec48e34a92fb4e5bac86a897187332b
+      internalID: 1133314074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_78
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db1d016a85ad243f5a49a5d3cba537d6
+      internalID: -149957644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_79
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5493ba3e8dab943b89b8cfeb42b2c8b3
+      internalID: 1881127645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_80
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b8b640ba8bfb4933a8ab6a494c91c66
+      internalID: 383419960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_81
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1810a1246048464c8c107b1f99032f8
+      internalID: 706953028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_82
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3cbeb3c67e3a4a2a89e7bf4a2681b2a
+      internalID: -170289985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_83
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c22bd6d22bbdc42de829816f9a73e1e2
+      internalID: -2052315151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_84
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d53db3a8a02b04c02a8addc651f84d88
+      internalID: -1195577436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_85
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d94c101383cff434db3bdba55ff87234
+      internalID: 2098090565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_86
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e53db4894c5a459883bf48b331e32af
+      internalID: 1293017038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_87
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bcfceadcb9e540e2b95b24476d19bfc
+      internalID: 1679932930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_88
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0402006a85a0d4d40ad2edf0ac43d044
+      internalID: 1159987826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_89
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 314f0723ef08a4d349d10fc305e8d591
+      internalID: -1711921475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_90
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d24e87da64c874ebe8c64d83ef505daa
+      internalID: 205935767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_91
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ba5450e045224c3c89902961d8a36a4
+      internalID: 386056768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_92
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca7bb6434083b4469bd3b5831aa1193c
+      internalID: -1544445620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_5: 1645655303
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_19: -455151659
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_79: 1881127645
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_31: 1192777056
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_61: 1258460624
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_3: 917335313
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_87: 1679932930
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_4: -1217344575
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_54: -593377944
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_38: 570393465
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_28: 122352768
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_42: -1674031356
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_69: -1457784142
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_14: -1287205499
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_21: 196876442
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_40: -402462480
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_57: 670800686
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_51: -1148283047
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_71: -524284083
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_53: -1617703290
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_46: -742354587
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_80: 383419960
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_29: -104576551
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_48: 350874868
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_63: -1406343545
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_68: 265577088
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_56: 1012704683
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_47: -1200367801
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_67: 1400126339
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_8: -953369228
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_85: 2098090565
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_64: -1657676175
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_1: 53961452
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_2: 709374344
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_17: 1024744687
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_34: -1904277933
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_60: 597688656
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_12: -684398222
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_50: -1246331222
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_78: -149957644
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_72: -38606942
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_91: 386056768
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_0: 21539680
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_30: -1696060968
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_74: 592782478
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_13: 382992432
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_92: -1544445620
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_22: -276162804
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_37: -647956241
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_16: -1604947321
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_24: -1087402275
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_44: -1192528203
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_52: -1023038161
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_58: 270841696
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_6: 1959537790
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_82: -170289985
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_76: 2070382744
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_49: -834575021
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_45: -1816458062
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_73: 1201324186
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_83: -2052315151
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_27: -1392399677
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_39: 234872543
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_59: 141861976
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_32: -1812963732
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_55: 87763263
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_41: 890485443
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_65: 2086763405
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_88: 1159987826
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_26: 66896584
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_20: -2138041461
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_70: 1410069208
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_43: 647686857
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_10: -358558493
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_33: 761841040
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_86: 1293017038
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_23: -1804901296
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_89: -1711921475
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_11: -1048507837
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_9: -545253459
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_36: -981493568
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_77: 1133314074
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_84: -1195577436
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_18: 927283032
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_35: 1071982142
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_62: -298852881
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_90: 205935767
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_25: -339527296
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_81: 706953028
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_66: -1511297180
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_7: 1364641563
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_75: -1645608822
+      rmmv_icons___letters_speech_bubbles_by_amysaurus121_dbxak6d_15: 759942604
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
