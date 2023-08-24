@@ -22,7 +22,7 @@ public class PlayerLocomotion : MonoBehaviour
         Vector3 worldSetting;
 
         // Create switch statement based on either world nornal or camera
-        worldSetting = (InputManager.Instance.inputY * Vector3.forward) + (InputManager.Instance.inputX * Vector3.right);
+        worldSetting = (InputManager.instance.inputY * Vector3.forward) + (InputManager.instance.inputX * Vector3.right);
         worldSetting.Normalize();
         worldSetting.y = 0;
 
@@ -39,11 +39,11 @@ public class PlayerLocomotion : MonoBehaviour
 
     public void HandleGroundedMovement(float delta, Vector3 moveDirection)
     {
-        if (InputManager.Instance.moveAmount > 0.5f)
+        if (InputManager.instance.moveAmount > 0.5f)
         {
             playerManager.characterController.Move(moveDirection * runningSpeed * delta);
         }
-        else if (InputManager.Instance.moveAmount <= 0.5f)
+        else if (InputManager.instance.moveAmount <= 0.5f)
         {
             playerManager.characterController.Move(moveDirection * walkingSpeed * delta);
         }
@@ -75,7 +75,7 @@ public class PlayerLocomotion : MonoBehaviour
         if (playerManager.isPerformingAction)
             return;
 
-        if (InputManager.Instance.moveAmount > 0) //roll if we are moving
+        if (InputManager.instance.moveAmount > 0) //roll if we are moving
         {
             rollDirection = GetYourBearings();
 

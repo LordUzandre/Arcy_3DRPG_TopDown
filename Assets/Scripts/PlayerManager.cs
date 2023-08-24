@@ -17,18 +17,7 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public CharacterController characterController;
     [HideInInspector] public Animator animator;
 
-    private static PlayerManager instance;
-    public static PlayerManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new PlayerManager();
-            }
-            return instance;
-        }
-    }
+    public static PlayerManager instance;
 
     private float delta;
     [Header("Flags")]
@@ -48,6 +37,16 @@ public class PlayerManager : MonoBehaviour
 
         //Interaction
         fow = GetComponent<FieldOfView>();
+
+        //Singleton
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     private void Update()
@@ -55,7 +54,7 @@ public class PlayerManager : MonoBehaviour
         delta = Time.deltaTime;
 
         playerLocomotion.HandleAllMovement(delta);
-        animationHandler.locomotion = InputManager.Instance.moveAmount;
+        animationHandler.locomotion = InputManager.instance.moveAmount;
     }
 
     public void InteractionStarted()

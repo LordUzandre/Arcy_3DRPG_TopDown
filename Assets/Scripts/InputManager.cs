@@ -6,18 +6,7 @@ using System;
 
 public class InputManager : MonoBehaviour
 {
-    private static InputManager instance;
-    public static InputManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new InputManager();
-            }
-            return instance;
-        }
-    }
+    public static InputManager instance;
 
     private PlayerInputs playerInputs;
 
@@ -30,9 +19,9 @@ public class InputManager : MonoBehaviour
     [Header("Action Inputs")]
     public bool dodgeInput = false;
 
-    private void Start()
+    private void Awake()
     {
-        instance.enabled = true;
+        if (instance == null) { instance = this; } else { Destroy(this); }
     }
 
     private void OnEnable()
@@ -52,9 +41,9 @@ public class InputManager : MonoBehaviour
     // When player presses "E"-key
     private void CheckInteractible(InputAction.CallbackContext context)
     {
-        if (PlayerManager.Instance.interactible != null)
+        if (PlayerManager.instance.interactible != null)
         {
-            PlayerManager.Instance.InteractionStarted();
+            PlayerManager.instance.InteractionStarted();
         }
     }
 

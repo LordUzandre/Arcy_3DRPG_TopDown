@@ -21,9 +21,24 @@ public class FieldOfViewEditor : Editor
         //Vector3 viewAngleD = fow.DirFromAngle(fow.viewAngle * .25f, false);
         //Handles.DrawLine(fow.transform.position, fow.transform.position + viewAngleC * fow.viewRadius);
         //Handles.DrawLine(fow.transform.position, fow.transform.position + viewAngleD * fow.viewRadius);
-        
+
         //Draw line to current interactible
-        if (fow.currentInteractible != null)
+        if (fow.multipleTargetsInView)
+        {
+            foreach (Interactible i in fow.visibleTargetsList)
+            {
+                if (i == fow.currentInteractible)
+                {
+                    Handles.color = Color.red;
+                }
+                else
+                {
+                    Handles.color = Color.white;
+                }
+                Handles.DrawLine(fow.transform.position, fow.currentInteractible.transform.position);
+            }
+        }
+        else if (fow.currentInteractible != null)
         {
             Handles.color = Color.red;
             Handles.DrawLine(fow.transform.position, fow.currentInteractible.transform.position);

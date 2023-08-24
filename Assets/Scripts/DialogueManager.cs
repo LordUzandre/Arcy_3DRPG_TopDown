@@ -9,22 +9,22 @@ public class DialogueManager : MonoBehaviour
 {
     //singleton
     private static DialogueManager instance;
-    public static DialogueManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new DialogueManager();
-            }
-            return instance;
-        }
-    }
 
     [HideInInspector] public TextMeshProUGUI nameText;
     [HideInInspector] public TextMeshProUGUI dialogueText;
 
     private Queue<string> sentences;
+
+    private void Awake() {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     private void Start()
     {

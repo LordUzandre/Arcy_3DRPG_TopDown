@@ -8,8 +8,8 @@ public class FieldOfView : MonoBehaviour
     [Range(0, 120)] public float viewAngle = 120;
     
     private PlayerManager playerManager;
+    [HideInInspector] public bool multipleTargetsInView; //used by FieldOfViewEditor
 
-    //public LayerMask targetMask;
     public LayerMask obstacleMask;
 
     [HideInInspector] public List<Interactible> visibleTargetsList = new List<Interactible>();
@@ -53,6 +53,7 @@ public class FieldOfView : MonoBehaviour
     private void FindVisibleTargets()
     {
         currentInteractible = null;
+        multipleTargetsInView = false;
         visibleTargetsList.Clear();
         Collider[] targetsInViewRadiusArray = Physics.OverlapSphere(transform.position, viewRadius);
 
@@ -93,6 +94,7 @@ public class FieldOfView : MonoBehaviour
                                 break;
                             default:
                                 // Multiple interactibles in fow
+                                multipleTargetsInView = true;
                                 if (angleToTarget < (viewAngle * .2f))
                                 {
                                     if (i.distanceToPlayer < currentInteractible.distanceToPlayer)
