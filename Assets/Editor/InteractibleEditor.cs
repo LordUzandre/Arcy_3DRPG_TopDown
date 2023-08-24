@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-
 [CustomEditor(typeof(Interactible))]
 public class InteractibleEditor : Editor
 {
@@ -19,10 +18,7 @@ public class InteractibleEditor : Editor
         {
             // Ensure the label and the value are on the same line
             EditorGUILayout.BeginHorizontal();
-
-            // A label that says "b" (change b to B if you want it uppercase like default) and restrict its length.
-            // You can change 50 to any other value
-            EditorGUILayout.LabelField("speakerID", GUILayout.MaxWidth(50));
+            EditorGUILayout.LabelField("speakerName", GUILayout.MaxWidth(125));
 
             // Show and save the value of b
             interactible.speakerID = EditorGUILayout.TextField(interactible.speakerID);

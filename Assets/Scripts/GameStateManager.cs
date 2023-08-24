@@ -4,23 +4,24 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
-    private static GameStateManager _instance;
+    private static GameStateManager instance;
     public static GameStateManager Instance
     {
         get
         {
-            if (_instance == null)
+            if (instance == null)
             {
-                _instance = new GameStateManager();
+                instance = new GameStateManager();
             }
-            return _instance;
+            return instance;
         }
     }
 
     public GameState CurrentGameState { get; private set; }
 
-    public delegate void GameStateChangeHandler(GameState newGameState);
-    public event GameStateChangeHandler OnGameStateChanged;
+    public static event System.Action<GameState> OnGameStateChanged;
+    //public delegate void GameStateChangeHandler(GameState newGameState);
+    //public event GameStateChangeHandler OnGameStateChanged;
 
     public void SetState(GameState newGameState)
     {

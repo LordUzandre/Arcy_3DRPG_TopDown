@@ -5,9 +5,11 @@ using UnityEngine;
 public class Interactible : MonoBehaviour
 {
     [SerializeField] public bool isNPC;
+    [SerializeField] public bool haveDialogue;
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public GameObject standingPoint;
     [HideInInspector] public string speakerID;
+    private Dialogue dialogue;
 
     //UI
     private Vector3 originalFacingDirection;
@@ -20,7 +22,7 @@ public class Interactible : MonoBehaviour
         {
             //create a point for the player to stand and read.
             standingPoint = new GameObject("standingPlace");
-            Instantiate(standingPoint, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (8 * this.transform.localScale.z)), Quaternion.identity, this.transform);
+            //Instantiate(standingPoint, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (8 * this.transform.localScale.z)), Quaternion.identity, this.transform);
         }
     }
 

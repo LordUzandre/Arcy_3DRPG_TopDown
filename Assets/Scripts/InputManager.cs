@@ -6,7 +6,19 @@ using System;
 
 public class InputManager : MonoBehaviour
 {
-    public static InputManager instance;
+    private static InputManager instance;
+    public static InputManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new InputManager();
+            }
+            return instance;
+        }
+    }
+
     private PlayerInputs playerInputs;
 
     [Header("Player Movement")]
@@ -17,18 +29,6 @@ public class InputManager : MonoBehaviour
 
     [Header("Action Inputs")]
     public bool dodgeInput = false;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
 
     private void Start()
     {
@@ -43,14 +43,31 @@ public class InputManager : MonoBehaviour
             playerInputs.Gameplay.move.performed += i => movementInput = i.ReadValue<Vector2>();
             playerInputs.Gameplay.move.canceled += i => movementInput = i.ReadValue<Vector2>();
             playerInputs.Gameplay.run.performed += i => dodgeInput = true;
+            playerInputs.Gameplay.interact.performed += CheckInteractible;
         }
 
         playerInputs.Enable();
     }
 
+    // When player presses "E"-key
+    private void CheckInteractible(InputAction.CallbackContext context)
+    {
+        if (PlayerManager.Instance.interactible != null)
+        {
+            PlayerManager.Instance.InteractionStarted();
+        }
+    }
+
     private void Update()
     {
-        HandleMovementInput();
+        switch (GameStateManager.Instance.CurrentGameState)
+        {
+            case GameState.Freeroam:
+                HandleMovementInput();
+                break;
+            default:
+                break;
+        }
     }
 
     private void HandleMovementInput()
