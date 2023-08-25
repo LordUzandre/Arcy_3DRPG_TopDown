@@ -5,12 +5,13 @@ using Action = System.Action;
 
 public class Interactible : MonoBehaviour
 {
-    [SerializeField] public bool isNPC;
-    [SerializeField] public bool haveDialogue;
-    [HideInInspector] public float distanceToPlayer;
-    [HideInInspector] public string speakerID;
-    [HideInInspector] public Animator animator;
+    public bool isNPC;
+    public bool haveDialogue;
+    public float distanceToPlayer;
+    public string speakerID;
+    public Animator animator;
     public Dialogue dialogue;
+    //public enum MyType { None, Chest, Sign, NPC, Door, Pickup, Enemy };
 
     //UI
     public static event System.Action<Vector3> MoveIconHere;
@@ -24,6 +25,8 @@ public class Interactible : MonoBehaviour
             isNPC = false;
         }
     }
+
+    //When the interactible is in focus, but not interacted with
     public void OnFocus()
     {
         if (MoveIconHere != null)
@@ -32,18 +35,12 @@ public class Interactible : MonoBehaviour
         }
     }
 
+    //When the interactible is out of range for player
     public void OnDefocused()
     {
         if (RemoveIcon != null)
         {
             RemoveIcon();
-            //StartCoroutine(RotateTowardsGoal(originalFacingDirection));
         }
-    }
-
-    //event triggered by
-    public void InteractionStarted(Transform playerTransform)
-    {
-        
     }
 }

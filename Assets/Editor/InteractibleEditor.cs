@@ -7,32 +7,27 @@ using UnityEditor;
 public class InteractibleEditor : Editor
 {
     private bool hasDialogue = false;
-    private bool patrolRoute = false;
 
     public override void OnInspectorGUI()
     {
-        // Call normal GUI (displaying "a" and any other variables you might have)
         //base.OnInspectorGUI();
-
         Interactible interactible = (Interactible)target;
 
+        // bool HasDialogue
+        EditorGUILayout.BeginHorizontal();
+        EditorGUIUtility.labelWidth = 100;
         hasDialogue = EditorGUILayout.Toggle("Has Dialogue", hasDialogue);
+        EditorGUILayout.EndHorizontal();
 
         if (hasDialogue)
         {
-            // patrolRoute = EditorGUILayout.Toggle("Patrol Route", patrolRoute);
-
-            // EditorGUILayout.BeginHorizontal();
-            // EditorGUILayout.LabelField("speakerName", GUILayout.MaxWidth(125));
-            // interactible.speakerID = EditorGUILayout.TextField(interactible.speakerID);
-            // EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            for (int i = 0; i < interactible.dialogue.sentences.Length; i++)
-            {
-                interactible.dialogue.sentences[i] = EditorGUILayout.TextField("Element 01", interactible.dialogue.sentences[i]); ;
-            }
-            EditorGUILayout.EndHorizontal();
+            //Dialogue
+            EditorGUI.indentLevel = 2;
+            EditorGUIUtility.labelWidth = 175;
+            SerializedProperty dialogue = serializedObject.FindProperty("dialogue");
+            EditorGUILayout.PropertyField(dialogue, true);
+            serializedObject.ApplyModifiedProperties();
+            EditorGUI.indentLevel = 0;
         }
     }
 }

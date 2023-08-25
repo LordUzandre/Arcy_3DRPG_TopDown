@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028353, g: 0.22571383, b: 0.30692253, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -530,7 +530,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139180224}
-  m_LocalRotation: {x: 0.4010735, y: 0.000000037950894, z: -0.000000016616085, w: 0.9160459}
+  m_LocalRotation: {x: 0.40107352, y: -0.0000000055956337, z: 0.000000002449943, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 13, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -886,6 +886,11 @@ MonoBehaviour:
   distanceToPlayer: 0
   speakerID: Board01
   animator: {fileID: 0}
+  dialogue:
+    nameOfSpeaker: 
+    sentences:
+    - "When I get older I'm going to be a Pok\xE9mon master."
+    - Buttcheeks!
 --- !u!1 &479210695
 GameObject:
   m_ObjectHideFlags: 0
@@ -972,7 +977,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479210695}
-  m_LocalRotation: {x: 0.4010735, y: 0.000000037950894, z: -0.000000016616085, w: 0.9160459}
+  m_LocalRotation: {x: 0.40107352, y: -0.0000000055956337, z: 0.000000002449943, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 13, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3335,6 +3340,9 @@ MonoBehaviour:
   distanceToPlayer: 0
   speakerID: InteractiveObject
   animator: {fileID: 0}
+  dialogue:
+    nameOfSpeaker: 
+    sentences: []
 --- !u!1 &1461497988
 GameObject:
   m_ObjectHideFlags: 0

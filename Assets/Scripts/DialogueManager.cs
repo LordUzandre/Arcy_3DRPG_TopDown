@@ -9,21 +9,16 @@ public class DialogueManager : MonoBehaviour
 {
     //singleton
     private static DialogueManager instance;
+    private static bool isCurrentlyTyping = false;
 
     [HideInInspector] public TextMeshProUGUI nameText;
     [HideInInspector] public TextMeshProUGUI dialogueText;
 
     private Queue<string> sentences;
 
-    private void Awake() {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
+    private void Awake()
+    {
+        if (instance == null) { instance = this; } else { Destroy(this); }
     }
 
     private void Start()
@@ -56,16 +51,27 @@ public class DialogueManager : MonoBehaviour
 
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
-        StartCoroutine(TypeSentence(sentence));
+
+        if (!isCurrentlyTyping)
+        {
+            //Start typing out sentence
+            StartCoroutine(TypeSentence(sentence));
+        }
+        else
+        {
+            //Display full sentence
+            dialogueText.text = sentence;
+        }
     }
 
     IEnumerator TypeSentence(string sentence)
     {
+        isCurrentlyTyping = true;
         dialogueText.text = " ";
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
         }
     }
 
