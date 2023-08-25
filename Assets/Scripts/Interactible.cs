@@ -10,7 +10,7 @@ public class Interactible : MonoBehaviour
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public string speakerID;
     [HideInInspector] public Animator animator;
-    private Dialogue dialogue;
+    public Dialogue dialogue;
 
     //UI
     public static event System.Action<Vector3> MoveIconHere;

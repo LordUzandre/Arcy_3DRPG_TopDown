@@ -20,19 +20,19 @@ public class InteractibleEditor : Editor
 
         if (hasDialogue)
         {
-            patrolRoute = EditorGUILayout.Toggle("Patrol Route", patrolRoute);
-            
-            if (patrolRoute)
+            // patrolRoute = EditorGUILayout.Toggle("Patrol Route", patrolRoute);
+
+            // EditorGUILayout.BeginHorizontal();
+            // EditorGUILayout.LabelField("speakerName", GUILayout.MaxWidth(125));
+            // interactible.speakerID = EditorGUILayout.TextField(interactible.speakerID);
+            // EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            for (int i = 0; i < interactible.dialogue.sentences.Length; i++)
             {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("speakerName", GUILayout.MaxWidth(125));
-                interactible.speakerID = EditorGUILayout.TextField(interactible.speakerID);
-                EditorGUILayout.EndHorizontal();
-    
-                EditorGUILayout.BeginHorizontal();
-                
-                EditorGUILayout.EndHorizontal();
+                interactible.dialogue.sentences[i] = EditorGUILayout.TextField("Element 01", interactible.dialogue.sentences[i]); ;
             }
+            EditorGUILayout.EndHorizontal();
         }
     }
 }
