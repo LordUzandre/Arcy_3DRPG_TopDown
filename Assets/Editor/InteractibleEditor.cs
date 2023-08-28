@@ -6,8 +6,6 @@ using UnityEditor;
 [CustomEditor(typeof(Interactible))]
 public class InteractibleEditor : Editor
 {
-    private bool hasDialogue = false;
-
     public override void OnInspectorGUI()
     {
         //base.OnInspectorGUI();
@@ -16,10 +14,10 @@ public class InteractibleEditor : Editor
         // bool HasDialogue
         EditorGUILayout.BeginHorizontal();
         EditorGUIUtility.labelWidth = 100;
-        hasDialogue = EditorGUILayout.Toggle("Has Dialogue", hasDialogue);
+        interactible.haveDialogue = EditorGUILayout.Toggle("Have Dialogue", interactible.haveDialogue);
         EditorGUILayout.EndHorizontal();
 
-        if (hasDialogue)
+        if (interactible.haveDialogue)
         {
             //Dialogue
             EditorGUI.indentLevel = 2;

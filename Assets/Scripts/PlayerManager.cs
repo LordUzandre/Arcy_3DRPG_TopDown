@@ -25,6 +25,8 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public bool canRotate = true;
     [HideInInspector] public bool isPerformingAction = false;
     [HideInInspector] public bool applyRootMotion;
+    [HideInInspector] public bool isInteracting = false;
+    [HideInInspector] public bool interactionFinished = false;
 
     private void Awake()
     {
@@ -39,26 +41,39 @@ public class PlayerManager : MonoBehaviour
         fow = GetComponent<FieldOfView>();
 
         //Singleton
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
+        if (instance == null) { instance = this; } else { Destroy(this); }
     }
 
     private void Update()
     {
         delta = Time.deltaTime;
 
-        playerLocomotion.HandleAllMovement(delta);
-        animationHandler.locomotion = InputManager.instance.moveAmount;
+        if (isInteracting == false)
+        {
+            playerLocomotion.HandleAllMovement(delta);
+            animationHandler.locomotion = InputManager.instance.moveAmount;
+        }
     }
 
-    public void InteractionStarted()
+    public void interactionKeyPressed() //triggered by input manager when there's an interactible
     {
+        if (!isInteracting && !interactionFinished)
+        {
+            //if player is not already interacting with anything
+            interactible.InteractStarted();
+            isInteracting = true;
+
+            playerLocomotion.enabled = false;
+            fow.enabled = false;
+        }
+        else if (isInteracting && interactionFinished)
+        {
+            //when dialogue is finished
+            playerLocomotion.enabled = true;
+            fow.enabled = true;
+            isInteracting = false;
+            interactionFinished = false;
+        }
 
     }
 }

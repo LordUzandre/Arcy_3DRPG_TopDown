@@ -335,6 +335,7 @@ MonoBehaviour:
   canRotate: 1
   isPerformingAction: 0
   applyRootMotion: 0
+  isInteracting: 0
 --- !u!114 &50579284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,7 +531,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139180224}
-  m_LocalRotation: {x: 0.40107352, y: -0.0000000055956337, z: 0.000000002449943, w: 0.9160459}
+  m_LocalRotation: {x: 0.4010735, y: 0.000000037950894, z: -0.000000016616085, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 13, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -688,6 +689,82 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &329908629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 329908630}
+  - component: {fileID: 329908632}
+  - component: {fileID: 329908631}
+  m_Layer: 5
+  m_Name: dialogue_Arrow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &329908630
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329908629}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1522220114}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 308.9, y: -105.4}
+  m_SizeDelta: {x: 61.6465, y: 61.6465}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &329908631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329908629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: cbd64db443b2c0747a41fde538eaca1f, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &329908632
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329908629}
+  m_CullTransparentMesh: 1
 --- !u!137 &337493863 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: -5985556037490972868, guid: 7da7be040dc3a674a83a4d89bb517479,
@@ -977,7 +1054,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479210695}
-  m_LocalRotation: {x: 0.40107352, y: -0.0000000055956337, z: 0.000000002449943, w: 0.9160459}
+  m_LocalRotation: {x: 0.4010735, y: 0.000000037950894, z: -0.000000016616085, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 13, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1853,7 +1930,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua.
+    tempor
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1880,8 +1957,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2060,7 +2137,7 @@ GameObject:
   - component: {fileID: 895579303}
   - component: {fileID: 895579302}
   m_Layer: 5
-  m_Name: Image
+  m_Name: UI_background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2115,7 +2192,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.5
+  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &895579303
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2239,7 +2316,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-942120
+  m_Name: pb_Mesh28838
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2410,7 +2487,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-978554
+  m_Name: pb_Mesh28952
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3052,7 +3129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-978552
+  m_Name: pb_Mesh28976
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3336,13 +3413,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isNPC: 0
-  haveDialogue: 0
+  haveDialogue: 1
   distanceToPlayer: 0
   speakerID: InteractiveObject
   animator: {fileID: 0}
   dialogue:
-    nameOfSpeaker: 
-    sentences: []
+    nameOfSpeaker: Sign
+    sentences:
+    - "When I get older, I am going to become a Pok\xE9mon Master!"
+    - ButtCheeks!
 --- !u!1 &1461497988
 GameObject:
   m_ObjectHideFlags: 0
@@ -3435,13 +3514,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1522220114}
+  - component: {fileID: 1522220115}
   m_Layer: 5
   m_Name: DialogueUI
   m_TagString: DialogueUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1522220114
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3456,14 +3536,31 @@ RectTransform:
   m_Children:
   - {fileID: 895579301}
   - {fileID: 825435498}
+  - {fileID: 329908630}
   m_Father: {fileID: 1053396817}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -214}
-  m_SizeDelta: {x: -128, y: -492}
+  m_AnchoredPosition: {x: 0, y: -178}
+  m_SizeDelta: {x: -512, y: -484}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1522220115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522220113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaedd75688681c94388ef351d36f6c11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameText: {fileID: 0}
+  dialogueText: {fileID: 825435499}
+  dialogueBox: {fileID: 895579302}
+  dialogueArrow: {fileID: 329908631}
 --- !u!137 &1626286149 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: -2293819332471049893, guid: 7da7be040dc3a674a83a4d89bb517479,
@@ -3831,6 +3928,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1767956530}
+  - component: {fileID: 1767956531}
   m_Layer: 0
   m_Name: DialogueManager
   m_TagString: Untagged
@@ -3853,6 +3951,22 @@ Transform:
   m_Father: {fileID: 514425268}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1767956531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767956528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a3928b32281e043925fdba616b2229, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueUI: {fileID: 1522220113}
+  dialogueBox: {fileID: 895579302}
+  nameText: {fileID: 0}
+  dialogueText: {fileID: 0}
 --- !u!1 &1902857352
 GameObject:
   m_ObjectHideFlags: 0
@@ -4269,7 +4383,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-814048
+  m_Name: pb_Mesh28894
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

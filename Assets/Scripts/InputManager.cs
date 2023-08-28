@@ -28,14 +28,24 @@ public class InputManager : MonoBehaviour
     {
         if (playerInputs == null)
         {
+            //movementInput
             playerInputs = new PlayerInputs();
             playerInputs.Gameplay.move.performed += i => movementInput = i.ReadValue<Vector2>();
             playerInputs.Gameplay.move.canceled += i => movementInput = i.ReadValue<Vector2>();
+
+            //dodge- and runInput
             playerInputs.Gameplay.run.performed += i => dodgeInput = true;
+
+            //interactInput
             playerInputs.Gameplay.interact.performed += CheckInteractible;
         }
 
         playerInputs.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInputs.Disable();
     }
 
     // When player presses "E"-key
@@ -43,12 +53,13 @@ public class InputManager : MonoBehaviour
     {
         if (PlayerManager.instance.interactible != null)
         {
-            PlayerManager.instance.InteractionStarted();
+            PlayerManager.instance.interactionKeyPressed();
         }
     }
 
     private void Update()
     {
+        //Which gaestate are we currently in?
         switch (GameStateManager.Instance.CurrentGameState)
         {
             case GameState.Freeroam:

@@ -43,4 +43,12 @@ public class Interactible : MonoBehaviour
             RemoveIcon();
         }
     }
+
+    public void InteractStarted()
+    {
+        if (haveDialogue)
+        {
+            DialogueManager.Instance.StartDialogue(dialogue);
+        }
+    }
 }

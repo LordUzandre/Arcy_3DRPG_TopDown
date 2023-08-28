@@ -1,20 +1,24 @@
-using System;
+//using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Random = System.Random;
 
 public class DialogueManager : MonoBehaviour
 {
     //singleton
     private static DialogueManager instance;
+    public static DialogueManager Instance { get { return instance; } }
     private static bool isCurrentlyTyping = false;
+    public DialogueUI dialogueUI;
+    public Image dialogueBox;
 
     [HideInInspector] public TextMeshProUGUI nameText;
     [HideInInspector] public TextMeshProUGUI dialogueText;
 
-    private Queue<string> sentences;
+    private Queue<string> sentences = new Queue<string>();
 
     private void Awake()
     {
@@ -23,13 +27,30 @@ public class DialogueManager : MonoBehaviour
 
     private void Start()
     {
-        sentences = new Queue<string>();
+        //Set Up UI
+        if (dialogueUI == null)
+        {
+            dialogueUI = GameObject.FindGameObjectWithTag("DialogueUI").GetComponent<DialogueUI>();
+        }
+
+        if (dialogueUI != null)
+        {
+            sentences = new Queue<string>();
+            dialogueBox = dialogueUI.dialogueBox;
+            dialogueText = dialogueUI.dialogueText;
+            nameText = dialogueUI.nameText;
+            dialogueUI.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("Could not find dialogueUI");
+        }
     }
 
     public void StartDialogue(Dialogue dialogue)
     {
         //OPEN UI
-
+        dialogueUI.gameObject.SetActive(true);
         nameText.text = dialogue.nameOfSpeaker;
         sentences.Clear();
 
@@ -77,6 +98,8 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        //Remove UI and change UI;
+        //Remove UI and change playerManager;
+        dialogueBox.gameObject.SetActive(false);
+        PlayerManager.instance.isInteracting = false;
     }
 }
