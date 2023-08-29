@@ -3,20 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 using TMPro;
 using Random = System.Random;
 
 public class DialogueManager : MonoBehaviour
 {
     //singleton
-    private static DialogueManager instance;
-    public static DialogueManager Instance { get { return instance; } }
-    private static bool isCurrentlyTyping = false;
+    public static DialogueManager instance;
+
+    //bools
+    public bool currentlyInDialogue = false;
+    public bool nextDialogue = false;
+    public bool canExit = false;
+    public bool isCurrentlyTyping = false;
+    //int
+    public int dialogueIndex = 0;
+
+    public CanvasGroup canvasGroup;
+    //    public TMP_Animated animatedText;
     public DialogueUI dialogueUI;
     public Image dialogueBox;
 
-    [HideInInspector] public TextMeshProUGUI nameText;
     [HideInInspector] public TextMeshProUGUI dialogueText;
+    [HideInInspector] public Interactible currentInteractible;
 
     private Queue<string> sentences = new Queue<string>();
 
@@ -35,10 +45,8 @@ public class DialogueManager : MonoBehaviour
 
         if (dialogueUI != null)
         {
-            sentences = new Queue<string>();
             dialogueBox = dialogueUI.dialogueBox;
             dialogueText = dialogueUI.dialogueText;
-            nameText = dialogueUI.nameText;
             dialogueUI.gameObject.SetActive(false);
         }
         else
@@ -47,11 +55,23 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    public void ShowUI(bool show, float time, float delay)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.AppendInterval(delay);
+        sequence.Append(canvasGroup.DOFade(show ? 1 : 0, time));
+        if (show)
+        {
+            dialogueIndex = 0;
+            sequence.Join(canvasGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
+            //sequence.AppendCallback(() => animatedText.ReadText(currentVillager.dialogue.conversationBlock[0]));
+        }
+    }
+
     public void StartDialogue(Dialogue dialogue)
     {
         //OPEN UI
         dialogueUI.gameObject.SetActive(true);
-        nameText.text = dialogue.nameOfSpeaker;
         sentences.Clear();
 
         foreach (string sentence in dialogue.sentences)

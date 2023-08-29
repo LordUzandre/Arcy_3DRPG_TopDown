@@ -336,6 +336,7 @@ MonoBehaviour:
   isPerformingAction: 0
   applyRootMotion: 0
   isInteracting: 0
+  interactionFinished: 0
 --- !u!114 &50579284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -963,11 +964,7 @@ MonoBehaviour:
   distanceToPlayer: 0
   speakerID: Board01
   animator: {fileID: 0}
-  dialogue:
-    nameOfSpeaker: 
-    sentences:
-    - "When I get older I'm going to be a Pok\xE9mon master."
-    - Buttcheeks!
+  dialogue: {fileID: 0}
 --- !u!1 &479210695
 GameObject:
   m_ObjectHideFlags: 0
@@ -3417,11 +3414,7 @@ MonoBehaviour:
   distanceToPlayer: 0
   speakerID: InteractiveObject
   animator: {fileID: 0}
-  dialogue:
-    nameOfSpeaker: Sign
-    sentences:
-    - "When I get older, I am going to become a Pok\xE9mon Master!"
-    - ButtCheeks!
+  dialogue: {fileID: 11400000, guid: 7a33af11f6bd8514fa4fdfb4bc62f92e, type: 2}
 --- !u!1 &1461497988
 GameObject:
   m_ObjectHideFlags: 0
@@ -3963,10 +3956,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a3928b32281e043925fdba616b2229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentlyInDialogue: 0
+  nextDialogue: 0
+  canExit: 0
+  isCurrentlyTyping: 0
+  dialogueIndex: 0
+  canvasGroup: {fileID: 0}
   dialogueUI: {fileID: 1522220113}
   dialogueBox: {fileID: 895579302}
-  nameText: {fileID: 0}
   dialogueText: {fileID: 0}
+  currentInteractible: {fileID: 0}
 --- !u!1 &1902857352
 GameObject:
   m_ObjectHideFlags: 0

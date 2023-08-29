@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Dialogue
+[CreateAssetMenu(fileName = "Dialogue", menuName = "New Dialogue")]
+public class Dialogue : ScriptableObject
 {
-    public string nameOfSpeaker;
-
     //Maximum number of lines
-    [TextArea(1, 8)]
-    public string[] sentences;
+    [TextArea(1, 6)]
+    public List<string> sentences;
 }

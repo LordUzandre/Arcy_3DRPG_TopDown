@@ -48,7 +48,7 @@ public class Interactible : MonoBehaviour
     {
         if (haveDialogue)
         {
-            DialogueManager.Instance.StartDialogue(dialogue);
+            DialogueManager.instance.StartDialogue(dialogue);
         }
     }
 }
