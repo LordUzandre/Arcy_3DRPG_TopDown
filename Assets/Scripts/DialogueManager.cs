@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using Cinemachine;
+using UnityEngine.Rendering;
 using Random = System.Random;
 
 public class DialogueManager : MonoBehaviour
@@ -12,23 +14,32 @@ public class DialogueManager : MonoBehaviour
     //singleton
     public static DialogueManager instance;
 
-    //bools
+    [Header("Bools")]
     public bool currentlyInDialogue = false;
     public bool nextDialogue = false;
     public bool canExit = false;
-    public bool isCurrentlyTyping = false;
-    //int
-    public int dialogueIndex = 0;
-
+    private int dialogueIndex = 0;
+    [Space]
+    [Header("Dialogue Canvas Group")]
     public CanvasGroup canvasGroup;
     //    public TMP_Animated animatedText;
+    [Space]
+    [Header("UI")]
     public DialogueUI dialogueUI;
     public Image dialogueBox;
+    [Space]
+    [Header("Cameras")]
+    public GameObject gameCam;
+    public GameObject dialogueCam;
+    [SerializeField] public CinemachineTargetGroup targetGroup;
+    [Space]
+    [Header("Post-proccessing")]
+    public UnityEngine.Rendering.Volume dialogueDof;
 
+    [HideInInspector] public TextMeshProUGUI speakerNameText;
     [HideInInspector] public TextMeshProUGUI dialogueText;
     [HideInInspector] public Interactible currentInteractible;
-
-    private Queue<string> sentences = new Queue<string>();
+    public TMP_Animated animatedText;
 
     private void Awake()
     {
@@ -49,10 +60,26 @@ public class DialogueManager : MonoBehaviour
             dialogueText = dialogueUI.dialogueText;
             dialogueUI.gameObject.SetActive(false);
         }
-        else
+    }
+
+    public void StartDialogue()
+    {
+        currentInteractible = PlayerManager.instance.interactible;
+
+        if (currentInteractible.isNPC)
         {
-            Debug.LogWarning("Could not find dialogueUI");
+            currentInteractible.TurnToPlayer(transform.position);
         }
+
+        //camera settings
+        targetGroup.m_Targets[1].target = currentInteractible.transform;
+
+        // UI
+        //ui.SetNameTextAndColor(); //FIX LATER
+        currentlyInDialogue = true;
+        CameraChange(true);
+        ClearText();
+        ShowUI(true, .2f, .65f);
     }
 
     public void ShowUI(bool show, float time, float delay)
@@ -64,62 +91,63 @@ public class DialogueManager : MonoBehaviour
         {
             dialogueIndex = 0;
             sequence.Join(canvasGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
-            //sequence.AppendCallback(() => animatedText.ReadText(currentVillager.dialogue.conversationBlock[0]));
+            sequence.AppendCallback(() => animatedText.ReadText(currentInteractible.dialogue.sentences[0]));
         }
     }
 
-    public void StartDialogue(Dialogue dialogue)
+    public void ClearText()
     {
-        //OPEN UI
-        dialogueUI.gameObject.SetActive(true);
-        sentences.Clear();
-
-        foreach (string sentence in dialogue.sentences)
-        {
-            sentences.Enqueue(sentence);
-        }
-
-        DisplayNextSentence();
+        dialogueText.text = string.Empty;
     }
 
-    private void DisplayNextSentence()
+    public void ResetState()
     {
-        if (sentences.Count == 0)
-        {
-            EndDialogue();
-            return;
-        }
+        //currentInteractible.Reset(); //reset currentInteractible animator
+        PlayerManager.instance.ResetAfterDialogue();
+        currentlyInDialogue = false;
+        canExit = false;
+    }
 
-        string sentence = sentences.Dequeue();
-        StopAllCoroutines();
+    public void FinishDialogue()
+    {
+        int sentenceCount = currentInteractible.dialogue.sentences.Count;
 
-        if (!isCurrentlyTyping)
+        if (dialogueIndex < sentenceCount - 1)
         {
-            //Start typing out sentence
-            StartCoroutine(TypeSentence(sentence));
+            dialogueIndex++;
+            nextDialogue = true;
         }
         else
         {
-            //Display full sentence
-            dialogueText.text = sentence;
+            nextDialogue = false;
+            canExit = true;
         }
     }
 
-    IEnumerator TypeSentence(string sentence)
+    //The character's name:
+    // public void SetNameTextAndColor()
+    // {
+    //     speakerNameText.text = currentInteractible.data.villagerName;
+    //     speakerNameText.color = currentInteractible.data.villagerNameColor;
+    //     nameBubble.color = currentInteractible.data.villagerColor;
+
+    // }
+
+    public void CameraChange(bool dialogue)
     {
-        isCurrentlyTyping = true;
-        dialogueText.text = " ";
-        foreach (char letter in sentence.ToCharArray())
+        gameCam.SetActive(!dialogue);
+        dialogueCam.SetActive(dialogue);
+
+        //Depth of field modifier
+        if (dialogueDof != null)
         {
-            dialogueText.text += letter;
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
+            float dofWeight = dialogueCam.activeSelf ? 1 : 0;
+            DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
         }
     }
 
-    private void EndDialogue()
+    public void DialogueDOF(float x)
     {
-        //Remove UI and change playerManager;
-        dialogueBox.gameObject.SetActive(false);
-        PlayerManager.instance.isInteracting = false;
+        dialogueDof.weight = x;
     }
 }

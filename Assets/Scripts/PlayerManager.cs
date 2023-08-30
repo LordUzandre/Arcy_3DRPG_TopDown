@@ -55,7 +55,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void interactionKeyPressed() //triggered by input manager when there's an interactible
+    public void interactionKeyPressed() //triggered by inputManager when there's an interactible
     {
         if (!isInteracting && !interactionFinished)
         {
@@ -74,6 +74,10 @@ public class PlayerManager : MonoBehaviour
             isInteracting = false;
             interactionFinished = false;
         }
+    }
 
+    public void ResetAfterDialogue()
+    {
+        playerLocomotion.enabled = true;
     }
 }

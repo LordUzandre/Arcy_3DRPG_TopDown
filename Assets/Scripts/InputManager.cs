@@ -18,6 +18,7 @@ public class InputManager : MonoBehaviour
 
     [Header("Action Inputs")]
     public bool dodgeInput = false;
+    private GameState currentGameState;
 
     private void Awake()
     {
@@ -38,6 +39,9 @@ public class InputManager : MonoBehaviour
 
             //interactInput
             playerInputs.Gameplay.interact.performed += CheckInteractible;
+
+            // subscribe to gameStateManager
+            GameStateManager.OnGameStateChanged += OnGameStateChanged;
         }
 
         playerInputs.Enable();
@@ -46,21 +50,34 @@ public class InputManager : MonoBehaviour
     private void OnDisable()
     {
         playerInputs.Disable();
+        GameStateManager.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameState currentGameState)
+    {
+        currentGameState = GameStateManager.Instance.CurrentGameState;
     }
 
     // When player presses "E"-key
     private void CheckInteractible(InputAction.CallbackContext context)
     {
-        if (PlayerManager.instance.interactible != null)
+        switch (currentGameState)
         {
-            PlayerManager.instance.interactionKeyPressed();
+            case (GameState.Freeroam):
+                if (PlayerManager.instance.interactible != null)
+                {
+                    PlayerManager.instance.interactionKeyPressed();
+                }
+                break;
+            default:
+                break;
         }
     }
 
     private void Update()
     {
         //Which gaestate are we currently in?
-        switch (GameStateManager.Instance.CurrentGameState)
+        switch (currentGameState)
         {
             case GameState.Freeroam:
                 HandleMovementInput();

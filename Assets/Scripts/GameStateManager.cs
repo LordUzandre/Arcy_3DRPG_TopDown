@@ -20,8 +20,6 @@ public class GameStateManager
     public GameState CurrentGameState { get; private set; }
 
     public static event System.Action<GameState> OnGameStateChanged;
-    //public delegate void GameStateChangeHandler(GameState newGameState);
-    //public event GameStateChangeHandler OnGameStateChanged;
 
     public void SetState(GameState newGameState)
     {
@@ -40,17 +38,17 @@ public class GameStateManager
     /*
     private void OnEnable()
     {
-        GameStateManager.Instance.OnGameStateChanged += OnGameStateChanged;
+        GameStateManager.OnGameStateChanged += OnGameStateChanged;
     }
 
     private void OnGameStateChanged()
     {
-
+        currentGameState = GameStateManager.Instance.CurrentGameState
     }
 
     private void OnDisable()
     {
-        GameStateManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
     }
     */
 }
