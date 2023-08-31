@@ -14,6 +14,12 @@ public class InteractibleEditor : Editor
         // bool HasDialogue
         EditorGUILayout.BeginHorizontal();
         EditorGUIUtility.labelWidth = 100;
+        interactible.isNPC = EditorGUILayout.Toggle("is NPC", interactible.isNPC);
+        EditorGUILayout.EndHorizontal();
+
+        // bool HasDialogue
+        EditorGUILayout.BeginHorizontal();
+        EditorGUIUtility.labelWidth = 100;
         interactible.haveDialogue = EditorGUILayout.Toggle("Have Dialogue", interactible.haveDialogue);
         EditorGUILayout.EndHorizontal();
 

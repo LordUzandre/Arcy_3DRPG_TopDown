@@ -14,19 +14,8 @@ public class DialogueManager : MonoBehaviour
     //singleton
     public static DialogueManager instance;
 
-    [Header("Bools")]
-    public bool currentlyInDialogue = false;
-    public bool nextDialogue = false;
-    public bool canExit = false;
-    private int dialogueIndex = 0;
-    [Space]
     [Header("Dialogue Canvas Group")]
     public CanvasGroup canvasGroup;
-    //    public TMP_Animated animatedText;
-    [Space]
-    [Header("UI")]
-    public DialogueUI dialogueUI;
-    public Image dialogueBox;
     [Space]
     [Header("Cameras")]
     public GameObject gameCam;
@@ -36,10 +25,16 @@ public class DialogueManager : MonoBehaviour
     [Header("Post-proccessing")]
     public UnityEngine.Rendering.Volume dialogueDof;
 
-    [HideInInspector] public TextMeshProUGUI speakerNameText;
-    [HideInInspector] public TextMeshProUGUI dialogueText;
+    //[HideInInspector] public TextMeshProUGUI speakerNameText;
+    //[HideInInspector] public TextMeshProUGUI dialogueText;
     [HideInInspector] public Interactible currentInteractible;
-    public TMP_Animated animatedText;
+    public TMP_Animated dialogueText;
+
+    [Header("Bools")]
+    public bool currentlyInDialogue = false;
+    public bool nextDialogue = false;
+    public bool canExit = false;
+    private int dialogueIndex = 0;
 
     private void Awake()
     {
@@ -48,18 +43,13 @@ public class DialogueManager : MonoBehaviour
 
     private void Start()
     {
-        //Set Up UI
-        if (dialogueUI == null)
+        if (canvasGroup == null)
         {
-            dialogueUI = GameObject.FindGameObjectWithTag("DialogueUI").GetComponent<DialogueUI>();
+            GameObject.FindGameObjectWithTag("DialogueUI").GetComponent<CanvasGroup>();
         }
 
-        if (dialogueUI != null)
-        {
-            dialogueBox = dialogueUI.dialogueBox;
-            dialogueText = dialogueUI.dialogueText;
-            dialogueUI.gameObject.SetActive(false);
-        }
+        canvasGroup.alpha = 0;
+        dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
     }
 
     public void StartDialogue()
@@ -74,12 +64,35 @@ public class DialogueManager : MonoBehaviour
         //camera settings
         targetGroup.m_Targets[1].target = currentInteractible.transform;
 
-        // UI
         //ui.SetNameTextAndColor(); //FIX LATER
         currentlyInDialogue = true;
-        CameraChange(true);
         ClearText();
-        ShowUI(true, .2f, .65f);
+        CameraChange(true);
+        ShowUI(true, .25f, .025f);
+    }
+
+    public void MyMethod()
+    {
+        if (!currentlyInDialogue)
+        {
+            if (canExit)
+            {
+                CameraChange(false);
+                ShowUI(false, .2f, 0);
+                Sequence s = DOTween.Sequence();
+                s.AppendInterval(.8f);
+                s.AppendCallback(() => ResetState());
+            }
+
+            if (nextDialogue)
+            {
+                dialogueText.ReadText(currentInteractible.dialogue.sentences[dialogueIndex]);
+            }
+        }
+        else
+        {
+            StartDialogue();
+        }
     }
 
     public void ShowUI(bool show, float time, float delay)
@@ -87,11 +100,12 @@ public class DialogueManager : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
         sequence.AppendInterval(delay);
         sequence.Append(canvasGroup.DOFade(show ? 1 : 0, time));
+
         if (show)
         {
             dialogueIndex = 0;
             sequence.Join(canvasGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
-            sequence.AppendCallback(() => animatedText.ReadText(currentInteractible.dialogue.sentences[0]));
+            sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.sentences[0]));
         }
     }
 
@@ -102,7 +116,7 @@ public class DialogueManager : MonoBehaviour
 
     public void ResetState()
     {
-        //currentInteractible.Reset(); //reset currentInteractible animator
+        //currentInteractible.Reset(); //reset the animator of currentInteractible
         PlayerManager.instance.ResetAfterDialogue();
         currentlyInDialogue = false;
         canExit = false;
@@ -110,9 +124,7 @@ public class DialogueManager : MonoBehaviour
 
     public void FinishDialogue()
     {
-        int sentenceCount = currentInteractible.dialogue.sentences.Count;
-
-        if (dialogueIndex < sentenceCount - 1)
+        if (dialogueIndex < currentInteractible.dialogue.sentences.Count - 1)
         {
             dialogueIndex++;
             nextDialogue = true;

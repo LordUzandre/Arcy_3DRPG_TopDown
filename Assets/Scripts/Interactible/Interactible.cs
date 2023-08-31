@@ -55,7 +55,7 @@ public class Interactible : MonoBehaviour
     {
         if (haveDialogue)
         {
-            DialogueManager.instance.StartDialogue();
+            DialogueManager.instance.MyMethod();
         }
     }
     public void TurnToPlayer(Vector3 playerPos)
