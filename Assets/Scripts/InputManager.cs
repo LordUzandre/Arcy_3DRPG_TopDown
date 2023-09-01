@@ -41,6 +41,7 @@ public class InputManager : MonoBehaviour
             playerInputs.Gameplay.interact.performed += CheckInteractible;
 
             // subscribe to gameStateManager
+            currentGameState = GameStateManager.Instance.CurrentGameState;
             GameStateManager.OnGameStateChanged += OnGameStateChanged;
         }
 
@@ -50,7 +51,7 @@ public class InputManager : MonoBehaviour
     private void OnDisable()
     {
         playerInputs.Disable();
-        GameStateManager.OnGameStateChanged += OnGameStateChanged;
+        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
     }
 
     private void OnGameStateChanged(GameState currentGameState)
@@ -64,7 +65,11 @@ public class InputManager : MonoBehaviour
         switch (currentGameState)
         {
             case (GameState.Freeroam):
-                if (PlayerManager.instance.interactible != null)
+                if (PlayerManager.instance.currentInteractible == null)
+                {
+                    return;
+                }
+                else
                 {
                     PlayerManager.instance.interactionKeyPressed();
                 }

@@ -17,20 +17,21 @@ public class DialogueManager : MonoBehaviour
     [Header("Dialogue Canvas Group")]
     public CanvasGroup canvasGroup;
     [Space]
+
     [Header("Cameras")]
     public GameObject gameCam;
     public GameObject dialogueCam;
     [SerializeField] public CinemachineTargetGroup targetGroup;
     [Space]
+
     [Header("Post-proccessing")]
     public UnityEngine.Rendering.Volume dialogueDof;
-
-    //[HideInInspector] public TextMeshProUGUI speakerNameText;
-    //[HideInInspector] public TextMeshProUGUI dialogueText;
-    [HideInInspector] public Interactible currentInteractible;
+    [Space]
+    
+    [Header("Dialogue Text")]
     public TMP_Animated dialogueText;
 
-    [Header("Bools")]
+    [HideInInspector] public Interactible currentInteractible;
     public bool currentlyInDialogue = false;
     public bool nextDialogue = false;
     public bool canExit = false;
@@ -48,40 +49,30 @@ public class DialogueManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("DialogueUI").GetComponent<CanvasGroup>();
         }
 
+        if (gameCam == null)
+        {
+            GameObject.FindGameObjectWithTag("MainCamera");
+        }
+
         canvasGroup.alpha = 0;
         dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
     }
 
-    public void StartDialogue()
-    {
-        currentInteractible = PlayerManager.instance.interactible;
-
-        if (currentInteractible.isNPC)
-        {
-            currentInteractible.TurnToPlayer(transform.position);
-        }
-
-        //camera settings
-        targetGroup.m_Targets[1].target = currentInteractible.transform;
-
-        //ui.SetNameTextAndColor(); //FIX LATER
-        currentlyInDialogue = true;
-        ClearText();
-        CameraChange(true);
-        ShowUI(true, .25f, .025f);
-    }
-
-    public void MyMethod()
+    public void RunDialogue(Interactible currentInteractible)
     {
         if (!currentlyInDialogue)
+        {
+            StartDialogue();
+        }
+        else
         {
             if (canExit)
             {
                 CameraChange(false);
-                ShowUI(false, .2f, 0);
-                Sequence s = DOTween.Sequence();
-                s.AppendInterval(.8f);
-                s.AppendCallback(() => ResetState());
+                FadeUI(false, .2f, .05f);
+                Sequence sequence = DOTween.Sequence();
+                sequence.AppendInterval(.8f);
+                sequence.AppendCallback(() => ResetState());
             }
 
             if (nextDialogue)
@@ -89,13 +80,9 @@ public class DialogueManager : MonoBehaviour
                 dialogueText.ReadText(currentInteractible.dialogue.sentences[dialogueIndex]);
             }
         }
-        else
-        {
-            StartDialogue();
-        }
     }
 
-    public void ShowUI(bool show, float time, float delay)
+    public void FadeUI(bool show, float time, float delay)
     {
         Sequence sequence = DOTween.Sequence();
         sequence.AppendInterval(delay);
@@ -109,6 +96,25 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    public void StartDialogue()
+    {
+        currentInteractible = PlayerManager.instance.currentInteractible;
+
+        if (currentInteractible.isNPC)
+        {
+            currentInteractible.TurnToPlayer(transform.position);
+        }
+
+        //camera settings
+        targetGroup.m_Targets[1].target = currentInteractible.transform;
+
+        //ui.SetNameTextAndColor(); //FIX LATER
+        currentlyInDialogue = true;
+        ClearText();
+        CameraChange(true);
+        FadeUI(true, .25f, .025f);
+    }
+
     public void ClearText()
     {
         dialogueText.text = string.Empty;
@@ -116,7 +122,7 @@ public class DialogueManager : MonoBehaviour
 
     public void ResetState()
     {
-        //currentInteractible.Reset(); //reset the animator of currentInteractible
+        //currentInteractible.Reset(); //reset the animator of currentInteractible, FIX LATER
         PlayerManager.instance.ResetAfterDialogue();
         currentlyInDialogue = false;
         canExit = false;
@@ -145,10 +151,13 @@ public class DialogueManager : MonoBehaviour
 
     // }
 
-    public void CameraChange(bool dialogue)
+    public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
     {
-        gameCam.SetActive(!dialogue);
-        dialogueCam.SetActive(dialogue);
+        if (dialogueCam != null)
+        {
+            gameCam.SetActive(!dialogue);
+            dialogueCam.SetActive(dialogue);
+        }
 
         //Depth of field modifier
         if (dialogueDof != null)

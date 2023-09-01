@@ -11,12 +11,13 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public PlayerAnimationHandler animationHandler;
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public FieldOfView fow;
-    [HideInInspector] public Interactible interactible;
+    [HideInInspector] public Interactible currentInteractible;
 
     //Other assets
     [HideInInspector] public CharacterController characterController;
     [HideInInspector] public Animator animator;
 
+    //Singleton
     public static PlayerManager instance;
 
     private float delta;
@@ -26,7 +27,6 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public bool isPerformingAction = false;
     [HideInInspector] public bool applyRootMotion;
     [HideInInspector] public bool isInteracting = false;
-    [HideInInspector] public bool interactionFinished = false;
 
     private void Awake()
     {
@@ -55,29 +55,26 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void interactionKeyPressed() //triggered by inputManager when there's an interactible
+    public void interactionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
     {
-        if (!isInteracting && !interactionFinished)
+        if (!isInteracting && currentInteractible.hasDialogue)
         {
-            //if player is not already interacting with anything
-            interactible.InteractStarted();
+            DialogueManager.instance.RunDialogue(currentInteractible);
             isInteracting = true;
-
             playerLocomotion.enabled = false;
             fow.enabled = false;
         }
-        else if (isInteracting && interactionFinished)
+        else if (isInteracting && currentInteractible.hasDialogue)
         {
-            //when dialogue is finished
-            playerLocomotion.enabled = true;
-            fow.enabled = true;
-            isInteracting = false;
-            interactionFinished = false;
+            DialogueManager.instance.RunDialogue(currentInteractible);
         }
     }
 
     public void ResetAfterDialogue()
     {
+        //when dialogue is finished
+        isInteracting = false;
         playerLocomotion.enabled = true;
+        fow.enabled = true;
     }
 }

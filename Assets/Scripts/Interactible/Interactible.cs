@@ -7,7 +7,7 @@ using DG.Tweening;
 public class Interactible : MonoBehaviour
 {
     public bool isNPC;
-    public bool haveDialogue;
+    public bool hasDialogue;
     public float distanceToPlayer;
     public string speakerID;
     public Animator animator;
@@ -28,7 +28,7 @@ public class Interactible : MonoBehaviour
 
         if (dialogue == null)
         {
-            haveDialogue = false;
+            hasDialogue = false;
         }
     }
 
@@ -50,15 +50,7 @@ public class Interactible : MonoBehaviour
         }
     }
 
-    //Started by PlayerManager when the player is interacting this object
-    public void InteractStarted()
-    {
-        if (haveDialogue)
-        {
-            DialogueManager.instance.MyMethod();
-        }
-    }
-    public void TurnToPlayer(Vector3 playerPos)
+    public void TurnToPlayer(Vector3 playerPos) // from MixAndJam, untested
     {
         transform.DOLookAt(playerPos, Vector3.Distance(transform.position, playerPos) / 5);
         string turnMotion = isRightSide(transform.forward, playerPos, Vector3.up) ? "rturn" : "lturn";

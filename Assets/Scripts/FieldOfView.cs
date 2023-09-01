@@ -45,7 +45,7 @@ public class FieldOfView : MonoBehaviour
 
             if (currentInteractible != null && playerManager != null)
             {
-                playerManager.interactible = currentInteractible;
+                playerManager.currentInteractible = currentInteractible;
             }            
         }
     }

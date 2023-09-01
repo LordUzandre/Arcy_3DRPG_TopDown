@@ -20,10 +20,10 @@ public class InteractibleEditor : Editor
         // bool HasDialogue
         EditorGUILayout.BeginHorizontal();
         EditorGUIUtility.labelWidth = 100;
-        interactible.haveDialogue = EditorGUILayout.Toggle("Have Dialogue", interactible.haveDialogue);
+        interactible.hasDialogue = EditorGUILayout.Toggle("Have Dialogue", interactible.hasDialogue);
         EditorGUILayout.EndHorizontal();
 
-        if (interactible.haveDialogue)
+        if (interactible.hasDialogue)
         {
             //Dialogue
             EditorGUI.indentLevel = 2;
