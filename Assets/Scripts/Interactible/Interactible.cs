@@ -20,10 +20,14 @@ public class Interactible : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         if (animator == null)
         {
             isNPC = false;
+        }
+        else
+        {
+            StartCoroutine(AnimateNPC());
         }
 
         if (dialogue == null)
@@ -54,7 +58,7 @@ public class Interactible : MonoBehaviour
     {
         transform.DOLookAt(playerPos, Vector3.Distance(transform.position, playerPos) / 5);
         string turnMotion = isRightSide(transform.forward, playerPos, Vector3.up) ? "rturn" : "lturn";
-        animator.SetTrigger(turnMotion);
+        //animator.SetTrigger(turnMotion);
     }
 
     public bool isRightSide(Vector3 fwd, Vector3 targetDir, Vector3 up)
@@ -63,5 +67,16 @@ public class Interactible : MonoBehaviour
         Vector3 right = Vector3.Cross(up.normalized, fwd.normalized);
         float dir = Vector3.Dot(right, targetDir.normalized);
         return dir > 0f;
+    }
+
+    IEnumerator AnimateNPC()
+    {
+        while (true)
+        {
+            float animatorFloat = 0; // = value for locomotion, SET UP LATER!
+            float dampTime = 1f; // = how long should it take to blend?
+            animator.SetFloat("Blend", animatorFloat, dampTime, Time.deltaTime);
+            yield return null;
+        }
     }
 }

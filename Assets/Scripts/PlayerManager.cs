@@ -44,7 +44,7 @@ public class PlayerManager : MonoBehaviour
         if (instance == null) { instance = this; } else { Destroy(this); }
     }
 
-    private void Update()
+    private void Update() //Should be the only Update() on player's scripts
     {
         delta = Time.deltaTime;
 
