@@ -20,7 +20,7 @@ public class Interactible : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
         if (animator == null)
         {
             isNPC = false;
