@@ -19,6 +19,18 @@ public class Path
         };
     }
 
+    public Vector2 this[int i] { get { return points[i]; } }
+
+    public int NumPoints { get { return points.Count; } }
+
+    public int NumSegments
+    {
+        get
+        {
+            return (points.Count - 4) / 3 + 1;
+        }
+    }
+
     public void AddSegement(Vector2 anchorPos)
     {
         points.Add(points[points.Count - 1] * 2 - points[points.Count - 2]);
@@ -29,5 +41,10 @@ public class Path
     public Vector2[] GetPointsInSegment(int i)
     {
         return new Vector2[] { points[i * 3], points[i * 3 + 1], points[i * 3 + 2], points[i * 3 + 3] };
+    }
+
+    public void MovePoint(int i, Vector2 pos)
+    {
+        points[i] = pos;
     }
 }
