@@ -6,6 +6,8 @@ using UnityEditor;
 [CustomEditor(typeof(Interactible))]
 public class InteractibleEditor : Editor
 {
+    Object block;
+
     public override void OnInspectorGUI()
     {
         //base.OnInspectorGUI();
@@ -27,11 +29,18 @@ public class InteractibleEditor : Editor
         {
             //Dialogue
             EditorGUI.indentLevel = 2;
-            EditorGUIUtility.labelWidth = 175;
+            EditorGUILayout.BeginHorizontal();
+            EditorGUIUtility.labelWidth = 100;
             SerializedProperty dialogue = serializedObject.FindProperty("dialogue");
             EditorGUILayout.PropertyField(dialogue, true);
             serializedObject.ApplyModifiedProperties();
             EditorGUI.indentLevel = 0;
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUI.indentLevel = 3;
+            EditorGUILayout.BeginHorizontal();
+            block = EditorGUILayout.ObjectField("block", block, typeof(Transform), true);
+            EditorGUILayout.EndHorizontal();
         }
     }
 }
