@@ -7,20 +7,21 @@ using UnityEditor;
 public class PathEditor : Editor
 {
     PathCreator creator;
-    PathEditor path;
+    Path path;
 
     public void Draw()
     {
         for (int i = 0; i < path.NumPoints; i++)
         {
-            Vector2 newPos = Handles.FreeMoveHandle(path[i], Quaternion.identity, .1f, Vector2.zero, Handles.CylinderHandleCap);
+            //Vector2 newPos = Handles.FreeMoveHandle(path[i], Quaternion.identity, .1f, Vector2.zero, Handles.CylinderHandleCap);
+            Vector2 newPos = Handles.FreeMoveHandle(path[i], .1f, Vector2.zero, Handles.CylinderHandleCap);
         }
     }
 
     public void OnEnable()
     {
         creator = (PathCreator)target;
-        if (creator.path = null)
+        if (creator.path == null)
         {
             creator.CreatePath();
         }

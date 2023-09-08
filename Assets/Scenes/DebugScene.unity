@@ -235,7 +235,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29318
+  m_Name: pb_Mesh29536
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -689,7 +689,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139180224}
-  m_LocalRotation: {x: 0.40107352, y: 0.00000004285444, z: -0.000000018763014, w: 0.9160459}
+  m_LocalRotation: {x: 0.4010735, y: -1.248171e-10, z: 5.464867e-11, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -921,33 +921,40 @@ LODGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148674980897}
   serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.00001463294, y: 0.37668073, z: -0.10307959}
+  m_LocalReferencePoint: {x: -0.00001463294, y: 0.37668073, z: -0.10307953}
   m_Size: 1
   m_FadeMode: 0
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.4
+  - screenRelativeHeight: 0.5247109
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 8334064834301899028}
     - renderer: {fileID: 2636699107485554775}
     - renderer: {fileID: 6799456258189646703}
     - renderer: {fileID: 8499779910305082120}
-  - screenRelativeHeight: 0.2
+  - screenRelativeHeight: 0.26475468
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 6784799950272528854}
     - renderer: {fileID: 6859150440663463358}
     - renderer: {fileID: 6201126226283334159}
     - renderer: {fileID: 3237815998811944524}
-  - screenRelativeHeight: 0.1
+  - screenRelativeHeight: 0.1092801
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 7455859938683352211}
     - renderer: {fileID: 8469853677888978046}
     - renderer: {fileID: 4381820000041041531}
     - renderer: {fileID: 6929552703865970731}
+  - screenRelativeHeight: 0.040218692
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 1642593130882227678}
+    - renderer: {fileID: 3125358727376402702}
+    - renderer: {fileID: 8845337236352254030}
+    - renderer: {fileID: 6518455569401805660}
   m_Enabled: 1
 --- !u!1 &466122804
 GameObject:
@@ -1159,7 +1166,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479210695}
-  m_LocalRotation: {x: 0.40107352, y: 0.00000004285444, z: -0.000000018763014, w: 0.9160459}
+  m_LocalRotation: {x: 0.4010735, y: -1.248171e-10, z: 5.464867e-11, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1626,7 +1633,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -2567,7 +2574,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29172
+  m_Name: pb_Mesh29400
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3209,7 +3216,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29350
+  m_Name: pb_Mesh29570
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -4516,7 +4523,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29226
+  m_Name: pb_Mesh29448
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

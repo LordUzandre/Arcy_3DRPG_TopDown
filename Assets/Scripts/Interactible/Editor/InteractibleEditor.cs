@@ -39,7 +39,7 @@ public class InteractibleEditor : Editor
 
             EditorGUI.indentLevel = 3;
             EditorGUILayout.BeginHorizontal();
-            block = EditorGUILayout.ObjectField("block", block, typeof(Transform), true);
+            block = EditorGUILayout.ObjectField("Eyeheight", block, typeof(Transform), true);
             EditorGUILayout.EndHorizontal();
         }
     }
