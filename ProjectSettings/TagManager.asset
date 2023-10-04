@@ -8,6 +8,7 @@ TagManager:
   - DialogueUI
   - InteractibleCanvas
   - DialogueCamera
+  - DebugUI
   layers:
   - Default
   - TransparentFX
