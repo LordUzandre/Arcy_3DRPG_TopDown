@@ -5,7 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Dialogue", menuName = "New Dialogue")]
 public class Dialogue : ScriptableObject
 {
-    //Maximum number of lines
-    [TextArea(1, 6)]
-    public List<string> sentences;
+    //Maximum number of lines per sentence
+    [TextArea(1, 4)]
+    public List<string> engSentences;
+    [TextArea(1, 4)]
+    public List<string> espSentences;
 }

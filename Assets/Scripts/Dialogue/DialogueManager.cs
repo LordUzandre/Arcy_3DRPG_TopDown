@@ -27,7 +27,7 @@ public class DialogueManager : MonoBehaviour
     [Header("Post-proccessing")]
     public UnityEngine.Rendering.Volume dialogueDof;
     [Space]
-    
+
     [Header("Dialogue Text")]
     public TMP_Animated dialogueText;
 
@@ -77,7 +77,7 @@ public class DialogueManager : MonoBehaviour
 
             if (nextDialogue)
             {
-                dialogueText.ReadText(currentInteractible.dialogue.sentences[dialogueIndex]);
+                dialogueText.ReadText(currentInteractible.dialogue.engSentences[dialogueIndex]);
             }
         }
     }
@@ -92,7 +92,7 @@ public class DialogueManager : MonoBehaviour
         {
             dialogueIndex = 0;
             sequence.Join(canvasGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
-            sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.sentences[0]));
+            sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.engSentences[0]));
         }
     }
 
@@ -130,7 +130,7 @@ public class DialogueManager : MonoBehaviour
 
     public void FinishDialogue()
     {
-        if (dialogueIndex < currentInteractible.dialogue.sentences.Count - 1)
+        if (dialogueIndex < currentInteractible.dialogue.engSentences.Count - 1)
         {
             dialogueIndex++;
             nextDialogue = true;

@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec39c8ccdab07914fbdc9bd714a3b8e9, type: 3}
-  m_Name: MyFirstTestDialogue
+  m_Name: Dialogue-DebugScene-Jammo-002
   m_EditorClassIdentifier: 
-  sentences:
-  - "When I grow up. I'm going to be a Pok\xE9mon master!"
+  engSentences:
+  - "When I grow up, I'm going to be a Pok\xE9mon Master.\t"
   - Buttcheeks!
+  espSentences: []
