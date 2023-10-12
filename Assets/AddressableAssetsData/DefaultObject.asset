@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec39c8ccdab07914fbdc9bd714a3b8e9, type: 3}
-  m_Name: Dialogue-DebugScene-Jammo-002
+  m_Script: {fileID: 11500000, guid: 3a189bb168d8d90478a09ea08c2f3d72, type: 3}
+  m_Name: DefaultObject
   m_EditorClassIdentifier: 
-  engSentences:
-  - "When I grow up, I'm going to be a Pok\xE9mon Master.\t"
-  - Buttcheeks!
-  espSentences: []
+  m_AddressableAssetSettingsGuid: b40a47020ffff2048a2ec03e0527ab9d
