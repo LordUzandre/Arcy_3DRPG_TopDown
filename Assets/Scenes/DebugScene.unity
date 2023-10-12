@@ -129,7 +129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30014
+  m_Name: pb_Mesh30472
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -4289,7 +4289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 0
   m_Data:
-    m_ConstrainedObject: {fileID: 0}
+    m_ConstrainedObject: {fileID: 1615626017}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
@@ -5501,7 +5501,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29572
+  m_Name: pb_Mesh30030
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -6264,6 +6264,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1811286580}
+    - targetCorrespondingSourceObject: {fileID: -927199367670048503, guid: 82a2914d8f86c62488456950c8330e38,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1811286581}
   m_SourcePrefab: {fileID: 100100000, guid: 82a2914d8f86c62488456950c8330e38, type: 3}
 --- !u!4 &1163754264 stripped
 Transform:
@@ -7624,7 +7628,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30166
+  m_Name: pb_Mesh30626
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -9928,10 +9932,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a874ec313bacb7478fddc1c46717cc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aimController: {fileID: 1403317479}
+  aimController: {fileID: 0}
   aimTarget: {fileID: 0}
-  multiAim: {fileID: 830524659}
-  viewRadius: 5
+  multiAim: {fileID: 0}
+  viewRadius: 6
   viewAngle: 120
 --- !u!114 &1811286576
 MonoBehaviour:
@@ -9970,7 +9974,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 535d24752e3d6444da644e79e90ec2ca, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -9990,6 +9994,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23b38954a159fe14fbce7fe6727015b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npc: {fileID: 1811286581}
+--- !u!114 &1811286581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811286571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b91e1709542bac41ab77b5770615304, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1811286579}
+  canMove: 0
+  canRotate: 0
+  isPerformingAction: 0
 --- !u!1 &1817236952
 GameObject:
   m_ObjectHideFlags: 0
@@ -10051,7 +10072,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29808
+  m_Name: pb_Mesh30266
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

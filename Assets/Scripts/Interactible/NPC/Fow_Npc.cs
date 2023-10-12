@@ -10,34 +10,64 @@ public class Fow_Npc : MonoBehaviour
     [SerializeField] private MultiAimConstraint multiAim;
     [SerializeField] private float viewRadius = 5;
     [SerializeField] private float viewAngle = 120;
-    private float delay = .1f;
+    private float delay = .05f;
 
-    private void OnEnable()
+    private void Start()
     {
-        StartCoroutine(Fow());
-    }
-
-    private void OnDisable()
-    {
-        StopCoroutine(Fow());
-    }
-
-    IEnumerator Fow()
-    {
-        while (true)
+        #region Check Components
+        if (aimController == null)
         {
-            yield return new WaitForSeconds(delay);
+            foreach (Transform transform in gameObject.GetComponentsInChildren<Transform>(true))
+            {
+                if (transform.name == "aim-control")
+                {
+                    aimController = transform;
+                }
+            }
+        }
+
+        if (multiAim == null)
+        {
+            foreach (MultiAimConstraint multiAimConstraint in gameObject.GetComponentsInChildren<MultiAimConstraint>(true))
+            {
+                if (multiAimConstraint.name == "Aim_head")
+                {
+                    multiAim = multiAimConstraint;
+                }
+            }
+        }
+
+        if (multiAim.data.constrainedObject == null)
+        {
+            foreach (Transform bone in gameObject.GetComponentsInChildren<Transform>(true))
+            {
+                if (bone.name == "mixamorig:Neck")
+                {
+                    multiAim.data.constrainedObject = bone;
+                }
+            }
+        }
+        #endregion
+    }
+
+    private void Update()
+    {
+        if (true)
+        {
             FindPlayer();
 
             float weight = (aimTarget == null) ? 0 : 1f;
             Vector3 thisPos = (aimTarget == null) ? transform.position + transform.forward + new Vector3(0, 1.2f, 0) : aimTarget.position + Vector3.up;
 
-            multiAim.weight = Mathf.Lerp(multiAim.weight, weight, .05f); //how "much" is the NPC is the looking?
-            aimController.position = Vector3.Lerp(aimController.position, thisPos, .05f); //"where" is the character looking
+            //set weight of the anim constraint
+            multiAim.weight = Mathf.Lerp(multiAim.weight, weight, .05f);
+            //Set position of the aim-controller to player
+            aimController.position = Vector3.Lerp(aimController.position, thisPos, .05f);
+
         }
     }
 
-    private void FindPlayer()
+    private void FindPlayer() //SphereCast, checking for player by tag
     {
         aimTarget = null;
         Collider[] targetsInViewRadiusArray = Physics.OverlapSphere(transform.position, viewRadius);

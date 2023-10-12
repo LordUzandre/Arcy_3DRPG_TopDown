@@ -100,9 +100,13 @@ public class DialogueManager : MonoBehaviour
     {
         currentInteractible = PlayerManager.instance.currentInteractible;
 
-        if (currentInteractible.isNPC)
+        if (currentInteractible.TryGetComponent<NPC_AnimationHandler>(out NPC_AnimationHandler npcAnimator))
         {
-            currentInteractible.TurnToPlayer(transform.position);
+            npcAnimator.TurnToPlayer(transform.position);
+        }
+        else
+        {
+            print("no Animator found");
         }
 
         //camera settings

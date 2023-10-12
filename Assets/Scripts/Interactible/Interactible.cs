@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Action = System.Action;
-using DG.Tweening;
 
 public class Interactible : MonoBehaviour
 {
@@ -15,28 +14,21 @@ public class Interactible : MonoBehaviour
     //public enum MyType { None, Chest, Sign, NPC, Door, Pickup, Enemy };
 
     //UI
-    public static event System.Action<Vector3> MoveIconHere;
-    public static event System.Action RemoveIcon;
+    public static System.Action<Vector3> MoveIconHere;
+    public static Action RemoveIcon;
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
-        if (animator == null)
+        if (gameObject.tag == "Untagged")
         {
-            isNPC = false;
-        }
-        else
-        {
-            StartCoroutine(AnimateNPC());
+            gameObject.tag = "Interactible";
         }
 
-        if (dialogue == null)
-        {
-            hasDialogue = false;
-        }
+        //dialogue is null, hasDialogue = false
+        hasDialogue = dialogue != false;
     }
 
-    //When the interactible is in focus, but not interacted with
+    //When the interactible is within Player's fow, triggered by fieldOfView.cs
     public void OnFocus()
     {
         if (MoveIconHere != null)
@@ -45,38 +37,12 @@ public class Interactible : MonoBehaviour
         }
     }
 
-    //When the interactible is out of range for player
+    //When the interactible is out of range for player, triggered by FieldOfView.cs
     public void OnDefocused()
     {
         if (RemoveIcon != null)
         {
             RemoveIcon();
-        }
-    }
-
-    public void TurnToPlayer(Vector3 playerPos) // from MixAndJam, untested
-    {
-        transform.DOLookAt(playerPos, Vector3.Distance(transform.position, playerPos) / 5);
-        string turnMotion = isRightSide(transform.forward, playerPos, Vector3.up) ? "rturn" : "lturn";
-        //animator.SetTrigger(turnMotion);
-    }
-
-    public bool isRightSide(Vector3 fwd, Vector3 targetDir, Vector3 up)
-    {
-        // right vector
-        Vector3 right = Vector3.Cross(up.normalized, fwd.normalized);
-        float dir = Vector3.Dot(right, targetDir.normalized);
-        return dir > 0f;
-    }
-
-    IEnumerator AnimateNPC()
-    {
-        while (true)
-        {
-            float animatorFloat = 0; // = value for locomotion, SET UP LATER!
-            float dampTime = 1f; // = how long should it take to blend?
-            animator.SetFloat("Blend", animatorFloat, dampTime, Time.deltaTime);
-            yield return null;
         }
     }
 }
