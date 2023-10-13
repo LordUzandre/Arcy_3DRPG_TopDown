@@ -129,7 +129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32690
+  m_Name: pb_Mesh30472
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -673,7 +673,7 @@ GameObject:
   - component: {fileID: 50579284}
   - component: {fileID: 50579285}
   m_Layer: 0
-  m_Name: Player__________________________________
+  m_Name: Player_____________________________
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -739,7 +739,7 @@ Transform:
   m_Children:
   - {fileID: 543450653148165787}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &50579283
 MonoBehaviour:
@@ -965,7 +965,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139180224}
-  m_LocalRotation: {x: 0.4010735, y: 0.0000000068794215, z: -0.000000003012026, w: 0.9160459}
+  m_LocalRotation: {x: 0.40107352, y: -0.0000000055956337, z: 0.000000002449943, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1457,7 +1457,7 @@ RectTransform:
   - {fileID: 1761784416}
   - {fileID: 1902857353}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2295,7 +2295,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 120, z: 0}
 --- !u!114 &466122809
 MonoBehaviour:
@@ -2536,7 +2536,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479210695}
-  m_LocalRotation: {x: 0.4010735, y: 0.0000000068794215, z: -0.000000003012026, w: 0.9160459}
+  m_LocalRotation: {x: 0.40107352, y: -0.0000000055956337, z: 0.000000002449943, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2632,7 +2632,7 @@ GameObject:
   m_Component:
   - component: {fileID: 514425268}
   m_Layer: 0
-  m_Name: Managers_______________________________
+  m_Name: Managers_________________________
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2653,7 +2653,7 @@ Transform:
   - {fileID: 1767956530}
   - {fileID: 1295529080}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &547604061
 GameObject:
@@ -2993,7 +2993,7 @@ GameObject:
   - component: {fileID: 601054008}
   - component: {fileID: 601054012}
   m_Layer: 5
-  m_Name: WorldSpaceCanvas____________________
+  m_Name: WorldSpaceCanvas______________
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3429,7 +3429,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &686353318
 MonoBehaviour:
@@ -4434,7 +4434,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &868300775
 MonoBehaviour:
@@ -5393,7 +5393,7 @@ GameObject:
   - component: {fileID: 1053396815}
   - component: {fileID: 1053396814}
   m_Layer: 5
-  m_Name: UI_Canvas______________________________
+  m_Name: UI_Canvas_________________________
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5501,7 +5501,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32248
+  m_Name: pb_Mesh30030
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -7201,7 +7201,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1362706627 stripped
 Transform:
@@ -7531,7 +7531,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1417442470
 BoxCollider:
@@ -7621,14 +7621,14 @@ MonoBehaviour:
   distanceToPlayer: 0
   speakerID: InteractiveObject
   animator: {fileID: 0}
-  dialogue: {fileID: 11400000, guid: abdecffe87f0be74c8cfedf96ac434c7, type: 2}
+  dialogue: {fileID: 11400000, guid: 7a33af11f6bd8514fa4fdfb4bc62f92e, type: 2}
 --- !u!43 &1424279993
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32846
+  m_Name: pb_Mesh30626
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -9932,9 +9932,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a874ec313bacb7478fddc1c46717cc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aimController: {fileID: 1403317479}
+  aimController: {fileID: 0}
   aimTarget: {fileID: 0}
-  multiAim: {fileID: 830524659}
+  multiAim: {fileID: 0}
   viewRadius: 6
   viewAngle: 120
 --- !u!114 &1811286576
@@ -10045,7 +10045,7 @@ Transform:
   - {fileID: 667245416}
   - {fileID: 547604063}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1817236954
 MonoBehaviour:
@@ -10072,7 +10072,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32484
+  m_Name: pb_Mesh30266
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -11632,7 +11632,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &2053662890
 MonoBehaviour:

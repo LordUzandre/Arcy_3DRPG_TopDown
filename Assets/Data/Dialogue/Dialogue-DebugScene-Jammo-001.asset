@@ -14,9 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   engSentences:
   - Hiya! My name is Jammo, I'm your friend.
-  - "When I grow up, I'm going to be pok\xE9mon master!"
-  - Buttcheeks!
-  espSentences:
-  - Salut! Je m'appelle Jammo. je suis votre ami
-  - "Quand je serai grand, je deviendrai un ma\xEEtre Pok\xE9mon."
-  - Fesses!
+  espSentences: []

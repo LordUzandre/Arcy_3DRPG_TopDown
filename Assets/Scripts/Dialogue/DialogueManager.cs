@@ -104,6 +104,10 @@ public class DialogueManager : MonoBehaviour
         {
             npcAnimator.TurnToPlayer(transform.position);
         }
+        else
+        {
+            print("no Animator found");
+        }
 
         //camera settings
         targetGroup.m_Targets[1].target = currentInteractible.transform;
@@ -122,6 +126,7 @@ public class DialogueManager : MonoBehaviour
 
     public void ResetState()
     {
+        //currentInteractible.Reset(); //reset the animator of currentInteractible, FIX LATER
         PlayerManager.instance.ResetAfterDialogue();
         currentlyInDialogue = false;
         canExit = false;
@@ -140,6 +145,15 @@ public class DialogueManager : MonoBehaviour
             canExit = true;
         }
     }
+
+    //The character's name:
+    // public void SetNameTextAndColor()
+    // {
+    //     speakerNameText.text = currentInteractible.data.villagerName;
+    //     speakerNameText.color = currentInteractible.data.villagerNameColor;
+    //     nameBubble.color = currentInteractible.data.villagerColor;
+
+    // }
 
     public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
     {
