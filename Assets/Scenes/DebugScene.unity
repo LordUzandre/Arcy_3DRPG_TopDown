@@ -965,7 +965,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139180224}
-  m_LocalRotation: {x: 0.4010735, y: 0.0000000068794215, z: -0.000000003012026, w: 0.9160459}
+  m_LocalRotation: {x: 0.4010735, y: 0.000000037950894, z: -0.000000016616085, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2536,7 +2536,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479210695}
-  m_LocalRotation: {x: 0.4010735, y: 0.0000000068794215, z: -0.000000003012026, w: 0.9160459}
+  m_LocalRotation: {x: 0.4010735, y: 0.000000037950894, z: -0.000000016616085, w: 0.9160459}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9932,9 +9932,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a874ec313bacb7478fddc1c46717cc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aimController: {fileID: 0}
+  aimController: {fileID: 1403317479}
   aimTarget: {fileID: 0}
-  multiAim: {fileID: 0}
+  multiAim: {fileID: 830524659}
   viewRadius: 6
   viewAngle: 120
 --- !u!114 &1811286576

@@ -93,8 +93,6 @@ public class DialogueManager : MonoBehaviour
 
         //camera settings
         targetGroup.m_Targets[1].target = currentInteractible.gameObject.transform;
-
-        //ui.SetNameTextAndColor(); //FIX LATER
         currentlyInDialogue = true;
         ClearText();
         CameraChange(true);

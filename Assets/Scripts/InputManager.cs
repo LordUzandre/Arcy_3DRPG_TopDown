@@ -65,11 +65,7 @@ public class InputManager : MonoBehaviour
         switch (currentGameState)
         {
             case (GameState.Freeroam):
-                if (PlayerManager.instance.currentInteractible == null)
-                {
-                    return;
-                }
-                else
+                if (PlayerManager.instance.currentInteractible != null)
                 {
                     PlayerManager.instance.interactionKeyPressed();
                 }
@@ -115,9 +111,6 @@ public class InputManager : MonoBehaviour
         if (dodgeInput)
         {
             dodgeInput = false;
-
-            //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
-            //player.playerLocomotionManager.AttemptToPerformDodge();
         }
     }
 }
