@@ -6,7 +6,7 @@ public class FieldOfView : MonoBehaviour
 {
     [SerializeField] public float viewRadius = 4;
     [Range(0, 120)] public float viewAngle = 120;
-    
+
     private PlayerManager playerManager;
     [HideInInspector] public bool multipleTargetsInView; //used by FieldOfViewEditor
 
@@ -43,10 +43,10 @@ public class FieldOfView : MonoBehaviour
                 previousInteractible = null;
             }
 
-            if (currentInteractible != null && playerManager != null)
+            if (playerManager != null)
             {
                 playerManager.currentInteractible = currentInteractible;
-            }            
+            }
         }
     }
 

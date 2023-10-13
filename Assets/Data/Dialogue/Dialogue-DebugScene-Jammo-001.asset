@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec39c8ccdab07914fbdc9bd714a3b8e9, type: 3}
   m_Name: Dialogue-DebugScene-Jammo-001
   m_EditorClassIdentifier: 
-  engSentences:
-  - Hiya! My name is Jammo, I'm your friend.
-  espSentences: []
+  Sentences:
+  - Sentence 01
+  - Sentence 02

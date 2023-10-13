@@ -51,8 +51,9 @@ public class PlayerManager : MonoBehaviour
         if (isInteracting == false)
         {
             playerLocomotion.HandleAllMovement(delta);
-            animationHandler.locomotion = InputManager.instance.moveAmount;
         }
+
+        animationHandler.locomotion = InputManager.instance.moveAmount;
     }
 
     public void interactionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible

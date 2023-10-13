@@ -77,9 +77,28 @@ public class DialogueManager : MonoBehaviour
 
             if (nextDialogue)
             {
-                dialogueText.ReadText(currentInteractible.dialogue.engSentences[dialogueIndex]);
+                dialogueText.ReadText(currentInteractible.dialogue.Sentences[dialogueIndex]);
             }
         }
+    }
+
+    public void StartDialogue()
+    {
+        currentInteractible = PlayerManager.instance.currentInteractible;
+
+        if (currentInteractible.TryGetComponent<NPC_AnimationHandler>(out NPC_AnimationHandler npcAnimator))
+        {
+            npcAnimator.TurnToPlayer(transform.position);
+        }
+
+        //camera settings
+        targetGroup.m_Targets[1].target = currentInteractible.gameObject.transform;
+
+        //ui.SetNameTextAndColor(); //FIX LATER
+        currentlyInDialogue = true;
+        ClearText();
+        CameraChange(true);
+        FadeUI(true, .25f, .025f);
     }
 
     public void FadeUI(bool show, float time, float delay)
@@ -92,31 +111,8 @@ public class DialogueManager : MonoBehaviour
         {
             dialogueIndex = 0;
             sequence.Join(canvasGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
-            sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.engSentences[0]));
+            sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.Sentences[0]));
         }
-    }
-
-    public void StartDialogue()
-    {
-        currentInteractible = PlayerManager.instance.currentInteractible;
-
-        if (currentInteractible.TryGetComponent<NPC_AnimationHandler>(out NPC_AnimationHandler npcAnimator))
-        {
-            npcAnimator.TurnToPlayer(transform.position);
-        }
-        else
-        {
-            print("no Animator found");
-        }
-
-        //camera settings
-        targetGroup.m_Targets[1].target = currentInteractible.transform;
-
-        //ui.SetNameTextAndColor(); //FIX LATER
-        currentlyInDialogue = true;
-        ClearText();
-        CameraChange(true);
-        FadeUI(true, .25f, .025f);
     }
 
     public void ClearText()
@@ -126,7 +122,6 @@ public class DialogueManager : MonoBehaviour
 
     public void ResetState()
     {
-        //currentInteractible.Reset(); //reset the animator of currentInteractible, FIX LATER
         PlayerManager.instance.ResetAfterDialogue();
         currentlyInDialogue = false;
         canExit = false;
@@ -134,7 +129,7 @@ public class DialogueManager : MonoBehaviour
 
     public void FinishDialogue()
     {
-        if (dialogueIndex < currentInteractible.dialogue.engSentences.Count - 1)
+        if (dialogueIndex < currentInteractible.dialogue.Sentences.Count - 1)
         {
             dialogueIndex++;
             nextDialogue = true;
@@ -145,15 +140,6 @@ public class DialogueManager : MonoBehaviour
             canExit = true;
         }
     }
-
-    //The character's name:
-    // public void SetNameTextAndColor()
-    // {
-    //     speakerNameText.text = currentInteractible.data.villagerName;
-    //     speakerNameText.color = currentInteractible.data.villagerNameColor;
-    //     nameBubble.color = currentInteractible.data.villagerColor;
-
-    // }
 
     public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
     {
