@@ -9,154 +9,158 @@ using Cinemachine;
 using UnityEngine.Rendering;
 using Random = System.Random;
 
-public class DialogueManager : MonoBehaviour
+namespace Arcy.Dialogue
 {
-    //singleton
-    public static DialogueManager instance;
-
-    [Header("Dialogue Canvas Group")]
-    public CanvasGroup canvasGroup;
-    [Space]
-
-    [Header("Cameras")]
-    public GameObject gameCam;
-    public GameObject dialogueCam;
-    [SerializeField] public CinemachineTargetGroup targetGroup;
-    [Space]
-
-    [Header("Post-proccessing")]
-    public UnityEngine.Rendering.Volume dialogueDof;
-    [Space]
-
-    [Header("Dialogue Text")]
-    public TMP_Animated dialogueText;
-
-    [HideInInspector] public Interactible currentInteractible;
-    public bool currentlyInDialogue = false;
-    public bool nextDialogue = false;
-    public bool canExit = false;
-    private int dialogueIndex = 0;
-
-    private void Awake()
+    public class DialogueManager : MonoBehaviour
     {
-        if (instance == null) { instance = this; } else { Destroy(this); }
-    }
+        //singleton
+        public static DialogueManager instance;
 
-    private void Start()
-    {
-        if (canvasGroup == null)
+        [Header("Dialogue Canvas Group")]
+        public CanvasGroup canvasGroup;
+        [Space]
+
+        [Header("Cameras")]
+        public GameObject gameCam;
+        public GameObject dialogueCam;
+        [SerializeField] public CinemachineTargetGroup targetGroup;
+        [Space]
+
+        [Header("Post-proccessing")]
+        public UnityEngine.Rendering.Volume dialogueDof;
+        [Space]
+
+        [Header("Dialogue Text")]
+        public TMP_Animated dialogueText;
+
+        [HideInInspector] public Interactible currentInteractible;
+        public bool currentlyInDialogue = false;
+        public bool nextDialogue = false;
+        public bool canExit = false;
+        private int dialogueIndex = 0;
+
+        private void Awake()
         {
-            GameObject.FindGameObjectWithTag("DialogueUI").GetComponent<CanvasGroup>();
+            if (instance == null) { instance = this; } else { Destroy(this); }
         }
 
-        if (gameCam == null)
+        private void Start()
         {
-            GameObject.FindGameObjectWithTag("MainCamera");
-        }
-
-        canvasGroup.alpha = 0;
-        dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
-    }
-
-    public void RunDialogue(Interactible currentInteractible)
-    {
-        if (!currentlyInDialogue)
-        {
-            StartDialogue();
-        }
-        else
-        {
-            if (canExit)
+            if (canvasGroup == null)
             {
-                CameraChange(false);
-                FadeUI(false, .2f, .05f);
-                Sequence sequence = DOTween.Sequence();
-                sequence.AppendInterval(.8f);
-                sequence.AppendCallback(() => ResetState());
+                GameObject.FindGameObjectWithTag("DialogueUI").GetComponent<CanvasGroup>();
             }
 
-            if (nextDialogue)
+            if (gameCam == null)
             {
-                dialogueText.ReadText(currentInteractible.dialogue.Sentences[dialogueIndex]);
+                GameObject.FindGameObjectWithTag("MainCamera");
+            }
+
+            canvasGroup.alpha = 0;
+            dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
+        }
+
+        public void RunDialogue(Interactible currentInteractible)
+        {
+            if (!currentlyInDialogue)
+            {
+                StartDialogue();
+            }
+            else
+            {
+                if (canExit)
+                {
+                    CameraChange(false);
+                    FadeUI(false, .2f, .05f);
+                    Sequence sequence = DOTween.Sequence();
+                    sequence.AppendInterval(.8f);
+                    sequence.AppendCallback(() => ResetState());
+                }
+
+                if (nextDialogue)
+                {
+                    dialogueText.ReadText(currentInteractible.dialogue.Sentences[dialogueIndex]);
+                }
             }
         }
-    }
 
-    public void StartDialogue()
-    {
-        currentInteractible = PlayerManager.instance.currentInteractible;
-
-        if (currentInteractible.TryGetComponent<NPC_AnimationHandler>(out NPC_AnimationHandler npcAnimator))
+        public void StartDialogue()
         {
-            npcAnimator.TurnToPlayer(transform.position);
+            currentInteractible = PlayerManager.instance.currentInteractible;
+
+            if (currentInteractible.TryGetComponent<NPC_AnimationHandler>(out NPC_AnimationHandler npcAnimator))
+            {
+                npcAnimator.TurnToPlayer(transform.position);
+            }
+
+            //camera settings
+            targetGroup.m_Targets[1].target = currentInteractible.gameObject.transform;
+            currentlyInDialogue = true;
+            ClearText();
+            CameraChange(true);
+            FadeUI(true, .25f, .025f);
         }
 
-        //camera settings
-        targetGroup.m_Targets[1].target = currentInteractible.gameObject.transform;
-        currentlyInDialogue = true;
-        ClearText();
-        CameraChange(true);
-        FadeUI(true, .25f, .025f);
-    }
-
-    public void FadeUI(bool show, float time, float delay)
-    {
-        Sequence sequence = DOTween.Sequence();
-        sequence.AppendInterval(delay);
-        sequence.Append(canvasGroup.DOFade(show ? 1 : 0, time));
-
-        if (show)
+        public void FadeUI(bool show, float time, float delay)
         {
-            dialogueIndex = 0;
-            sequence.Join(canvasGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
-            sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.Sentences[0]));
+            Sequence sequence = DOTween.Sequence();
+            sequence.AppendInterval(delay);
+            sequence.Append(canvasGroup.DOFade(show ? 1 : 0, time));
+
+            if (show)
+            {
+                dialogueIndex = 0;
+                sequence.Join(canvasGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
+                sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.Sentences[0]));
+            }
+        }
+
+        public void ClearText()
+        {
+            dialogueText.text = string.Empty;
+        }
+
+        public void ResetState()
+        {
+            PlayerManager.instance.ResetAfterDialogue();
+            currentlyInDialogue = false;
+            canExit = false;
+        }
+
+        public void FinishDialogue()
+        {
+            if (dialogueIndex < currentInteractible.dialogue.Sentences.Count - 1)
+            {
+                dialogueIndex++;
+                nextDialogue = true;
+            }
+            else
+            {
+                nextDialogue = false;
+                canExit = true;
+            }
+        }
+
+        public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
+        {
+            if (dialogueCam != null)
+            {
+                gameCam.SetActive(!dialogue);
+                dialogueCam.SetActive(dialogue);
+            }
+
+            //Depth of field modifier
+            if (dialogueDof != null)
+            {
+                float dofWeight = dialogueCam.activeSelf ? 1 : 0;
+                DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
+            }
+        }
+
+        public void DialogueDOF(float x)
+        {
+            dialogueDof.weight = x;
         }
     }
 
-    public void ClearText()
-    {
-        dialogueText.text = string.Empty;
-    }
-
-    public void ResetState()
-    {
-        PlayerManager.instance.ResetAfterDialogue();
-        currentlyInDialogue = false;
-        canExit = false;
-    }
-
-    public void FinishDialogue()
-    {
-        if (dialogueIndex < currentInteractible.dialogue.Sentences.Count - 1)
-        {
-            dialogueIndex++;
-            nextDialogue = true;
-        }
-        else
-        {
-            nextDialogue = false;
-            canExit = true;
-        }
-    }
-
-    public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
-    {
-        if (dialogueCam != null)
-        {
-            gameCam.SetActive(!dialogue);
-            dialogueCam.SetActive(dialogue);
-        }
-
-        //Depth of field modifier
-        if (dialogueDof != null)
-        {
-            float dofWeight = dialogueCam.activeSelf ? 1 : 0;
-            DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
-        }
-    }
-
-    public void DialogueDOF(float x)
-    {
-        dialogueDof.weight = x;
-    }
 }

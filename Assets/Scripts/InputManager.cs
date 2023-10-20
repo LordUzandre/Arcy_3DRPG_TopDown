@@ -4,113 +4,107 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
-public class InputManager : MonoBehaviour
+namespace Arcy.InputManager
 {
-    public static InputManager instance;
-
-    private PlayerInputs playerInputs;
-
-    [Header("Player Movement")]
-    [SerializeField] Vector2 movementInput;
-    public float inputY;
-    public float inputX;
-    public float moveAmount;
-
-    [Header("Action Inputs")]
-    public bool dodgeInput = false;
-    private GameState currentGameState;
-
-    private void Awake()
+    public class InputManager : MonoBehaviour
     {
-        if (instance == null) { instance = this; } else { Destroy(this); }
-    }
+        public static InputManager instance;
 
-    private void OnEnable()
-    {
-        if (playerInputs == null)
+        private PlayerInputs playerInputs;
+
+        [Header("Player Movement")]
+        [SerializeField] Vector2 movementInput;
+        public float inputY;
+        public float inputX;
+        public float moveAmount;
+
+        [Header("Action Inputs")]
+        public bool dodgeInput = false;
+        private GameState currentGameState;
+
+        private void Awake()
         {
-            //movementInput
-            playerInputs = new PlayerInputs();
-            playerInputs.Gameplay.move.performed += i => movementInput = i.ReadValue<Vector2>();
-            playerInputs.Gameplay.move.canceled += i => movementInput = i.ReadValue<Vector2>();
+            if (instance == null) { instance = this; } else { Destroy(this); }
+        }
 
-            //dodge- and runInput
-            playerInputs.Gameplay.run.performed += i => dodgeInput = true;
+        private void OnEnable()
+        {
+            if (playerInputs == null)
+            {
+                //movementInput
+                playerInputs = new PlayerInputs();
+                playerInputs.Gameplay.move.performed += i => movementInput = i.ReadValue<Vector2>();
+                playerInputs.Gameplay.move.canceled += i => movementInput = i.ReadValue<Vector2>();
 
-            //interactInput
-            playerInputs.Gameplay.interact.performed += CheckInteractible;
+                //dodge- and runInput
+                playerInputs.Gameplay.run.performed += i => dodgeInput = true;
 
-            // subscribe to gameStateManager
+                //interactInput
+                playerInputs.Gameplay.interact.performed += CheckInteractible;
+
+                // subscribe to gameStateManager
+                currentGameState = GameStateManager.Instance.CurrentGameState;
+                GameStateManager.OnGameStateChanged += OnGameStateChanged;
+            }
+
+            playerInputs.Enable();
+        }
+
+        private void OnDisable()
+        {
+            playerInputs.Disable();
+            GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+        }
+
+        private void OnGameStateChanged(GameState currentGameState)
+        {
             currentGameState = GameStateManager.Instance.CurrentGameState;
-            GameStateManager.OnGameStateChanged += OnGameStateChanged;
         }
 
-        playerInputs.Enable();
-    }
-
-    private void OnDisable()
-    {
-        playerInputs.Disable();
-        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
-    }
-
-    private void OnGameStateChanged(GameState currentGameState)
-    {
-        currentGameState = GameStateManager.Instance.CurrentGameState;
-    }
-
-    // When player presses "E"-key
-    private void CheckInteractible(InputAction.CallbackContext context)
-    {
-        switch (currentGameState)
+        // When player presses "E"-key
+        private void CheckInteractible(InputAction.CallbackContext context)
         {
-            case (GameState.Freeroam):
-                if (PlayerManager.instance.currentInteractible != null)
-                {
-                    PlayerManager.instance.interactionKeyPressed();
-                }
-                break;
-            default:
-                break;
+            switch (currentGameState)
+            {
+                case (GameState.Freeroam):
+                    if (PlayerManager.instance.currentInteractible != null)
+                    {
+                        PlayerManager.instance.interactionKeyPressed();
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
-    }
 
-    private void Update()
-    {
-        //Which gaestate are we currently in?
-        switch (currentGameState)
+        private void Update()
         {
-            case GameState.Freeroam:
-                HandleMovementInput();
-                break;
-            default:
-                break;
+            //Which gaestate are we currently in?
+            switch (currentGameState)
+            {
+                case GameState.Freeroam:
+                    HandleMovementInput();
+                    break;
+                default:
+                    break;
+            }
         }
-    }
 
-    private void HandleMovementInput()
-    {
-        inputY = movementInput.y;
-        inputX = movementInput.x;
-
-        moveAmount = Mathf.Clamp01(Mathf.Abs(inputY) + Mathf.Abs(inputX));
-
-        if (moveAmount <= 0.5 && moveAmount > 0)
+        private void HandleMovementInput()
         {
-            moveAmount = 0.5f;
-        }
-        else if (moveAmount > 0.5 && moveAmount <= 1)
-        {
-            moveAmount = 1;
-        }
-    }
+            inputY = movementInput.y;
+            inputX = movementInput.x;
 
-    //  Actions
-    private void HandleDodgeInput()
-    {
-        if (dodgeInput)
-        {
-            dodgeInput = false;
+            moveAmount = Mathf.Clamp01(Mathf.Abs(inputY) + Mathf.Abs(inputX));
+
+            if (moveAmount <= 0.5 && moveAmount > 0)
+            {
+                moveAmount = 0.5f;
+            }
+            else if (moveAmount > 0.5 && moveAmount <= 1)
+            {
+                moveAmount = 1;
+            }
         }
     }
 }
