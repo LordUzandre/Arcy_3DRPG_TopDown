@@ -863,6 +863,7 @@ GameObject:
   - component: {fileID: 408839324}
   - component: {fileID: 408839325}
   - component: {fileID: 408839322}
+  - component: {fileID: 408839326}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -936,9 +937,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 976605706}
-        m_TargetAssemblyTypeName: Arcy.MainMenu.MainMenu, Assembly-CSharp
-        m_MethodName: QuitButtonPressed
+      - m_Target: {fileID: 512284912}
+        m_TargetAssemblyTypeName: Arcy.MainMenu.TempButtonFunction, Assembly-CSharp
+        m_MethodName: MyButtonFunction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -986,6 +987,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &408839326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408839320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad247a73ce8602e42ad5a7232c3f6042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _horizontalMoveAmount: 0
+  _verticalMoveAmount: 0
+  _moveTime: 0.1
+  _scaleAmount: 0
 --- !u!1 &462920131
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,6 +1203,51 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &512284911
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 512284913}
+  - component: {fileID: 512284912}
+  m_Layer: 0
+  m_Name: TempFunctionObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &512284912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512284911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2df379e76683dcd4f82afa73dc4c3be9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: ' Button is pressed'
+--- !u!4 &512284913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512284911}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 962.45355, y: 610.0126, z: 6.386838}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &611846412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1289,6 +1351,7 @@ GameObject:
   - component: {fileID: 696617382}
   - component: {fileID: 696617383}
   - component: {fileID: 696617380}
+  - component: {fileID: 696617384}
   m_Layer: 5
   m_Name: ContinueButton
   m_TagString: Untagged
@@ -1362,9 +1425,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 976605706}
-        m_TargetAssemblyTypeName: Arcy.MainMenu.MainMenu, Assembly-CSharp
-        m_MethodName: ContinueButtonPressed
+      - m_Target: {fileID: 512284912}
+        m_TargetAssemblyTypeName: Arcy.MainMenu.TempButtonFunction, Assembly-CSharp
+        m_MethodName: MyButtonFunction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1412,6 +1475,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &696617384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696617378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad247a73ce8602e42ad5a7232c3f6042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _horizontalMoveAmount: 0
+  _verticalMoveAmount: 0
+  _moveTime: 0.1
+  _scaleAmount: 0
 --- !u!1 &785686645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,6 +1715,7 @@ GameObject:
   - component: {fileID: 831511041}
   - component: {fileID: 831511040}
   - component: {fileID: 831511039}
+  - component: {fileID: 831511044}
   m_Layer: 5
   m_Name: Canvas__BlackOverlay
   m_TagString: Untagged
@@ -1651,7 +1731,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 831511038}
   m_Enabled: 1
-  m_Alpha: 0.5
+  m_Alpha: 0.99
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -1739,6 +1819,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &831511044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831511038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121623e7ba1055f4682dd3759e863592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 831511039}
+  fadeTime: 1
 --- !u!1 &880937412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1752,6 +1846,7 @@ GameObject:
   - component: {fileID: 880937416}
   - component: {fileID: 880937415}
   - component: {fileID: 880937414}
+  - component: {fileID: 880937418}
   m_Layer: 5
   m_Name: Canvas__PressAnyKey
   m_TagString: Untagged
@@ -1856,6 +1951,20 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 10
   m_TargetDisplay: 0
+--- !u!114 &880937418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880937412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121623e7ba1055f4682dd3759e863592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 880937414}
+  fadeTime: 0.1
 --- !u!1 &896021739
 GameObject:
   m_ObjectHideFlags: 0
@@ -1951,12 +2060,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bcddff89b3c4ee4092a9d1955ac8211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pressAnyKey_CanvasGroup: {fileID: 880937414}
-  buttons_Group: {fileID: 1738499980}
+  cvGroup:
+  - {fileID: 831511044}
+  - {fileID: 880937418}
   continueButton: {fileID: 696617378}
   eventSystem: {fileID: 1252973518}
   inputUIModule: {fileID: 1252973520}
-  blackOverlay: {fileID: 831511039}
+  startGameInPressAnyKeyMode: 1
 --- !u!4 &976605707
 Transform:
   m_ObjectHideFlags: 0
@@ -2119,6 +2229,7 @@ GameObject:
   - component: {fileID: 1115426268}
   - component: {fileID: 1115426269}
   - component: {fileID: 1115426266}
+  - component: {fileID: 1115426270}
   m_Layer: 5
   m_Name: OptionsButton
   m_TagString: Untagged
@@ -2192,9 +2303,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 976605706}
-        m_TargetAssemblyTypeName: Arcy.MainMenu.MainMenu, Assembly-CSharp
-        m_MethodName: OptionsButtonPressed
+      - m_Target: {fileID: 512284912}
+        m_TargetAssemblyTypeName: Arcy.MainMenu.TempButtonFunction, Assembly-CSharp
+        m_MethodName: MyButtonFunction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2242,6 +2353,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1115426270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115426264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad247a73ce8602e42ad5a7232c3f6042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _horizontalMoveAmount: 0
+  _verticalMoveAmount: 0
+  _moveTime: 0.1
+  _scaleAmount: 0
 --- !u!1 &1219867347
 GameObject:
   m_ObjectHideFlags: 0
@@ -3409,6 +3536,7 @@ GameObject:
   - component: {fileID: 1788390200}
   - component: {fileID: 1788390201}
   - component: {fileID: 1788390198}
+  - component: {fileID: 1788390202}
   m_Layer: 5
   m_Name: NewGameButton
   m_TagString: Untagged
@@ -3482,9 +3610,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 976605706}
-        m_TargetAssemblyTypeName: Arcy.MainMenu.MainMenu, Assembly-CSharp
-        m_MethodName: NewGameButton
+      - m_Target: {fileID: 512284912}
+        m_TargetAssemblyTypeName: Arcy.MainMenu.TempButtonFunction, Assembly-CSharp
+        m_MethodName: MyButtonFunction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3532,6 +3660,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1788390202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788390196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad247a73ce8602e42ad5a7232c3f6042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _horizontalMoveAmount: 0
+  _verticalMoveAmount: 0
+  _moveTime: 0.1
+  _scaleAmount: 0
 --- !u!1 &1862649466
 GameObject:
   m_ObjectHideFlags: 0

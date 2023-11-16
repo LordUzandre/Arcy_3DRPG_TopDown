@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,15 +14,19 @@ namespace Arcy.MainMenu
     {
         //Public:
         [Header("Canvas Groups")]
-        [SerializeField] CanvasGroup pressAnyKey_CanvasGroup;
-        [SerializeField] CanvasGroup buttons_Group;
-        [SerializeField] CanvasGroup blackOverlay;
+        [SerializeField] CanvasGroupFader[] cvGroup;
         [Space]
         [SerializeField] GameObject continueButton;
 
         [Header("Event System")]
         [SerializeField] EventSystem eventSystem;
         [SerializeField] InputSystemUIInputModule inputUIModule;
+        [Space]
+        [Header("Debug")]
+        [Space]
+        [SerializeField] bool startGameInPressAnyKeyMode;
+
+        public static Action FadeOut;
 
         //Private:
         bool initialBool = true;
@@ -40,27 +45,19 @@ namespace Arcy.MainMenu
                 inputUIModule = eventSystem.gameObject.GetComponent<InputSystemUIInputModule>();
             }
 
-            if (buttons_Group == null)
+            if (cvGroup.Length == 0)
             {
-                buttons_Group = GameObject.Find("Canvas__Buttons")?.GetComponent<CanvasGroup>();
+                cvGroup = GameObject.FindObjectsOfType<CanvasGroupFader>();
             }
 
-            if (buttons_Group != null)
-            {
-                if (pressAnyKey_CanvasGroup.gameObject.activeInHierarchy)
-                {
-                    buttons_Group.alpha = .05f;
-                    inputUIModule.enabled = false;
-                    eventSystem.SetSelectedGameObject(null);
-                }
-            }
-
-            if (blackOverlay != null)
-            {
-                blackOverlay.alpha = 1f;
-            }
-
+            inputUIModule.enabled = false;
+            eventSystem.SetSelectedGameObject(null);
             fadeNormalized = 1 / fadeDelay;
+
+            if (!startGameInPressAnyKeyMode)
+            {
+                PressAnyKey_Pressed();
+            }
         }
 
         private void Update()
@@ -75,72 +72,16 @@ namespace Arcy.MainMenu
             }
         }
 
-        public void ContinueButtonPressed()
-        {
-            fadeTime = Time.time + fadeDelay;
-            StartCoroutine(ChangeScene());
-
-            IEnumerator ChangeScene()
-            {
-                while (Time.time < fadeTime)
-                {
-                    blackOverlay.alpha += (Time.deltaTime * fadeNormalized);
-
-                    if (blackOverlay.alpha > (1 - Time.deltaTime))
-                    {
-                        print("Scene Loaded");
-                        StopCoroutine(ChangeScene());
-                        //SceneManager.LoadScene("DebugScene");
-                    }
-
-                    yield return null;
-                }
-            }
-        }
-
-        public void NewGameButton()
-        {
-            print("New Game Button Pressed");
-        }
-
-        public void OptionsButtonPressed()
-        {
-            print("Options Button Pressed");
-        }
-
-        public void QuitButtonPressed()
-        {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#endif
-            Application.Quit();
-        }
-
-        //Activates when pressing ("Press any key Button")
+        //Activates when pressing ("Press any key Button"), or if the game shouldn't start in "Press any Key"-mode
         public void PressAnyKey_Pressed()
         {
-            fadeTime = Time.time + fadeDelay;
-            buttons_Group.alpha = 0;
+            foreach (CanvasGroupFader cvFader in cvGroup)
+            {
+                cvFader.FadeCanvasGroup(false);
+            }
+
             inputUIModule.enabled = true;
             eventSystem.SetSelectedGameObject(continueButton);
-            StartCoroutine(FadeInspector());
-
-            IEnumerator FadeInspector()
-            {
-                while (fadeTime - Time.time > 1 || buttons_Group.alpha < 1)
-                {
-                    buttons_Group.alpha += (Time.deltaTime * (fadeNormalized * 2));
-                    pressAnyKey_CanvasGroup.alpha -= (Time.deltaTime * (fadeNormalized * 10));
-                    blackOverlay.alpha -= (Time.deltaTime * fadeNormalized);
-                    yield return null;
-                }
-
-                if (buttons_Group.alpha >= 1)
-                {
-                    Destroy(pressAnyKey_CanvasGroup.gameObject);
-                    blackOverlay.alpha = 0;
-                }
-            }
         }
     }
 }
