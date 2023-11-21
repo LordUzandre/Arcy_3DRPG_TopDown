@@ -31,24 +31,28 @@ public class GameStateManager
         // if (OnGameStateChanged != null)
         //     OnGameStateChanged(newGameState);
         //Statement below is simplified version
+
         OnGameStateChanged?.Invoke(newGameState);
     }
-
-    //Copy this onto any observer
-    /*
-    private void OnEnable()
-    {
-        GameStateManager.OnGameStateChanged += OnGameStateChanged;
-    }
-
-    private void OnGameStateChanged()
-    {
-        currentGameState = GameStateManager.Instance.CurrentGameState
-    }
-
-    private void OnDisable()
-    {
-        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
-    }
-    */
 }
+
+//Helpful Hint:
+//Copy the text below into any observer
+/*
+
+private void OnEnable()
+{
+    GameStateManager.OnGameStateChanged += OnGameStateChanged;
+}
+
+private void OnGameStateChanged()
+{
+    currentGameState = GameStateManager.Instance.CurrentGameState
+}
+
+private void OnDisable()
+{
+    GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+}
+
+*/
