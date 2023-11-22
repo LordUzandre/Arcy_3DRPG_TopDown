@@ -3,10 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arcy.Saving
+public class CharacterBase : MonoBehaviour
 {
-    public class JsonSaveableEntity : MonoBehaviour
-    {
-
-    }
+	
 }

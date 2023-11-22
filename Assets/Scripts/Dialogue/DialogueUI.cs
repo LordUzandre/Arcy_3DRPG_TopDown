@@ -4,20 +4,14 @@ using UnityEngine;
 
 public class DialogueUI : MonoBehaviour
 {
-    [Header("Texts")]
-    [SerializeField] public TMPro.TextMeshProUGUI nameText;
+    [Header("Text")]
     [SerializeField] public TMPro.TMP_Animated dialogueText;
     [Header("Sprites")]
     [SerializeField] public UnityEngine.UI.Image dialogueBox;
     [SerializeField] public UnityEngine.UI.Image dialogueArrow;
 
-    private void Start()
+    private void OnEnable()
     {
-        if (nameText == null)
-        {
-            nameText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
-        }
-
         if (dialogueText == null)
         {
             dialogueText = GetComponentInChildren<TMPro.TMP_Animated>();

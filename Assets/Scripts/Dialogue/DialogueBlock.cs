@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Dialogue", menuName = "Dialogue/New Dialogue")]
-public class Dialogue : ScriptableObject
+public class DialogueBlock : ScriptableObject
 {
     //Maximum number of lines per sentence
     [TextArea(1, 4)]

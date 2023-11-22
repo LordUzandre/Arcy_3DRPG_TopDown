@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Action = System.Action;
 
 public class Interactible : MonoBehaviour
 {
@@ -10,14 +10,14 @@ public class Interactible : MonoBehaviour
     public float distanceToPlayer;
     public string speakerID;
     public Animator animator;
-    public Dialogue dialogue;
+    public DialogueBlock dialogue;
     //public enum MyType { None, Chest, Sign, NPC, Door, Pickup, Enemy };
 
     //UI
-    public static System.Action<Vector3> MoveIconHere;
+    public static Action<Vector3> MoveIconHere;
     public static Action RemoveIcon;
 
-    private void Start()
+    private void OnEnable()
     {
         if (gameObject.tag == "Untagged")
         {
