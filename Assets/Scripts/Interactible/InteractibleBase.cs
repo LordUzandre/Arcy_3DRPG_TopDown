@@ -15,6 +15,7 @@ namespace Arcy.Interaction
 
         [Header("SpeechBubble Indicator GameObject")]
         public GameObject speechObject;
+        public abstract Vector3 BubbleOffset { get; set; }
 
         //Actions
         public static Action<Vector3> MoveIconHere;
@@ -25,6 +26,11 @@ namespace Arcy.Interaction
         private void Reset()
         {
             bubbleSprites = new UnityEngine.UI.Image[4];
+
+            if (speechObject == null)
+            {
+                GameObject.FindGameObjectWithTag("InteractionIcon");
+            }
         }
 
         private void OnEnable()
@@ -37,6 +43,11 @@ namespace Arcy.Interaction
             if (gameObject.tag == "Untagged")
             {
                 gameObject.tag = "Interactible";
+            }
+
+            if (speechObject == null)
+            {
+                GameObject.FindGameObjectWithTag("InteractionIcon");
             }
         }
 
@@ -76,5 +87,7 @@ namespace Arcy.Interaction
         {
             speechObject.transform.position = this.transform.position;
         }
+
+        public abstract void Interaction();
     }
 }

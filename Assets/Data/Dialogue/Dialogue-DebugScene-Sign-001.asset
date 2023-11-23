@@ -10,8 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4a9a090f79be054499de268918ea52d, type: 3}
-  m_Name: Dialogue-DebugScene-Jammo-001
+  m_Name: Dialogue-DebugScene-Sign-001
   m_EditorClassIdentifier: 
   Sentences:
-  - "When I grow up, I'm going to be a Pok\xE9mon master!"
-  - Buttcheeks!
+  - Always remember to drink your water

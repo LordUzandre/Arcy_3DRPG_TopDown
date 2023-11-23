@@ -10,6 +10,7 @@ namespace Arcy.Interaction
         [Header("Unique to NPC")]
         [Space]
         [SerializeField] private Animator animator;
+        public override Vector3 BubbleOffset { get; set; }
         //[SerializeField] private Dialogue dialogue;
 
         private void Reset()
@@ -23,6 +24,11 @@ namespace Arcy.Interaction
             {
                 animator = GetComponentInChildren<Animator>();
             }
+        }
+
+        public override void Interaction()
+        {
+            Debug.Log("NPC interacted with");
         }
     }
 }
