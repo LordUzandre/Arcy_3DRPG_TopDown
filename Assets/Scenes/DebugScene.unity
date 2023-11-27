@@ -146,7 +146,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c9ad7dfc85c715541bc100339aaac03b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c9ad7dfc85c715541bc100339aaac03b,
         type: 3}
@@ -501,7 +501,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh54004
+  m_Name: pb_Mesh30772
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1498,7 +1498,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh54162
+  m_Name: pb_Mesh30930
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1681,7 +1681,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
-  m_LocalRotation: {x: 0.5089603, y: 0.00000002247566, z: -0.00000001328921, w: 0.86079}
+  m_LocalRotation: {x: 0.50896037, y: -0.0000000034025442, z: 0.0000000020118256,
+    w: 0.86079}
   m_LocalPosition: {x: 0, y: 1.2700005, z: 5.5600004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1898,26 +1899,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.3851104, y: 1.5, z: 0.34260213}
   m_Center: {x: 0, y: 0.375, z: -0.026412196}
---- !u!114 &392541687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 392541681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76a299999498c434c955595d96afb2c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bubbleSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  icontype: 0
-  speechObject: {fileID: 601054007}
-  dialogue: {fileID: 11400000, guid: 45b60a323bc964d449080c81951f1653, type: 2}
 --- !u!4 &407029746 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5159579089291596364, guid: 82a2914d8f86c62488456950c8330e38,
@@ -5795,7 +5776,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh53554
+  m_Name: pb_Mesh30314
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -6845,54 +6826,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1160528999}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1241862529
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1241862531}
-  - component: {fileID: 1241862532}
-  m_Layer: 0
-  m_Name: Empty
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1241862531
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241862529}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.8777127, y: 4.3265953, z: -0.3007423}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 17
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1241862532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241862529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76a299999498c434c955595d96afb2c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bubbleSprites: []
-  icontype: 0
-  speechObject: {fileID: 0}
-  dialogue: {fileID: 0}
 --- !u!4 &1244933996 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5420008163957686366, guid: 82a2914d8f86c62488456950c8330e38,
@@ -6910,7 +6843,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 7c1c3b20ee8395146b21cfe7169d23e9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7c1c3b20ee8395146b21cfe7169d23e9,
         type: 3}
@@ -6988,7 +6921,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7c1c3b20ee8395146b21cfe7169d23e9,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1670699174}
+      addedObject: {fileID: 1670699177}
   m_SourcePrefab: {fileID: 100100000, guid: 7c1c3b20ee8395146b21cfe7169d23e9, type: 3}
 --- !u!1 &1278186516
 GameObject:
@@ -8965,23 +8898,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1254418557}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1670699174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1670699173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ae7e8e6f18cf744d95e1aec3958990f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bubbleSprites: []
-  icontype: 0
-  speechObject: {fileID: 1417442468}
-  animator: {fileID: 1670699176}
-  boxCollider: {fileID: 1670699175}
 --- !u!65 &1670699175
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9009,6 +8925,20 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 1254418557}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1670699177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670699173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e080e7f708d7f1448a4e2fd4b5fd8c68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1670699176}
+  boxCollider: {fileID: 1670699175}
 --- !u!1 &1677117656
 GameObject:
   m_ObjectHideFlags: 0
@@ -10327,7 +10257,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh53792
+  m_Name: pb_Mesh30552
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -11118,7 +11048,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8d99eb9617d603648b32c6ef108f2b29,
         type: 3}
       propertyPath: m_RootOrder
-      value: 20
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8d99eb9617d603648b32c6ef108f2b29,
         type: 3}
@@ -11193,10 +11123,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 392541686}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d99eb9617d603648b32c6ef108f2b29,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 392541687}
   m_SourcePrefab: {fileID: 100100000, guid: 8d99eb9617d603648b32c6ef108f2b29, type: 3}
 --- !u!4 &1968127833 stripped
 Transform:

@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace Arcy.Interaction
 {
-    public interface IcharacterBase
+    public interface IInteractible
     {
-        float MyFloat { get; set; }
+        void Interact();
     }
 }

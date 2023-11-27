@@ -15,6 +15,7 @@ public class FieldOfView : MonoBehaviour
     [HideInInspector] public List<Interactible> visibleTargetsList = new List<Interactible>();
     [HideInInspector] public Interactible currentInteractible;
     private Interactible previousInteractible;
+    private GameObject interactionIcon;
 
     void OnEnable()
     {
@@ -91,6 +92,7 @@ public class FieldOfView : MonoBehaviour
                             case 1:
                                 // 1 interactible in fow
                                 currentInteractible = i;
+                                MoveIconToInteractible(i.transform.position);
                                 break;
                             default:
                                 // Multiple interactibles in fow
@@ -101,6 +103,7 @@ public class FieldOfView : MonoBehaviour
                                     {
                                         //PossibleTarget is closer than closestTarget
                                         currentInteractible = i;
+                                        MoveIconToInteractible(i.transform.position);
                                     }
                                 }
                                 break;
@@ -109,6 +112,11 @@ public class FieldOfView : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void MoveIconToInteractible(Vector3 interactiblePosition)
+    {
+        interactionIcon.transform.position = interactiblePosition;
     }
 
     //used by FieldOfViewEditor
