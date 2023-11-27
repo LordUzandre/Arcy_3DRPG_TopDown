@@ -40,7 +40,7 @@ namespace Arcy.InputManager
                 playerInputs.Gameplay.run.performed += i => dodgeInput = true;
 
                 //interactInput
-                playerInputs.Gameplay.interact.performed += CheckInteractible;
+                playerInputs.Gameplay.interact.performed += InteractibleKeyPressed;
 
                 // subscribe to gameStateManager
                 currentGameState = GameStateManager.Instance.CurrentGameState;
@@ -62,7 +62,7 @@ namespace Arcy.InputManager
         }
 
         // When player presses "E"-key
-        private void CheckInteractible(InputAction.CallbackContext context)
+        private void InteractibleKeyPressed(InputAction.CallbackContext context)
         {
             switch (currentGameState)
             {

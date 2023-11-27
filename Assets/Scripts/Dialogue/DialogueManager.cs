@@ -8,6 +8,7 @@ using TMPro;
 using Cinemachine;
 using UnityEngine.Rendering;
 using Random = System.Random;
+using Arcy.Interaction;
 
 namespace Arcy.Dialogue
 {
@@ -33,7 +34,7 @@ namespace Arcy.Dialogue
         [Header("Dialogue Text")]
         public TMP_Animated dialogueText;
 
-        [HideInInspector] public Interactible currentInteractible;
+        [HideInInspector] public IInteractible currentInteractible;
         public bool currentlyInDialogue = false;
         public bool nextDialogue = false;
         public bool canExit = false;
@@ -60,8 +61,9 @@ namespace Arcy.Dialogue
             dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
         }
 
-        public void RunDialogue(Interactible currentInteractible)
+        public void RunDialogue(IInteractible currentInteractible)
         {
+            print("fahfajrhguiahfuiahf");
             if (!currentlyInDialogue)
             {
                 StartDialogue();
@@ -79,7 +81,7 @@ namespace Arcy.Dialogue
 
                 if (nextDialogue)
                 {
-                    dialogueText.ReadText(currentInteractible.dialogue.Sentences[dialogueIndex]);
+                    //dialogueText.ReadText(currentInteractible.dialogue.Sentences[dialogueIndex]);
                 }
             }
         }
@@ -88,13 +90,13 @@ namespace Arcy.Dialogue
         {
             currentInteractible = PlayerManager.instance.currentInteractible;
 
-            if (currentInteractible.TryGetComponent<NPC_AnimationHandler>(out NPC_AnimationHandler npcAnimator))
-            {
-                npcAnimator.TurnToPlayer(transform.position);
-            }
+            // if (currentInteractible.TryGetComponent<NPC_AnimationHandler>(out NPC_AnimationHandler npcAnimator))
+            // {
+            //     npcAnimator.TurnToPlayer(transform.position);
+            // }
 
             //camera settings
-            targetGroup.m_Targets[1].target = currentInteractible.gameObject.transform;
+            targetGroup.m_Targets[1].target = currentInteractible.transform;
             currentlyInDialogue = true;
             ClearText();
             CameraChange(true);
@@ -111,7 +113,7 @@ namespace Arcy.Dialogue
             {
                 dialogueIndex = 0;
                 sequence.Join(canvasGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
-                sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.Sentences[0]));
+                //sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.Sentences[0]));
             }
         }
 
@@ -129,16 +131,16 @@ namespace Arcy.Dialogue
 
         public void FinishDialogue()
         {
-            if (dialogueIndex < currentInteractible.dialogue.Sentences.Count - 1)
-            {
-                dialogueIndex++;
-                nextDialogue = true;
-            }
-            else
-            {
-                nextDialogue = false;
-                canExit = true;
-            }
+            // if (dialogueIndex < currentInteractible.dialogue.Sentences.Count - 1)
+            // {
+            //     dialogueIndex++;
+            //     nextDialogue = true;
+            // }
+            // else
+            // {
+            //     nextDialogue = false;
+            //     canExit = true;
+            // }
         }
 
         public void CameraChange(bool dialogue) //true = dialogue, false = freeroam

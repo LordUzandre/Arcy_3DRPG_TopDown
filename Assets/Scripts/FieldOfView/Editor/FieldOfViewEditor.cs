@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Arcy.Interaction;
 
 [CustomEditor(typeof(FieldOfView))]
 public class FieldOfViewEditor : Editor
@@ -25,7 +26,7 @@ public class FieldOfViewEditor : Editor
         //Draw line to current interactible
         if (fow.multipleTargetsInView)
         {
-            foreach (Interactible i in fow.visibleTargetsList)
+            foreach (IInteractible i in fow.visibleTargetsList)
             {
                 if (i == fow.currentInteractible)
                 {
