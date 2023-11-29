@@ -88,11 +88,6 @@ namespace Arcy.Dialogue
         {
             currentInteractible = PlayerManager.instance.currentInteractible;
 
-            if (currentInteractible.TryGetComponent<NPC_AnimationHandler>(out NPC_AnimationHandler npcAnimator))
-            {
-                npcAnimator.TurnToPlayer(transform.position);
-            }
-
             //camera settings
             targetGroup.m_Targets[1].target = currentInteractible.gameObject.transform;
             currentlyInDialogue = true;
