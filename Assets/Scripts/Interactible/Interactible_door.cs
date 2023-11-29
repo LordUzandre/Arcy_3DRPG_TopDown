@@ -6,25 +6,35 @@ using UnityEngine;
 namespace Arcy.Interaction
 {
     [RequireComponent(typeof(Animator), typeof(BoxCollider))]
-    public class Door : MonoBehaviour, IInteractible
+    public class Interactible_door : InteractibleBase
     {
+        [Header("Door")]
         [SerializeField] Animator animator;
         [SerializeField] BoxCollider boxCollider;
-        
+
+        public override Vector3 BubbleOffset { get; set; }
+
         private void Reset()
         {
             animator = GetComponent<Animator>();
             boxCollider = GetComponent<BoxCollider>();
         }
-        public void Interact()
+
+        public void OpenDoor()
         {
             animator.SetTrigger("Opening");
-            Debug.Log("Interaction triggered");
+            boxCollider.enabled = false;
         }
 
-        public float setDistanceToPlayer(float myDistance)
+        public void ClosedDoor()
         {
-            return myDistance;
+            animator.SetTrigger("Closing");
+            boxCollider.enabled = true;
+        }
+
+        public override void Interaction()
+        {
+            Debug.Log("Door interacted");
         }
     }
 }

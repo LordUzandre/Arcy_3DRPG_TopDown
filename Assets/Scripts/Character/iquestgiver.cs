@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ISpeakable
+public class iquestgiver : MonoBehaviour
 {
-    DialogueBlock dialogue { get; set; }
+	
 }

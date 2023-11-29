@@ -3,10 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arcy.Character
+public class Inpc : MonoBehaviour
 {
-    public abstract class CharacterBase : MonoBehaviour
-    {
-
-    }
+	
 }
