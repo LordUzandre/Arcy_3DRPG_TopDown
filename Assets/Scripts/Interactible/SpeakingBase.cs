@@ -8,11 +8,9 @@ namespace Arcy.Interaction
 {
     public abstract class SpeakingBase : InteractibleBase
     {
+        [Header("Dialogue Block")]
         [SerializeField] DialogueBlock dialogue;
-        
-        public override void Interact()
-        {
-            base.Interact();
-        }
+
+        public override abstract void Interact();
     }
 }

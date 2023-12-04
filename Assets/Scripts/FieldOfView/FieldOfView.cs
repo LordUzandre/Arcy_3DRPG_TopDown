@@ -4,49 +4,52 @@ using System.Collections.Generic;
 
 public class FieldOfView : MonoBehaviour
 {
+    //public:
     [SerializeField] public float viewRadius = 4;
     [Range(0, 120)] public float viewAngle = 120;
-
-    private PlayerManager playerManager;
-    [HideInInspector] public bool multipleTargetsInView; //used by FieldOfViewEditor
-
-    public LayerMask obstacleMask;
-
+    [SerializeField] public LayerMask obstacleMask;
     [HideInInspector] public List<Interactible> visibleTargetsList = new List<Interactible>();
     [HideInInspector] public Interactible currentInteractible;
-    private Interactible previousInteractible;
-    private GameObject interactionIcon;
+    [HideInInspector] public bool multipleTargetsInView; //used by FieldOfViewEditor
+
+    //private:
+    private PlayerManager _playerManager;
+    private Interactible _previousInteractible;
+    private GameObject _interactionIcon;
 
     void OnEnable()
     {
-        StartCoroutine("FindTargetsWithDelay", .25f);
-        playerManager = GetComponent<PlayerManager>();
+        StartCoroutine(FindTargetsWithDelay());
+        _playerManager = GetComponent<PlayerManager>();
+        _interactionIcon = GameObject.FindGameObjectWithTag("InteractionIcon");
     }
 
-    IEnumerator FindTargetsWithDelay(float delay)
+    IEnumerator FindTargetsWithDelay()
     {
+        WaitForSeconds fowDelay = new WaitForSeconds(.25f);
+
         while (true)
         {
-            yield return new WaitForSeconds(delay);
+            yield return fowDelay;
             FindVisibleTargets();
 
             //new interactible from the previous check
-            if (currentInteractible != null && currentInteractible != previousInteractible)
+            if (currentInteractible != null && currentInteractible != _previousInteractible)
             {
                 currentInteractible.OnFocus();
-                previousInteractible = currentInteractible;
+                _previousInteractible = currentInteractible;
             }
 
             //deactivate current Interactible
-            if (currentInteractible == null && previousInteractible != null)
+            if (currentInteractible == null && _previousInteractible != null)
             {
-                previousInteractible.OnDefocused();
-                previousInteractible = null;
+                _previousInteractible.OnDefocused();
+                _previousInteractible = null;
             }
 
-            if (playerManager != null)
+            if (_playerManager != null)
             {
-                playerManager.currentInteractible = currentInteractible;
+                _playerManager.currentInteractible = currentInteractible;
             }
         }
     }
@@ -116,7 +119,7 @@ public class FieldOfView : MonoBehaviour
 
     public void MoveIconToInteractible(Vector3 interactiblePosition)
     {
-        interactionIcon.transform.position = interactiblePosition;
+        _interactionIcon.transform.position = interactiblePosition;
     }
 
     //used by FieldOfViewEditor

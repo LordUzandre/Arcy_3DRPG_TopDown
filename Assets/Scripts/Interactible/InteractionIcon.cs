@@ -34,14 +34,20 @@ namespace Arcy.Interaction
         {
             if (mainCamera == null)
             {
-                mainCamera = Camera.main.transform;
+                mainCamera = CameraManager.instance.mainCamera.transform;
+
+                if (mainCamera == null)
+                {
+                    mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>();
+                    print("Interaction icon couldn't find camera");
+                }
             }
 
             if (interactionIcon == null)
             {
-            interactionIcon = GetComponentInChildren<Image>();
+                interactionIcon = GetComponentInChildren<Image>();
             }
-            
+
             cvGroup = GetComponent<CanvasGroup>();
             cvGroup.alpha = 0;
             originalScale = this.transform.localScale;
