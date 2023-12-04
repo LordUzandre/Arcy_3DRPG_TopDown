@@ -1,25 +1,36 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Arcy.Interaction;
 
 public class FieldOfView : MonoBehaviour
 {
+    //public:
     [SerializeField] public float viewRadius = 4;
-    [Range(0, 120)] public float viewAngle = 120;
+    [Range(45, 120)] public float viewAngle = 120;
+    [SerializeField] public LayerMask obstacleMask;
 
-    private PlayerManager playerManager;
-    [HideInInspector] public bool multipleTargetsInView; //used by FieldOfViewEditor
-
-    public LayerMask obstacleMask;
+    [Space]
+    [SerializeField] InteractionIcon interactionIcon;
 
     [HideInInspector] public List<Interactible> visibleTargetsList = new List<Interactible>();
     [HideInInspector] public Interactible currentInteractible;
-    private Interactible previousInteractible;
+    [HideInInspector] public bool multipleTargetsInView; //used by FieldOfViewEditor
 
-    void OnEnable()
+    //private:
+    private PlayerManager _playerManager; //used to set playerManager.currentInteractive
+    private Interactible _previousInteractible;
+    private Vector3 _vectorOffset = new Vector3(0, 1f, 0);
+
+    private void Reset()
+    {
+        _playerManager = GetComponent<PlayerManager>();
+    }
+
+    private void OnEnable()
     {
         StartCoroutine("FindTargetsWithDelay", .25f);
-        playerManager = GetComponent<PlayerManager>();
+        _playerManager = GetComponent<PlayerManager>();
     }
 
     IEnumerator FindTargetsWithDelay(float delay)
@@ -30,22 +41,22 @@ public class FieldOfView : MonoBehaviour
             FindVisibleTargets();
 
             //new interactible from the previous check
-            if (currentInteractible != null && currentInteractible != previousInteractible)
+            if (currentInteractible != null && currentInteractible != _previousInteractible)
             {
                 currentInteractible.OnFocus();
-                previousInteractible = currentInteractible;
+                _previousInteractible = currentInteractible;
             }
 
             //deactivate current Interactible
-            if (currentInteractible == null && previousInteractible != null)
+            if (currentInteractible == null && _previousInteractible != null)
             {
-                previousInteractible.OnDefocused();
-                previousInteractible = null;
+                _previousInteractible.OnDefocused();
+                _previousInteractible = null;
             }
 
-            if (playerManager != null)
+            if (_playerManager != null)
             {
-                playerManager.currentInteractible = currentInteractible;
+                _playerManager.currentInteractible = currentInteractible;
             }
         }
     }
