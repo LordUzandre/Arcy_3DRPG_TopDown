@@ -5,6 +5,7 @@ using Random = System.Random;
 using Arcy.Dialogue;
 using Arcy.Animation;
 using Arcy.InputManager;
+using System;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerManager : MonoBehaviour
@@ -47,16 +48,31 @@ public class PlayerManager : MonoBehaviour
         if (instance == null) { instance = this; } else { Destroy(this); }
     }
 
+    private void OnEnable()
+    {
+        GameStateManager.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameState state)
+    {
+        
+    }
+
     private void Update() //Should be the only Update() on player's scripts
     {
         delta = Time.deltaTime;
 
-        if (isInteracting == false)
+        if (canMove == true)
         {
             playerLocomotion.HandleAllMovement(delta);
+            animationHandler.locomotion = InputManager.instance.moveAmount;
         }
 
-        animationHandler.locomotion = InputManager.instance.moveAmount;
     }
 
     public void interactionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
@@ -67,6 +83,7 @@ public class PlayerManager : MonoBehaviour
             isInteracting = true;
             playerLocomotion.enabled = false;
             fow.enabled = false;
+            canMove = false;
         }
         else if (isInteracting && currentInteractible.hasDialogue)
         {
@@ -80,5 +97,6 @@ public class PlayerManager : MonoBehaviour
         isInteracting = false;
         playerLocomotion.enabled = true;
         fow.enabled = true;
+        canMove = true;
     }
 }

@@ -33,6 +33,8 @@ public class GameStateManager
         //Statement below is simplified version
 
         OnGameStateChanged?.Invoke(newGameState);
+
+        Debug.Log($"New State is {newGameState}");
     }
 }
 

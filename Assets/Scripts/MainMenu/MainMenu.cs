@@ -11,7 +11,6 @@ using DG.Tweening;
 
 namespace Arcy.MainMenu
 {
-
     public class MainMenu : MonoBehaviour
     {
         //Public:
