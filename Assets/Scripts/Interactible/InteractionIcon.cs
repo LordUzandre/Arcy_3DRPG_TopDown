@@ -23,15 +23,9 @@ namespace Arcy.Interaction
             CheckComponents();
         }
 
-        private void OnEnable()
-        {
-            //subscribe to events
-            Interactible.MoveIconHere += NewInteractibleInFocus;
-            Interactible.RemoveIcon += NoObjectInFocus;
-        }
-
         private void CheckComponents()
         {
+            //Replace with future camera system
             if (mainCamera == null)
             {
                 mainCamera = CameraManager.instance.mainCamera.transform;
@@ -53,11 +47,17 @@ namespace Arcy.Interaction
             originalScale = this.transform.localScale;
         }
 
+        private void OnEnable()
+        {
+            //subscribe to events
+            FieldOfView.moveInteractionIconHere += NewInteractibleInFocus;
+
+        }
+
         private void OnDisable()
         {
             //de-subscribe from events
-            Interactible.MoveIconHere -= NewInteractibleInFocus;
-            Interactible.RemoveIcon -= NoObjectInFocus;
+            FieldOfView.moveInteractionIconHere -= NewInteractibleInFocus;
         }
 
         private void Update()

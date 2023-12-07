@@ -1,134 +1,162 @@
-using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class FieldOfView : MonoBehaviour
+namespace Arcy.Interaction
 {
-    //public:
-    [SerializeField] public float viewRadius = 4;
-    [Range(0, 120)] public float viewAngle = 120;
-    [SerializeField] public LayerMask obstacleMask;
-    [HideInInspector] public List<Interactible> visibleTargetsList = new List<Interactible>();
-    [HideInInspector] public Interactible currentInteractible;
-    [HideInInspector] public bool multipleTargetsInView; //used by FieldOfViewEditor
-
-    //private:
-    private PlayerManager _playerManager;
-    private Interactible _previousInteractible;
-    private GameObject _interactionIcon;
-
-    void OnEnable()
+    public class FieldOfView : MonoBehaviour
     {
-        StartCoroutine(FindTargetsWithDelay());
-        _playerManager = GetComponent<PlayerManager>();
-        _interactionIcon = GameObject.FindGameObjectWithTag("InteractionIcon");
-    }
+        //public:
+        [SerializeField]
+        public float viewRadius = 4;
+        [Range(0, 120)]
+        public float viewAngle = 120;
+        [SerializeField]
+        public LayerMask obstacleMask;
+        [HideInInspector]
+        public List<InteractibleBase> myVisibleTargetsList = new List<InteractibleBase>();
+        [HideInInspector]
+        public InteractibleBase currentInteractibleBase;
+        // [HideInInspector] public Interactible currentInteractible;
+        public static Action<Vector3> moveInteractionIconHere;
+        public static Action noObjectInFocus;
 
-    IEnumerator FindTargetsWithDelay()
-    {
-        WaitForSeconds fowDelay = new WaitForSeconds(.25f);
+        //used by FieldOfViewEditor
+        [HideInInspector]
+        public bool multipleTargetsInView;
 
-        while (true)
+        //private:
+        private PlayerManager _playerManager;
+        private InteractibleBase _previousInteractible;
+        private GameObject _interactionIcon;
+        private float _previousInteractibleDistance;
+
+        void OnEnable()
         {
-            yield return fowDelay;
-            FindVisibleTargets();
+            StartCoroutine(FindTargetsWithDelay());
 
-            //new interactible from the previous check
-            if (currentInteractible != null && currentInteractible != _previousInteractible)
-            {
-                currentInteractible.OnFocus();
-                _previousInteractible = currentInteractible;
-            }
-
-            //deactivate current Interactible
-            if (currentInteractible == null && _previousInteractible != null)
-            {
-                _previousInteractible.OnDefocused();
-                _previousInteractible = null;
-            }
-
-            if (_playerManager != null)
-            {
-                _playerManager.currentInteractible = currentInteractible;
-            }
-        }
-    }
-
-    private void FindVisibleTargets()
-    {
-        currentInteractible = null;
-        multipleTargetsInView = false;
-        visibleTargetsList.Clear();
-        Collider[] targetsInViewRadiusArray = Physics.OverlapSphere(transform.position, viewRadius);
-
-        //No colliders in fow
-        if (targetsInViewRadiusArray.Length == 0)
-        {
-            return;
+            _playerManager = GetComponent<PlayerManager>();
+            _interactionIcon = GameObject.FindGameObjectWithTag("InteractionIcon");
         }
 
-        foreach (Collider collider in targetsInViewRadiusArray)
+        IEnumerator FindTargetsWithDelay()
         {
-            Transform targetTransform = collider.transform;
-            Vector3 dirToTarget = (targetTransform.position - transform.position).normalized;
-            float angleToTarget = Vector3.Angle(transform.forward, dirToTarget);
+            WaitForSeconds fowDelay = new WaitForSeconds(.25f);
 
-            //Is the target within viewcone
-            if (angleToTarget < (viewAngle * .5f))
+            while (true)
             {
-                float dstToTarget = Vector3.Distance(transform.position, targetTransform.position);
+                yield return fowDelay;
+                FindVisibleTargets();
 
-                //is the target an interactible
-                if (collider.TryGetComponent<Interactible>(out Interactible i))
+                //new interactible from the previous check
+                if (currentInteractibleBase != null && currentInteractibleBase != _previousInteractible)
                 {
-                    //Is the object blocked by obstacleLayer? (remove and replace)
-                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
-                    {
-                        visibleTargetsList.Add(i);
-                        i.distanceToPlayer = dstToTarget;
+                    _previousInteractible = currentInteractibleBase;
+                    MoveIconToInteractible(currentInteractibleBase.transform.position);
 
-                        switch (visibleTargetsList.Count)
+                    if (_playerManager != null)
+                    {
+                        _playerManager.currentInteractible = currentInteractibleBase;
+                    }
+                }
+
+                //deactivate current Interactible
+                if (currentInteractibleBase == null && _previousInteractible != null)
+                {
+                    //_previousInteractible.OnDefocused();
+                    _previousInteractible = null;
+
+                    if (noObjectInFocus != null)
+                    {
+                        noObjectInFocus();
+                    }
+                }
+
+            }
+        }
+
+        private void FindVisibleTargets()
+        {
+            currentInteractibleBase = null;
+            multipleTargetsInView = false;
+            myVisibleTargetsList.Clear();
+            Collider[] targetsInViewRadiusArray = Physics.OverlapSphere(transform.position, viewRadius);
+
+            //No colliders in fow
+            if (targetsInViewRadiusArray.Length == 0)
+            {
+                return;
+            }
+
+            foreach (Collider collider in targetsInViewRadiusArray)
+            {
+                Transform targetTransform = collider.transform;
+                Vector3 dirToTarget = (targetTransform.position - transform.position).normalized;
+                float angleToTarget = Vector3.Angle(transform.forward, dirToTarget);
+
+                //Is the target within viewcone
+                if (angleToTarget < (viewAngle * .5f))
+                {
+                    //is the target an interactible
+                    if (collider.TryGetComponent(typeof(InteractibleBase), out Component component))
+                    {
+                        float dstToTarget = Vector3.Distance(transform.position, targetTransform.position);
+
+                        //Is the object blocked by obstacleLayer? (remove and replace)
+                        if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                         {
-                            case 0:
-                                // no interactibles within fow
-                                break;
-                            case 1:
-                                // 1 interactible in fow
-                                currentInteractible = i;
-                                MoveIconToInteractible(i.transform.position);
-                                break;
-                            default:
-                                // Multiple interactibles in fow
-                                multipleTargetsInView = true;
-                                if (angleToTarget < (viewAngle * .2f))
-                                {
-                                    if (i.distanceToPlayer < currentInteractible.distanceToPlayer)
+                            InteractibleBase i = component as InteractibleBase;
+                            myVisibleTargetsList.Add(i);
+
+                            // go through the list iof interactibles
+                            switch (myVisibleTargetsList.Count)
+                            {
+                                case 0:
+                                    // no interactibles within fow
+                                    break;
+                                case 1:
+                                    // 1 interactible in fow
+                                    currentInteractibleBase = i;
+                                    break;
+                                default:
+
+                                    /*
+	                                When there are multiple targets in fow. (MultipleTartgetsInView is used by fow.Editor)
+	                                First it narrows the field of search, and if there are no interactibles in the new cone there will be no currentInteractible.
+	                                It then chooses the one closest to player.
+	                                */
+
+                                    multipleTargetsInView = true;
+
+                                    if (angleToTarget < (viewAngle * .2f))
                                     {
-                                        //PossibleTarget is closer than closestTarget
-                                        currentInteractible = i;
-                                        MoveIconToInteractible(i.transform.position);
+                                        if (dstToTarget < _previousInteractibleDistance)
+                                        {
+                                            currentInteractibleBase = i;
+                                        }
                                     }
-                                }
-                                break;
+                                    break;
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    public void MoveIconToInteractible(Vector3 interactiblePosition)
-    {
-        _interactionIcon.transform.position = interactiblePosition;
-    }
-
-    //used by FieldOfViewEditor
-    public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
-    {
-        if (!angleIsGlobal)
+        public void MoveIconToInteractible(Vector3 interactiblePosition)
         {
-            angleInDegrees += transform.eulerAngles.y;
+            _interactionIcon.transform.position = interactiblePosition;
         }
-        return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+
+        //used by FieldOfViewEditor
+        public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
+        {
+            if (!angleIsGlobal)
+            {
+                angleInDegrees += transform.eulerAngles.y;
+            }
+            return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+        }
     }
 }

@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = System.Random;
 using Arcy.Dialogue;
 using Arcy.Animation;
 using Arcy.InputManager;
+using Arcy.Interaction;
 using System;
 
 [RequireComponent(typeof(CharacterController))]
@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public PlayerAnimationHandler animationHandler;
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public FieldOfView fow;
-    [HideInInspector] public Interactible currentInteractible;
+    [HideInInspector] public InteractibleBase currentInteractible;
 
     //Other assets
     [HideInInspector] public CharacterController characterController;
@@ -60,7 +60,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnGameStateChanged(GameState state)
     {
-        
+
     }
 
     private void Update() //Should be the only Update() on player's scripts
@@ -77,26 +77,27 @@ public class PlayerManager : MonoBehaviour
 
     public void interactionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
     {
-        if (!isInteracting && currentInteractible.hasDialogue)
+        if (currentInteractible is SpeakingBase)
         {
-            DialogueManager.instance.RunDialogue(currentInteractible);
-            isInteracting = true;
-            playerLocomotion.enabled = false;
-            fow.enabled = false;
-            canMove = false;
-        }
-        else if (isInteracting && currentInteractible.hasDialogue)
-        {
-            DialogueManager.instance.RunDialogue(currentInteractible);
+            if (!isInteracting)
+            {
+                DialogueManager.instance.RunDialogue(currentInteractible as SpeakingBase);
+                DisableMovement(false);
+            }
+            else
+            {
+                DialogueManager.instance.RunDialogue(currentInteractible as SpeakingBase);
+            }
         }
     }
 
-    public void ResetAfterDialogue()
+    public void DisableMovement(bool whatToDoBool)
     {
         //when dialogue is finished
-        isInteracting = false;
-        playerLocomotion.enabled = true;
-        fow.enabled = true;
-        canMove = true;
+        isInteracting = !whatToDoBool;
+
+        playerLocomotion.enabled = whatToDoBool;
+        fow.enabled = whatToDoBool;
+        canMove = whatToDoBool;
     }
 }

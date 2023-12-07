@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Arcy.Interaction
 {
     [RequireComponent(typeof(Animator), typeof(BoxCollider))]
-    public class Door : MonoBehaviour, IInteractible
+    public class Door : InteractibleBase
     {
         [SerializeField] Animator animator;
         [SerializeField] BoxCollider boxCollider;
@@ -16,7 +16,8 @@ namespace Arcy.Interaction
             animator = GetComponent<Animator>();
             boxCollider = GetComponent<BoxCollider>();
         }
-        public void Interact()
+
+        public override void Interact()
         {
             animator.SetTrigger("Opening");
             Debug.Log("Interaction triggered");

@@ -6,8 +6,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 using Cinemachine;
-using UnityEngine.Rendering;
-using Random = System.Random;
+using Arcy.Interaction;
 
 namespace Arcy.Dialogue
 {
@@ -16,28 +15,35 @@ namespace Arcy.Dialogue
         //singleton
         public static DialogueManager instance;
 
+        //public:
         [Header("Dialogue Canvas Group")]
-        public CanvasGroup canvasGroup;
+        [SerializeField]
+        public CanvasGroup cvGroup;
         [Space]
-
         [Header("Cameras")]
+        [SerializeField]
         public GameObject gameCam;
+        [SerializeField]
         public GameObject dialogueCam;
-        [SerializeField] public CinemachineTargetGroup targetGroup;
+        [SerializeField]
+        public CinemachineTargetGroup targetGroup;
         [Space]
-
         [Header("Post-proccessing")]
+        [SerializeField]
         public UnityEngine.Rendering.Volume dialogueDof;
         [Space]
-
         [Header("Dialogue Text")]
+        [SerializeField]
         public TMP_Animated dialogueText;
 
-        [HideInInspector] public Interactible currentInteractible;
-        public bool currentlyInDialogue = false;
-        public bool nextDialogue = false;
-        public bool canExit = false;
-        private int dialogueIndex = 0;
+        [HideInInspector]
+        public SpeakingBase currentInteractible;
+
+        //private:
+        private bool _currentlyInDialogue = false;
+        private bool _nextDialogue = false;
+        private bool _canExit = false;
+        private int _dialogueIndex = 0;
 
         private void Awake()
         {
@@ -46,7 +52,7 @@ namespace Arcy.Dialogue
 
         private void Start()
         {
-            if (canvasGroup == null)
+            if (cvGroup == null)
             {
                 GameObject.FindGameObjectWithTag("DialogueUI").GetComponent<CanvasGroup>();
             }
@@ -56,19 +62,19 @@ namespace Arcy.Dialogue
                 GameObject.FindGameObjectWithTag("MainCamera");
             }
 
-            canvasGroup.alpha = 0;
+            cvGroup.alpha = 0;
             dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
         }
 
-        public void RunDialogue(Interactible currentInteractible)
+        public void RunDialogue(SpeakingBase currentInteractible)
         {
-            if (!currentlyInDialogue)
+            if (!_currentlyInDialogue)
             {
                 StartDialogue();
             }
             else
             {
-                if (canExit)
+                if (_canExit)
                 {
                     CameraChange(false);
                     FadeUI(false, .2f, .05f);
@@ -77,20 +83,20 @@ namespace Arcy.Dialogue
                     sequence.AppendCallback(() => ResetState());
                 }
 
-                if (nextDialogue)
+                if (_nextDialogue)
                 {
-                    dialogueText.ReadText(currentInteractible.dialogue.Sentences[dialogueIndex]);
+                    dialogueText.ReadText(currentInteractible.dialogue.Sentences[_dialogueIndex]);
                 }
             }
         }
 
         public void StartDialogue()
         {
-            currentInteractible = PlayerManager.instance.currentInteractible;
+            currentInteractible = PlayerManager.instance.currentInteractible as SpeakingBase;
 
             //camera settings
             targetGroup.m_Targets[1].target = currentInteractible.gameObject.transform;
-            currentlyInDialogue = true;
+            _currentlyInDialogue = true;
             ClearText();
             CameraChange(true);
             FadeUI(true, .25f, .025f);
@@ -100,12 +106,12 @@ namespace Arcy.Dialogue
         {
             Sequence sequence = DOTween.Sequence();
             sequence.AppendInterval(delay);
-            sequence.Append(canvasGroup.DOFade(show ? 1 : 0, time));
+            sequence.Append(cvGroup.DOFade(show ? 1 : 0, time));
 
             if (show)
             {
-                dialogueIndex = 0;
-                sequence.Join(canvasGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
+                _dialogueIndex = 0;
+                sequence.Join(cvGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
                 sequence.AppendCallback(() => dialogueText.ReadText(currentInteractible.dialogue.Sentences[0]));
             }
         }
@@ -117,22 +123,22 @@ namespace Arcy.Dialogue
 
         public void ResetState()
         {
-            PlayerManager.instance.ResetAfterDialogue();
-            currentlyInDialogue = false;
-            canExit = false;
+            PlayerManager.instance.DisableMovement(true);
+            _currentlyInDialogue = false;
+            _canExit = false;
         }
 
         public void FinishDialogue()
         {
-            if (dialogueIndex < currentInteractible.dialogue.Sentences.Count - 1)
+            if (_dialogueIndex < currentInteractible.dialogue.Sentences.Count - 1)
             {
-                dialogueIndex++;
-                nextDialogue = true;
+                _dialogueIndex++;
+                _nextDialogue = true;
             }
             else
             {
-                nextDialogue = false;
-                canExit = true;
+                _nextDialogue = false;
+                _canExit = true;
             }
         }
 

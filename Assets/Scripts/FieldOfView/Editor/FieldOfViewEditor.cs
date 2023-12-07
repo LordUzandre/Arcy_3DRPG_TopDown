@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Arcy.Interaction;
 
 [CustomEditor(typeof(FieldOfView))]
 public class FieldOfViewEditor : Editor
@@ -17,17 +18,13 @@ public class FieldOfViewEditor : Editor
         Vector3 viewAngleB = fow.DirFromAngle(fow.viewAngle * .5f, false);
         Handles.DrawLine(fow.transform.position, fow.transform.position + viewAngleA * fow.viewRadius);
         Handles.DrawLine(fow.transform.position, fow.transform.position + viewAngleB * fow.viewRadius);
-        //Vector3 viewAngleC = fow.DirFromAngle(-fow.viewAngle * .25f, false);
-        //Vector3 viewAngleD = fow.DirFromAngle(fow.viewAngle * .25f, false);
-        //Handles.DrawLine(fow.transform.position, fow.transform.position + viewAngleC * fow.viewRadius);
-        //Handles.DrawLine(fow.transform.position, fow.transform.position + viewAngleD * fow.viewRadius);
 
         //Draw line to current interactible
         if (fow.multipleTargetsInView)
         {
-            foreach (Interactible i in fow.visibleTargetsList)
+            foreach (InteractibleBase i in fow.myVisibleTargetsList)
             {
-                if (i == fow.currentInteractible)
+                if (i == fow.currentInteractibleBase)
                 {
                     Handles.color = Color.red;
                 }
@@ -35,13 +32,13 @@ public class FieldOfViewEditor : Editor
                 {
                     Handles.color = Color.white;
                 }
-                Handles.DrawLine(fow.transform.position, fow.currentInteractible.transform.position);
+                Handles.DrawLine(fow.transform.position, fow.currentInteractibleBase.transform.position);
             }
         }
-        else if (fow.currentInteractible != null)
+        else if (fow.currentInteractibleBase != null)
         {
             Handles.color = Color.red;
-            Handles.DrawLine(fow.transform.position, fow.currentInteractible.transform.position);
+            Handles.DrawLine(fow.transform.position, fow.currentInteractibleBase.transform.position);
         }
     }
 }

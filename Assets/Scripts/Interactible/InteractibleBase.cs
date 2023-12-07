@@ -5,9 +5,6 @@ namespace Arcy.Interaction
 {
     public abstract class InteractibleBase : MonoBehaviour
     {
-        public virtual void Interact()
-        {
-            print("interaction started");
-        }
+        public abstract void Interact();
     }
 }
