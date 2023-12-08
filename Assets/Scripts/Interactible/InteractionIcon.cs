@@ -8,10 +8,14 @@ namespace Arcy.Interaction
 {
     public class InteractionIcon : MonoBehaviour
     {
-        [SerializeField] Transform mainCamera;
-        [SerializeField] Image interactionIcon;
-        [SerializeField] CanvasGroup cvGroup;
-        private Vector3 originalScale;
+        [SerializeField] private Transform _mainCamera;
+        [SerializeField] private Image _interactionIcon;
+        [SerializeField] private CanvasGroup _cvGroup;
+        private Vector3 _punchScale = new Vector3(1f, 1f, 1f);
+        private Vector3 _originalScale;
+        private Vector3 _canvasOffset;
+        private float _yOffset = 2f;
+        private float _zOffset = -0.5f;
 
         private void Reset()
         {
@@ -21,30 +25,32 @@ namespace Arcy.Interaction
         private void Start()
         {
             CheckComponents();
+
+            _canvasOffset = new Vector3(0, _yOffset, _zOffset);
+            _cvGroup.alpha = 0;
         }
 
         private void CheckComponents()
         {
             //Replace with future camera system
-            if (mainCamera == null)
+            if (_mainCamera == null)
             {
-                mainCamera = CameraManager.instance.mainCamera.transform;
+                _mainCamera = CameraManager.instance.mainCamera.transform;
 
-                if (mainCamera == null)
+                if (_mainCamera == null)
                 {
-                    mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>();
+                    _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>();
                     print("Interaction icon couldn't find camera");
                 }
             }
 
-            if (interactionIcon == null)
+            if (_interactionIcon == null)
             {
-                interactionIcon = GetComponentInChildren<Image>();
+                _interactionIcon = GetComponentInChildren<Image>();
             }
 
-            cvGroup = GetComponent<CanvasGroup>();
-            cvGroup.alpha = 0;
-            originalScale = this.transform.localScale;
+            _cvGroup = GetComponent<CanvasGroup>();
+            _originalScale = this.transform.localScale;
         }
 
         private void OnEnable()
@@ -62,21 +68,21 @@ namespace Arcy.Interaction
 
         private void Update()
         {
-            Quaternion transformRotation = mainCamera.transform.rotation;
+            Quaternion transformRotation = _mainCamera.transform.rotation;
             transform.rotation = Quaternion.Euler(transformRotation.eulerAngles.x, 0f, 0f);
         }
 
         private void NewInteractibleInFocus(Vector3 newPosition)
         {
-            this.transform.localScale = originalScale;
-            this.transform.position = new Vector3(0f, 1f, 0f) + newPosition;
-            cvGroup.alpha = 1;
-            transform.DOPunchScale(new Vector3(1f, 1f, 1f), .3f, 5, .5f);
+            this.transform.localScale = _originalScale;
+            this.transform.position = newPosition + _canvasOffset;
+            _cvGroup.alpha = 1;
+            transform.DOPunchScale(_punchScale, .2f, 5, .5f);
         }
 
         private void NoObjectInFocus()
         {
-            cvGroup.alpha = 0;
+            _cvGroup.alpha = 0;
         }
     }
 

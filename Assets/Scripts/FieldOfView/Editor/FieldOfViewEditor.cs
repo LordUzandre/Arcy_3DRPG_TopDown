@@ -22,7 +22,7 @@ public class FieldOfViewEditor : Editor
         //Draw line to current interactible
         if (fow.multipleTargetsInView)
         {
-            foreach (InteractibleBase i in fow.myVisibleTargetsList)
+            foreach (InteractibleBase i in fow.visibleTargetsList)
             {
                 if (i == fow.currentInteractibleBase)
                 {

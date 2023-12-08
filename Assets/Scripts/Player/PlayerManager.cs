@@ -81,13 +81,15 @@ public class PlayerManager : MonoBehaviour
         {
             if (!isInteracting)
             {
-                DialogueManager.instance.RunDialogue(currentInteractible as SpeakingBase);
                 DisableMovement(false);
             }
-            else
-            {
-                DialogueManager.instance.RunDialogue(currentInteractible as SpeakingBase);
-            }
+
+            DialogueManager.instance.RunDialogue(currentInteractible as SpeakingBase);
+
+        }
+        else if (currentInteractible is InteractibleBase)
+        {
+            currentInteractible.Interact();
         }
     }
 

@@ -15,7 +15,7 @@ namespace Arcy.Interaction
         [SerializeField]
         public LayerMask obstacleMask;
         [HideInInspector]
-        public List<InteractibleBase> myVisibleTargetsList = new List<InteractibleBase>();
+        public List<InteractibleBase> visibleTargetsList = new List<InteractibleBase>();
         [HideInInspector]
         public InteractibleBase currentInteractibleBase;
         // [HideInInspector] public Interactible currentInteractible;
@@ -29,7 +29,7 @@ namespace Arcy.Interaction
         //private:
         private PlayerManager _playerManager;
         private InteractibleBase _previousInteractible;
-        private GameObject _interactionIcon;
+        //private GameObject _interactionIcon;
         private float _previousInteractibleDistance;
 
         void OnEnable()
@@ -37,7 +37,7 @@ namespace Arcy.Interaction
             StartCoroutine(FindTargetsWithDelay());
 
             _playerManager = GetComponent<PlayerManager>();
-            _interactionIcon = GameObject.FindGameObjectWithTag("InteractionIcon");
+            //_interactionIcon = GameObject.FindGameObjectWithTag("InteractionIcon");
         }
 
         IEnumerator FindTargetsWithDelay()
@@ -53,7 +53,11 @@ namespace Arcy.Interaction
                 if (currentInteractibleBase != null && currentInteractibleBase != _previousInteractible)
                 {
                     _previousInteractible = currentInteractibleBase;
-                    MoveIconToInteractible(currentInteractibleBase.transform.position);
+                    
+                    if (moveInteractionIconHere != null)
+                    {
+                        moveInteractionIconHere(currentInteractibleBase.transform.position);
+                    }
 
                     if (_playerManager != null)
                     {
@@ -80,7 +84,7 @@ namespace Arcy.Interaction
         {
             currentInteractibleBase = null;
             multipleTargetsInView = false;
-            myVisibleTargetsList.Clear();
+            visibleTargetsList.Clear();
             Collider[] targetsInViewRadiusArray = Physics.OverlapSphere(transform.position, viewRadius);
 
             //No colliders in fow
@@ -107,10 +111,10 @@ namespace Arcy.Interaction
                         if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                         {
                             InteractibleBase i = component as InteractibleBase;
-                            myVisibleTargetsList.Add(i);
+                            visibleTargetsList.Add(i);
 
                             // go through the list iof interactibles
-                            switch (myVisibleTargetsList.Count)
+                            switch (visibleTargetsList.Count)
                             {
                                 case 0:
                                     // no interactibles within fow
@@ -144,10 +148,10 @@ namespace Arcy.Interaction
             }
         }
 
-        public void MoveIconToInteractible(Vector3 interactiblePosition)
-        {
-            _interactionIcon.transform.position = interactiblePosition;
-        }
+        // public void MoveIconToInteractible(Vector3 interactiblePosition)
+        // {
+        //     _interactionIcon.transform.position = interactiblePosition;
+        // }
 
         //used by FieldOfViewEditor
         public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
