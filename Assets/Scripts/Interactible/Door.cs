@@ -8,6 +8,7 @@ namespace Arcy.Interaction
     [RequireComponent(typeof(Animator), typeof(BoxCollider))]
     public class Door : InteractibleBase
     {
+        [Header("Components")]
         [SerializeField] Animator animator;
         [SerializeField] BoxCollider boxCollider;
 

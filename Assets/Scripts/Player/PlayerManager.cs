@@ -77,7 +77,7 @@ public class PlayerManager : MonoBehaviour
 
     public void interactionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
     {
-        if (currentInteractible is SpeakingBase)
+        if (currentInteractible is SpeakingBase) // is dialogue != null
         {
             if (!isInteracting)
             {

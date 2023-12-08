@@ -148,11 +148,6 @@ namespace Arcy.Interaction
             }
         }
 
-        // public void MoveIconToInteractible(Vector3 interactiblePosition)
-        // {
-        //     _interactionIcon.transform.position = interactiblePosition;
-        // }
-
         //used by FieldOfViewEditor
         public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
         {
