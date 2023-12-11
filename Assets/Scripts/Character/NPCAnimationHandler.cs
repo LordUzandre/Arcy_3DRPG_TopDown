@@ -3,19 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEditor;
 
 namespace Arcy.Animation
 {
     public class NPCAnimationHandler : MonoBehaviour
     {
+        //Public:
+        [Header("Animator")]
+        [SerializeField] public Animator anim;
+        [Space]
+
+        //private:
         [SerializeField] private Transform _aimController;
-        [SerializeField] private Transform _aimTarget;
         [SerializeField] private MultiAimConstraint _multiAim;
-        [SerializeField] private Animator _anim;
-        
+        private Transform _aimTarget;
         private float _viewRadius = 5f;
         private float _viewAngle = 120f;
-        private float _delay = .05f;
+        private float _weight;
+        private Vector3 _aimCtrlPosition = new Vector3(0, 0, 0);
 
         private void OnEnable()
         {
@@ -61,49 +67,66 @@ namespace Arcy.Animation
                     }
                 }
             }
+
+            if (anim == null)
+            {
+                if (TryGetComponent<Animator>(out Animator animFound))
+                {
+                    anim = animFound;
+                }
+            }
+
+            _aimTarget = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
         private void Update()
         {
-            if (true)
+
+            if (_aimTarget != null)
             {
-                FindPlayer();
-
-                float weight = (_aimTarget == null) ? 0 : 1f;
-                Vector3 thisPos = (_aimTarget == null) ? transform.position + transform.forward + new Vector3(0, 1.2f, 0) : _aimTarget.position + Vector3.up;
-
-                //set weight of the anim constraint
-                _multiAim.weight = Mathf.Lerp(_multiAim.weight, weight, .05f);
-                //Set position of the aim-controller to player
-                _aimController.position = Vector3.Lerp(_aimController.position, thisPos, .05f);
-
-            }
-        }
-
-        private void FindPlayer() //SphereCast, checking for player by tag
-        {
-            _aimTarget = null;
-            Collider[] targetsInViewRadiusArray = Physics.OverlapSphere(transform.position, _viewRadius);
-
-            //No colliders in fow
-            if (targetsInViewRadiusArray.Length == 0) return;
-
-            foreach (Collider other in targetsInViewRadiusArray)
-            {
-                if (other.CompareTag("Player"))
+                if (Vector3.Distance(transform.position, _aimTarget.position) > _viewRadius)
                 {
-                    Vector3 dirToTarget = (other.transform.position - transform.position).normalized;
+                    Vector3 dirToTarget = (_aimTarget.transform.position - transform.position).normalized;
+
                     float angleToTarget = Vector3.Angle(transform.forward, dirToTarget);
 
                     if (angleToTarget < (_viewAngle * .5f)) //is the player within the viewCone
                     {
-                        _aimTarget = other.transform;
-                        _delay = Time.deltaTime;
+                        _weight = 1;
+                        _aimCtrlPosition = _aimTarget.position + Vector3.up;
+
+                    }
+                    else
+                    {
+                        _aimCtrlPosition = transform.position + transform.forward + new Vector3(0, 1.2f, 0);
                     }
                 }
-            }
 
-            if (_aimTarget == null) _delay = .1f;
+                //set weight of the anim constraint
+                _multiAim.weight = Mathf.Lerp(_multiAim.weight, _weight, .05f);
+                //Set position of the aim-controller to player
+                _aimController.position = Vector3.Lerp(_aimController.position, _aimCtrlPosition, .05f);
+            }
+        }
+
+        private void OnSceneGUI()
+        {
+            //Draw view cone
+            Handles.color = Color.white;
+            Handles.DrawWireArc(transform.position, Vector3.up, Vector3.forward, 360, _viewRadius);
+            Vector3 viewAngleA = DirFromAngle(_viewAngle * .5f, false);
+            Vector3 viewAngleB = DirFromAngle(_viewAngle * .5f, false);
+            Handles.DrawLine(transform.position, transform.position + viewAngleA * _viewRadius);
+            Handles.DrawLine(transform.position, transform.position + viewAngleB * _viewRadius);
+        }
+
+        public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
+        {
+            if (!angleIsGlobal)
+            {
+                angleInDegrees += transform.eulerAngles.y;
+            }
+            return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
         }
     }
 }

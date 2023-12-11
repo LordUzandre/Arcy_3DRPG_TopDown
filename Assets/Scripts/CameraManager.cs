@@ -3,73 +3,73 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using Vector3 = UnityEngine.Vector3;
 
-public class CameraManager : MonoBehaviour
+namespace Arcy.Camera
 {
-    [Header("Main Camera")]
-    public CinemachineVirtualCamera mainCamera;
-    [Space]
-    [Header("Dialogue Camera")]
-    public CinemachineVirtualCamera dialogueCamera;
-    [Space]
-    [Header("Top View Camera")]
-    public CinemachineVirtualCamera topViewCamera;
-    [HideInInspector] public static CameraManager instance;
-    [HideInInspector] public float distanceToPlayer;
-    public static Action changeCamera;
-
-    //Private:
-    private Transform player;
-
-    private void Reset()
+    public class CameraManager : MonoBehaviour
     {
-        CheckComponents();
-    }
+        //public:
+        [Header("CineMachine Brain")]
+        public CinemachineBrain CM_Brain;
+        
+        [Header("Main Camera")]
+        public CinemachineVirtualCamera gameplayCamera;
+        [Space]
+        [Header("Dialogue Camera")]
+        public CinemachineVirtualCamera dialogueCamera;
+        [Space]
+        [Header("Top View Camera")]
+        public CinemachineVirtualCamera topViewCamera;
 
-    private void Start()
-    {
-        // if (instance == null)
-        // {
-        //     instance = this;
-        // }
-        // else
-        // {
-        //     Destroy(gameObject);
-        // }
-    }
+        [HideInInspector] public static CameraManager instance;
+        [HideInInspector] public float distanceToPlayer;
 
-    private void OnEnable()
-    {
-        CheckComponents();
-        changeCamera += ChangeCameraView;
-    }
+        //Private:
+        private Transform player;
+        private Vector3 camBodyPosOffset;
 
-    private void OnDisable()
-    {
-        changeCamera -= ChangeCameraView;
-    }
-
-    private void CheckComponents()
-    {
-        if (mainCamera == null)
+        private void Reset()
         {
-            mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineVirtualCamera>();
+            CheckComponents();
         }
 
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        distanceToPlayer = Vector3.Distance(this.transform.position, player.position);
-    }
-
-    void FixedUpdate()
-    {
-        //Change to top view camera if blocked
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out RaycastHit hit, distanceToPlayer))
+        private void OnEnable()
         {
+            CheckComponents();
+            camBodyPosOffset = gameplayCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
         }
-    }
 
-    public void ChangeCameraView()
-    {
+        private void CheckComponents()
+        {
+            if (gameplayCamera == null)
+            {
+                gameplayCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineVirtualCamera>();
+            }
 
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+            distanceToPlayer = Vector3.Distance((gameplayCamera.transform.position + camBodyPosOffset), player.position) + 2f;
+        }
+
+        private void OnSceneGUI()
+        {
+            Debug.DrawLine(gameplayCamera.transform.position + camBodyPosOffset, player.transform.position, Color.yellow, Mathf.Infinity);
+        }
+
+        private void FixedUpdate()
+        {
+            RaycastHit hit;
+
+            if (Physics.Linecast((transform.position + camBodyPosOffset), player.transform.position, out hit))
+            {
+                if (hit.collider != null)
+                {
+                    if (hit.transform == player)
+                    {
+                        //Debug.Log("RayCast hit player");
+                    }
+                }
+            }
+        }
     }
 }

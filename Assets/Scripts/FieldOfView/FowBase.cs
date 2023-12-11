@@ -7,6 +7,9 @@ namespace Arcy.Interaction
 {
     public abstract class FowBase : MonoBehaviour
     {
-
+        public virtual void FindVisibleTargets()
+        {
+            
+        }
     }
 }

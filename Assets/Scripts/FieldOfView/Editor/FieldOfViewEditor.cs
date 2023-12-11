@@ -24,7 +24,7 @@ public class FieldOfViewEditor : Editor
         {
             foreach (InteractibleBase i in fow.visibleTargetsList)
             {
-                if (i == fow.currentInteractibleBase)
+                if (i == fow.currentInteractible)
                 {
                     Handles.color = Color.red;
                 }
@@ -32,13 +32,13 @@ public class FieldOfViewEditor : Editor
                 {
                     Handles.color = Color.white;
                 }
-                Handles.DrawLine(fow.transform.position, fow.currentInteractibleBase.transform.position);
+                Handles.DrawLine(fow.transform.position, fow.currentInteractible.transform.position);
             }
         }
-        else if (fow.currentInteractibleBase != null)
+        else if (fow.currentInteractible != null)
         {
             Handles.color = Color.red;
-            Handles.DrawLine(fow.transform.position, fow.currentInteractibleBase.transform.position);
+            Handles.DrawLine(fow.transform.position, fow.currentInteractible.transform.position);
         }
     }
 }

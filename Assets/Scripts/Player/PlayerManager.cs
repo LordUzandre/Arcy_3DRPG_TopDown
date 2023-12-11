@@ -72,34 +72,32 @@ public class PlayerManager : MonoBehaviour
             playerLocomotion.HandleAllMovement(delta);
             animationHandler.locomotion = InputManager.instance.moveAmount;
         }
-
     }
 
     public void interactionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
     {
-        if (currentInteractible is SpeakingBase) // is dialogue != null
+        if (currentInteractible.dialogue != null)
         {
             if (!isInteracting)
             {
                 DisableMovement(false);
             }
 
-            DialogueManager.instance.RunDialogue(currentInteractible as SpeakingBase);
-
+            DialogueManager.instance.RunDialogue(currentInteractible);
         }
-        else if (currentInteractible is InteractibleBase)
+        else
         {
             currentInteractible.Interact();
         }
     }
 
-    public void DisableMovement(bool whatToDoBool)
+    public void DisableMovement(bool canCharacterMove)
     {
         //when dialogue is finished
-        isInteracting = !whatToDoBool;
+        isInteracting = !canCharacterMove;
 
-        playerLocomotion.enabled = whatToDoBool;
-        fow.enabled = whatToDoBool;
-        canMove = whatToDoBool;
+        playerLocomotion.enabled = canCharacterMove;
+        fow.enabled = canCharacterMove;
+        canMove = canCharacterMove;
     }
 }

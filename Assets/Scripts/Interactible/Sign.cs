@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace Arcy.Interaction
 {
-    public class Sign : SpeakingBase
+    [RequireComponent(typeof(BoxCollider))]
+    public class Sign : InteractibleBase
     {
         public override void Interact()
         {
-            StartDialogue();
-        }
-
-        private void StartDialogue()
-        {
-
+            throw new System.NotImplementedException();
         }
     }
 }

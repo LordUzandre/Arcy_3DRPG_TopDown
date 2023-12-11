@@ -37,7 +37,7 @@ namespace Arcy.Dialogue
         public TMP_Animated dialogueText;
 
         [HideInInspector]
-        public SpeakingBase currentInteractible;
+        public InteractibleBase currentInteractible;
 
         //private:
         private bool _currentlyInDialogue = false;
@@ -66,7 +66,7 @@ namespace Arcy.Dialogue
             dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
         }
 
-        public void RunDialogue(SpeakingBase currentInteractible)
+        public void RunDialogue(InteractibleBase currentInteractible)
         {
             if (!_currentlyInDialogue)
             {
@@ -92,7 +92,7 @@ namespace Arcy.Dialogue
 
         public void StartDialogue()
         {
-            currentInteractible = PlayerManager.instance.currentInteractible as SpeakingBase;
+            currentInteractible = PlayerManager.instance.currentInteractible;
 
             //camera settings
             targetGroup.m_Targets[1].target = currentInteractible.gameObject.transform;

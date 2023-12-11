@@ -14,30 +14,27 @@ namespace Arcy.Interaction
         public float viewAngle = 120;
         [SerializeField]
         public LayerMask obstacleMask;
+
         [HideInInspector]
         public List<InteractibleBase> visibleTargetsList = new List<InteractibleBase>();
         [HideInInspector]
-        public InteractibleBase currentInteractibleBase;
-        // [HideInInspector] public Interactible currentInteractible;
-        public static Action<Vector3> moveInteractionIconHere;
-        public static Action noObjectInFocus;
+        public InteractibleBase currentInteractible;
 
-        //used by FieldOfViewEditor
+        public static Action<Vector3> moveInteractionIconHere; //used by interactionIcon
+        public static Action noObjectInFocus; //used by interactionIcon
+
         [HideInInspector]
-        public bool multipleTargetsInView;
+        public bool multipleTargetsInView; //used by FieldOfViewEditor
 
         //private:
         private PlayerManager _playerManager;
         private InteractibleBase _previousInteractible;
-        //private GameObject _interactionIcon;
         private float _previousInteractibleDistance;
 
         void OnEnable()
         {
             StartCoroutine(FindTargetsWithDelay());
-
             _playerManager = GetComponent<PlayerManager>();
-            //_interactionIcon = GameObject.FindGameObjectWithTag("InteractionIcon");
         }
 
         IEnumerator FindTargetsWithDelay()
@@ -50,25 +47,26 @@ namespace Arcy.Interaction
                 FindVisibleTargets();
 
                 //new interactible from the previous check
-                if (currentInteractibleBase != null && currentInteractibleBase != _previousInteractible)
+                if (currentInteractible != null && currentInteractible != _previousInteractible)
                 {
-                    _previousInteractible = currentInteractibleBase;
-                    
+                    _previousInteractible = currentInteractible;
+
                     if (moveInteractionIconHere != null)
                     {
-                        moveInteractionIconHere(currentInteractibleBase.transform.position);
+                        //calcuate interactionIcons new position
+
+                        moveInteractionIconHere(currentInteractible.transform.position);
                     }
 
                     if (_playerManager != null)
                     {
-                        _playerManager.currentInteractible = currentInteractibleBase;
+                        _playerManager.currentInteractible = currentInteractible;
                     }
                 }
 
                 //deactivate current Interactible
-                if (currentInteractibleBase == null && _previousInteractible != null)
+                if (currentInteractible == null && _previousInteractible != null)
                 {
-                    //_previousInteractible.OnDefocused();
                     _previousInteractible = null;
 
                     if (noObjectInFocus != null)
@@ -82,7 +80,7 @@ namespace Arcy.Interaction
 
         private void FindVisibleTargets()
         {
-            currentInteractibleBase = null;
+            currentInteractible = null;
             multipleTargetsInView = false;
             visibleTargetsList.Clear();
             Collider[] targetsInViewRadiusArray = Physics.OverlapSphere(transform.position, viewRadius);
@@ -121,7 +119,7 @@ namespace Arcy.Interaction
                                     break;
                                 case 1:
                                     // 1 interactible in fow
-                                    currentInteractibleBase = i;
+                                    currentInteractible = i;
                                     break;
                                 default:
 
@@ -137,7 +135,7 @@ namespace Arcy.Interaction
                                     {
                                         if (dstToTarget < _previousInteractibleDistance)
                                         {
-                                            currentInteractibleBase = i;
+                                            currentInteractible = i;
                                         }
                                     }
                                     break;

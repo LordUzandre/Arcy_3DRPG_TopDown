@@ -35,13 +35,8 @@ namespace Arcy.Interaction
             //Replace with future camera system
             if (_mainCamera == null)
             {
-                _mainCamera = CameraManager.instance.mainCamera.transform;
-
-                if (_mainCamera == null)
-                {
-                    _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>();
-                    print("Interaction icon couldn't find camera");
-                }
+                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>();
+                print("Interaction icon couldn't find camera");
             }
 
             if (_interactionIcon == null)
@@ -57,6 +52,7 @@ namespace Arcy.Interaction
         {
             //subscribe to events
             FieldOfView.moveInteractionIconHere += NewInteractibleInFocus;
+            FieldOfView.noObjectInFocus += NoObjectInFocus;
 
         }
 
@@ -64,6 +60,7 @@ namespace Arcy.Interaction
         {
             //de-subscribe from events
             FieldOfView.moveInteractionIconHere -= NewInteractibleInFocus;
+            FieldOfView.noObjectInFocus -= NoObjectInFocus;
         }
 
         private void Update()
