@@ -12,7 +12,7 @@ namespace Arcy.Camera
         //public:
         [Header("CineMachine Brain")]
         public CinemachineBrain CM_Brain;
-        
+
         [Header("Main Camera")]
         public CinemachineVirtualCamera gameplayCamera;
         [Space]
@@ -38,6 +38,7 @@ namespace Arcy.Camera
         {
             CheckComponents();
             camBodyPosOffset = gameplayCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+            StartCoroutine(MyCoroutine());
         }
 
         private void CheckComponents()
@@ -69,6 +70,18 @@ namespace Arcy.Camera
                         //Debug.Log("RayCast hit player");
                     }
                 }
+            }
+        }
+
+        IEnumerator MyCoroutine()
+        {
+            yield return new WaitForSeconds(1f);
+
+            while (true)
+            {
+                bool myBool = gameplayCamera.GetComponent<CinemachineCollider>().IsTargetObscured(gameplayCamera);
+                print(myBool);
+                yield return new WaitForSeconds(.5f);
             }
         }
     }
