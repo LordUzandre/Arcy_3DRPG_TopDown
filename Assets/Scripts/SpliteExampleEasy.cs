@@ -1,58 +1,41 @@
-//using Mono.Data.Sqlite; // 1
-using System.Data; // 1
+using Mono.Data.Sqlite;
+using System.Data;
 using UnityEngine;
 
-// public class SpliteExampleSimple : MonoBehaviour
-// {
-//     // Resources:
-//     // https://www.mono-project.com/docs/database-access/providers/sqlite/
+public class SpliteExampleSimple : MonoBehaviour
+{
+    public void OnEnable()
+    {
+        string connectionString = "URI=file:" + Application.dataPath + "/Data/Dialogue/DB_Debug-scene.db";
+        string dialogue01 = "Dialogue01";
+        string speakerID = "001";
 
-//     [SerializeField] private int hitCount = 0;
+        // Connect to the SQLite database
+        IDbConnection dbConnection = new SqliteConnection(connectionString);
+        
+        // Open the database connection and create a command to execute SQL queries
+        dbConnection.Open();        
+        IDbCommand dbCommand = dbConnection.CreateCommand();
 
-//     void Start() // 13
-//     {
-//         // Read all values from the table.
-//         IDbConnection dbConnection = CreateAndOpenDatabase(); // 14
-//         IDbCommand dbCommandReadValues = dbConnection.CreateCommand(); // 15
-//         dbCommandReadValues.CommandText = "SELECT * FROM HitCountTableSimple"; // 16
-//         IDataReader dataReader = dbCommandReadValues.ExecuteReader(); // 17
+        // Select all data from row specified by {keyvalue}
+        dbCommand.CommandText = $"SELECT DISTINCT char, english FROM {dialogue01} WHERE speakID = {speakerID}";
 
-//         while (dataReader.Read()) // 18
-//         {
-//             // The `id` has index 0, our `hits` have the index 1.
-//             hitCount = dataReader.GetInt32(1); // 19
-//         }
+        // Execute the query and retrieve the result
+        IDataReader reader = dbCommand.ExecuteReader();
 
-//         // Remember to always close the connection at the end.
-//         dbConnection.Close(); // 20
-//     }
+        // Check if there are rows in the result
+        while (reader.Read())
+        {
+            // Retrieve the content of the 5th column (assuming it's a string)
+            string content = reader.GetString(1); // Note: SQLite indices are zero-based
 
-//     private void OnMouseDown()
-//     {
-//         hitCount++;
+            // Log the content to the console
+            Debug.Log(content);
+        }
 
-//         // Insert hits into the table.
-//         IDbConnection dbConnection = CreateAndOpenDatabase(); // 2
-//         IDbCommand dbCommandInsertValue = dbConnection.CreateCommand(); // 9
-//         dbCommandInsertValue.CommandText = "INSERT OR REPLACE INTO HitCountTableSimple (id, hits) VALUES (0, " + hitCount + ")"; // 10
-//         dbCommandInsertValue.ExecuteNonQuery(); // 11
-
-//         // Remember to always close the connection at the end.
-//         dbConnection.Close(); // 12
-//     }
-
-//     private IDbConnection CreateAndOpenDatabase() // 3
-//     {
-//         // Open a connection to the database.
-//         string dbUri = "URI=file:MyDatabase.sqlite"; // 4
-//         IDbConnection dbConnection = new SliteConnection(dbUri); // 5
-//         dbConnection.Open(); // 6
-
-//         // Create a table for the hit count in the database if it does not exist yet.
-//         IDbCommand dbCommandCreateTable = dbConnection.CreateCommand(); // 6
-//         dbCommandCreateTable.CommandText = "CREATE TABLE IF NOT EXISTS HitCountTableSimple (id INTEGER PRIMARY KEY, hits INTEGER )"; // 7
-//         dbCommandCreateTable.ExecuteReader(); // 8
-
-//         return dbConnection;
-//     }
-// }
+        // Close the connections
+        reader.Close();
+        dbCommand.Dispose();
+        dbConnection.Close();
+    }
+}

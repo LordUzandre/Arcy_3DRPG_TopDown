@@ -57,21 +57,21 @@ namespace Arcy.Camera
             Debug.DrawLine(gameplayCamera.transform.position + camBodyPosOffset, player.transform.position, Color.yellow, Mathf.Infinity);
         }
 
-        private void FixedUpdate()
-        {
-            RaycastHit hit;
+        // private void FixedUpdate()
+        // {
+        //     RaycastHit hit;
 
-            if (Physics.Linecast((transform.position + camBodyPosOffset), player.transform.position, out hit))
-            {
-                if (hit.collider != null)
-                {
-                    if (hit.transform == player)
-                    {
-                        //Debug.Log("RayCast hit player");
-                    }
-                }
-            }
-        }
+        //     if (Physics.Linecast((transform.position + camBodyPosOffset), player.transform.position, out hit))
+        //     {
+        //         if (hit.collider != null)
+        //         {
+        //             if (hit.transform == player)
+        //             {
+        //                 //Debug.Log("RayCast hit player");
+        //             }
+        //         }
+        //     }
+        // }
 
         IEnumerator MyCoroutine()
         {
@@ -80,7 +80,7 @@ namespace Arcy.Camera
             while (true)
             {
                 bool myBool = gameplayCamera.GetComponent<CinemachineCollider>().IsTargetObscured(gameplayCamera);
-                print(myBool);
+                //print(myBool);
                 yield return new WaitForSeconds(.5f);
             }
         }
