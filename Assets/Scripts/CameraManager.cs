@@ -25,6 +25,13 @@ namespace Arcy.Camera
         [HideInInspector] public static CameraManager instance;
         [HideInInspector] public float distanceToPlayer;
 
+        CinemachineCollider cinemachineCollider;
+
+        bool playerIsBlockedBool;
+        // public delegate void BoolDelegate(bool value);
+        // public static event BoolDelegate OnFooBoolUpdated;
+        public static Action<bool> OnFooBoolUpdated;
+
         //Private:
         private Transform player;
         private Vector3 camBodyPosOffset;
@@ -37,8 +44,34 @@ namespace Arcy.Camera
         private void OnEnable()
         {
             CheckComponents();
+
             camBodyPosOffset = gameplayCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
-            StartCoroutine(MyCoroutine());
+            //StartCoroutine(MyCoroutine());
+
+            OnFooBoolUpdated += HandlePlayerBlocked;
+        }
+
+        void OnDisable()
+        {
+            // Unsubscribe from the event to avoid memory leaks
+            OnFooBoolUpdated -= HandlePlayerBlocked;
+        }
+
+        void HandlePlayerBlocked(bool newValue)
+        {
+            playerIsBlockedBool = newValue;
+            print("We got it this far, didn't we");
+        }
+
+        // Call this method to manually update fooBool
+        public void UpdateFooBool()
+        {
+            if (gameplayCamera != null && cinemachineCollider != null)
+            {
+                bool newValue = cinemachineCollider.IsTargetObscured(gameplayCamera);
+                // Trigger the event to notify other components about the change
+                OnFooBoolUpdated?.Invoke(newValue);
+            }
         }
 
         private void CheckComponents()
@@ -51,27 +84,6 @@ namespace Arcy.Camera
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
             distanceToPlayer = Vector3.Distance((gameplayCamera.transform.position + camBodyPosOffset), player.position) + 2f;
         }
-
-        private void OnSceneGUI()
-        {
-            Debug.DrawLine(gameplayCamera.transform.position + camBodyPosOffset, player.transform.position, Color.yellow, Mathf.Infinity);
-        }
-
-        // private void FixedUpdate()
-        // {
-        //     RaycastHit hit;
-
-        //     if (Physics.Linecast((transform.position + camBodyPosOffset), player.transform.position, out hit))
-        //     {
-        //         if (hit.collider != null)
-        //         {
-        //             if (hit.transform == player)
-        //             {
-        //                 //Debug.Log("RayCast hit player");
-        //             }
-        //         }
-        //     }
-        // }
 
         IEnumerator MyCoroutine()
         {

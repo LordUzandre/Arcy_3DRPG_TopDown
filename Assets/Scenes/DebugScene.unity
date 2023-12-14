@@ -1232,7 +1232,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32
   m_MinimumDistanceFromTarget: 0.1
-  m_AvoidObstacles: 0
+  m_AvoidObstacles: 1
   m_DistanceLimit: 0
   m_MinimumOcclusionTime: 0
   m_CameraRadius: 0.1
@@ -1702,7 +1702,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
-  m_LocalRotation: {x: 0.5089603, y: 0.000000022475659, z: -0.000000013289209, w: 0.86079}
+  m_LocalRotation: {x: 0.50896037, y: -0.0000000034025442, z: 0.0000000020118265,
+    w: 0.86079}
   m_LocalPosition: {x: 0, y: 1.2700005, z: 5.5600004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1988,7 +1989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e431611bbc344197815c45ecdc7e3e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 11400000, guid: 45b60a323bc964d449080c81951f1653, type: 2}
+  speakerID: 1004
 --- !u!1 &401327945
 GameObject:
   m_ObjectHideFlags: 0
@@ -6974,7 +6975,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 82a2914d8f86c62488456950c8330e38,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8635,50 +8636,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
---- !u!1 &1370655906
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1370655908}
-  - component: {fileID: 1370655907}
-  m_Layer: 0
-  m_Name: SQLiteExampleEasy
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1370655907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1370655906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687a1762a86c48a2967acbc6a27aa6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1370655908
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1370655906}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.7904208, y: 5.395348, z: -6.576254}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 16
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1403317478
 GameObject:
   m_ObjectHideFlags: 0
@@ -10603,7 +10560,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.3
+  m_fontSize: 42.1
   m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -10711,7 +10668,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e080e7f708d7f1448a4e2fd4b5fd8c68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 0}
   animator: {fileID: 1670699176}
   boxCollider: {fileID: 1670699175}
 --- !u!1 &1677117656
@@ -11662,8 +11618,8 @@ MonoBehaviour:
   dialogueCam: {fileID: 667245415}
   targetGroup: {fileID: 547604062}
   dialogueDof: {fileID: 0}
-  dialogueText: {fileID: 1416812068}
-  currentInteractible: {fileID: 0}
+  dialogueUIText: {fileID: 1416812068}
+  choosenLanguage: 0
 --- !u!1 &1782248801
 GameObject:
   m_ObjectHideFlags: 0
@@ -12080,7 +12036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc4061c0fc524e19a398b4d0d31e6e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 11400000, guid: 7a33af11f6bd8514fa4fdfb4bc62f92e, type: 2}
+  _speakerID: 1001
   _npcAnimationHandler: {fileID: 1811286581}
 --- !u!114 &1811286581
 MonoBehaviour:
@@ -13550,7 +13506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75910c590257422297eeb7ecdb97b98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 0}
   boxCollider: {fileID: 2041001122}
   animator: {fileID: 2041001119}
 --- !u!65 &2041001122

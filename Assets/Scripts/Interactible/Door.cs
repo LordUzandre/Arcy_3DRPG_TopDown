@@ -21,7 +21,7 @@ namespace Arcy.Interaction
         public override void Interact()
         {
             animator.SetTrigger("Opening");
-            Debug.Log("Interaction triggered");
+            //print("Interaction triggered");
         }
     }
 }

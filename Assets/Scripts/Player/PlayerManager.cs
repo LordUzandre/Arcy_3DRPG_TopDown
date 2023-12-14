@@ -76,14 +76,15 @@ public class PlayerManager : MonoBehaviour
 
     public void interactionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
     {
-        if (currentInteractible.dialogue != null)
+        if (currentInteractible is ISpeakable speakableObject && speakableObject.SpeakerID != null)
         {
             if (!isInteracting)
             {
-                DisableMovement(false);
+                EnableMovement(false);
             }
 
-            DialogueManager.instance.RunDialogue(currentInteractible);
+            bool cameraShouldChange = currentInteractible is NPCBase ? true : false; // Should be in CameraManager
+            DialogueManager.instance.RunDialogue(currentInteractible, speakableObject.SpeakerID, currentInteractible.transform, cameraShouldChange);
         }
         else
         {
@@ -91,7 +92,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void DisableMovement(bool canCharacterMove)
+    public void EnableMovement(bool canCharacterMove)
     {
         //when dialogue is finished
         isInteracting = !canCharacterMove;

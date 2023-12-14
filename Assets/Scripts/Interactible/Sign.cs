@@ -5,11 +5,14 @@ using UnityEngine;
 namespace Arcy.Interaction
 {
     [RequireComponent(typeof(BoxCollider))]
-    public class Sign : InteractibleBase
+    public class Sign : InteractibleBase, ISpeakable
     {
-        public override void Interact()
+        [SerializeField] private string speakerID;
+        
+        public string SpeakerID
         {
-            throw new System.NotImplementedException();
+            get { return speakerID; }
+            set { speakerID = value; }
         }
     }
 }

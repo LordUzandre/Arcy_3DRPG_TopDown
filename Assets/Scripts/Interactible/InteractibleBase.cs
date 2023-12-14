@@ -5,9 +5,9 @@ namespace Arcy.Interaction
 {
     public abstract class InteractibleBase : MonoBehaviour
     {
-        [Header("Dialogue Block")]
-        [SerializeField] public DialogueBlock dialogue;
-
-        public abstract void Interact();
+        public virtual void Interact()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -7,10 +7,18 @@ using Arcy.Dialogue;
 
 namespace Arcy.Interaction
 {
-    public class NPCBase : InteractibleBase
+    public class NPCBase : InteractibleBase, ISpeakable
     {
+        [Header("Dialogue")]
+        [SerializeField] private string _speakerID;
         [Header("Animation Handler")]
         [SerializeField] private NPCAnimationHandler _npcAnimationHandler;
+
+        public string SpeakerID
+        {
+            get { return _speakerID; }
+            set { _speakerID = value; }
+        }
 
         private void OnEnable()
         {
@@ -22,7 +30,7 @@ namespace Arcy.Interaction
 
         public override void Interact()
         {
-            if (dialogue != null)
+            if (_speakerID != null)
             {
                 _npcAnimationHandler.anim.SetTrigger("talking");
             }
