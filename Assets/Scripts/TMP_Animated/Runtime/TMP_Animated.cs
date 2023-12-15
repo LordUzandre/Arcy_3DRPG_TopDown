@@ -19,12 +19,14 @@ namespace TMPro
         public TextRevealEvent onTextReveal;
         public DialogueEvent onDialogueFinish;
 
+        private string[] subTexts;
+
         public void ReadText(string newText)
         {
             text = string.Empty;
             // split the whole text into parts based off the <> tags 
             // even numbers in the array are text, odd numbers are tags
-            string[] subTexts = newText.Split('<', '>');
+            subTexts = newText.Split('<', '>');
 
             // textmeshpro still needs to parse its built-in tags, so we only include noncustom tags
             string displayText = "";
@@ -46,56 +48,63 @@ namespace TMPro
             text = displayText;
             maxVisibleCharacters = 0;
             StartCoroutine(Read());
+        }
 
-            IEnumerator Read()
+        IEnumerator Read()
+        {
+            int subCounter = 0;
+            int visibleCounter = 0;
+            while (subCounter < subTexts.Length)
             {
-                int subCounter = 0;
-                int visibleCounter = 0;
-                while (subCounter < subTexts.Length)
+                // if 
+                if (subCounter % 2 == 1)
                 {
-                    // if 
-                    if (subCounter % 2 == 1)
-                    {
-                        yield return EvaluateTag(subTexts[subCounter].Replace(" ", ""));
-                    }
-                    else
-                    {
-                        while (visibleCounter < subTexts[subCounter].Length)
-                        {
-                            onTextReveal.Invoke(subTexts[subCounter][visibleCounter]);
-                            visibleCounter++;
-                            maxVisibleCharacters++;
-                            yield return new WaitForSeconds(1f / speed);
-                        }
-                        visibleCounter = 0;
-                    }
-                    subCounter++;
+                    yield return EvaluateTag(subTexts[subCounter].Replace(" ", ""));
                 }
-                yield return null;
-
-                WaitForSeconds EvaluateTag(string tag)
+                else
                 {
-                    if (tag.Length > 0)
+                    while (visibleCounter < subTexts[subCounter].Length)
                     {
-                        if (tag.StartsWith("emotion="))
-                        {
-                            onEmotionChange.Invoke((Emotion)System.Enum.Parse(typeof(Emotion), tag.Split('=')[1]));
-                        }
-                        else if (tag.StartsWith("action="))
-                        {
-                            onAction.Invoke(tag.Split('=')[1]);
-                        }
-
-                        //Original below:
-                        // if (tag.StartsWith("speed=")) { speed = float.Parse(tag.Split('=')[1]); }
-                        // else if (tag.StartsWith("pause=")) { return new WaitForSeconds(float.Parse(tag.Split('=')[1])); }
-                        // else if (tag.StartsWith("emotion=")) { onEmotionChange.Invoke((Emotion)System.Enum.Parse(typeof(Emotion), tag.Split('=')[1])); }
-                        // else if (tag.StartsWith("action=")) { onAction.Invoke(tag.Split('=')[1]); }
+                        onTextReveal.Invoke(subTexts[subCounter][visibleCounter]);
+                        visibleCounter++;
+                        maxVisibleCharacters++;
+                        yield return new WaitForSeconds(1f / speed);
                     }
-                    return null;
+                    visibleCounter = 0;
                 }
-                onDialogueFinish.Invoke();
+                subCounter++;
             }
+            yield return null;
+
+            WaitForSeconds EvaluateTag(string tag)
+            {
+                if (tag.Length > 0)
+                {
+                    if (tag.StartsWith("emotion="))
+                    {
+                        onEmotionChange.Invoke((Emotion)System.Enum.Parse(typeof(Emotion), tag.Split('=')[1]));
+                    }
+                    else if (tag.StartsWith("action="))
+                    {
+                        onAction.Invoke(tag.Split('=')[1]);
+                    }
+
+                    //Original below:
+                    // if (tag.StartsWith("speed=")) { speed = float.Parse(tag.Split('=')[1]); }
+                    // else if (tag.StartsWith("pause=")) { return new WaitForSeconds(float.Parse(tag.Split('=')[1])); }
+                    // else if (tag.StartsWith("emotion=")) { onEmotionChange.Invoke((Emotion)System.Enum.Parse(typeof(Emotion), tag.Split('=')[1])); }
+                    // else if (tag.StartsWith("action=")) { onAction.Invoke(tag.Split('=')[1]); }
+                }
+                return null;
+            }
+
+            //Text has finished typing
+            onDialogueFinish.Invoke();
+        }
+
+        public void StopReading()
+        {
+            StopCoroutine(Read());
         }
     }
 }

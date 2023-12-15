@@ -1232,7 +1232,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32
   m_MinimumDistanceFromTarget: 0.1
-  m_AvoidObstacles: 1
+  m_AvoidObstacles: 0
   m_DistanceLimit: 0
   m_MinimumOcclusionTime: 0
   m_CameraRadius: 0.1
@@ -1702,7 +1702,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
-  m_LocalRotation: {x: 0.50896037, y: -0.0000000034025442, z: 0.0000000020118265,
+  m_LocalRotation: {x: 0.50896037, y: -0.0000000034025442, z: 0.0000000020118256,
     w: 0.86079}
   m_LocalPosition: {x: 0, y: 1.2700005, z: 5.5600004}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -1815,7 +1815,7 @@ GameObject:
   m_Component:
   - component: {fileID: 325056110}
   m_Layer: 0
-  m_Name: CanvasMaster
+  m_Name: CanvasMaster__
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6380,6 +6380,7 @@ MonoBehaviour:
   dialogueText: {fileID: 1416812068}
   dialogueBox: {fileID: 895579302}
   dialogueArrow: {fileID: 329908631}
+  _currentlyTyping: 0
 --- !u!225 &1053396819
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -11613,13 +11614,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a3928b32281e043925fdba616b2229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cvGroup: {fileID: 1053396819}
   gameCam: {fileID: 139180224}
   dialogueCam: {fileID: 667245415}
   targetGroup: {fileID: 547604062}
   dialogueDof: {fileID: 0}
-  dialogueUIText: {fileID: 1416812068}
-  choosenLanguage: 0
+  _dialogueUI: {fileID: 1053396818}
+  dialogueBlock: []
+  dialogueIndex: 0
+  nextDialogue: 0
+  canExit: 0
 --- !u!1 &1782248801
 GameObject:
   m_ObjectHideFlags: 0

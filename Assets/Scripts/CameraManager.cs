@@ -84,17 +84,5 @@ namespace Arcy.Camera
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
             distanceToPlayer = Vector3.Distance((gameplayCamera.transform.position + camBodyPosOffset), player.position) + 2f;
         }
-
-        IEnumerator MyCoroutine()
-        {
-            yield return new WaitForSeconds(1f);
-
-            while (true)
-            {
-                bool myBool = gameplayCamera.GetComponent<CinemachineCollider>().IsTargetObscured(gameplayCamera);
-                //print(myBool);
-                yield return new WaitForSeconds(.5f);
-            }
-        }
     }
 }

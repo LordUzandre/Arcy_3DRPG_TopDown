@@ -84,7 +84,7 @@ public class PlayerManager : MonoBehaviour
             }
 
             bool cameraShouldChange = currentInteractible is NPCBase ? true : false; // Should be in CameraManager
-            DialogueManager.instance.RunDialogue(currentInteractible, speakableObject.SpeakerID, currentInteractible.transform, cameraShouldChange);
+            DialogueManager.instance.RunDialogue(speakableObject.SpeakerID, currentInteractible.transform, cameraShouldChange);
         }
         else
         {
