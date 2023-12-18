@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
-using Vector3 = UnityEngine.Vector3;
+using UnityEngine.Rendering;
+using DG.Tweening;
+using Arcy.Dialogue;
 
 namespace Arcy.Camera
 {
@@ -12,77 +14,106 @@ namespace Arcy.Camera
         //public:
         [Header("CineMachine Brain")]
         public CinemachineBrain CM_Brain;
-
+        [Space]
         [Header("Main Camera")]
         public CinemachineVirtualCamera gameplayCamera;
+        [Header("Top View Camera")]
+        public CinemachineVirtualCamera topViewCamera;
         [Space]
         [Header("Dialogue Camera")]
         public CinemachineVirtualCamera dialogueCamera;
-        [Space]
-        [Header("Top View Camera")]
-        public CinemachineVirtualCamera topViewCamera;
+        public CinemachineTargetGroup targetGroup;
+        [Header("Post-proccessing")]
+        [SerializeField]
+        public Volume dialogueDof;
 
-        [HideInInspector] public static CameraManager instance;
+
+        private static CameraManager instance;
+        public static CameraManager Instance { get; private set; }
+
         [HideInInspector] public float distanceToPlayer;
 
-        CinemachineCollider cinemachineCollider;
-
-        bool playerIsBlockedBool;
-        // public delegate void BoolDelegate(bool value);
-        // public static event BoolDelegate OnFooBoolUpdated;
-        public static Action<bool> OnFooBoolUpdated;
-
-        //Private:
-        private Transform player;
-        private Vector3 camBodyPosOffset;
-
-        private void Reset()
-        {
-            CheckComponents();
-        }
+        private CinemachineVirtualCamera currentActiveCamera;
+        public CinemachineVirtualCamera CurrentActiveCamera { get; private set; }
 
         private void OnEnable()
         {
-            CheckComponents();
-
-            camBodyPosOffset = gameplayCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
-            //StartCoroutine(MyCoroutine());
-
-            OnFooBoolUpdated += HandlePlayerBlocked;
+            GameStateManager.OnGameStateChanged += GameStateChanged;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
-            // Unsubscribe from the event to avoid memory leaks
-            OnFooBoolUpdated -= HandlePlayerBlocked;
+            GameStateManager.OnGameStateChanged -= GameStateChanged;
         }
 
-        void HandlePlayerBlocked(bool newValue)
+        IEnumerator CheckIfCameraIsBlockedInFreeroam()
         {
-            playerIsBlockedBool = newValue;
-            print("We got it this far, didn't we");
-        }
+            yield return new WaitForSeconds(.5f);
 
-        // Call this method to manually update fooBool
-        public void UpdateFooBool()
-        {
-            if (gameplayCamera != null && cinemachineCollider != null)
+            if (GameStateManager.Instance.CurrentGameState != GameState.Freeroam)
             {
-                bool newValue = cinemachineCollider.IsTargetObscured(gameplayCamera);
-                // Trigger the event to notify other components about the change
-                OnFooBoolUpdated?.Invoke(newValue);
+                yield return null;
+            }
+
+            bool targetIsObscured;
+            WaitForSeconds delay = new WaitForSeconds(.4f);
+
+            while (true)
+            {
+                targetIsObscured = gameplayCamera.GetComponent<CinemachineCollider>().IsTargetObscured(gameplayCamera);
+
+                if (targetIsObscured)
+                {
+                    topViewCamera.MoveToTopOfPrioritySubqueue();
+                    print("CameraManager: target Is Obscured");
+                }
+                else
+                {
+                    gameplayCamera.MoveToTopOfPrioritySubqueue();
+                }
+
+                yield return delay;
             }
         }
 
-        private void CheckComponents()
+        void GameStateChanged(GameState newGameState)
         {
-            if (gameplayCamera == null)
+            switch (newGameState)
             {
-                gameplayCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineVirtualCamera>();
+                case GameState.Freeroam:
+                    gameplayCamera.MoveToTopOfPrioritySubqueue();
+                    StartCoroutine(CheckIfCameraIsBlockedInFreeroam());
+                    break;
+                case GameState.Dialogue:
+                    //ChangeToDialogueCamera(DialogueManager.Instance.cameraShouldChange);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void ChangeToDialogueCamera(bool cameraChange)
+        {
+            //Check wether currentInteractible is a sign or a character
+            if (!cameraChange)
+            {
+                return;
             }
 
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-            distanceToPlayer = Vector3.Distance((gameplayCamera.transform.position + camBodyPosOffset), player.position) + 2f;
+            dialogueCamera.MoveToTopOfPrioritySubqueue();
+            print("CameraStateManager is succesful");
+
+            //Depth of field modifier
+            if (dialogueDof != null)
+            {
+                float dofWeight = dialogueCamera.enabled ? 1 : 0;
+                DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
+            }
+        }
+
+        public void DialogueDOF(float x)
+        {
+            dialogueDof.weight = x;
         }
     }
 }

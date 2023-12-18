@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using Arcy.Camera;
 
 namespace Arcy.Interaction
 {
@@ -35,7 +36,7 @@ namespace Arcy.Interaction
             //Replace with future camera system
             if (_mainCamera == null)
             {
-                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>();
+                _mainCamera = CameraManager.Instance.CurrentActiveCamera.GetComponent<Transform>();
                 print("Interaction icon couldn't find camera");
             }
 

@@ -13,83 +13,60 @@ namespace Arcy.Dialogue
     public class DialogueManager : MonoBehaviour
     {
         //singleton
-        public static DialogueManager instance;
+        private static DialogueManager instance;
+        public static DialogueManager Instance { get; private set; }
 
         /*
         This script retrieves the data from the db and sends it to DialgueUI.
         But shuld be able to finish alone, without the support of DialogueUI.
         */
 
-        [SerializeField]
-        public GameObject gameCam;
-        [SerializeField]
-        public GameObject dialogueCam;
-        [SerializeField]
-        public CinemachineTargetGroup targetGroup;
-        [Header("Post-proccessing")]
-        [SerializeField]
-        public UnityEngine.Rendering.Volume dialogueDof;
-
-        [Space]
         [Header("Dialogue UI")]
-        //[SerializeField] public TMP_Animated dialogueUIText;
         [SerializeField] private DialogueUI _dialogueUI;
 
-        //private:
+        // public:
         public string[] dialogueBlock;
         public int dialogueIndex = 0;
-        private bool _currentlyInDialogue = false;
-        public bool nextDialogue = false;
-        public bool canExit = false;
 
-        private void Awake()
-        {
-            if (instance == null) { instance = this; } else { Destroy(this); }
-        }
+        // private:
+        private bool _currentlyInDialogue = false;
+        private bool _nextDialogue = false;
+        private bool _canExit = false;
 
         private void Start()
         {
-            if (gameCam == null)
-            {
-                GameObject.FindGameObjectWithTag("MainCamera");
-            }
+            if (Instance == null) { Instance = this; }
+        }
 
+        void OnEnable()
+        {
             _dialogueUI.dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
         }
 
         //Started by PlayerManager when an interactible has dialogue
-        public void RunDialogue(string speakerID, Transform otherSpeaker, bool cameraShouldChange = false)
+        public void RunDialogue(string speakerID)
         {
             if (!_currentlyInDialogue)
             {
                 RetrieveDataFromDB(speakerID);
-
                 _currentlyInDialogue = true;
 
                 // UI
                 _dialogueUI.FadeUI(true, .25f, .025f);
 
-                // Change the camera
-                if (cameraShouldChange == true)
-                {
-                    targetGroup.m_Targets[1].target = otherSpeaker;
-                    CameraChange(true);
-                }
+                //targetGroup.m_Targets[1].target = otherSpeaker;
             }
-            // else if (_dialogueUI._currentlyTyping)
-            // {
-            //     _dialogueUI.SkipTyping(dialogueIndex);
-            // }
-            else if (nextDialogue)
+            else if (_nextDialogue)
             {
                 // Run next line of dialogue
                 _dialogueUI.TypeOutDialogueText(dialogueIndex);
             }
-            else if (canExit)
+            else if (_canExit)
             {
-                CameraChange(false);
+                //UI
                 _dialogueUI.FadeUI(false, .2f, .05f);
 
+                GameStateManager.Instance.SetState(GameState.Freeroam);
                 Invoke("ResetState", .8f);
             }
 
@@ -145,51 +122,51 @@ namespace Arcy.Dialogue
         {
             PlayerManager.instance.EnableMovement(true);
             _currentlyInDialogue = false;
-            canExit = false;
-        }
-
-        /*
-        // All methods below should be put in CameraManager
-        */
-
-        public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
-        {
-            if (dialogueCam != null)
-            {
-                gameCam.SetActive(!dialogue);
-                dialogueCam.SetActive(dialogue);
-            }
-
-            //Depth of field modifier
-            if (dialogueDof != null)
-            {
-                float dofWeight = dialogueCam.activeSelf ? 1 : 0;
-                DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
-            }
-        }
-
-        public void DialogueDOF(float x)
-        {
-            dialogueDof.weight = x;
+            _canExit = false;
         }
 
         //Triggered by TMP_Animated or SkipTyping()
         public void FinishDialogue()
         {
-            _dialogueUI._currentlyTyping = false;
+            //_dialogueUI._currentlyTyping = false;
 
             if (dialogueIndex < dialogueBlock.Length - 1)
             {
                 dialogueIndex++;
-                nextDialogue = true;
+                _nextDialogue = true;
             }
             else
             {
-                nextDialogue = false;
-                canExit = true;
+                _nextDialogue = false;
+                _canExit = true;
             }
         }
 
+
+        /*
+        // All methods below should be put in CameraManager
+        */
+
+        // public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
+        // {
+        //     if (dialogueCam != null)
+        //     {
+        //         gameCam.SetActive(!dialogue);
+        //         dialogueCam.SetActive(dialogue);
+        //     }
+
+        //     //Depth of field modifier
+        //     if (dialogueDof != null)
+        //     {
+        //         float dofWeight = dialogueCam.activeSelf ? 1 : 0;
+        //         DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
+        //     }
+        // }
+
+        // public void DialogueDOF(float x)
+        // {
+        //     dialogueDof.weight = x;
+        // }
     }
 
 }

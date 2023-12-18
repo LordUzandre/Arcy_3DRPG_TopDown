@@ -14,10 +14,7 @@ public class DialogueUI : MonoBehaviour
     [SerializeField] Image dialogueArrow;
     CanvasGroup cvGroup;
 
-    //public int _dialogueIndex;
-    //public string[] dialogueBlock;
-    //bool _nextDialogue;
-    public bool _currentlyTyping;
+    //public bool _currentlyTyping;
 
     private void OnEnable()
     {
@@ -56,7 +53,7 @@ public class DialogueUI : MonoBehaviour
 
         if (show)
         {
-            DialogueManager.instance.dialogueIndex = 0;
+            DialogueManager.Instance.dialogueIndex = 0;
             //pop the size of the UI
             sequence.Join(cvGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
 
@@ -65,17 +62,9 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // public void SkipTyping(int index)
-    // {
-    //     dialogueText.StopReading();
-    //     print("Skiptyping()");
-    //     dialogueText.text = DialogueManager.instance.dialogueBlock[index];
-    //     FinishDialogue();
-    // }
-
     public void TypeOutDialogueText(int index)
     {
-        dialogueText.ReadText(DialogueManager.instance.dialogueBlock[index]);
-        _currentlyTyping = true;
+        dialogueText.ReadText(DialogueManager.Instance.dialogueBlock[index]);
+        //_currentlyTyping = true;
     }
 }

@@ -17,9 +17,9 @@ public class GameStateManager
         }
     }
 
-    public GameState CurrentGameState { get; private set; }
+    public static System.Action<GameState> OnGameStateChanged;
 
-    public static event System.Action<GameState> OnGameStateChanged;
+    public GameState CurrentGameState { get; private set; }
 
     public void SetState(GameState newGameState)
     {
@@ -28,33 +28,6 @@ public class GameStateManager
 
         CurrentGameState = newGameState;
 
-        // if (OnGameStateChanged != null)
-        //     OnGameStateChanged(newGameState);
-        //Statement below is simplified version
-
         OnGameStateChanged?.Invoke(newGameState);
-
-        Debug.Log($"New State is {newGameState}");
     }
 }
-
-//Helpful Hint:
-//Copy the text below into any observer
-/*
-
-private void OnEnable()
-{
-    GameStateManager.OnGameStateChanged += OnGameStateChanged;
-}
-
-private void OnGameStateChanged()
-{
-    currentGameState = GameStateManager.Instance.CurrentGameState
-}
-
-private void OnDisable()
-{
-    GameStateManager.OnGameStateChanged -= OnGameStateChanged;
-}
-
-*/

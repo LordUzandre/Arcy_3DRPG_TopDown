@@ -6,6 +6,7 @@ using Arcy.Animation;
 using Arcy.InputManager;
 using Arcy.Interaction;
 using System;
+using Arcy.Camera;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerManager : MonoBehaviour
@@ -58,11 +59,6 @@ public class PlayerManager : MonoBehaviour
         GameStateManager.OnGameStateChanged -= OnGameStateChanged;
     }
 
-    private void OnGameStateChanged(GameState state)
-    {
-
-    }
-
     private void Update() //Should be the only Update() on player's scripts
     {
         delta = Time.deltaTime;
@@ -80,11 +76,10 @@ public class PlayerManager : MonoBehaviour
         {
             if (!isInteracting)
             {
-                EnableMovement(false);
+                GameStateManager.Instance.SetState(GameState.Dialogue);
             }
-
-            bool cameraShouldChange = currentInteractible is NPCBase ? true : false; // Should be in CameraManager
-            DialogueManager.instance.RunDialogue(speakableObject.SpeakerID, currentInteractible.transform, cameraShouldChange);
+            
+            DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);
         }
         else
         {
@@ -100,5 +95,20 @@ public class PlayerManager : MonoBehaviour
         playerLocomotion.enabled = canCharacterMove;
         fow.enabled = canCharacterMove;
         canMove = canCharacterMove;
+    }
+
+    private void OnGameStateChanged(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Freeroam:
+                EnableMovement(true);
+                break;
+            case GameState.Dialogue:
+                EnableMovement(false);
+                break;
+            default:
+                break;
+        }
     }
 }
