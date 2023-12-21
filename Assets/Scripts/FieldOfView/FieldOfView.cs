@@ -21,7 +21,7 @@ namespace Arcy.Interaction
         public InteractibleBase currentInteractible;
 
         public static Action<Vector3> moveInteractionIconHere; //used by interactionIcon
-        public static Action noObjectInFocus; //used by interactionIcon
+        public static Action noObjectInFocus; //used by interactionIcon, also used in PlayerManager
 
         [HideInInspector]
         public bool multipleTargetsInView; //used by FieldOfViewEditor
@@ -51,7 +51,7 @@ namespace Arcy.Interaction
                 {
                     _previousInteractible = currentInteractible;
 
-                    if (moveInteractionIconHere != null)
+                    if (moveInteractionIconHere != null && currentInteractible.isInteractible)
                     {
                         //calcuate interactionIcons new position
 
@@ -69,12 +69,17 @@ namespace Arcy.Interaction
                 {
                     _previousInteractible = null;
 
-                    if (noObjectInFocus != null)
-                    {
-                        noObjectInFocus();
-                    }
+                    RemoveIcon();
                 }
 
+            }
+        }
+
+        public void RemoveIcon()
+        {
+            if (noObjectInFocus != null)
+            {
+                noObjectInFocus();
             }
         }
 

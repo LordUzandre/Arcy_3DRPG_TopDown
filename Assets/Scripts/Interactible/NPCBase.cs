@@ -14,6 +14,9 @@ namespace Arcy.Interaction
         [Header("Animation Handler")]
         [SerializeField] private NPCAnimationHandler _npcAnimationHandler;
 
+        private bool _isInteractible = true;
+        [HideInInspector] public override bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
+
         public string SpeakerID
         {
             get { return _speakerID; }

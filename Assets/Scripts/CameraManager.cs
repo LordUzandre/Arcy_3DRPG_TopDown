@@ -5,103 +5,126 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.Rendering;
 using DG.Tweening;
-using Arcy.Dialogue;
 
 namespace Arcy.Camera
 {
     public class CameraManager : MonoBehaviour
     {
+        #region Serializefield components
         //public:
         [Header("CineMachine Brain")]
         public CinemachineBrain CM_Brain;
         [Space]
-        [Header("Main Camera")]
+        [Header("cameras")]
         public CinemachineVirtualCamera gameplayCamera;
-        [Header("Top View Camera")]
         public CinemachineVirtualCamera topViewCamera;
-        [Space]
-        [Header("Dialogue Camera")]
         public CinemachineVirtualCamera dialogueCamera;
+        [Header("Dialogue Specific")]
         public CinemachineTargetGroup targetGroup;
-        [Header("Post-proccessing")]
-        [SerializeField]
-        public Volume dialogueDof;
-
+        [SerializeField] public Volume dialogueDof;
+        #endregion
 
         private static CameraManager instance;
         public static CameraManager Instance { get; private set; }
 
+        private List<CinemachineVirtualCamera> cameraList = new List<CinemachineVirtualCamera>();
         [HideInInspector] public float distanceToPlayer;
+        [HideInInspector] public int cameraListIndex;
+        private bool _isFreeroam;
 
-        private CinemachineVirtualCamera currentActiveCamera;
-        public CinemachineVirtualCamera CurrentActiveCamera { get; private set; }
-
+        #region Subscriptions
         private void OnEnable()
         {
+            GameStateChanged(GameStateManager.Instance.CurrentGameState);
             GameStateManager.OnGameStateChanged += GameStateChanged;
+
+            cameraList.Clear();
+            cameraList.Add(gameplayCamera);
+            cameraList.Add(topViewCamera);
+            cameraList.Add(dialogueCamera);
+
+            //myMethod += gameplayCamera.GetComponent<CinemachineCollider>().IsTargetObscured(gameplayCamera);
         }
 
         private void OnDisable()
         {
             GameStateManager.OnGameStateChanged -= GameStateChanged;
         }
+        #endregion
 
+        #region Freeroam
         IEnumerator CheckIfCameraIsBlockedInFreeroam()
         {
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.2f);
 
             if (GameStateManager.Instance.CurrentGameState != GameState.Freeroam)
             {
                 yield return null;
             }
+            else
+            {
+                _isFreeroam = true;
+            }
 
             bool targetIsObscured;
             WaitForSeconds delay = new WaitForSeconds(.4f);
 
-            while (true)
+            while (_isFreeroam == true)
             {
+                //Check whether player is obscured
                 targetIsObscured = gameplayCamera.GetComponent<CinemachineCollider>().IsTargetObscured(gameplayCamera);
 
-                if (targetIsObscured)
-                {
-                    topViewCamera.MoveToTopOfPrioritySubqueue();
-                    print("CameraManager: target Is Obscured");
-                }
-                else
-                {
-                    gameplayCamera.MoveToTopOfPrioritySubqueue();
-                }
+                //Switch to topview camera
+                ChangeCamera(targetIsObscured ? 1 : 0, true);
 
                 yield return delay;
             }
+
         }
+        #endregion
 
         void GameStateChanged(GameState newGameState)
         {
+            StopCoroutine(CheckIfCameraIsBlockedInFreeroam());
+
             switch (newGameState)
             {
                 case GameState.Freeroam:
-                    gameplayCamera.MoveToTopOfPrioritySubqueue();
+                    _isFreeroam = true;
+                    ChangeCamera(0, true);
                     StartCoroutine(CheckIfCameraIsBlockedInFreeroam());
                     break;
                 case GameState.Dialogue:
-                    //ChangeToDialogueCamera(DialogueManager.Instance.cameraShouldChange);
+                    _isFreeroam = false;
+                    ChangeCamera(2, true);
                     break;
                 default:
                     break;
             }
         }
 
-        void ChangeToDialogueCamera(bool cameraChange)
+        public Transform CheckCurrentCamera()
         {
-            //Check wether currentInteractible is a sign or a character
-            if (!cameraChange)
+            return cameraList[cameraListIndex].transform;
+        }
+
+        void ChangeCamera(int index = 0, bool cameraChange = false)
+        {
+            // Check so that we actually need to change camera
+            if (index == cameraListIndex)
             {
+                //print("CameraManager: index == cameraIndex");
                 return;
             }
 
-            dialogueCamera.MoveToTopOfPrioritySubqueue();
-            print("CameraStateManager is succesful");
+            cameraListIndex = index;
+
+            foreach (CinemachineVirtualCamera camera in cameraList)
+            {
+                camera.Priority = 9;
+            }
+
+            cameraList[index].Priority = 10;
 
             //Depth of field modifier
             if (dialogueDof != null)

@@ -18,10 +18,12 @@ namespace Arcy.Interaction
         private float _yOffset = 2f;
         private float _zOffset = -0.5f;
 
+        #if UINTY_EDITOR
         private void Reset()
         {
             CheckComponents();
         }
+        #endif
 
         private void Start()
         {
@@ -36,7 +38,7 @@ namespace Arcy.Interaction
             //Replace with future camera system
             if (_mainCamera == null)
             {
-                _mainCamera = CameraManager.Instance.CurrentActiveCamera.GetComponent<Transform>();
+                _mainCamera = CameraManager.Instance.CheckCurrentCamera();
                 print("Interaction icon couldn't find camera");
             }
 

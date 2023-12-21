@@ -9,9 +9,13 @@ public class PlayerLocomotion : MonoBehaviour
 
     public float moveAmount;
 
+    float movementSpeed;
     [SerializeField] float walkingSpeed = 2;
     [SerializeField] float runningSpeed = 5;
     [SerializeField] float rotationSpeed = 15;
+
+    private float gravity = 9.8f;
+    private Vector3 velocity;
 
     private void Start()
     {
@@ -42,13 +46,28 @@ public class PlayerLocomotion : MonoBehaviour
     {
         if (InputManager.instance.moveAmount > 0.5f)
         {
-            playerManager.characterController.Move(moveDirection * runningSpeed * delta);
+            movementSpeed = runningSpeed;
         }
         else if (InputManager.instance.moveAmount <= 0.5f)
         {
-            playerManager.characterController.Move(moveDirection * walkingSpeed * delta);
+            movementSpeed = walkingSpeed;
         }
 
+        velocity = moveDirection * movementSpeed * delta;
+
+        // Apply gravity
+        //velocity.y = playerManager.characterController.isGrounded ? 0 : gravity * delta;
+        if (playerManager.characterController.isGrounded)
+        {
+            velocity.y = 0;
+        }
+        else
+        {
+            velocity.y = -gravity;
+        }
+
+        playerManager.characterController.Move(velocity);
+        playerManager.animationHandler.locomotion = InputManager.instance.moveAmount;
         playerManager.animationHandler.UpdateLocomotion();
     }
 

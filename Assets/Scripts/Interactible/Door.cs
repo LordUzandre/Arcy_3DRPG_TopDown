@@ -11,6 +11,8 @@ namespace Arcy.Interaction
         [Header("Components")]
         [SerializeField] Animator animator;
         [SerializeField] BoxCollider boxCollider;
+        private bool _isInteractible = true;
+        [HideInInspector] public override bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
 
         private void Reset()
         {
@@ -20,6 +22,7 @@ namespace Arcy.Interaction
 
         public override void Interact()
         {
+            base.Interact();
             animator.SetTrigger("Opening");
             //print("Interaction triggered");
         }
