@@ -84,7 +84,7 @@ namespace Arcy.Animation
 
             if (_aimTarget != null)
             {
-                if (Vector3.Distance(transform.position, _aimTarget.position) > _viewRadius)
+                if (Vector3.Distance(transform.position, _aimTarget.position) < _viewRadius)
                 {
                     Vector3 dirToTarget = (_aimTarget.transform.position - transform.position).normalized;
 
@@ -98,7 +98,7 @@ namespace Arcy.Animation
                     }
                     else
                     {
-                        _aimCtrlPosition = transform.position + transform.forward + new Vector3(0, 1.2f, 0);
+                        _aimCtrlPosition = transform.position + transform.forward + new Vector3(0, 1.7f, 0);
                     }
                 }
 

@@ -63,12 +63,14 @@ namespace TMPro
                 }
                 else
                 {
+                    WaitForSeconds delay = new WaitForSeconds(1f / speed);
+
                     while (visibleCounter < subTexts[subCounter].Length)
                     {
                         onTextReveal.Invoke(subTexts[subCounter][visibleCounter]);
                         visibleCounter++;
                         maxVisibleCharacters++;
-                        yield return new WaitForSeconds(1f / speed);
+                        yield return delay;
                     }
                     visibleCounter = 0;
                 }
