@@ -20,6 +20,9 @@ namespace Arcy.Battle
         public int curHp;
         public int maxHp;
 
+        [Header("Combat Actions")]
+        public VSlice_CombatAction[] combatActions;
+
         [Header("Components")]
         public VSlice_BattleCharEffects characterEffects;
         public VSlice_BattleCharUI characterUI;
@@ -31,5 +34,20 @@ namespace Arcy.Battle
 
         //Private:
         private Vector3 standingPosition;
+
+        private void OnEnable()
+        {
+            VSlice_BattleTurnManager.instance.onNewTurn += OnNewTurn;
+        }
+
+        private void OnDisable()
+        {
+            VSlice_BattleTurnManager.instance.onNewTurn -= OnNewTurn;
+        }
+
+        void OnNewTurn()
+        {
+            characterUI.ToggleTurnVisual(VSlice_BattleTurnManager.instance.GetCurrentCharacter() == this);
+        }
     }
 }

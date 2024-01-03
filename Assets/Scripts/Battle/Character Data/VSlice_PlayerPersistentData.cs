@@ -21,8 +21,15 @@ namespace Arcy.Battle
         {
             for (int i = 0; i < characters.Length; i++)
             {
-                characters[i].health = characters[i].characterPrefab.GetComponent<VSlice_BattleCharacterBase>().maxHp;
-                characters[i].isDead = false;
+                // refactored lines to prevent MissingReferenceException error on opening project
+                if (characters[i].characterPrefab != null)
+                {
+                    if (characters[i].characterPrefab.TryGetComponent<VSlice_BattleCharacterBase>(out var character))
+                    {
+                        characters[i].health = character.maxHp;
+                        characters[i].isDead = false;
+                    }
+                }
             }
         }
     }
