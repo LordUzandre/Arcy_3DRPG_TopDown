@@ -12,7 +12,12 @@ namespace Arcy.Battle
 
         public override void Cast(VSlice_BattleCharacterBase caster, VSlice_BattleCharacterBase target)
         {
+            caster.MoveToTarget(target, OnDamageTargetCallback);
+        }
 
+        private void OnDamageTargetCallback(VSlice_BattleCharacterBase target)
+        {
+            target.TakeDamage(meleeDamage);
         }
     }
 }

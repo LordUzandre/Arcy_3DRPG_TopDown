@@ -28,6 +28,17 @@ PrefabInstance:
       propertyPath: displayName
       value: Enemy Character
       objectReference: {fileID: 0}
+    - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
+        type: 3}
+      propertyPath: combatActions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
+        type: 3}
+      propertyPath: combatActions.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: c1c5ddc9fbbb28f4c8bd45b47f9666cc,
+        type: 2}
     - target: {fileID: 1060190946506122153, guid: 9d103d25a71004a45acfef9e13913bdd,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

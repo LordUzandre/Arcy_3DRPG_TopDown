@@ -84,7 +84,7 @@ namespace Arcy.Battle
             NewTurn(turnOrder[curTurnOrderIndex]);
         }
 
-        public VSlice_BattleCharacterBase GetCurrentCharacter()
+        public VSlice_BattleCharacterBase GetCurrentTurnCharacter()
         {
             return curTurnCharacter;
         }

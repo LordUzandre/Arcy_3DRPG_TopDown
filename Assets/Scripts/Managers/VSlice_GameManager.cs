@@ -38,6 +38,13 @@ namespace Arcy.Battle
                 private void Start()
                 {
                         CreateCharacters(playerPersistentData, defaultEnemySet);
+                        StartCoroutine(Begin());
+                }
+
+                //Make sure waits one frame before subscribing.
+                IEnumerator Begin()
+                {
+                        yield return null;
                         VSlice_BattleTurnManager.instance.Begin();
                 }
 

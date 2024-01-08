@@ -8,6 +8,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
+        type: 3}
+      propertyPath: combatActions.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
+        type: 3}
+      propertyPath: combatActions.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: c1c5ddc9fbbb28f4c8bd45b47f9666cc,
+        type: 2}
+    - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
+        type: 3}
+      propertyPath: combatActions.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7be701a37c0465c44992c8bf595b8467,
+        type: 2}
+    - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
+        type: 3}
+      propertyPath: combatActions.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 03407e84759b55040a74252aab6062a1,
+        type: 2}
     - target: {fileID: 1060190946506122153, guid: 9d103d25a71004a45acfef9e13913bdd,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
