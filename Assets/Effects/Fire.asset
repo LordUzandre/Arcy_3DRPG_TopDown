@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 001d54079c17927429dc78eb337cc3af, type: 3}
-  m_Name: Player_0 Fireball
+  m_Script: {fileID: 11500000, guid: 4cfbecdcb42e3fe499162d645d659a02, type: 3}
+  m_Name: Fire
   m_EditorClassIdentifier: 
-  displayName: Fireball
-  description: Throw a throwball
-  projectilePrefab: {fileID: 4534247985948425999, guid: e6d974f0e29f5924092db2f425e012e8,
+  durationTurns: 2
+  activePrefab: {fileID: 7705832513356109955, guid: 57fb3a1790ac5a74bbe8d993a9c58503,
     type: 3}
+  tickPrefab: {fileID: 7855046206333459810, guid: cf69824c6e4d89f439ba2a752e4b03e7,
+    type: 3}
+  damage: 2

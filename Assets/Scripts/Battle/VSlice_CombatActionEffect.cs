@@ -8,13 +8,14 @@ namespace Arcy.Battle
     [CreateAssetMenu(fileName = "Effect Combat Action", menuName = "Combat Actions/Effect Combat Action")]
     public class VSlice_CombatActionEffect : VSlice_CombatAction
     {
+        public VSlice_BattleEffectBase effectToCast;
         public bool canEffectSelf;
         public bool canEffectTeam;
         public bool canEffectEnemy;
 
         public override void Cast(VSlice_BattleCharacterBase caster, VSlice_BattleCharacterBase target)
         {
-
+            target.characterEffects.AddNewEffect(effectToCast);
         }
     }
 }

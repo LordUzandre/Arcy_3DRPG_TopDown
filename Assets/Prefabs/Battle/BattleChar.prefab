@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4944665382510937557}
   - component: {fileID: -4034488690416478313}
   - component: {fileID: 3744813135341387889}
+  - component: {fileID: 4291069290550665707}
   m_Layer: 7
   m_Name: BattleChar
   m_TagString: Untagged
@@ -55,7 +56,9 @@ MonoBehaviour:
   characterEffects: {fileID: 3744813135341387889}
   characterUI: {fileID: 0}
   selectionVisual: {fileID: 7977645338791964562}
-  healParticlePrefab: {fileID: 0}
+  damageFlash: {fileID: 2214037421236398494}
+  healParticlePrefab: {fileID: 7713095558719005110, guid: add9023f950a7b045a48bc8b115480b5,
+    type: 3}
 --- !u!114 &3744813135341387889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,6 +71,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6ef50d02541649228af90bcd3c9f042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!136 &4291069290550665707
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336138618226397748}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Height: 2.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!1 &6038532624043123796
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +208,6 @@ GameObject:
   - component: {fileID: 5340830846610130977}
   - component: {fileID: 1962033383963775607}
   - component: {fileID: 1060190946506122153}
-  - component: {fileID: 5882104929550627266}
   - component: {fileID: 8472709142412469453}
   - component: {fileID: 2214037421236398494}
   m_Layer: 7
@@ -257,29 +282,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5882104929550627266
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7596046776075816703}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.8
-  m_Height: 2.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &8472709142412469453
 Animator:
   serializedVersion: 5

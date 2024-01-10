@@ -12,7 +12,7 @@ namespace Arcy.Battle
 
         public override void Cast(VSlice_BattleCharacterBase caster, VSlice_BattleCharacterBase target)
         {
-
+            target.Heal(healAmount);
         }
     }
 }

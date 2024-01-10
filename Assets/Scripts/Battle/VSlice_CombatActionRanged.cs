@@ -12,7 +12,12 @@ namespace Arcy.Battle
 
         public override void Cast(VSlice_BattleCharacterBase caster, VSlice_BattleCharacterBase target)
         {
+            if (caster == null)
+                return;
 
+            Vector3 yOffset = new Vector3(0, 0.5f, 0);
+            GameObject projectile = Instantiate(projectilePrefab, caster.transform.position + yOffset, Quaternion.identity);
+            projectile.GetComponent<BattleProjectile>().Initialize(target);
         }
     }
 }

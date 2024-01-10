@@ -9,7 +9,7 @@ namespace Arcy.Battle
         public int damage;
         public int heal;
         public float moveSpeed;
-        //public Effect effectToApply;
+        public VSlice_BattleEffectBase effectToApply;
 
         private Vector3 yOffset = new Vector3(0, 0.5f, 0);
         private VSlice_BattleCharacterBase target;
@@ -27,6 +27,7 @@ namespace Arcy.Battle
             }
         }
 
+        // Called when we hit our target.
         private void ImpactTarget()
         {
             if (damage > 0)
@@ -35,7 +36,8 @@ namespace Arcy.Battle
             if (heal > 0)
                 target.Heal(heal);
 
-            //apply effect if we have one
+            if (effectToApply != null)
+                target.GetComponent<VSlice_BattleCharEffects>().AddNewEffect(effectToApply);
         }
 
         private void OnTriggerEnter(Collider other)

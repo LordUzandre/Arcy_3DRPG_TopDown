@@ -29,17 +29,18 @@ namespace Arcy.Battle
         public VSlice_BattleCharEffects characterEffects;
         public VSlice_BattleCharUI characterUI;
         public GameObject selectionVisual;
-        //public DamageFlash damageFlash;
+        public vSlice_DamageFlash damageFlash;
 
         [Header("Prefabs")]
         public GameObject healParticlePrefab;
+        public static UnityAction<VSlice_BattleCharacterBase> onCharacterDeath;
 
         //Private:
-        private Vector3 standingPosition;
+        private Vector3 _ogStandingPosition;
 
         private void Start()
         {
-            standingPosition = transform.position;
+            _ogStandingPosition = transform.position;
             characterUI?.SetCharacterNameText(displayName);
             characterUI?.UpdateHealthBar(curHp, maxHp);
         }
@@ -58,6 +59,7 @@ namespace Arcy.Battle
         {
             // TODO: Remember to set up a character UI
             characterUI?.ToggleTurnVisual(VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter() == this);
+            characterEffects?.ApplyCurrentEffects();
         }
 
         public void CastCombatAction(VSlice_CombatAction combatAction, VSlice_BattleCharacterBase target = null)
@@ -73,6 +75,7 @@ namespace Arcy.Battle
             curHp -= damage;
 
             characterUI?.UpdateHealthBar(curHp, maxHp);
+            damageFlash?.Flash();
 
             if (curHp <= 0)
             {
@@ -82,12 +85,20 @@ namespace Arcy.Battle
 
         public void Heal(int amount)
         {
+            curHp += amount;
 
+            if (curHp > maxHp)
+            {
+                curHp = maxHp;
+            }
+
+            characterUI?.UpdateHealthBar(curHp, maxHp);
+            Instantiate(healParticlePrefab, transform);
         }
 
         void Die()
         {
-            // TODO: "I know, Johnny. Do it better"
+            onCharacterDeath?.Invoke(this);
             Destroy(gameObject);
         }
 
@@ -109,9 +120,9 @@ namespace Arcy.Battle
                 arriveCallback?.Invoke(target);
 
                 // Move back to your original standing position
-                while (transform.position != standingPosition)
+                while (transform.position != _ogStandingPosition)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, standingPosition, 40 * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, _ogStandingPosition, 40 * Time.deltaTime);
                     yield return null;
                 }
             }
