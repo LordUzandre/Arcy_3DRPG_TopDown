@@ -3,22 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Arcy.Battle
 {
     public class VSlice_CombatActionUI : MonoBehaviour
     {
-        public GameObject panel;
-        public VSlice_CombatActionBtn[] buttons;
-        public GameObject descriptionPanel;
-        public TextMeshProUGUI descriptionText;
+        /// <summary>
+        /// All player team's CombatActions UI and Buttons. The class is used by Canvas.
+        /// </summary>
 
+        [SerializeField] private GameObject _buttonPanel; // The panel containing all the CombatAction Buttons
+        [SerializeField] private GameObject _descriptionPanel; // The panel containing the descriptive TextMesh
+
+        private TextMeshProUGUI _descriptionText; // Text in the descriptionPanel
+        private VSlice_CombatActionBtn[] _buttons; // All the CombatAction Buttons
+
+        private void Start()
+        {
+            _descriptionText = _descriptionPanel.GetComponentInChildren<TextMeshProUGUI>();
+            _buttons = _buttonPanel.GetComponentsInChildren<VSlice_CombatActionBtn>();
+        }
 
         private void OnEnable()
         {
             StartCoroutine(myCoroutine());
-            //Make sure waits one frame before subscribing.
-            IEnumerator myCoroutine()
+
+            IEnumerator myCoroutine() // Wait one frame before subscribing.
             {
                 yield return null;
                 VSlice_BattleTurnManager.instance.onNewTurn += OnNewTurn;
@@ -30,51 +41,57 @@ namespace Arcy.Battle
             VSlice_BattleTurnManager.instance.onNewTurn -= OnNewTurn;
         }
 
+        // Called by TurnManager when a new turn has triggered.
         void OnNewTurn()
         {
+            // Enable the UI if it's a player character's turn
             if (VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter().team == VSlice_BattleCharacterBase.Team.Player)
             {
                 DisplayCombatActions(VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter());
             }
+            // Otherwise disable it
             else
             {
                 DisableCombatActions();
             }
         }
 
-        public void DisplayCombatActions(VSlice_BattleCharacterBase character)
+        // Display the requested character's available combat actions.
+        private void DisplayCombatActions(VSlice_BattleCharacterBase character)
         {
-            panel.SetActive(true);
+            _buttonPanel.SetActive(true);
 
-            for (int i = 0; i < buttons.Length; i++)
+            for (int i = 0; i < _buttons.Length; i++)
             {
                 if (i < character.combatActions.Length)
                 {
-                    buttons[i].gameObject.SetActive(true);
-                    buttons[i].SetCombatAction(character.combatActions[i]);
+                    _buttons[i].gameObject.SetActive(true);
+                    _buttons[i].SetCombatAction(character.combatActions[i]);
                 }
                 else
                 {
-                    buttons[i].gameObject.SetActive(false);
+                    _buttons[i].gameObject.SetActive(false);
                 }
             }
         }
 
+        // Disable the CombatActions UI, called by CombatManager
         public void DisableCombatActions()
         {
-            panel.SetActive(false);
+            _buttonPanel.SetActive(false);
             DisableCombatActionDescription();
         }
 
+        // Called by CombatActionButton when we hover over a combat action button.
         public void SetCombatActionDescription(VSlice_CombatAction combatAction)
         {
-            descriptionPanel.SetActive(true);
-            descriptionText.text = combatAction.description;
+            _descriptionPanel.SetActive(true);
+            _descriptionText.text = combatAction.description;
         }
 
         public void DisableCombatActionDescription()
         {
-            descriptionPanel.SetActive(false);
+            _descriptionPanel.SetActive(false);
         }
     }
 }

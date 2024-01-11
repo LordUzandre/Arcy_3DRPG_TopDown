@@ -50,14 +50,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 0
   displayName: Player Character
-  curHp: 25
+  curHp: 50
   maxHp: 50
   combatActions: []
   characterEffects: {fileID: 3744813135341387889}
   characterUI: {fileID: 0}
   selectionVisual: {fileID: 7977645338791964562}
-  damageFlash: {fileID: 2214037421236398494}
-  healParticlePrefab: {fileID: 7713095558719005110, guid: add9023f950a7b045a48bc8b115480b5,
+  _healParticlePrefab: {fileID: 7713095558719005110, guid: add9023f950a7b045a48bc8b115480b5,
     type: 3}
 --- !u!114 &3744813135341387889
 MonoBehaviour:

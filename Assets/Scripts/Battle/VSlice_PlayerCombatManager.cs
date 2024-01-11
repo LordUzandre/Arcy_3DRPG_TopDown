@@ -9,27 +9,39 @@ namespace Arcy.Battle
 {
     public class VSlice_PlayerCombatManager : MonoBehaviour
     {
+        /// <summary>
+        /// This manager handles the combat during the player's turn
+        /// </summary>
+
         // Public:
         public static VSlice_PlayerCombatManager instance; // Singleton
 
         // Private:
         [Header("Components")]
         [SerializeField] private LayerMask _selectionLayerMask; // LayerMask
-        [SerializeField] VSlice_CombatActionUI combatActionsUI; // PlayerTeam CombatActions UI
+        [SerializeField] private VSlice_CombatActionUI combatActionsUI; // PlayerTeam CombatActions UI
 
         private VSlice_CombatAction _curSelectionCombatAction; // Current selected combatAction
         private VSlice_BattleCharacterBase _curSelectedCharacter; // Current selected character
-        private bool _isActive; // Active Bool
+        private bool _isActive; // Whether PlayerCombat is active or not
 
-        // Selection flags
+        // Selection flags for the currently selected combatAction
         private bool _canSelectSelf;
         private bool _canSelectTeam;
         private bool _canSelectEnemies;
 
-        // Selection Rate variables
+        // Selection Raycast variables
         private float _selectionCheckRate = 0.1f;
         private float _lastSelectionCheckTime;
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            //Set the LayerMask to the appropriate layer
+            if (_selectionLayerMask == LayerMask.GetMask("Nothing"))
+                _selectionLayerMask = LayerMask.GetMask("Player_combat");
+        }
+#endif
 
         private void Awake()
         {
@@ -41,12 +53,6 @@ namespace Arcy.Battle
             {
                 instance = this;
             }
-        }
-
-        private void OnValidate()
-        {
-            if (_selectionLayerMask == LayerMask.GetMask("Nothing"))
-                _selectionLayerMask = LayerMask.GetMask("Player_combat");
         }
 
         private void OnEnable()

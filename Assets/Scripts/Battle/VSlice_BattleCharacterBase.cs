@@ -5,44 +5,46 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 namespace Arcy.Battle
 {
     [SelectionBase]
     public class VSlice_BattleCharacterBase : MonoBehaviour
     {
-        public enum Team
-        {
-            Player,
-            Enemy
-        }
+        /// <summary>
+        /// This class is the base for all characters during battle
+        /// </summary> 
+
+        public enum Team { Player, Enemy }
+        public static UnityAction<VSlice_BattleCharacterBase> onCharacterDeath; // Subscribed by GameManager
 
         [Header("Stats")]
-        public Team team;
-        public string displayName;
-        public int curHp;
-        public int maxHp;
+        public Team team; // Which side is the character on
+        public string displayName; // Used by CombatActionBtn
+        public int curHp; // Used by managers to update UI
+        public int maxHp; // Used by managers to Update UI
 
         [Header("Combat Actions")]
-        public VSlice_CombatAction[] combatActions;
+        public VSlice_CombatAction[] combatActions; // Used by managers
 
         [Header("Components")]
-        public VSlice_BattleCharEffects characterEffects;
-        public VSlice_BattleCharUI characterUI;
-        public GameObject selectionVisual;
-        public vSlice_DamageFlash damageFlash;
+        public VSlice_BattleCharEffects characterEffects; // Used by combatActionEffects
+        public VSlice_BattleCharUI characterUI; // The character's battle UI
+        public GameObject selectionVisual; // Should be a part of the prefab
 
         [Header("Prefabs")]
-        public GameObject healParticlePrefab;
-        public static UnityAction<VSlice_BattleCharacterBase> onCharacterDeath;
+        [SerializeField] private GameObject _healParticlePrefab;
 
         //Private:
-        private Vector3 _ogStandingPosition;
+        private vSlice_DamageFlash _damageFlash; // Set
+        private Vector3 _ogStandingPosition; // The return position after combatActionMelee
 
         private void Start()
         {
             _ogStandingPosition = transform.position;
             characterUI?.SetCharacterNameText(displayName);
             characterUI?.UpdateHealthBar(curHp, maxHp);
+            _damageFlash = GetComponentInChildren<vSlice_DamageFlash>();
         }
 
         private void OnEnable()
@@ -55,13 +57,15 @@ namespace Arcy.Battle
             VSlice_BattleTurnManager.instance.onNewTurn -= OnNewTurn;
         }
 
-        void OnNewTurn()
+        // Called whenever BattleTurnManager trigger a new turn
+        private void OnNewTurn()
         {
             // TODO: Remember to set up a character UI
             characterUI?.ToggleTurnVisual(VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter() == this);
             characterEffects?.ApplyCurrentEffects();
         }
 
+        // Makes the character cast the requested combatAction, called by combatManagers
         public void CastCombatAction(VSlice_CombatAction combatAction, VSlice_BattleCharacterBase target = null)
         {
             if (target == null)
@@ -70,12 +74,13 @@ namespace Arcy.Battle
             combatAction.Cast(this, target);
         }
 
+        // Called when the character takes damage by either CombatAction or battleCharEffect
         public void TakeDamage(int damage)
         {
             curHp -= damage;
 
             characterUI?.UpdateHealthBar(curHp, maxHp);
-            damageFlash?.Flash();
+            _damageFlash.Flash();
 
             if (curHp <= 0)
             {
@@ -83,6 +88,7 @@ namespace Arcy.Battle
             }
         }
 
+        // Called when the character is healed by either effect or projectile
         public void Heal(int amount)
         {
             curHp += amount;
@@ -93,23 +99,25 @@ namespace Arcy.Battle
             }
 
             characterUI?.UpdateHealthBar(curHp, maxHp);
-            Instantiate(healParticlePrefab, transform);
+            Instantiate(_healParticlePrefab, transform);
         }
 
-        void Die()
+        // Called when hp reaches 0
+        private void Die()
         {
+            // TODO: Right now the object is simply destroyed. Make it something more impressive.
             onCharacterDeath?.Invoke(this);
             Destroy(gameObject);
         }
 
-        //Used for the melee combat action
+        // Used by CombatActionMelee
         public void MoveToTarget(VSlice_BattleCharacterBase target, UnityAction<VSlice_BattleCharacterBase> arriveCallback)
         {
             StartCoroutine(MeleeAttackAnimation());
 
             IEnumerator MeleeAttackAnimation()
             {
-                //move to the target
+                // Move to the target
                 while (transform.position != target.transform.position)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 40 * Time.deltaTime);
@@ -128,6 +136,7 @@ namespace Arcy.Battle
             }
         }
 
+        // Enable or disable the mouse selection visual
         public void ToggleSelectionVisual(bool toggle)
         {
             selectionVisual?.SetActive(toggle);

@@ -7,19 +7,20 @@ namespace Arcy.Battle
 {
     public class VSlice_BattleCharEffects : MonoBehaviour
     {
-        private List<EffectInstance> curEffects = new List<EffectInstance>();
-        private VSlice_BattleCharacterBase character;
+        private List<EffectInstance> _curEffects = new List<EffectInstance>();
+        private VSlice_BattleCharacterBase _character;
 
-        private void Awake()
+        private void Start()
         {
-            character = GetComponent<VSlice_BattleCharacterBase>();
+            _character = GetComponent<VSlice_BattleCharacterBase>();
         }
 
+        // Called by CombatActionEffect
         public void AddNewEffect(VSlice_BattleEffectBase effect)
         {
             EffectInstance effectInstance = new EffectInstance(effect);
 
-            if (effect.activePrefab == null)
+            if (effect.activePrefab != null)
             {
                 effectInstance.curActiveGameObject = Instantiate(effect.activePrefab, transform);
             }
@@ -29,15 +30,16 @@ namespace Arcy.Battle
                 effectInstance.curTickParticle = Instantiate(effect.tickPrefab, transform).GetComponent<ParticleSystem>();
             }
 
-            curEffects.Add(effectInstance);
+            _curEffects.Add(effectInstance);
             ApplyEffect(effectInstance);
         }
 
+        // Called by BattleCharacterBase
         public void ApplyCurrentEffects()
         {
-            for (int i = 0; i < curEffects.Count; i++)
+            for (int i = 0; i < _curEffects.Count; i++)
             {
-                ApplyEffect(curEffects[i]);
+                ApplyEffect(_curEffects[i]);
             }
         }
 
@@ -47,11 +49,11 @@ namespace Arcy.Battle
 
             if (effect.effect as DamageEffect)
             {
-                character.TakeDamage((effect.effect as DamageEffect).damage);
+                _character.TakeDamage((effect.effect as DamageEffect).damage);
             }
             else if (effect.effect as HealEffect)
             {
-                character.Heal((effect.effect as HealEffect).heal);
+                _character.Heal((effect.effect as HealEffect).heal);
             }
 
             effect.turnRemaining--;
@@ -62,6 +64,7 @@ namespace Arcy.Battle
             }
         }
 
+        // Remove the effect once it has run its course
         private void RemoveEffect(EffectInstance effect)
         {
             if (effect.curActiveGameObject != null)
@@ -70,7 +73,7 @@ namespace Arcy.Battle
             if (effect.curTickParticle != null)
                 Destroy(effect.curTickParticle.gameObject);
 
-            curEffects.Remove(effect);
+            _curEffects.Remove(effect);
         }
     }
 }

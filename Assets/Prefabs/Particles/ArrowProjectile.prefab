@@ -4876,10 +4876,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69fc9de8346aa4149843aad4e36acd07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
-  heal: 0
-  moveSpeed: 40
-  effectToApply: {fileID: 11400000, guid: eb030a95b597fb84fa0ba410bcfc26c6, type: 2}
+  _damage: 5
+  _heal: 0
+  _moveSpeed: 20
+  _effectToApply: {fileID: 11400000, guid: eb030a95b597fb84fa0ba410bcfc26c6, type: 2}
 --- !u!136 &4769023394358493225
 CapsuleCollider:
   m_ObjectHideFlags: 0

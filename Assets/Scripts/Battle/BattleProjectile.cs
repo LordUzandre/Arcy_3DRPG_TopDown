@@ -6,47 +6,57 @@ namespace Arcy.Battle
 {
     public class BattleProjectile : MonoBehaviour
     {
-        public int damage;
-        public int heal;
-        public float moveSpeed;
-        public VSlice_BattleEffectBase effectToApply;
+        /// <summary>
+        /// The base script for any projectile Combat Aciton. Can both damage and heal
+        /// </summary>
 
-        private Vector3 yOffset = new Vector3(0, 0.5f, 0);
-        private VSlice_BattleCharacterBase target;
+        // Private:
 
+        // Variables Needs to be set manually
+        [SerializeField] private int _damage;
+        [SerializeField] private int _heal;
+        [SerializeField] private float _moveSpeed;
+        [SerializeField] private VSlice_BattleEffectBase _effectToApply;
+
+        private VSlice_BattleCharacterBase _target; //Sets automatically by CombatActionRanged
+        private Vector3 _yOffset = new Vector3(0, 0.6f, 0);
+
+        // Called by CombatActionRanged
         public void Initialize(VSlice_BattleCharacterBase targetChar)
         {
-            target = targetChar;
+            _target = targetChar;
         }
 
         private void Update()
         {
-            if (target != null)
+            // Push the projectile forward
+            if (_target != null)
             {
-                transform.position = Vector3.MoveTowards(transform.position, target.transform.position + yOffset, moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, _target.transform.position + _yOffset, _moveSpeed * Time.deltaTime);
             }
         }
 
-        // Called when we hit our target.
-        private void ImpactTarget()
+        // When projectile hits its intended target
+        private void OnTriggerEnter(Collider collider)
         {
-            if (damage > 0)
-                target.TakeDamage(damage);
-
-            if (heal > 0)
-                target.Heal(heal);
-
-            if (effectToApply != null)
-                target.GetComponent<VSlice_BattleCharEffects>().AddNewEffect(effectToApply);
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (target != null && other.gameObject == target.gameObject)
+            if (_target != null && collider.gameObject == _target.gameObject)
             {
                 ImpactTarget();
                 Destroy(gameObject);
             }
+        }
+
+        // When we hit our target.
+        private void ImpactTarget()
+        {
+            if (_damage > 0)
+                _target.TakeDamage(_damage);
+
+            if (_heal > 0)
+                _target.Heal(_heal);
+
+            if (_effectToApply != null)
+                _target.GetComponent<VSlice_BattleCharEffects>().AddNewEffect(_effectToApply);
         }
     }
 }
