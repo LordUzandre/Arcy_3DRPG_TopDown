@@ -9,30 +9,36 @@ namespace Arcy.Battle
 {
     public class VSlice_BattleCharUI : MonoBehaviour
     {
-        public TextMeshProUGUI characterNameText;
-        public Image healthFill;
-        public TextMeshProUGUI healthText;
-        public Image turnVisual;
+        [Header("Character Name")]
+        [SerializeField] private TextMeshProUGUI characterNameText; // TextMesh that's set by CharacterBase
 
-        private void Update()
-        {
-            transform.forward = transform.position - UnityEngine.Camera.main.transform.position;
-        }
+        [Header("Turn Visuals")]
+        [SerializeField] private Image _turnVisual; // Visual indicator which character's turn it is.
 
-        public void ToggleTurnVisual(bool toggle)
-        {
-            turnVisual.gameObject.SetActive(toggle);
-        }
+        [Header("HP")]
+        [SerializeField] private Image healthFill; // healthBar
+        [SerializeField] private TextMeshProUGUI healthText; // TextMesh that shows character's hp
 
-        public void SetCharacterNameText(string characterName)
+        // Called by GameManager when UI is instanced
+        public void ConnectUItoNewChar(string characterName, int curHp, int maxHp)
         {
             characterNameText.text = characterName;
+            UpdateHealthBar(curHp, maxHp);
         }
 
-        public void UpdateHealthBar(int curHP, int maxHP)
+        // Called by BattleCharBase when it's the current player character's turn
+        public void ToggleTurnVisual(bool toggle)
         {
-            healthText.text = $"{curHP} / {maxHP}";
-            healthFill.fillAmount = (float)curHP / (float)maxHP;
+            _turnVisual.gameObject.SetActive(toggle);
+        }
+
+        // Called by BattleCharBase when the health is changed
+        public void UpdateHealthBar(int curHp, int maxHp)
+        {
+            healthText.text = $"{curHp}";
+
+            // Fill health Bar according to normalized value
+            healthFill.fillAmount = (float)curHp / (float)maxHp;
         }
     }
 }

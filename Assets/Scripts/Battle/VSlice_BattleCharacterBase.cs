@@ -29,8 +29,8 @@ namespace Arcy.Battle
 
         [Header("Components")]
         public VSlice_BattleCharEffects characterEffects; // Used by combatActionEffects
-        public VSlice_BattleCharUI characterUI; // The character's battle UI
-        public GameObject selectionVisual; // Should be a part of the prefab
+        public GameObject selectionVisual; // Visual indicator which character can be chosen for attack. Remember: should be part of prefab.
+        [HideInInspector] public VSlice_BattleCharUI characterUI; // The character's battle UI, set by GameManager
 
         [Header("Prefabs")]
         [SerializeField] private GameObject _healParticlePrefab;
@@ -42,8 +42,8 @@ namespace Arcy.Battle
         private void Start()
         {
             _ogStandingPosition = transform.position;
-            characterUI?.SetCharacterNameText(displayName);
-            characterUI?.UpdateHealthBar(curHp, maxHp);
+            // characterUI?.SetCharacterNameText(displayName);
+            // characterUI?.UpdateHealthBar(curHp, maxHp);
             _damageFlash = GetComponentInChildren<vSlice_DamageFlash>();
         }
 

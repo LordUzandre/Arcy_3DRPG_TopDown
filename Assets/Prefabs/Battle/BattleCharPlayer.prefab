@@ -10,6 +10,21 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
         type: 3}
+      propertyPath: curHp
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
+        type: 3}
+      propertyPath: maxHp
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
+        type: 3}
+      propertyPath: displayName
+      value: Default Name
+      objectReference: {fileID: 0}
+    - target: {fileID: -4034488690416478313, guid: 9d103d25a71004a45acfef9e13913bdd,
+        type: 3}
       propertyPath: combatActions.Array.size
       value: 3
       objectReference: {fileID: 0}

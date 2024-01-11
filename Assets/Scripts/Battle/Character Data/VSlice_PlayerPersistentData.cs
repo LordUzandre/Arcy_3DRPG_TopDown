@@ -26,7 +26,7 @@ namespace Arcy.Battle
                 {
                     if (characters[i].characterPrefab.TryGetComponent<VSlice_BattleCharacterBase>(out var character))
                     {
-                        characters[i].health = character.maxHp;
+                        characters[i].health = character.curHp;
                         characters[i].isDead = false;
                     }
                 }

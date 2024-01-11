@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d67bfabd981cb4301907b732c3878468, type: 3}
-  m_Name: Player Persitent Data
+  m_Name: Player_0 Team
   m_EditorClassIdentifier: 
   characters:
   - characterPrefab: {fileID: 2921751862634022623, guid: 55b6b4faa85ee534a80e8698d23ca2c1,
       type: 3}
-    health: 50
+    health: 512
     isDead: 0

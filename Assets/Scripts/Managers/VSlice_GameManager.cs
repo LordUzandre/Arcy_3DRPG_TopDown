@@ -12,24 +12,28 @@ namespace Arcy.Battle
                 public static VSlice_GameManager instance; //Singleton
 
                 [Header("Player and Enemy Teams (Sets automatically)")]
-                public List<VSlice_BattleCharacterBase> playerTeam;
-                public VSlice_BattleCharacterBase[] enemyTeam;
+                public List<VSlice_BattleCharacterBase> playerTeam; // List that includes all Player Team's characters
+                public VSlice_BattleCharacterBase[] enemyTeam; // Array that includes all Enemy Team's characters
 
                 //Private:
                 [Header("Components (Set manually)")]
-                [SerializeField] private Transform _playerTeamSpawnPositionsParent;
-                [SerializeField] private Transform _enemyTeamSpawnPositionsParent;
-                private Transform[] _playerTeamSpawns;
-                private Transform[] _enemyTeamSpawns;
+                [SerializeField] private Transform _playerTeamSpawnPositionsParent; // The transform that's going to parent all player Team spawn points
+                [SerializeField] private Transform _enemyTeamSpawnPositionsParent; // The transform that's going to parent all enemy Team spawn points
+                private Transform[] _playerTeamSpawns; // ALl the transform of player Team Spawn Points
+                private Transform[] _enemyTeamSpawns; // ALl the transform of enemy Team Spawn Points
 
                 [Header("Data (Set manually)")]
-                [SerializeField] private VSlice_PlayerPersistentData _playerPersistentData;
-                [SerializeField] private VSlice_CharacterSet _defaultEnemySet;
+                [SerializeField] private VSlice_PlayerPersistentData _playerPersistentData; // Player Team's Data
+                [SerializeField] private VSlice_CharacterSet _defaultEnemySet; // Enemy Team's Data
+
+                [Header("Character UI (set manually)")]
+                [SerializeField] private GameObject _characterUiParentObject; // The parent Object that should spawn Player Character's UI
+                [SerializeField] private GameObject _characterUiPrefab; // Player Character's UI Prefab
+
+                private List<VSlice_BattleCharacterBase> _allCharactersList = new List<VSlice_BattleCharacterBase>(); // All character's that currently featured in the battle, used to determine when the battle's over
 
                 // Debug
-                string _winningTeam = "null";
-
-                private List<VSlice_BattleCharacterBase> _allCharactersList = new List<VSlice_BattleCharacterBase>();
+                private string _winningTeam = "null";
 
                 private void Awake()
                 {
@@ -78,7 +82,7 @@ namespace Arcy.Battle
                         VSlice_BattleCharacterBase.onCharacterDeath -= OnCharacterKilled;
                 }
 
-                //Make sure waits one frame before subscribing.
+                //Make sure waits one frame before Battle begins.
                 IEnumerator Begin()
                 {
                         yield return null;
@@ -101,6 +105,10 @@ namespace Arcy.Battle
                                 {
                                         VSlice_BattleCharacterBase character = CreateCharacter(playerData.characters[i].characterPrefab, _playerTeamSpawns[playerSpawnIndex]);
                                         character.curHp = playerData.characters[i].health;
+
+                                        // Spawn UI and connect to newly formed player character
+                                        character.characterUI = Instantiate(_characterUiPrefab, _characterUiParentObject.transform).GetComponent<VSlice_BattleCharUI>();
+                                        character.characterUI.ConnectUItoNewChar(character.displayName, character.curHp, character.maxHp);
                                         playerTeam.Add(character);
                                         playerSpawnIndex++;
                                 }
