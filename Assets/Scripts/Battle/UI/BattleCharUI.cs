@@ -7,8 +7,12 @@ using TMPro;
 
 namespace Arcy.Battle
 {
-    public class VSlice_BattleCharUI : MonoBehaviour
+    public class BattleCharUI : MonoBehaviour
     {
+        /// <summary>
+        /// This is the UI that contains all the character's stats during combat , such as name, HP-Bar etc.
+        /// </summary>
+
         [Header("Character Name")]
         [SerializeField] private TextMeshProUGUI characterNameText; // TextMesh that's set by CharacterBase
 

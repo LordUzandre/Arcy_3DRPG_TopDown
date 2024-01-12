@@ -7,13 +7,13 @@ using UnityEngine.SceneManagement;
 
 namespace Arcy.Battle
 {
-        public class VSlice_GameManager : MonoBehaviour
+        public class BattleManager : MonoBehaviour
         {
-                public static VSlice_GameManager instance; //Singleton
+                public static BattleManager instance; //Singleton
 
                 [Header("Player and Enemy Teams (Sets automatically)")]
-                public List<VSlice_BattleCharacterBase> playerTeam; // List that includes all Player Team's characters
-                public VSlice_BattleCharacterBase[] enemyTeam; // Array that includes all Enemy Team's characters
+                public List<BattleCharacterBase> playerTeam; // List that includes all Player Team's characters
+                public BattleCharacterBase[] enemyTeam; // Array that includes all Enemy Team's characters
 
                 //Private:
                 [Header("Components (Set manually)")]
@@ -30,7 +30,7 @@ namespace Arcy.Battle
                 [SerializeField] private GameObject _characterUiParentObject; // The parent Object that should spawn Player Character's UI
                 [SerializeField] private GameObject _characterUiPrefab; // Player Character's UI Prefab
 
-                private List<VSlice_BattleCharacterBase> _allCharactersList = new List<VSlice_BattleCharacterBase>(); // All character's that currently featured in the battle, used to determine when the battle's over
+                private List<BattleCharacterBase> _allCharactersList = new List<BattleCharacterBase>(); // All character's that currently featured in the battle, used to determine when the battle's over
 
                 // Debug
                 private string _winningTeam = "null";
@@ -52,8 +52,16 @@ namespace Arcy.Battle
                         PopulateArrays();
                         CreateCharacters(_playerPersistentData, _defaultEnemySet);
                         StartCoroutine(Begin());
+
+                        IEnumerator Begin()
+                        {
+                                //Make sure waits one frame before Battle begins.
+                                yield return null;
+                                BattleTurnManager.instance.Begin();
+                        }
                 }
 
+                // Set the player and enemy team based on persistent data
                 private void PopulateArrays()
                 {
                         _playerTeamSpawns = new Transform[_playerTeamSpawnPositionsParent.childCount];
@@ -74,27 +82,20 @@ namespace Arcy.Battle
 
                 private void OnEnable()
                 {
-                        VSlice_BattleCharacterBase.onCharacterDeath += OnCharacterKilled;
+                        BattleCharacterBase.onCharacterDeath += OnCharacterKilled;
                 }
 
                 private void OnDisable()
                 {
-                        VSlice_BattleCharacterBase.onCharacterDeath -= OnCharacterKilled;
-                }
-
-                //Make sure waits one frame before Battle begins.
-                IEnumerator Begin()
-                {
-                        yield return null;
-                        VSlice_BattleTurnManager.instance.Begin();
+                        BattleCharacterBase.onCharacterDeath -= OnCharacterKilled;
                 }
 
                 // Called at the start of the game - create the character game objects
                 private void CreateCharacters(VSlice_PlayerPersistentData playerData, VSlice_CharacterSet enemyTeamSet)
                 {
                         // playerTeam = new VSlice_BattleCharacterBase[playerData.characters.Length];
-                        playerTeam = new List<VSlice_BattleCharacterBase>();
-                        enemyTeam = new VSlice_BattleCharacterBase[enemyTeamSet.characters.Length];
+                        playerTeam = new List<BattleCharacterBase>();
+                        enemyTeam = new BattleCharacterBase[enemyTeamSet.characters.Length];
 
                         int playerSpawnIndex = 0;
 
@@ -103,12 +104,13 @@ namespace Arcy.Battle
                         {
                                 if (!playerData.characters[i].isDead)
                                 {
-                                        VSlice_BattleCharacterBase character = CreateCharacter(playerData.characters[i].characterPrefab, _playerTeamSpawns[playerSpawnIndex]);
+                                        BattleCharacterBase character = CreateCharacter(playerData.characters[i].characterPrefab, _playerTeamSpawns[playerSpawnIndex]);
                                         character.curHp = playerData.characters[i].health;
 
                                         // Spawn UI and connect to newly formed player character
-                                        character.characterUI = Instantiate(_characterUiPrefab, _characterUiParentObject.transform).GetComponent<VSlice_BattleCharUI>();
+                                        character.characterUI = Instantiate(_characterUiPrefab, _characterUiParentObject.transform).GetComponent<BattleCharUI>();
                                         character.characterUI.ConnectUItoNewChar(character.displayName, character.curHp, character.maxHp);
+
                                         playerTeam.Add(character);
                                         playerSpawnIndex++;
                                 }
@@ -117,7 +119,7 @@ namespace Arcy.Battle
                         //Spawn the enemy Characters
                         for (int i = 0; i < enemyTeamSet.characters.Length; i++)
                         {
-                                VSlice_BattleCharacterBase character = CreateCharacter(enemyTeamSet.characters[i], _enemyTeamSpawns[i]);
+                                BattleCharacterBase character = CreateCharacter(enemyTeamSet.characters[i], _enemyTeamSpawns[i]);
                                 enemyTeam[i] = character;
                         }
 
@@ -125,13 +127,16 @@ namespace Arcy.Battle
                         _allCharactersList.AddRange(enemyTeam);
                 }
 
-                VSlice_BattleCharacterBase CreateCharacter(GameObject characterPrefab, Transform spawnPos)
+                // Spawn in the characters
+                private BattleCharacterBase CreateCharacter(GameObject characterPrefab, Transform spawnPos)
                 {
                         GameObject obj = Instantiate(characterPrefab, spawnPos.position, spawnPos.rotation);
-                        return obj.GetComponent<VSlice_BattleCharacterBase>();
+                        obj.transform.parent = spawnPos.transform;
+                        return obj.GetComponent<BattleCharacterBase>();
                 }
 
-                void OnCharacterKilled(VSlice_BattleCharacterBase character)
+                // Whenever a character (good or bad) is killed
+                private void OnCharacterKilled(BattleCharacterBase character)
                 {
                         _allCharactersList.Remove(character);
 
@@ -140,7 +145,7 @@ namespace Arcy.Battle
 
                         for (int i = 0; i < _allCharactersList.Count; i++)
                         {
-                                if (_allCharactersList[i].team == VSlice_BattleCharacterBase.Team.Player)
+                                if (_allCharactersList[i].team == BattleCharacterBase.Team.Player)
                                         playersRemaining++;
                                 else
                                         enemiesRemaining++;
@@ -171,6 +176,7 @@ namespace Arcy.Battle
                         _winningTeam = "Enemy Team";
                 }
 
+                // Update the team's stats when winning.
                 private void UpdatePlayerPersistentData()
                 {
                         for (int i = 0; i < playerTeam.Count; i++)
@@ -186,6 +192,7 @@ namespace Arcy.Battle
                         }
                 }
 
+                // Return to the main map once the battle is finished
                 private void LoadMapScene()
                 {
                         //SceneManager.LoadScene("Map");

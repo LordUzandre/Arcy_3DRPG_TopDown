@@ -24,7 +24,7 @@ namespace Arcy.Battle
                 // refactored lines to prevent MissingReferenceException error on opening project
                 if (characters[i].characterPrefab != null)
                 {
-                    if (characters[i].characterPrefab.TryGetComponent<VSlice_BattleCharacterBase>(out var character))
+                    if (characters[i].characterPrefab.TryGetComponent<BattleCharacterBase>(out var character))
                     {
                         characters[i].health = character.curHp;
                         characters[i].isDead = false;

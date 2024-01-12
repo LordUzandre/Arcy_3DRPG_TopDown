@@ -9,14 +9,14 @@ using UnityEngine.Events;
 namespace Arcy.Battle
 {
     [SelectionBase]
-    public class VSlice_BattleCharacterBase : MonoBehaviour
+    public class BattleCharacterBase : MonoBehaviour
     {
         /// <summary>
         /// This class is the base for all characters during battle
         /// </summary> 
 
         public enum Team { Player, Enemy }
-        public static UnityAction<VSlice_BattleCharacterBase> onCharacterDeath; // Subscribed by GameManager
+        public static UnityAction<BattleCharacterBase> onCharacterDeath; // Subscribed by GameManager
 
         [Header("Stats")]
         public Team team; // Which side is the character on
@@ -25,18 +25,18 @@ namespace Arcy.Battle
         public int maxHp; // Used by managers to Update UI
 
         [Header("Combat Actions")]
-        public VSlice_CombatAction[] combatActions; // Used by managers
+        public CombatActionBase[] combatActions; // Used by managers
 
         [Header("Components")]
-        public VSlice_BattleCharEffects characterEffects; // Used by combatActionEffects
+        public BattleChar_Effects characterEffects; // Used by combatActionEffects
         public GameObject selectionVisual; // Visual indicator which character can be chosen for attack. Remember: should be part of prefab.
-        [HideInInspector] public VSlice_BattleCharUI characterUI; // The character's battle UI, set by GameManager
+        [HideInInspector] public BattleCharUI characterUI; // The character's battle UI, set by GameManager
 
         [Header("Prefabs")]
         [SerializeField] private GameObject _healParticlePrefab;
 
         //Private:
-        private vSlice_DamageFlash _damageFlash; // Set
+        private DamageFlash _damageFlash; // Set
         private Vector3 _ogStandingPosition; // The return position after combatActionMelee
 
         private void Start()
@@ -44,29 +44,29 @@ namespace Arcy.Battle
             _ogStandingPosition = transform.position;
             // characterUI?.SetCharacterNameText(displayName);
             // characterUI?.UpdateHealthBar(curHp, maxHp);
-            _damageFlash = GetComponentInChildren<vSlice_DamageFlash>();
+            _damageFlash = GetComponentInChildren<DamageFlash>();
         }
 
         private void OnEnable()
         {
-            VSlice_BattleTurnManager.instance.onNewTurn += OnNewTurn;
+            BattleTurnManager.instance.onNewTurn += OnNewTurn;
         }
 
         private void OnDisable()
         {
-            VSlice_BattleTurnManager.instance.onNewTurn -= OnNewTurn;
+            BattleTurnManager.instance.onNewTurn -= OnNewTurn;
         }
 
         // Called whenever BattleTurnManager trigger a new turn
         private void OnNewTurn()
         {
             // TODO: Remember to set up a character UI
-            characterUI?.ToggleTurnVisual(VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter() == this);
+            characterUI?.ToggleTurnVisual(BattleTurnManager.instance.GetCurrentTurnCharacter() == this);
             characterEffects?.ApplyCurrentEffects();
         }
 
         // Makes the character cast the requested combatAction, called by combatManagers
-        public void CastCombatAction(VSlice_CombatAction combatAction, VSlice_BattleCharacterBase target = null)
+        public void CastCombatAction(CombatActionBase combatAction, BattleCharacterBase target = null)
         {
             if (target == null)
                 target = this;
@@ -111,7 +111,7 @@ namespace Arcy.Battle
         }
 
         // Used by CombatActionMelee
-        public void MoveToTarget(VSlice_BattleCharacterBase target, UnityAction<VSlice_BattleCharacterBase> arriveCallback)
+        public void MoveToTarget(BattleCharacterBase target, UnityAction<BattleCharacterBase> arriveCallback)
         {
             StartCoroutine(MeleeAttackAnimation());
 

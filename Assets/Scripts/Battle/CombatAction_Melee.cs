@@ -6,16 +6,16 @@ using UnityEngine;
 namespace Arcy.Battle
 {
     [CreateAssetMenu(fileName = "Melee Combat Action", menuName = "Combat Actions/Melee Combat Action")]
-    public class VSlice_CombatActionMelee : VSlice_CombatAction
+    public class CombatAction_Melee : CombatActionBase
     {
         public int meleeDamage;
 
-        public override void Cast(VSlice_BattleCharacterBase caster, VSlice_BattleCharacterBase target)
+        public override void Cast(BattleCharacterBase caster, BattleCharacterBase target)
         {
             caster.MoveToTarget(target, OnDamageTargetCallback);
         }
 
-        private void OnDamageTargetCallback(VSlice_BattleCharacterBase target)
+        private void OnDamageTargetCallback(BattleCharacterBase target)
         {
             target.TakeDamage(meleeDamage);
         }

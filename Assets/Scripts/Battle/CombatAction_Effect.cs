@@ -6,14 +6,18 @@ using UnityEngine;
 namespace Arcy.Battle
 {
     [CreateAssetMenu(fileName = "Effect Combat Action", menuName = "Combat Actions/Effect Combat Action")]
-    public class VSlice_CombatActionEffect : VSlice_CombatAction
+    public class CombatAction_Effect : CombatActionBase
     {
+        /// <summary>
+        /// Who should the Combat Action Affect
+        /// </summary>
+
         public VSlice_BattleEffectBase effectToCast;
         public bool canEffectSelf;
         public bool canEffectTeam;
         public bool canEffectEnemy;
 
-        public override void Cast(VSlice_BattleCharacterBase caster, VSlice_BattleCharacterBase target)
+        public override void Cast(BattleCharacterBase caster, BattleCharacterBase target)
         {
             target.characterEffects.AddNewEffect(effectToCast);
         }

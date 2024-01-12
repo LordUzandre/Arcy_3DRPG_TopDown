@@ -18,11 +18,11 @@ namespace Arcy.Battle
         [SerializeField] private float _moveSpeed;
         [SerializeField] private VSlice_BattleEffectBase _effectToApply;
 
-        private VSlice_BattleCharacterBase _target; //Sets automatically by CombatActionRanged
+        private BattleCharacterBase _target; //Sets automatically by CombatActionRanged
         private Vector3 _yOffset = new Vector3(0, 0.6f, 0);
 
         // Called by CombatActionRanged
-        public void Initialize(VSlice_BattleCharacterBase targetChar)
+        public void Initialize(BattleCharacterBase targetChar)
         {
             _target = targetChar;
         }
@@ -56,7 +56,7 @@ namespace Arcy.Battle
                 _target.Heal(_heal);
 
             if (_effectToApply != null)
-                _target.GetComponent<VSlice_BattleCharEffects>().AddNewEffect(_effectToApply);
+                _target.GetComponent<BattleChar_Effects>().AddNewEffect(_effectToApply);
         }
     }
 }

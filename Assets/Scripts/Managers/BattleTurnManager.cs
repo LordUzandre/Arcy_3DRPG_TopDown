@@ -6,17 +6,17 @@ using UnityEngine.Events;
 
 namespace Arcy.Battle
 {
-    public class VSlice_BattleTurnManager : MonoBehaviour
+    public class BattleTurnManager : MonoBehaviour
     {
-        private List<VSlice_BattleCharacterBase> turnOrder = new List<VSlice_BattleCharacterBase>();
+        private List<BattleCharacterBase> turnOrder = new List<BattleCharacterBase>();
         private int curTurnOrderIndex;
-        private VSlice_BattleCharacterBase curTurnCharacter;
+        private BattleCharacterBase curTurnCharacter;
 
         [Header("Components")]
         public GameObject endTurnButton;
 
         //Singleton
-        public static VSlice_BattleTurnManager instance;
+        public static BattleTurnManager instance;
 
         public event UnityAction onNewTurn;
 
@@ -35,30 +35,30 @@ namespace Arcy.Battle
         //Triggered by GameManager
         public void Begin()
         {
-            GenerateTurnOrder(VSlice_BattleCharacterBase.Team.Player);
+            GenerateTurnOrder(BattleCharacterBase.Team.Player);
             NewTurn(turnOrder[0]);
         }
 
-        void GenerateTurnOrder(VSlice_BattleCharacterBase.Team startingTeam)
+        void GenerateTurnOrder(BattleCharacterBase.Team startingTeam)
         {
-            if (startingTeam == VSlice_BattleCharacterBase.Team.Player)
+            if (startingTeam == BattleCharacterBase.Team.Player)
             {
-                turnOrder.AddRange(VSlice_GameManager.instance.playerTeam);
-                turnOrder.AddRange(VSlice_GameManager.instance.enemyTeam);
+                turnOrder.AddRange(BattleManager.instance.playerTeam);
+                turnOrder.AddRange(BattleManager.instance.enemyTeam);
             }
-            else if (startingTeam == VSlice_BattleCharacterBase.Team.Enemy)
+            else if (startingTeam == BattleCharacterBase.Team.Enemy)
             {
-                turnOrder.AddRange(VSlice_GameManager.instance.enemyTeam);
-                turnOrder.AddRange(VSlice_GameManager.instance.playerTeam);
+                turnOrder.AddRange(BattleManager.instance.enemyTeam);
+                turnOrder.AddRange(BattleManager.instance.playerTeam);
             }
         }
 
-        void NewTurn(VSlice_BattleCharacterBase character)
+        void NewTurn(BattleCharacterBase character)
         {
             curTurnCharacter = character;
             onNewTurn?.Invoke();
 
-            endTurnButton.SetActive(character.team == VSlice_BattleCharacterBase.Team.Player);
+            endTurnButton.SetActive(character.team == BattleCharacterBase.Team.Player);
         }
 
         public void EndTurn()
@@ -84,7 +84,7 @@ namespace Arcy.Battle
             NewTurn(turnOrder[curTurnOrderIndex]);
         }
 
-        public VSlice_BattleCharacterBase GetCurrentTurnCharacter()
+        public BattleCharacterBase GetCurrentTurnCharacter()
         {
             return curTurnCharacter;
         }

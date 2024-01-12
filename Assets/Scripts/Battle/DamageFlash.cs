@@ -5,8 +5,13 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    public class vSlice_DamageFlash : MonoBehaviour
+    public class DamageFlash : MonoBehaviour
     {
+        /// <summary>
+        /// This class is used to visually indicate that that a character has taken damage. 
+        /// Remember that material can't use baked lights
+        /// </summary>
+
         private Renderer[] _rs; // All childObjects with attached materials
 
         private void Start()
@@ -21,13 +26,13 @@ namespace Arcy.Battle
 
             IEnumerator FlashCoroutine()
             {
-                WaitForSeconds delay = new WaitForSeconds(0.2f);
+                WaitForSeconds delay = new WaitForSeconds(0.05f);
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     SetMaterialEmission(Color.white);
                     yield return delay;
-                    SetMaterialEmission(Color.white);
+                    SetMaterialEmission(Color.black);
                     yield return delay;
                 }
             }

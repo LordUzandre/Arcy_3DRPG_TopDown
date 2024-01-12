@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace Arcy.Battle
 {
-	public class VSlice_EnemyCombatManager : MonoBehaviour
+	public class EnemyCombatManager : MonoBehaviour
 	{
 		[Header("AI")]
 		public float minWaitTime = 0.2f;
@@ -19,25 +19,25 @@ namespace Arcy.Battle
 		[Header("Chance Curves")]
 		public AnimationCurve healChanceCurve;
 
-		private VSlice_BattleCharacterBase _curEnemy;
+		private BattleCharacterBase _curEnemy;
 
 		private void OnEnable()
 		{
-			VSlice_BattleTurnManager.instance.onNewTurn += OnNewTurn;
+			BattleTurnManager.instance.onNewTurn += OnNewTurn;
 		}
 
 		private void OnDisable()
 		{
-			VSlice_BattleTurnManager.instance.onNewTurn -= OnNewTurn;
+			BattleTurnManager.instance.onNewTurn -= OnNewTurn;
 		}
 
 		// Called when a new turn is triggered.
 		private void OnNewTurn()
 		{
 			// Is it an enemy character's turn?
-			if (VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter().team == VSlice_BattleCharacterBase.Team.Enemy)
+			if (BattleTurnManager.instance.GetCurrentTurnCharacter().team == BattleCharacterBase.Team.Enemy)
 			{
-				_curEnemy = VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter();
+				_curEnemy = BattleTurnManager.instance.GetCurrentTurnCharacter();
 				Invoke(nameof(DecideCombatAction), Random.Range(minWaitTime, maxWaitTime));
 			}
 		}
@@ -46,9 +46,9 @@ namespace Arcy.Battle
 		private void DecideCombatAction()
 		{
 			// Do we need to to heal ourselves or a teammate?
-			if (HasCombatActionOfType(typeof(VSlice_CombatActionHeal)))
+			if (HasCombatActionOfType(typeof(CombatAction_Heal)))
 			{
-				VSlice_BattleCharacterBase weakestEnemy = GetWeakestCharacter(VSlice_BattleCharacterBase.Team.Enemy);
+				BattleCharacterBase weakestEnemy = GetWeakestCharacter(BattleCharacterBase.Team.Enemy);
 
 				if (Random.value < healChanceCurve.Evaluate(GetHealthPercentage(weakestEnemy)))
 				{
@@ -58,16 +58,16 @@ namespace Arcy.Battle
 			}
 
 			// Deal damage to a player character
-			VSlice_BattleCharacterBase playerToDamage;
+			BattleCharacterBase playerToDamage;
 
 			if (Random.value < attackWeakestChance)
-				playerToDamage = GetWeakestCharacter(VSlice_BattleCharacterBase.Team.Player);
+				playerToDamage = GetWeakestCharacter(BattleCharacterBase.Team.Player);
 			else
-				playerToDamage = GetRandomCharacter(VSlice_BattleCharacterBase.Team.Player);
+				playerToDamage = GetRandomCharacter(BattleCharacterBase.Team.Player);
 
 			if (playerToDamage != null)
 			{
-				if (HasCombatActionOfType(typeof(VSlice_CombatActionMelee)) || HasCombatActionOfType(typeof(VSlice_CombatActionRanged)))
+				if (HasCombatActionOfType(typeof(CombatAction_Melee)) || HasCombatActionOfType(typeof(CombatAction_Ranged)))
 				{
 					CastCombatAction(GetDamageCombatAction(), playerToDamage);
 					return;
@@ -78,7 +78,7 @@ namespace Arcy.Battle
 		}
 
 		// Casts the requested combat action upon the requested target.
-		private void CastCombatAction(VSlice_CombatAction combatAction, VSlice_BattleCharacterBase target)
+		private void CastCombatAction(CombatActionBase combatAction, BattleCharacterBase target)
 		{
 			if (_curEnemy == null)
 			{
@@ -93,12 +93,12 @@ namespace Arcy.Battle
 		// Called once the enemy has finished with their turn.
 		private void EndTurn()
 		{
-			VSlice_BattleTurnManager.instance.EndTurn();
+			BattleTurnManager.instance.EndTurn();
 		}
 
 		// Returns the percentage of health remaining for the requested character.
 		// e.g. 15/20 hp = 0.75f
-		private float GetHealthPercentage(VSlice_BattleCharacterBase character)
+		private float GetHealthPercentage(BattleCharacterBase character)
 		{
 			return (float)character.curHp / (float)character.maxHp;
 		}
@@ -106,7 +106,7 @@ namespace Arcy.Battle
 		// Does the enemy have a combat action of the requested type? (melee, ranged, heal, etc).
 		private bool HasCombatActionOfType(Type type)
 		{
-			foreach (VSlice_CombatAction ca in _curEnemy.combatActions)
+			foreach (CombatActionBase ca in _curEnemy.combatActions)
 			{
 				if (ca.GetType() == type)
 				{
@@ -118,9 +118,9 @@ namespace Arcy.Battle
 		}
 
 		// Returns a random melee or ranged combat action from the enemy's combat action list.
-		private VSlice_CombatAction GetDamageCombatAction()
+		private CombatActionBase GetDamageCombatAction()
 		{
-			VSlice_CombatAction[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(VSlice_CombatActionMelee) || x.GetType() == typeof(VSlice_CombatActionRanged)).ToArray();
+			CombatActionBase[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(CombatAction_Melee) || x.GetType() == typeof(CombatAction_Ranged)).ToArray();
 
 			if (ca == null || ca.Length == 0)
 				return null;
@@ -129,9 +129,9 @@ namespace Arcy.Battle
 		}
 
 		// Returns a random heal combat action from the enemy's combat action list.
-		private VSlice_CombatAction GetHealCombatAction()
+		private CombatActionBase GetHealCombatAction()
 		{
-			VSlice_CombatAction[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(VSlice_CombatActionHeal)).ToArray();
+			CombatActionBase[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(CombatAction_Heal)).ToArray();
 
 			if (ca == null || ca.Length == 0)
 				return null;
@@ -140,9 +140,9 @@ namespace Arcy.Battle
 		}
 
 		// Returns a random effect combat action from the enemy's combat action list.
-		private VSlice_CombatAction GetEffectCombatAction()
+		private CombatActionBase GetEffectCombatAction()
 		{
-			VSlice_CombatAction[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(VSlice_CombatActionEffect)).ToArray();
+			CombatActionBase[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(CombatAction_Effect)).ToArray();
 
 			if (ca == null || ca.Length == 0)
 				return null;
@@ -151,14 +151,14 @@ namespace Arcy.Battle
 		}
 
 		// Returns the weakest character from the requested team (lowest health).
-		VSlice_BattleCharacterBase GetWeakestCharacter(VSlice_BattleCharacterBase.Team team)
+		BattleCharacterBase GetWeakestCharacter(BattleCharacterBase.Team team)
 		{
 			int weakestHp = 9999;
 			int weakestIndex = 0;
 
-			VSlice_BattleCharacterBase[] characters = team == VSlice_BattleCharacterBase.Team.Player
-			? VSlice_GameManager.instance.playerTeam.ToArray()
-			: VSlice_GameManager.instance.enemyTeam;
+			BattleCharacterBase[] characters = team == BattleCharacterBase.Team.Player
+			? BattleManager.instance.playerTeam.ToArray()
+			: BattleManager.instance.enemyTeam;
 
 			for (int i = 0; i < characters.Length; i++)
 			{
@@ -176,14 +176,14 @@ namespace Arcy.Battle
 		}
 
 		// Returns a random character from the requested team.
-		VSlice_BattleCharacterBase GetRandomCharacter(VSlice_BattleCharacterBase.Team team)
+		BattleCharacterBase GetRandomCharacter(BattleCharacterBase.Team team)
 		{
-			VSlice_BattleCharacterBase[] characters = null;
+			BattleCharacterBase[] characters = null;
 
-			if (team == VSlice_BattleCharacterBase.Team.Player)
-				characters = VSlice_GameManager.instance.playerTeam.Where(x => x != null).ToArray();
-			else if (team == VSlice_BattleCharacterBase.Team.Enemy)
-				characters = VSlice_GameManager.instance.enemyTeam.Where(x => x != null).ToArray();
+			if (team == BattleCharacterBase.Team.Player)
+				characters = BattleManager.instance.playerTeam.Where(x => x != null).ToArray();
+			else if (team == BattleCharacterBase.Team.Enemy)
+				characters = BattleManager.instance.enemyTeam.Where(x => x != null).ToArray();
 
 			return characters[Random.Range(0, characters.Length)];
 		}

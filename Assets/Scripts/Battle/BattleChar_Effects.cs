@@ -5,14 +5,19 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    public class VSlice_BattleCharEffects : MonoBehaviour
+    public class BattleChar_Effects : MonoBehaviour
     {
+        /// <summary>
+        /// This class checks which ca_effects are currently in Effect on the character.
+        /// The script should be Attached to the character.
+        /// </summary>
+
         private List<EffectInstance> _curEffects = new List<EffectInstance>();
-        private VSlice_BattleCharacterBase _character;
+        private BattleCharacterBase _character;
 
         private void Start()
         {
-            _character = GetComponent<VSlice_BattleCharacterBase>();
+            _character = GetComponent<BattleCharacterBase>();
         }
 
         // Called by CombatActionEffect
@@ -20,6 +25,7 @@ namespace Arcy.Battle
         {
             EffectInstance effectInstance = new EffectInstance(effect);
 
+            //TODO: Use object pooling instead
             if (effect.activePrefab != null)
             {
                 effectInstance.curActiveGameObject = Instantiate(effect.activePrefab, transform);

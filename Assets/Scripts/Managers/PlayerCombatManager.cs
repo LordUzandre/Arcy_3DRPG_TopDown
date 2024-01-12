@@ -7,22 +7,22 @@ using UnityEngine.InputSystem;
 
 namespace Arcy.Battle
 {
-    public class VSlice_PlayerCombatManager : MonoBehaviour
+    public class PlayerCombatManager : MonoBehaviour
     {
         /// <summary>
         /// This manager handles the combat during the player's turn
         /// </summary>
 
         // Public:
-        public static VSlice_PlayerCombatManager instance; // Singleton
+        public static PlayerCombatManager instance; // Singleton
 
         // Private:
         [Header("Components")]
         [SerializeField] private LayerMask _selectionLayerMask; // LayerMask
-        [SerializeField] private VSlice_CombatActionUI combatActionsUI; // PlayerTeam CombatActions UI
+        [SerializeField] private CombatActionUI combatActionsUI; // PlayerTeam CombatActions UI
 
-        private VSlice_CombatAction _curSelectionCombatAction; // Current selected combatAction
-        private VSlice_BattleCharacterBase _curSelectedCharacter; // Current selected character
+        private CombatActionBase _curSelectionCombatAction; // Current selected combatAction
+        private BattleCharacterBase _curSelectedCharacter; // Current selected character
         private bool _isActive; // Whether PlayerCombat is active or not
 
         // Selection flags for the currently selected combatAction
@@ -62,20 +62,20 @@ namespace Arcy.Battle
             IEnumerator WaitToSubscribe()
             {
                 yield return null;
-                VSlice_BattleTurnManager.instance.onNewTurn += OnNewTurn;
+                BattleTurnManager.instance.onNewTurn += OnNewTurn;
             }
         }
 
         private void OnDisable()
         {
-            VSlice_BattleTurnManager.instance.onNewTurn -= OnNewTurn;
+            BattleTurnManager.instance.onNewTurn -= OnNewTurn;
         }
 
         // Called when a new turn has triggered.
         private void OnNewTurn()
         {
             // Enable player combat if it's our turn.
-            if (VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter().team == VSlice_BattleCharacterBase.Team.Player)
+            if (BattleTurnManager.instance.GetCurrentTurnCharacter().team == BattleCharacterBase.Team.Player)
             {
                 EnablePlayerCombat();
             }
@@ -128,24 +128,24 @@ namespace Arcy.Battle
 
             if (Physics.Raycast(ray, out hit, 999, _selectionLayerMask))
             {
-                VSlice_BattleCharacterBase character = hit.collider.GetComponentInParent<VSlice_BattleCharacterBase>();
+                BattleCharacterBase character = hit.collider.GetComponentInParent<BattleCharacterBase>();
 
                 if (_curSelectedCharacter != null && _curSelectedCharacter == character)
                 {
                     return;
                 }
 
-                if (_canSelectSelf && character == VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter())
+                if (_canSelectSelf && character == BattleTurnManager.instance.GetCurrentTurnCharacter())
                 {
                     SelectCharacter(character);
                     return;
                 }
-                else if (_canSelectTeam && character.team == VSlice_BattleCharacterBase.Team.Player)
+                else if (_canSelectTeam && character.team == BattleCharacterBase.Team.Player)
                 {
                     SelectCharacter(character);
                     return;
                 }
-                else if (_canSelectEnemies && character.team == VSlice_BattleCharacterBase.Team.Enemy)
+                else if (_canSelectEnemies && character.team == BattleCharacterBase.Team.Enemy)
                 {
                     SelectCharacter(character);
                     return;
@@ -158,13 +158,13 @@ namespace Arcy.Battle
         // Called when we click on a target character with a combat action selected.
         void CastCombatAction()
         {
-            VSlice_BattleTurnManager.instance.GetCurrentTurnCharacter().CastCombatAction(_curSelectionCombatAction, _curSelectedCharacter);
+            BattleTurnManager.instance.GetCurrentTurnCharacter().CastCombatAction(_curSelectionCombatAction, _curSelectedCharacter);
             _curSelectionCombatAction = null;
 
             UnSelectCharacter();
             DisablePlayerCombat();
             combatActionsUI?.DisableCombatActions();
-            VSlice_BattleTurnManager.instance.endTurnButton.SetActive(false);
+            BattleTurnManager.instance.endTurnButton.SetActive(false);
 
             Invoke(nameof(NextTurnDelay), 1.0f);
         }
@@ -172,11 +172,11 @@ namespace Arcy.Battle
         // Initiate the next character's turn.
         private void NextTurnDelay()
         {
-            VSlice_BattleTurnManager.instance.EndTurn();
+            BattleTurnManager.instance.EndTurn();
         }
 
         //Called when we hover over a character
-        private void SelectCharacter(VSlice_BattleCharacterBase character)
+        private void SelectCharacter(BattleCharacterBase character)
         {
             UnSelectCharacter();
             _curSelectedCharacter = character;
@@ -193,7 +193,7 @@ namespace Arcy.Battle
         }
 
         //Called when we click on a ombat action in the UI panel.
-        public void SetCurrentCombatAction(VSlice_CombatAction combatAction)
+        public void SetCurrentCombatAction(CombatActionBase combatAction)
         {
             _curSelectionCombatAction = combatAction;
 
@@ -201,20 +201,20 @@ namespace Arcy.Battle
             _canSelectTeam = false;
             _canSelectEnemies = false;
 
-            if (combatAction as VSlice_CombatActionMelee || combatAction as VSlice_CombatActionRanged)
+            if (combatAction as CombatAction_Melee || combatAction as CombatAction_Ranged)
             {
                 _canSelectEnemies = true;
             }
-            else if (combatAction as VSlice_CombatActionHeal)
+            else if (combatAction as CombatAction_Heal)
             {
                 _canSelectSelf = true;
                 _canSelectTeam = true;
             }
-            else if (combatAction as VSlice_CombatActionEffect)
+            else if (combatAction as CombatAction_Effect)
             {
-                _canSelectSelf = (combatAction as VSlice_CombatActionEffect).canEffectSelf;
-                _canSelectTeam = (combatAction as VSlice_CombatActionEffect).canEffectTeam;
-                _canSelectEnemies = (combatAction as VSlice_CombatActionEffect).canEffectEnemy;
+                _canSelectSelf = (combatAction as CombatAction_Effect).canEffectSelf;
+                _canSelectTeam = (combatAction as CombatAction_Effect).canEffectTeam;
+                _canSelectEnemies = (combatAction as CombatAction_Effect).canEffectEnemy;
             }
         }
     }
