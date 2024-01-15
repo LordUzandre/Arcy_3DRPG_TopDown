@@ -66,6 +66,7 @@ namespace Arcy.Battle
         {
             _buttonPanel.SetActive(true);
 
+            // Activate buttons according to amount of combatActions available
             for (int i = 0; i < _buttons.Length; i++)
             {
                 if (i < character.combatActions.Length)

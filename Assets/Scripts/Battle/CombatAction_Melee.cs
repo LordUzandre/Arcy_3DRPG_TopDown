@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    [CreateAssetMenu(fileName = "Melee Combat Action", menuName = "Combat Actions/Melee Combat Action")]
+    [CreateAssetMenu(fileName = "Melee Combat Action", menuName = "Battle/Combat Actions/Melee Combat Action")]
     public class CombatAction_Melee : CombatActionBase
     {
         public int meleeDamage;

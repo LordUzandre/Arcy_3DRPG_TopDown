@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    [CreateAssetMenu(fileName = "Heal Combat Action", menuName = "Combat Actions/Heal Combat Action")]
+    [CreateAssetMenu(fileName = "Heal Combat Action", menuName = "Battle/Combat Actions/Heal Combat Action")]
     public class CombatAction_Heal : CombatActionBase
     {
         public int healAmount;

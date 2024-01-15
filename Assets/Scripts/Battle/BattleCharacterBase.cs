@@ -42,8 +42,6 @@ namespace Arcy.Battle
         private void Start()
         {
             _ogStandingPosition = transform.position;
-            // characterUI?.SetCharacterNameText(displayName);
-            // characterUI?.UpdateHealthBar(curHp, maxHp);
             _damageFlash = GetComponentInChildren<DamageFlash>();
         }
 
@@ -60,7 +58,6 @@ namespace Arcy.Battle
         // Called whenever BattleTurnManager trigger a new turn
         private void OnNewTurn()
         {
-            // TODO: Remember to set up a character UI
             characterUI?.ToggleTurnVisual(BattleTurnManager.instance.GetCurrentTurnCharacter() == this);
             characterEffects?.ApplyCurrentEffects();
         }
