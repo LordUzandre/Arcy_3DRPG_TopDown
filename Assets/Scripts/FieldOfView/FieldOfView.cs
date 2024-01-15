@@ -61,6 +61,7 @@ namespace Arcy.Interaction
                     if (_playerManager != null)
                     {
                         _playerManager.currentInteractible = currentInteractible;
+                        _playerManager.InteractibleNotNull(); //Subscribe to inputManager
                     }
                 }
 
@@ -68,6 +69,8 @@ namespace Arcy.Interaction
                 if (currentInteractible == null && _previousInteractible != null)
                 {
                     _previousInteractible = null;
+                    _playerManager.currentInteractible = null;
+                    _playerManager.UnSubscribeFromInteractible();
 
                     RemoveIcon();
                 }

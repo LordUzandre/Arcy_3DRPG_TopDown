@@ -93,7 +93,17 @@ public class PlayerManager : MonoBehaviour
     #region Interaction
 
 
-    public void interactionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
+    public void InteractibleNotNull() //Subscribe to inputManager
+    {
+        InputManager.InteractionButtonPressed += InteractionKeyPressed;
+    }
+
+    public void UnSubscribeFromInteractible() // UnSubscribe form inputManager
+    {
+        InputManager.InteractionButtonPressed += InteractionKeyPressed;
+    }
+
+    public void InteractionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
     {
         if (currentInteractible is ISpeakable speakableObject && speakableObject.SpeakerID != null)
         {

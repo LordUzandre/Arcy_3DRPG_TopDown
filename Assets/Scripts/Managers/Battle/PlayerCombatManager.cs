@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 namespace Arcy.Battle
 {
@@ -92,6 +93,9 @@ namespace Arcy.Battle
             _curSelectedCharacter = null;
             _curSelectionCombatAction = null;
             _characterChoiceIsActive = true;
+
+            // Set the choice for the 
+            EventSystem.current.SetSelectedGameObject(combatActionsUI.PickTopBtn());
         }
 
         private void DisablePlayerCombat()
@@ -99,6 +103,7 @@ namespace Arcy.Battle
             _characterChoiceIsActive = false;
         }
 
+        // TODO: Switch out for an inputSystem and statemachine
         private void Update()
         {
             // The update is used for choosing character for effect

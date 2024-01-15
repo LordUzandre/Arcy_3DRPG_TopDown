@@ -27,10 +27,13 @@ namespace Arcy.Battle
                 [SerializeField] private CharacterSet _defaultEnemySet; // Enemy Team's Data
 
                 [Header("Character UI (set manually)")]
-                [SerializeField] private GameObject _characterUiParentObject; // The parent Object that should spawn Player Character's UI
+                [SerializeField] private GameObject _playerCharacterUiParentObject; // The parent Object that should spawn Player Character's UI
+                [SerializeField] private GameObject _enemyCharacterUiParentObject; // The parent Object that should spawn Enemy Character's UI
                 [SerializeField] private GameObject _characterUiPrefab; // Player Character's UI Prefab
 
                 private List<BattleCharacterBase> _allCharactersList = new List<BattleCharacterBase>(); // All character's that currently featured in the battle, used to determine when the battle's over
+                private BattleCharUI[] _playerBattleCharUIArray = new BattleCharUI[3];
+                private BattleCharUI[] _enemyBattleCharUIArray = new BattleCharUI[4];
 
                 // Debug
                 private string _winningTeam = "null";
@@ -96,6 +99,8 @@ namespace Arcy.Battle
                         // playerTeam = new VSlice_BattleCharacterBase[playerData.characters.Length];
                         playerTeam = new List<BattleCharacterBase>();
                         enemyTeam = new BattleCharacterBase[enemyTeamSet.characters.Length];
+                        _playerBattleCharUIArray = _playerCharacterUiParentObject.GetComponentsInChildren<BattleCharUI>();
+                        _enemyBattleCharUIArray = _enemyCharacterUiParentObject.GetComponentsInChildren<BattleCharUI>();
 
                         int playerSpawnIndex = 0;
 
@@ -108,7 +113,8 @@ namespace Arcy.Battle
                                         character.curHp = playerData.characters[i].health;
 
                                         // Spawn UI and connect to newly formed player character
-                                        character.characterUI = Instantiate(_characterUiPrefab, _characterUiParentObject.transform).GetComponent<BattleCharUI>();
+                                        //character.characterUI = Instantiate(_characterUiPrefab, _playerCharacterUiParentObject.transform).GetComponent<BattleCharUI>();
+                                        character.characterUI = _playerBattleCharUIArray[i];
                                         character.characterUI.ConnectUItoNewChar(character.displayName, character.curHp, character.maxHp);
 
                                         playerTeam.Add(character);
@@ -121,6 +127,8 @@ namespace Arcy.Battle
                         {
                                 BattleCharacterBase character = CreateCharacter(enemyTeamSet.characters[i], _enemyTeamSpawns[i]);
                                 enemyTeam[i] = character;
+                                character.characterUI = _enemyBattleCharUIArray[i];
+                                character.characterUI.ConnectUItoNewChar(character.displayName, character.curHp, character.maxHp);
                         }
 
                         _allCharactersList.AddRange(playerTeam);

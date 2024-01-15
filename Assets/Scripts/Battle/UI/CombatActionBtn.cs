@@ -19,7 +19,7 @@ namespace Arcy.Battle
         {
             _ui = FindObjectOfType<CombatActionUI>();
             _nameText = GetComponentInChildren<TextMeshProUGUI>();
-            _btnPosition = gameObject.transform.position;
+            _btnPosition = gameObject.transform.localPosition;
         }
 
         public void SetCombatAction(CombatActionBase ca)

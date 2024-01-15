@@ -25,21 +25,16 @@ public class DialogueUI : MonoBehaviour
     private void CheckComponents()
     {
         if (dialogueText == null)
-        {
             dialogueText = GetComponentInChildren<TMP_Animated>();
-        }
 
         if (dialogueBox == null)
-        {
             dialogueBox = GetComponentInChildren<Image>();
-        }
 
         if (dialogueArrow == null)
-        {
             dialogueArrow = GetComponentInChildren<Image>();
-        }
 
-        cvGroup = GetComponent<CanvasGroup>();
+        if (cvGroup == null)
+            cvGroup = GetComponent<CanvasGroup>();
     }
 
     public void FadeUI(bool show, float time, float delay)
@@ -48,7 +43,8 @@ public class DialogueUI : MonoBehaviour
 
         Sequence sequence = DOTween.Sequence();
         sequence.AppendInterval(delay);
-        //Fade in or out
+
+        // Fade in or out depending on bool
         sequence.Append(cvGroup.DOFade(show ? 1 : 0, time));
 
         if (show)

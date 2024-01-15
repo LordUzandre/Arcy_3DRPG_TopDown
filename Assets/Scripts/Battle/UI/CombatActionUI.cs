@@ -14,16 +14,19 @@ namespace Arcy.Battle
         /// Connection with relevant character is made in GameManager.
         /// </summary>
 
-        [SerializeField] private GameObject _buttonPanel; // The panel containing all the CombatAction Buttons
+        [SerializeField] private GameObject _btnPanel; // The panel containing all the CombatAction Buttons
         [SerializeField] private GameObject _descriptionPanel; // The panel containing the descriptive TextMesh
 
         private TextMeshProUGUI _descriptionText; // Text in the descriptionPanel
         private CombatActionBtn[] _buttons; // All the CombatAction Buttons
 
+        private Vector2 _descPanelOrgPos;
+
+        //float _btnPanelHeight;
+
         private void Start()
         {
-            _descriptionText = _descriptionPanel.GetComponentInChildren<TextMeshProUGUI>();
-            _buttons = _buttonPanel.GetComponentsInChildren<CombatActionBtn>();
+            _buttons = _btnPanel.GetComponentsInChildren<CombatActionBtn>();
         }
 
         private void OnEnable()
@@ -34,10 +37,7 @@ namespace Arcy.Battle
             {
                 yield return null;
                 BattleTurnManager.instance.onNewTurn += OnNewTurn;
-
-                // Move the descriptionPanel next to the buttons
-                yield return null;
-                _descriptionPanel.transform.position = new Vector2(_buttonPanel.transform.position.x + _buttonPanel.GetComponent<RectTransform>().rect.width + 4, _buttons[0].gameObject.transform.position.y);
+                _descriptionText = _descriptionPanel.GetComponentInChildren<TextMeshProUGUI>();
             }
         }
 
@@ -61,10 +61,24 @@ namespace Arcy.Battle
             }
         }
 
+        public GameObject PickTopBtn(bool chooseBtn = true)
+        {
+            if (chooseBtn) // Select the top Btn, called by DisplayCombatActions()
+            {
+                return _buttons[0].gameObject;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         // Display the requested character's available combat actions.
         private void DisplayCombatActions(BattleCharacterBase character)
         {
-            _buttonPanel.SetActive(true);
+            _btnPanel.SetActive(true);
+            float spacingFloat = _btnPanel.GetComponent<VerticalLayoutGroup>().spacing;
+            float _btnPanelHeight = spacingFloat;
 
             // Activate buttons according to amount of combatActions available
             for (int i = 0; i < _buttons.Length; i++)
@@ -73,18 +87,25 @@ namespace Arcy.Battle
                 {
                     _buttons[i].gameObject.SetActive(true);
                     _buttons[i].SetCombatAction(character.combatActions[i]);
+
+                    // Set btnPanel height accrording to amount of btns
+                    _btnPanelHeight += (_buttons[i].GetComponent<RectTransform>().sizeDelta.y + spacingFloat);
                 }
                 else
                 {
                     _buttons[i].gameObject.SetActive(false);
                 }
+
+                // Set the caBtnPanel Height size
+                RectTransform rT = _btnPanel.GetComponent<RectTransform>();
+                rT.sizeDelta = new Vector2(rT.sizeDelta.x, _btnPanelHeight + spacingFloat);
             }
         }
 
         // Disable the CombatActions UI, called by PlayerCombatManager
         public void DisableCombatActions()
         {
-            _buttonPanel.SetActive(false);
+            _btnPanel.SetActive(false);
             DisableCombatActionDescription();
         }
 

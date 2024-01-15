@@ -8,6 +8,8 @@ namespace Arcy.InputManager
 {
     public class InputManager : MonoBehaviour
     {
+        public static Action InteractionButtonPressed;
+
         public static InputManager instance;
 
         private PlayerInputs playerInputs;
@@ -67,10 +69,11 @@ namespace Arcy.InputManager
             switch (currentGameState)
             {
                 case (GameState.Freeroam):
-                    if (PlayerManager.instance.currentInteractible != null)
-                    {
-                        PlayerManager.instance.interactionKeyPressed();
-                    }
+                    InteractionButtonPressed?.Invoke();
+                    // if (PlayerManager.instance.currentInteractible != null)
+                    // {
+                    //     PlayerManager.instance.interactionKeyPressed();
+                    // }
                     break;
                 default:
                     break;
