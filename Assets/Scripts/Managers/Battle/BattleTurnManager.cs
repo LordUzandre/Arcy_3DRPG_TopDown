@@ -2,23 +2,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace Arcy.Battle
 {
+    public enum TurnState { playerTeamsTurn, enemyTeamsTurn, chooseCombatAction, chooseEnemyCharacter, chooseTeamCharacter, chooseItem }
+
     public class BattleTurnManager : MonoBehaviour
     {
-        private List<BattleCharacterBase> turnOrder = new List<BattleCharacterBase>();
-        private int curTurnOrderIndex;
-        private BattleCharacterBase curTurnCharacter;
+        private TurnState _currentTurnState;
+
+        private List<BattleCharacterBase> _turnOrderList = new List<BattleCharacterBase>();
+        private int _curTurnOrderIndex;
+        private BattleCharacterBase _curTurnCharacter;
 
         [Header("Components")]
-        public GameObject endTurnButton;
+        [SerializeField] public Button endTurnButton; // Used by PlayerCombatManager
 
-        //Singleton
+        // Singleton
         public static BattleTurnManager instance;
 
-        public event UnityAction onNewTurn;
+        // Action for a new turn
+        public static Action<TurnState> onNewTurn;
 
         private void Awake()
         {
@@ -32,62 +39,85 @@ namespace Arcy.Battle
             }
         }
 
-        // Triggered by GameManager
+        // Triggered by BattleManager
         public void Begin()
         {
-            GenerateTurnOrder(BattleCharacterBase.Team.Player);
-            NewTurn(turnOrder[0]);
+            GenerateTurnOrder(BattleCharacterBase.Team.Player); // Change the overload if anybody else should start
+            NewTurn(_turnOrderList[0]);
+            endTurnButton.GetComponent<Button>().onClick.AddListener(EndTurn);
         }
 
         void GenerateTurnOrder(BattleCharacterBase.Team startingTeam)
         {
             if (startingTeam == BattleCharacterBase.Team.Player)
             {
-                turnOrder.AddRange(BattleManager.instance.playerTeam);
-                turnOrder.AddRange(BattleManager.instance.enemyTeam);
+                _turnOrderList.AddRange(BattleManager.instance.playerTeam);
+                _turnOrderList.AddRange(BattleManager.instance.enemyTeam);
             }
             else if (startingTeam == BattleCharacterBase.Team.Enemy)
             {
-                turnOrder.AddRange(BattleManager.instance.enemyTeam);
-                turnOrder.AddRange(BattleManager.instance.playerTeam);
+                _turnOrderList.AddRange(BattleManager.instance.enemyTeam);
+                _turnOrderList.AddRange(BattleManager.instance.playerTeam);
             }
         }
 
-        void NewTurn(BattleCharacterBase character)
+        private void NewTurn(BattleCharacterBase character)
         {
-            curTurnCharacter = character;
-            onNewTurn?.Invoke();
+            _curTurnCharacter = character;
+            //onNewTurn?.Invoke();
 
-            endTurnButton.SetActive(character.team == BattleCharacterBase.Team.Player);
+            switch (character.team)
+            {
+                // It's the player team's turn
+                case (BattleCharacterBase.Team.Player):
+                    if (onNewTurn != null)
+                        onNewTurn(TurnState.playerTeamsTurn);
+                    break;
+                // It's the enemy team's turn
+                case (BattleCharacterBase.Team.Enemy):
+                    if (onNewTurn != null)
+                        onNewTurn(TurnState.enemyTeamsTurn);
+                    break;
+                default:
+                    Debug.LogWarning("Something Went Horribly Wrong!");
+                    break;
+            }
+
+            endTurnButton.gameObject.SetActive(character.team == BattleCharacterBase.Team.Player);
         }
 
         public void EndTurn()
         {
-            curTurnOrderIndex++;
+            _curTurnOrderIndex++;
 
-            if (curTurnOrderIndex == turnOrder.Count)
+            if (_curTurnOrderIndex == _turnOrderList.Count)
             {
-                curTurnOrderIndex = 0;
+                _curTurnOrderIndex = 0;
             }
 
             // If the character is dead
-            while (turnOrder[curTurnOrderIndex] == null)
+            while (_turnOrderList[_curTurnOrderIndex] == null)
             {
-                curTurnOrderIndex++;
+                _curTurnOrderIndex++;
 
-                if (curTurnOrderIndex == turnOrder.Count)
+                if (_curTurnOrderIndex == _turnOrderList.Count)
                 {
-                    curTurnOrderIndex = 0;
+                    _curTurnOrderIndex = 0;
                 }
             }
 
-            NewTurn(turnOrder[curTurnOrderIndex]);
+            NewTurn(_turnOrderList[_curTurnOrderIndex]);
         }
 
-        // Used by other classes to get the current active character
+        // Used by:
+        // BattleCharacterBase
+        // CombatAcitonUI
+        // PlayerCombatManager
+        // EnemyCombatManager
+        // to get the current active character
         public BattleCharacterBase GetCurrentTurnCharacter()
         {
-            return curTurnCharacter;
+            return _curTurnCharacter;
         }
     }
 }

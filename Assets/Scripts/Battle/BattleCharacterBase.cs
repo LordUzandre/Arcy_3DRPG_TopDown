@@ -47,16 +47,16 @@ namespace Arcy.Battle
 
         private void OnEnable()
         {
-            BattleTurnManager.instance.onNewTurn += OnNewTurn;
+            BattleTurnManager.onNewTurn += OnNewTurn;
         }
 
         private void OnDisable()
         {
-            BattleTurnManager.instance.onNewTurn -= OnNewTurn;
+            BattleTurnManager.onNewTurn -= OnNewTurn;
         }
 
         // Called whenever BattleTurnManager trigger a new turn
-        private void OnNewTurn()
+        private void OnNewTurn(TurnState newTurnState)
         {
             characterUI?.ToggleTurnVisual(BattleTurnManager.instance.GetCurrentTurnCharacter() == this);
             characterEffects?.ApplyCurrentEffects();

@@ -63,27 +63,26 @@ namespace Arcy.Battle
             IEnumerator WaitToSubscribe()
             {
                 yield return null;
-                BattleTurnManager.instance.onNewTurn += OnNewTurn;
+                BattleTurnManager.onNewTurn += OnNewTurn;
             }
         }
 
         private void OnDisable()
         {
-            BattleTurnManager.instance.onNewTurn -= OnNewTurn;
+            BattleTurnManager.onNewTurn -= OnNewTurn;
         }
 
         // Called when a new turn has triggered.
-        private void OnNewTurn()
+        private void OnNewTurn(TurnState turnState)
         {
-            // Enable player combat if it's our turn.
-            if (BattleTurnManager.instance.GetCurrentTurnCharacter().team == BattleCharacterBase.Team.Player)
+            switch (turnState)
             {
-                EnablePlayerCombat();
-            }
-            // Disable it otherwise.
-            else
-            {
-                DisablePlayerCombat();
+                case (TurnState.playerTeamsTurn):
+                    EnablePlayerCombat();
+                    return;
+                default:
+                    DisablePlayerCombat();
+                    return;
             }
         }
 
@@ -170,8 +169,8 @@ namespace Arcy.Battle
 
             UnSelectCharacter();
             DisablePlayerCombat();
-            combatActionsUI?.DisableCombatActions();
-            BattleTurnManager.instance.endTurnButton.SetActive(false);
+            combatActionsUI?.DisableCombatActions(false);
+            BattleTurnManager.instance.endTurnButton.gameObject.SetActive(false);
 
             Invoke(nameof(NextTurnDelay), 1.0f);
         }
@@ -182,7 +181,7 @@ namespace Arcy.Battle
             BattleTurnManager.instance.EndTurn();
         }
 
-        //Called when we hover over a character
+        // Called when we hover over a character
         private void SelectCharacter(BattleCharacterBase character)
         {
             UnSelectCharacter();
@@ -202,6 +201,8 @@ namespace Arcy.Battle
         //Called when we click on a ombat action in the UI panel.
         public void SetCurrentCombatAction(CombatActionBase combatAction)
         {
+            // TODO: Replace, so that we can use keyboard to choose instead
+
             _curSelectionCombatAction = combatAction;
 
             _canSelectSelf = false;

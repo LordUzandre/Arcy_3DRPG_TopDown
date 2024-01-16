@@ -54,6 +54,10 @@ namespace Arcy.Battle
         // Called by BattleCharBase when the health is changed
         public void UpdateHealthBar(int curHp, int maxHp, bool shouldShowChange = true)
         {
+            //Prevent the health from dropping below 0
+            if (curHp <= 0)
+                curHp = 0;
+
             _healthText.text = $"{curHp}";
 
             // Fill health Bar according to normalized value

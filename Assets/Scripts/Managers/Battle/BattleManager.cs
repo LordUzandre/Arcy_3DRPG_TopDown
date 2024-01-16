@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -96,7 +95,6 @@ namespace Arcy.Battle
                 // Called at the start of the game - create the character game objects
                 private void CreateCharacters(PlayerPersistentData playerData, CharacterSet enemyTeamSet)
                 {
-                        // playerTeam = new VSlice_BattleCharacterBase[playerData.characters.Length];
                         playerTeam = new List<BattleCharacterBase>();
                         enemyTeam = new BattleCharacterBase[enemyTeamSet.characters.Length];
                         _playerBattleCharUIArray = _playerCharacterUiParentObject.GetComponentsInChildren<BattleCharUI>();
@@ -113,7 +111,6 @@ namespace Arcy.Battle
                                         character.curHp = playerData.characters[i].health;
 
                                         // Spawn UI and connect to newly formed player character
-                                        //character.characterUI = Instantiate(_characterUiPrefab, _playerCharacterUiParentObject.transform).GetComponent<BattleCharUI>();
                                         character.characterUI = _playerBattleCharUIArray[i];
                                         character.characterUI.ConnectUItoNewChar(character.displayName, character.curHp, character.maxHp);
 

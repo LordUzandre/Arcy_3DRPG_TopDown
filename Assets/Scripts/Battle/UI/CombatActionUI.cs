@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using DG.Tweening.Core.Easing;
 
 namespace Arcy.Battle
 {
@@ -36,33 +37,51 @@ namespace Arcy.Battle
             IEnumerator myCoroutine() // Wait one frame before subscribing to avoid error message.
             {
                 yield return null;
-                BattleTurnManager.instance.onNewTurn += OnNewTurn;
+                BattleTurnManager.onNewTurn += OnNewTurn;
                 _descriptionText = _descriptionPanel.GetComponentInChildren<TextMeshProUGUI>();
             }
         }
 
         private void OnDisable()
         {
-            BattleTurnManager.instance.onNewTurn -= OnNewTurn;
+            BattleTurnManager.onNewTurn -= OnNewTurn;
         }
 
-        // Called by TurnManager when a new turn has triggered.
-        void OnNewTurn()
+        // Action from BattleTurnManager when a new turn has triggered.
+        void OnNewTurn(TurnState turnState)
         {
-            // Enable the UI if it's a player character's turn
-            if (BattleTurnManager.instance.GetCurrentTurnCharacter().team == BattleCharacterBase.Team.Player)
+            switch (turnState)
             {
-                DisplayCombatActions(BattleTurnManager.instance.GetCurrentTurnCharacter());
+                // Enable the UI if it's a player character's turn
+                case (TurnState.playerTeamsTurn):
+                    DisplayCombatActions(BattleTurnManager.instance.GetCurrentTurnCharacter());
+                    return;
+                // Otherwise diable it
+                case (TurnState.enemyTeamsTurn):
+                    DisableCombatActions(false);
+                    return;
+                default:
+                    Debug.LogWarning("Something Went Wrong!");
+                    break;
             }
-            // Otherwise disable it
-            else
-            {
-                DisableCombatActions();
-            }
+
+            // // Enable the UI if it's a player character's turn
+            // if (BattleTurnManager.instance.GetCurrentTurnCharacter().team == BattleCharacterBase.Team.Player)
+            // {
+            //     DisplayCombatActions(BattleTurnManager.instance.GetCurrentTurnCharacter());
+            // }
+            // // Otherwise disable it
+            // else
+            // {
+            //     DisableCombatActions();
+            // }
         }
 
         public GameObject PickTopBtn(bool chooseBtn = true)
         {
+
+            // TODO: Replace and make it better
+
             if (chooseBtn) // Select the top Btn, called by DisplayCombatActions()
             {
                 return _buttons[0].gameObject;
@@ -103,10 +122,27 @@ namespace Arcy.Battle
         }
 
         // Disable the CombatActions UI, called by PlayerCombatManager
-        public void DisableCombatActions()
+        public void DisableCombatActions(bool characterChosingPhase)
         {
-            _btnPanel.SetActive(false);
+            //Should the UI be hidden or merely disabled
+            switch (characterChosingPhase)
+            {
+                case (true): // Disable the combatActions-buttons
+                    foreach (CombatActionBtn button in _buttons)
+                    {
+                        button.btn.interactable = !characterChosingPhase;
+                    }
+                    break;
+                case (false): //Hide the UI completely
+                    _btnPanel.SetActive(false);
+                    break;
+            }
             DisableCombatActionDescription();
+        }
+
+        private void ChooseSide()
+        {
+            // Decide if we should be able to choose enemies, player team-mates or only yourself
         }
 
         // Called by CombatActionButton when we hover over a combat action button.

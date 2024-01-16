@@ -990,7 +990,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -82.32, y: 0}
-  m_SizeDelta: {x: 360, y: 64}
+  m_SizeDelta: {x: 190, y: 64}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &573257068
 MonoBehaviour:
@@ -1390,7 +1390,6 @@ GameObject:
   - component: {fileID: 607619903}
   - component: {fileID: 607619902}
   - component: {fileID: 607619905}
-  - component: {fileID: 607619906}
   m_Layer: 5
   m_Name: CombatActionBtn(2)
   m_TagString: Untagged
@@ -1440,11 +1439,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9, g: 0.9, b: 0.9, a: 0.101960786}
+    m_NormalColor: {r: 0.9, g: 0.9, b: 0.9, a: 0.19607843}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.09803922}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1462,19 +1461,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 607619903}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 607619905}
-        m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &607619903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1525,51 +1512,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace85564df560434b8fd59a8857c6f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &607619906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 607619900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 607619905}
-          m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-          m_MethodName: OnHoverEnter
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 607619905}
-          m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-          m_MethodName: OnHoverExit
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
+  btn: {fileID: 0}
 --- !u!1 &624972135
 GameObject:
   m_ObjectHideFlags: 0
@@ -2327,7 +2271,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -82.32, y: 0}
-  m_SizeDelta: {x: 360, y: 64}
+  m_SizeDelta: {x: 190, y: 64}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1135918635
 MonoBehaviour:
@@ -2439,7 +2383,6 @@ GameObject:
   - component: {fileID: 1141415479}
   - component: {fileID: 1141415478}
   - component: {fileID: 1141415481}
-  - component: {fileID: 1141415482}
   m_Layer: 5
   m_Name: CombatActionBtn(3)
   m_TagString: Untagged
@@ -2489,11 +2432,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9, g: 0.9, b: 0.9, a: 0.101960786}
+    m_NormalColor: {r: 0.9, g: 0.9, b: 0.9, a: 0.19607843}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.09803922}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2511,19 +2454,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1141415479}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1141415481}
-        m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1141415479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2574,51 +2505,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace85564df560434b8fd59a8857c6f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1141415482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1141415476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1141415481}
-          m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-          m_MethodName: OnHoverEnter
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1141415481}
-          m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-          m_MethodName: OnHoverExit
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
+  btn: {fileID: 0}
 --- !u!1 &1143081348
 GameObject:
   m_ObjectHideFlags: 0
@@ -3092,7 +2980,6 @@ GameObject:
   - component: {fileID: 1427436180}
   - component: {fileID: 1427436179}
   - component: {fileID: 1427436182}
-  - component: {fileID: 1427436183}
   m_Layer: 5
   m_Name: CombatActionBtn(1)
   m_TagString: Untagged
@@ -3142,11 +3029,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9, g: 0.9, b: 0.9, a: 0.101960786}
+    m_NormalColor: {r: 0.9, g: 0.9, b: 0.9, a: 0.19607843}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.09803922}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3164,19 +3051,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1427436180}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1427436182}
-        m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1427436180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3227,51 +3102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace85564df560434b8fd59a8857c6f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1427436183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1427436177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1427436182}
-          m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-          m_MethodName: OnHoverEnter
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1427436182}
-          m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-          m_MethodName: OnHoverExit
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
+  btn: {fileID: 0}
 --- !u!1 &1433218870
 GameObject:
   m_ObjectHideFlags: 0
@@ -3308,7 +3140,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -82.32, y: 0}
-  m_SizeDelta: {x: 360, y: 64}
+  m_SizeDelta: {x: 190, y: 64}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1433218872
 MonoBehaviour:
@@ -3619,19 +3451,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1650958692}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1936919553}
-        m_TargetAssemblyTypeName: Arcy.Battle.VSlice_BattleTurnManager, Assembly-CSharp
-        m_MethodName: EndTurn
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1650958692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3726,7 +3546,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -82.32, y: 0}
-  m_SizeDelta: {x: 360, y: 64}
+  m_SizeDelta: {x: 190, y: 64}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1748181785
 MonoBehaviour:
@@ -4452,7 +4272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff5e0f5a6ec21c0408d93a1213d25c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endTurnButton: {fileID: 1650958689}
+  endTurnButton: {fileID: 1650958691}
 --- !u!114 &1936919554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4481,9 +4301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed656cf8cb3fbd49a9761252693230d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minWaitTime: 0.2
-  maxWaitTime: 1
-  attackWeakestChance: 0.7
+  _attackWeakestChance: 0.7
   healChanceCurve:
     serializedVersion: 2
     m_Curve:
@@ -4656,7 +4474,6 @@ GameObject:
   - component: {fileID: 2069866662}
   - component: {fileID: 2069866661}
   - component: {fileID: 2069866664}
-  - component: {fileID: 2069866665}
   m_Layer: 5
   m_Name: CombatActionBtn(4)
   m_TagString: Untagged
@@ -4706,11 +4523,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9, g: 0.9, b: 0.9, a: 0.101960786}
+    m_NormalColor: {r: 0.9, g: 0.9, b: 0.9, a: 0.19607843}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.09803922}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4728,19 +4545,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2069866662}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2069866664}
-        m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2069866662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4791,51 +4596,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace85564df560434b8fd59a8857c6f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2069866665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2069866659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2069866664}
-          m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-          m_MethodName: OnHoverEnter
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2069866664}
-          m_TargetAssemblyTypeName: Arcy.Battle.VSlice_CombatActionBtn, Assembly-CSharp
-          m_MethodName: OnHoverExit
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
+  btn: {fileID: 0}
 --- !u!1 &2077897572
 GameObject:
   m_ObjectHideFlags: 0

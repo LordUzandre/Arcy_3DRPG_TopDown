@@ -9,36 +9,41 @@ namespace Arcy.Battle
 {
 	public class EnemyCombatManager : MonoBehaviour
 	{
-		[Header("AI")]
-		public float minWaitTime = 0.2f;
-		public float maxWaitTime = 0.5f;
+		/// <summary>
+		/// This class handles the enemy team's side of the combat. Should be sitting on the BattleManager-object.
+		/// </summary>
 
 		[Header("Attacking")]
-		public float attackWeakestChance = 0.7f;
+		[SerializeField] private float _attackWeakestChance = 0.7f;
 
 		[Header("Chance Curves")]
 		public AnimationCurve healChanceCurve;
 
 		private BattleCharacterBase _curEnemy;
 
+		private float _minWaitTime = 0.2f;
+		private float _maxWaitTime = 0.5f;
+
 		private void OnEnable()
 		{
-			BattleTurnManager.instance.onNewTurn += OnNewTurn;
+			BattleTurnManager.onNewTurn += OnNewTurn;
 		}
 
 		private void OnDisable()
 		{
-			BattleTurnManager.instance.onNewTurn -= OnNewTurn;
+			BattleTurnManager.onNewTurn -= OnNewTurn;
 		}
 
-		// Called when a new turn is triggered.
-		private void OnNewTurn()
+		// Called by BattleTurnManager when a new turn is triggered.
+		private void OnNewTurn(TurnState turnState)
 		{
-			// Is it an enemy character's turn?
-			if (BattleTurnManager.instance.GetCurrentTurnCharacter().team == BattleCharacterBase.Team.Enemy)
+			switch (turnState)
 			{
-				_curEnemy = BattleTurnManager.instance.GetCurrentTurnCharacter();
-				Invoke(nameof(DecideCombatAction), Random.Range(minWaitTime, maxWaitTime));
+				// Is it an enemy character's turn?
+				case (TurnState.enemyTeamsTurn):
+					_curEnemy = BattleTurnManager.instance.GetCurrentTurnCharacter();
+					Invoke(nameof(DecideCombatAction), Random.Range(_minWaitTime, _maxWaitTime));
+					return;
 			}
 		}
 
@@ -60,7 +65,7 @@ namespace Arcy.Battle
 			// Deal damage to a player character
 			BattleCharacterBase playerToDamage;
 
-			if (Random.value < attackWeakestChance)
+			if (Random.value < _attackWeakestChance)
 				playerToDamage = GetWeakestCharacter(BattleCharacterBase.Team.Player);
 			else
 				playerToDamage = GetRandomCharacter(BattleCharacterBase.Team.Player);
@@ -74,7 +79,7 @@ namespace Arcy.Battle
 				}
 			}
 
-			Invoke(nameof(EndTurn), Random.Range(minWaitTime, maxWaitTime));
+			Invoke(nameof(EndTurn), Random.Range(_minWaitTime, _maxWaitTime));
 		}
 
 		// Casts the requested combat action upon the requested target.
@@ -87,7 +92,7 @@ namespace Arcy.Battle
 			}
 
 			_curEnemy.CastCombatAction(combatAction, target);
-			Invoke(nameof(EndTurn), Random.Range(minWaitTime, maxWaitTime));
+			Invoke(nameof(EndTurn), Random.Range(_minWaitTime, _maxWaitTime));
 		}
 
 		// Called once the enemy has finished with their turn.
