@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Arcy.Battle
 {
-    public enum PlayerTurnState { chooseCombatAction, chooseEnemy, choosePlayerChar, choosePlayerTeamChar, chooseItem, chooseAnyChar, enemiesTurn, battleIsOver }
+    public enum PlayerTurnState { defauultStartState, chooseCombatAction, chooseEnemy, choosePlayerChar, choosePlayerTeamChar, chooseItem, chooseAnyChar, enemiesTurn, battleIsOver }
 
     public class PlayerCombatManager : MonoBehaviour
     {
@@ -117,12 +117,12 @@ namespace Arcy.Battle
                     return;
 
                 case (PlayerTurnState.chooseEnemy):
-                    EnableCharacterBtns(true, false, false); // Enable to choose an enemy character
-                    EventSystem.current.SetSelectedGameObject(GetEnemyCharacter()); // mark first enemy team member TODO: check whether they are dead!
+                    combatActionsUI.EnableCharacterBtns(true, false, false); // Enable to choose an enemy character
+                    EventSystem.current.SetSelectedGameObject(GetTopEnemyCharacter()); // mark first enemy team member TODO: check whether they are dead!
                     return;
 
                 case (PlayerTurnState.choosePlayerTeamChar):
-                    EnableCharacterBtns(true, true, false); // Enable full Player-team characters choice
+                    combatActionsUI.EnableCharacterBtns(true, true, false); // Enable full Player-team characters choice
                     EventSystem.current.SetSelectedGameObject(BattleManager.instance.playerTeam[0].selectionVisual); // mark first player team member TODO: Check whether they are dead!
                     return;
 
@@ -131,12 +131,12 @@ namespace Arcy.Battle
                     return;
 
                 case (PlayerTurnState.chooseAnyChar):
-                    EnableCharacterBtns(false, false, true); // Enables to choose ANY currently active character
+                    combatActionsUI.EnableCharacterBtns(false, false, true); // Enables to choose ANY currently active character
                     return;
 
                 case (PlayerTurnState.enemiesTurn):
                     combatActionsUI?.DisableCombatActions(false); // Disable the CombatActionsUI
-                    EnableCharacterBtns(false, true, false);
+                    combatActionsUI.EnableCharacterBtns(false, true, false);
                     BattleManager.instance.battleTurnManager.endTurnButton.gameObject.SetActive(false); // Hide the EndTurnBtn
                     Invoke(nameof(NextTurnDelay), 1.5f); // Invoke NextTurn after a short delay
                     return;
@@ -147,50 +147,25 @@ namespace Arcy.Battle
             }
         }
 
-        private void EnableCharacterBtns(bool pickOneSide, bool goodGuySide, bool enableAllBtns)
+        private GameObject GetTopEnemyCharacter()
         {
-            if (pickOneSide) // Enable character selection on one side
-            {
-                foreach (BattleCharacterBase playerUnit in BattleManager.instance.playerTeam)
-                {
-                    // TODO: Check wether character is dead
-                    playerUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(goodGuySide);
-                }
-
-                foreach (BattleCharacterBase enemyUnit in BattleManager.instance.enemyTeam)
-                {
-                    enemyUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(!goodGuySide);
-                }
-            }
-            else // Activate all character buttons
-            {
-                foreach (BattleCharacterBase playerUnit in BattleManager.instance.playerTeam)
-                {
-                    playerUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(enableAllBtns);
-                }
-
-                foreach (BattleCharacterBase enemyUnit in BattleManager.instance.enemyTeam)
-                {
-                    enemyUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(enableAllBtns);
-                }
-            }
-        }
-
-        private GameObject GetEnemyCharacter()
-        {
-            GameObject myObject;
-
             for (int i = 0; i < BattleManager.instance.enemyTeam.Count; i++)
-            {
                 if (BattleManager.instance.enemyTeam[i] != null)
-                {
-                    myObject = BattleManager.instance.enemyTeam[i].gameObject;
-                    return myObject;
-                }
-            }
+                    return BattleManager.instance.enemyTeam[i].selectionVisual;
 
             // If no non-null enemy GameObject is found, return null
             Debug.LogWarning("No Enemy was found!");
+            return null;
+        }
+
+        private GameObject GetTopPlayerCharacter()
+        {
+            for (int i = 0; i < BattleManager.instance.playerTeam.Count; i++)
+                if (BattleManager.instance.playerTeam[i] != null)
+                    return BattleManager.instance.playerTeam[i].gameObject;
+
+            // If no non-null playerTeam GameObject is found, return null
+            Debug.LogWarning("No Team Player Char was found!");
             return null;
         }
 

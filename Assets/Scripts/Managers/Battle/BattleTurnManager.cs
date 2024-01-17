@@ -15,29 +15,14 @@ namespace Arcy.Battle
         private TurnState _currentTurnState;
 
         private List<BattleCharacterBase> _turnOrderList = new List<BattleCharacterBase>();
-        private int _curTurnOrderIndex;
         private BattleCharacterBase _curTurnCharacter;
+        private int _curTurnOrderIndex;
 
         [Header("Components")]
         [SerializeField] public Button endTurnButton; // Used by PlayerCombatManager
 
-        // Singleton
-        //public static BattleTurnManager instance;
-
         // Action for a new turn
         public static Action<TurnState> onNewTurn;
-
-        // private void Awake()
-        // {
-        //     if (instance != null && instance != this)
-        //     {
-        //         Destroy(gameObject);
-        //     }
-        //     else
-        //     {
-        //         instance = this;
-        //     }
-        // }
 
         // Triggered by BattleManager
         public void Begin()

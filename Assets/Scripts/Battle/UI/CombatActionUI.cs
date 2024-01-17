@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using DG.Tweening.Core.Easing;
+using System.Linq;
 
 namespace Arcy.Battle
 {
@@ -67,7 +68,6 @@ namespace Arcy.Battle
         public GameObject PickTopBtn(bool chooseBtn = true) // Called in PlayerCOmbatManager
         {
             // TODO: Replace and make it better
-
             if (chooseBtn) // Select the top Btn, called by DisplayCombatActions()
             {
                 return _buttons[0].gameObject;
@@ -75,6 +75,36 @@ namespace Arcy.Battle
             else
             {
                 return null;
+            }
+        }
+
+        // Called by PlayerCombatManager
+        public void EnableCharacterBtns(bool pickOneSide, bool goodGuySide, bool enableAllBtns)
+        {
+            if (pickOneSide) // Enable character selection on one side
+            {
+                foreach (BattleCharacterBase playerUnit in BattleManager.instance.playerTeam)
+                {
+                    // TODO: Check wether character is dead
+                    playerUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(goodGuySide);
+                }
+
+                foreach (BattleCharacterBase enemyUnit in BattleManager.instance.enemyTeam)
+                {
+                    enemyUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(!goodGuySide);
+                }
+            }
+            else // Activate all character buttons
+            {
+                foreach (BattleCharacterBase playerUnit in BattleManager.instance.playerTeam)
+                {
+                    playerUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(enableAllBtns);
+                }
+
+                foreach (BattleCharacterBase enemyUnit in BattleManager.instance.enemyTeam)
+                {
+                    enemyUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(enableAllBtns);
+                }
             }
         }
 
@@ -109,7 +139,8 @@ namespace Arcy.Battle
             }
         }
 
-        // Called by combatActionBtn when clicking on a ca-button
+        // Deactivate or activate ca-buttons. 
+        //Called by combatActionBtn when clicking on a ca-button or returning to ca-choosing state (TODO!)
         public void EnableCaBtns(bool enableBtns)
         {
             foreach (CombatActionBtn btn in _buttons)
@@ -125,9 +156,7 @@ namespace Arcy.Battle
             if (characterChosingPhase) // Disable the combatActions-buttons
             {
                 foreach (CombatActionBtn button in _buttons)
-                {
                     button.btn.interactable = !characterChosingPhase;
-                }
             }
             else
             {
@@ -153,6 +182,21 @@ namespace Arcy.Battle
         public void DisableCombatActionDescription()
         {
             _descriptionPanel.SetActive(false);
+        }
+
+        // Generate the correct order when entering character-choosing-state
+        private void GenerateBtnChoosingOrder()
+        {
+            BattleCharacterBase[] allCharacters = BattleManager.instance.enemyTeam.ToArray();
+
+            for (int i = 0; i < allCharacters.Length; i++)
+            {
+                // allCharacters[i].selectionVisual.GetComponent<Button>().navigation.mode = Navigation.Mode.Explicit selectOnRight(allCharacters[i+1]);
+                // if (allCharacters[i] == allCharacters.Length)
+                // {
+
+                // }
+            }
         }
     }
 }

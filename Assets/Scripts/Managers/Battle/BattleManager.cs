@@ -173,14 +173,9 @@ namespace Arcy.Battle
                         }
 
                         if (enemiesRemaining == 0)
-                        {
                                 PlayerTeamsWins();
-                        }
                         else if (playersRemaining == 0)
-                        {
                                 EnemyTeamWins();
-                        }
-
                 }
 
                 private void PlayerTeamsWins()
@@ -203,13 +198,9 @@ namespace Arcy.Battle
                         for (int i = 0; i < playerTeam.Count; i++)
                         {
                                 if (playerTeam[i] != null)
-                                {
                                         _playerPersistentData.characters[i].health = playerTeam[i].curHp;
-                                }
                                 else
-                                {
                                         _playerPersistentData.characters[i].isDead = true;
-                                }
                         }
                 }
 
