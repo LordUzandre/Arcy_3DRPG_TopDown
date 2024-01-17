@@ -41,7 +41,7 @@ namespace Arcy.Battle
 			{
 				// Is it an enemy character's turn?
 				case (TurnState.enemyTeamsTurn):
-					_curEnemy = BattleTurnManager.instance.GetCurrentTurnCharacter();
+					_curEnemy = BattleManager.instance.battleTurnManager.GetCurrentTurnCharacter();
 					Invoke(nameof(DecideCombatAction), Random.Range(_minWaitTime, _maxWaitTime));
 					return;
 			}
@@ -98,7 +98,7 @@ namespace Arcy.Battle
 		// Called once the enemy has finished with their turn.
 		private void EndTurn()
 		{
-			BattleTurnManager.instance.EndTurn();
+			BattleManager.instance.battleTurnManager.EndTurn();
 		}
 
 		// Returns the percentage of health remaining for the requested character.
@@ -163,7 +163,7 @@ namespace Arcy.Battle
 
 			BattleCharacterBase[] characters = team == BattleCharacterBase.Team.Player
 			? BattleManager.instance.playerTeam.ToArray()
-			: BattleManager.instance.enemyTeam;
+			: BattleManager.instance.enemyTeam.ToArray();
 
 			for (int i = 0; i < characters.Length; i++)
 			{

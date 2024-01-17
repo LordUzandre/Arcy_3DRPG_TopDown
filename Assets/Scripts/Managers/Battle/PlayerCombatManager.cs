@@ -5,17 +5,17 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Arcy.Battle
 {
+    public enum PlayerTurnState { chooseCombatAction, chooseEnemy, choosePlayerChar, choosePlayerTeamChar, chooseItem, chooseAnyChar, enemiesTurn, battleIsOver }
+
     public class PlayerCombatManager : MonoBehaviour
     {
         /// <summary>
         /// This manager handles the combat during the player's turn
         /// </summary>
-
-        // Public:
-        public static PlayerCombatManager instance; // Singleton
 
         // Private:
         [Header("Components")]
@@ -24,16 +24,8 @@ namespace Arcy.Battle
 
         private CombatActionBase _curSelectionCombatAction; // Current selected combatAction
         private BattleCharacterBase _curSelectedCharacter; // Current selected character
-        private bool _characterChoiceIsActive; // Used in Update() to check if we currently are in 'choose character'-mode
 
-        // Selection flags for the currently selected combatAction
-        private bool _canSelectSelf;
-        private bool _canSelectTeam;
-        private bool _canSelectEnemies;
-
-        // Selection Raycast variables
-        private float _selectionCheckRate = 0.1f;
-        private float _lastSelectionCheckTime;
+        private PlayerTurnState _previousTurnState;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -43,18 +35,6 @@ namespace Arcy.Battle
                 _selectionLayerMask = LayerMask.GetMask("Player_combat");
         }
 #endif
-
-        private void Awake()
-        {
-            if (instance != null && instance != this)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                instance = this;
-            }
-        }
 
         private void OnEnable()
         {
@@ -78,152 +58,146 @@ namespace Arcy.Battle
             switch (turnState)
             {
                 case (TurnState.playerTeamsTurn):
-                    EnablePlayerCombat();
-                    return;
-                default:
-                    DisablePlayerCombat();
+                    NewTurnState(PlayerTurnState.chooseCombatAction);
                     return;
             }
         }
 
         // Allow the player to select combat actions and select targets.
+        // Called at the beginning of player's turn or (TODO!) if the character cancels their current action
         private void EnablePlayerCombat()
         {
-            _curSelectedCharacter = null;
+            //_curSelectedCharacter = null;
             _curSelectionCombatAction = null;
-            _characterChoiceIsActive = true;
 
-            // Set the choice for the 
-            EventSystem.current.SetSelectedGameObject(combatActionsUI.PickTopBtn());
-        }
-
-        private void DisablePlayerCombat()
-        {
-            _characterChoiceIsActive = false;
-        }
-
-        // TODO: Switch out for an inputSystem and statemachine
-        private void Update()
-        {
-            // The update is used for choosing character for effect
-
-            // Only run update function if combat is enabled.
-            if (!_characterChoiceIsActive || _curSelectionCombatAction == null)
-                return;
-
-            // Check to see what the mouse is hovering over.
-            if (Time.time - _lastSelectionCheckTime > _selectionCheckRate)
-            {
-                _lastSelectionCheckTime = Time.time;
-                SelectionCheck();
-            }
-
-            // When we click, cast the combat action.
-            if (Mouse.current.leftButton.isPressed && _curSelectedCharacter != null)
-            {
-                CastCombatAction();
-            }
-        }
-
-        //See what we're hovering over
-        private void SelectionCheck()
-        {
-
-            Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 999, _selectionLayerMask))
-            {
-                BattleCharacterBase character = hit.collider.GetComponentInParent<BattleCharacterBase>();
-
-                if (_curSelectedCharacter != null && _curSelectedCharacter == character)
-                {
-                    return;
-                }
-
-                if (_canSelectSelf && character == BattleTurnManager.instance.GetCurrentTurnCharacter())
-                {
-                    SelectCharacter(character);
-                    return;
-                }
-                else if (_canSelectTeam && character.team == BattleCharacterBase.Team.Player)
-                {
-                    SelectCharacter(character);
-                    return;
-                }
-                else if (_canSelectEnemies && character.team == BattleCharacterBase.Team.Enemy)
-                {
-                    SelectCharacter(character);
-                    return;
-                }
-            }
-
-            UnSelectCharacter();
+            combatActionsUI.EnableCaBtns(true); // enable combatAction Buttons
+            EventSystem.current.SetSelectedGameObject(combatActionsUI.PickTopBtn()); // Pick the top btn in UI
         }
 
         // Called when we click on a target character with a combat action selected.
-        void CastCombatAction()
+        public void CastCombatAction(BattleCharacterBase character)
         {
-            BattleTurnManager.instance.GetCurrentTurnCharacter().CastCombatAction(_curSelectionCombatAction, _curSelectedCharacter);
+            //_curSelectedCharacter = character;
+            BattleManager.instance.battleTurnManager.GetCurrentTurnCharacter().CastCombatAction(_curSelectionCombatAction, character);
             _curSelectionCombatAction = null;
 
-            UnSelectCharacter();
-            DisablePlayerCombat();
-            combatActionsUI?.DisableCombatActions(false);
-            BattleTurnManager.instance.endTurnButton.gameObject.SetActive(false);
+            NewTurnState(PlayerTurnState.enemiesTurn);
+        }
 
-            Invoke(nameof(NextTurnDelay), 1.0f);
+        // Called when we click on a combat action in the UI panel.
+        public void SetCurrentCombatAction(CombatActionBase combatAction)
+        {
+            _curSelectionCombatAction = combatAction;
+
+            if (combatAction as CombatAction_Melee || combatAction as CombatAction_Ranged)
+            {
+                NewTurnState(PlayerTurnState.chooseEnemy);
+            }
+            else if (combatAction as CombatAction_Heal)
+            {
+                NewTurnState(PlayerTurnState.choosePlayerTeamChar);
+            }
+            else if (combatAction as CombatAction_Effect)
+            {
+                NewTurnState(PlayerTurnState.chooseAnyChar);
+            }
+        }
+
+        public void NewTurnState(PlayerTurnState currentPlayerTurnState)
+        {
+            if (_previousTurnState == currentPlayerTurnState)
+                return;
+
+            _previousTurnState = currentPlayerTurnState;
+
+            switch (currentPlayerTurnState)
+            {
+                case (PlayerTurnState.chooseCombatAction):
+                    EnablePlayerCombat();
+                    return;
+
+                case (PlayerTurnState.chooseEnemy):
+                    EnableCharacterBtns(true, false, false); // Enable to choose an enemy character
+                    EventSystem.current.SetSelectedGameObject(GetEnemyCharacter()); // mark first enemy team member TODO: check whether they are dead!
+                    return;
+
+                case (PlayerTurnState.choosePlayerTeamChar):
+                    EnableCharacterBtns(true, true, false); // Enable full Player-team characters choice
+                    EventSystem.current.SetSelectedGameObject(BattleManager.instance.playerTeam[0].selectionVisual); // mark first player team member TODO: Check whether they are dead!
+                    return;
+
+                case (PlayerTurnState.choosePlayerChar):
+                    BattleManager.instance.battleTurnManager.GetCurrentTurnCharacter().selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(true); // Enable current Player-team character choice
+                    return;
+
+                case (PlayerTurnState.chooseAnyChar):
+                    EnableCharacterBtns(false, false, true); // Enables to choose ANY currently active character
+                    return;
+
+                case (PlayerTurnState.enemiesTurn):
+                    combatActionsUI?.DisableCombatActions(false); // Disable the CombatActionsUI
+                    EnableCharacterBtns(false, true, false);
+                    BattleManager.instance.battleTurnManager.endTurnButton.gameObject.SetActive(false); // Hide the EndTurnBtn
+                    Invoke(nameof(NextTurnDelay), 1.5f); // Invoke NextTurn after a short delay
+                    return;
+
+                default:
+                    Debug.Log("Oops, like you didn't plan for that yet, Dumbo!");
+                    return;
+            }
+        }
+
+        private void EnableCharacterBtns(bool pickOneSide, bool goodGuySide, bool enableAllBtns)
+        {
+            if (pickOneSide) // Enable character selection on one side
+            {
+                foreach (BattleCharacterBase playerUnit in BattleManager.instance.playerTeam)
+                {
+                    // TODO: Check wether character is dead
+                    playerUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(goodGuySide);
+                }
+
+                foreach (BattleCharacterBase enemyUnit in BattleManager.instance.enemyTeam)
+                {
+                    enemyUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(!goodGuySide);
+                }
+            }
+            else // Activate all character buttons
+            {
+                foreach (BattleCharacterBase playerUnit in BattleManager.instance.playerTeam)
+                {
+                    playerUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(enableAllBtns);
+                }
+
+                foreach (BattleCharacterBase enemyUnit in BattleManager.instance.enemyTeam)
+                {
+                    enemyUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(enableAllBtns);
+                }
+            }
+        }
+
+        private GameObject GetEnemyCharacter()
+        {
+            GameObject myObject;
+
+            for (int i = 0; i < BattleManager.instance.enemyTeam.Count; i++)
+            {
+                if (BattleManager.instance.enemyTeam[i] != null)
+                {
+                    myObject = BattleManager.instance.enemyTeam[i].gameObject;
+                    return myObject;
+                }
+            }
+
+            // If no non-null enemy GameObject is found, return null
+            Debug.LogWarning("No Enemy was found!");
+            return null;
         }
 
         // Initiate the next character's turn.
         private void NextTurnDelay()
         {
-            BattleTurnManager.instance.EndTurn();
-        }
-
-        // Called when we hover over a character
-        private void SelectCharacter(BattleCharacterBase character)
-        {
-            UnSelectCharacter();
-            _curSelectedCharacter = character;
-            character.ToggleSelectionVisual(true);
-        }
-
-        //Called when we stop hovering over a character.
-        private void UnSelectCharacter()
-        {
-            if (_curSelectedCharacter == null) return;
-
-            _curSelectedCharacter.ToggleSelectionVisual(false);
-            _curSelectedCharacter = null;
-        }
-
-        //Called when we click on a ombat action in the UI panel.
-        public void SetCurrentCombatAction(CombatActionBase combatAction)
-        {
-            // TODO: Replace, so that we can use keyboard to choose instead
-
-            _curSelectionCombatAction = combatAction;
-
-            _canSelectSelf = false;
-            _canSelectTeam = false;
-            _canSelectEnemies = false;
-
-            if (combatAction as CombatAction_Melee || combatAction as CombatAction_Ranged)
-            {
-                _canSelectEnemies = true;
-            }
-            else if (combatAction as CombatAction_Heal)
-            {
-                _canSelectSelf = true;
-                _canSelectTeam = true;
-            }
-            else if (combatAction as CombatAction_Effect)
-            {
-                _canSelectSelf = (combatAction as CombatAction_Effect).canEffectSelf;
-                _canSelectTeam = (combatAction as CombatAction_Effect).canEffectTeam;
-                _canSelectEnemies = (combatAction as CombatAction_Effect).canEffectEnemy;
-            }
+            BattleManager.instance.battleTurnManager.EndTurn();
         }
     }
 }

@@ -58,7 +58,7 @@ namespace Arcy.Battle
         // Called whenever BattleTurnManager trigger a new turn
         private void OnNewTurn(TurnState newTurnState)
         {
-            characterUI?.ToggleTurnVisual(BattleTurnManager.instance.GetCurrentTurnCharacter() == this);
+            characterUI?.ToggleTurnVisual(BattleManager.instance.battleTurnManager.GetCurrentTurnCharacter() == this);
             characterEffects?.ApplyCurrentEffects();
         }
 
@@ -105,6 +105,11 @@ namespace Arcy.Battle
             // TODO: Right now the object is simply destroyed. Make it something more impressive.
             onCharacterDeath?.Invoke(this);
             Destroy(gameObject);
+
+            if (team == Team.Player)
+                BattleManager.instance.playerTeam.Remove(this);
+            else
+                BattleManager.instance.enemyTeam.Remove(this);
         }
 
         // Used by CombatActionMelee

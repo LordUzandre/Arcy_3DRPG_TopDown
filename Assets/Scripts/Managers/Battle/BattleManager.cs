@@ -8,11 +8,12 @@ namespace Arcy.Battle
 {
         public class BattleManager : MonoBehaviour
         {
-                public static BattleManager instance; //Singleton
+                public static BattleManager instance; // Should be the only singleton on BattleManager
 
                 [Header("Player and Enemy Teams (Sets automatically)")]
                 public List<BattleCharacterBase> playerTeam; // List that includes all Player Team's characters
-                public BattleCharacterBase[] enemyTeam; // Array that includes all Enemy Team's characters
+                //public BattleCharacterBase[] enemyTeam; // Array that includes all Enemy Team's characters
+                public List<BattleCharacterBase> enemyTeam; // List that includes all Enemy Team's characters
 
                 //Private:
                 [Header("Components (Set manually)")]
@@ -23,7 +24,7 @@ namespace Arcy.Battle
 
                 [Header("Data (Set manually)")]
                 [SerializeField] private PlayerPersistentData _playerPersistentData; // Player Team's Data
-                [SerializeField] private CharacterSet _defaultEnemySet; // Enemy Team's Data
+                [SerializeField] private CharacterSet _EnemyCharacterSet; // Enemy Team's Data
 
                 [Header("Character UI (set manually)")]
                 [SerializeField] private GameObject _playerCharacterUiParentObject; // The parent Object that should spawn Player Character's UI
@@ -33,6 +34,10 @@ namespace Arcy.Battle
                 private List<BattleCharacterBase> _allCharactersList = new List<BattleCharacterBase>(); // All character's that currently featured in the battle, used to determine when the battle's over
                 private BattleCharUI[] _playerBattleCharUIArray = new BattleCharUI[3];
                 private BattleCharUI[] _enemyBattleCharUIArray = new BattleCharUI[4];
+
+                [HideInInspector] public BattleTurnManager battleTurnManager;
+                [HideInInspector] public PlayerCombatManager playerCombatManager;
+                [HideInInspector] public EnemyCombatManager enemyCombatManager;
 
                 // Debug
                 private string _winningTeam = "null";
@@ -52,14 +57,18 @@ namespace Arcy.Battle
                 private void Start()
                 {
                         PopulateArrays();
-                        CreateCharacters(_playerPersistentData, _defaultEnemySet);
+                        CreateCharacters(_playerPersistentData, _EnemyCharacterSet);
                         StartCoroutine(Begin());
+
+                        battleTurnManager = GetComponent<BattleTurnManager>();
+                        playerCombatManager = GetComponent<PlayerCombatManager>();
+                        enemyCombatManager = GetComponent<EnemyCombatManager>();
 
                         IEnumerator Begin()
                         {
                                 //Make sure waits one frame before Battle begins.
                                 yield return null;
-                                BattleTurnManager.instance.Begin();
+                                battleTurnManager.Begin();
                         }
                 }
 
@@ -96,7 +105,8 @@ namespace Arcy.Battle
                 private void CreateCharacters(PlayerPersistentData playerData, CharacterSet enemyTeamSet)
                 {
                         playerTeam = new List<BattleCharacterBase>();
-                        enemyTeam = new BattleCharacterBase[enemyTeamSet.characters.Length];
+                        //enemyTeam = new BattleCharacterBase[enemyTeamSet.characters.Length];
+                        enemyTeam = new List<BattleCharacterBase>();
                         _playerBattleCharUIArray = _playerCharacterUiParentObject.GetComponentsInChildren<BattleCharUI>();
                         _enemyBattleCharUIArray = _enemyCharacterUiParentObject.GetComponentsInChildren<BattleCharUI>();
 
@@ -119,11 +129,17 @@ namespace Arcy.Battle
                                 }
                         }
 
+                        int enemySpawnIndex = 0;
+
                         //Spawn the enemy Characters
                         for (int i = 0; i < enemyTeamSet.characters.Length; i++)
                         {
-                                BattleCharacterBase character = CreateCharacter(enemyTeamSet.characters[i], _enemyTeamSpawns[i]);
-                                enemyTeam[i] = character;
+                                BattleCharacterBase character = CreateCharacter(enemyTeamSet.characters[i], _enemyTeamSpawns[enemySpawnIndex]);
+                                //enemyTeam[i] = character;
+                                enemyTeam.Add(character);
+                                enemySpawnIndex++;
+
+                                // Spawn the and connect character's UI
                                 character.characterUI = _enemyBattleCharUIArray[i];
                                 character.characterUI.ConnectUItoNewChar(character.displayName, character.curHp, character.maxHp);
                         }

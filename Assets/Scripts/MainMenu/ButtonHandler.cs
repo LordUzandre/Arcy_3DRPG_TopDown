@@ -8,6 +8,10 @@ namespace Arcy.MainMenu
 {
     public class ButtonHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
     {
+        /// <summary>
+        /// This class is used to navigate the buttons in the main menu
+        /// </summary>
+
         //Attach this script to buttons
         [SerializeField] private float _horizontalMoveAmount;
         [SerializeField] private float _verticalMoveAmount;

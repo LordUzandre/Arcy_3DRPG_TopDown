@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace Arcy.Battle
 {
-    public enum TurnState { playerTeamsTurn, enemyTeamsTurn, chooseCombatAction, chooseEnemyCharacter, chooseTeamCharacter, chooseItem }
+    public enum TurnState { playerTeamsTurn, enemyTeamsTurn }
 
     public class BattleTurnManager : MonoBehaviour
     {
@@ -22,22 +22,22 @@ namespace Arcy.Battle
         [SerializeField] public Button endTurnButton; // Used by PlayerCombatManager
 
         // Singleton
-        public static BattleTurnManager instance;
+        //public static BattleTurnManager instance;
 
         // Action for a new turn
         public static Action<TurnState> onNewTurn;
 
-        private void Awake()
-        {
-            if (instance != null && instance != this)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                instance = this;
-            }
-        }
+        // private void Awake()
+        // {
+        //     if (instance != null && instance != this)
+        //     {
+        //         Destroy(gameObject);
+        //     }
+        //     else
+        //     {
+        //         instance = this;
+        //     }
+        // }
 
         // Triggered by BattleManager
         public void Begin()
@@ -86,6 +86,7 @@ namespace Arcy.Battle
             endTurnButton.gameObject.SetActive(character.team == BattleCharacterBase.Team.Player);
         }
 
+        // Called by PlayerCombatManager and EnemyCombatManager
         public void EndTurn()
         {
             _curTurnOrderIndex++;

@@ -17,4 +17,4 @@ MonoBehaviour:
     type: 3}
   tickPrefab: {fileID: 7855046206333459810, guid: cf69824c6e4d89f439ba2a752e4b03e7,
     type: 3}
-  damage: 3
+  damage: 6

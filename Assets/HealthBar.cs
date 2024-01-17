@@ -10,6 +10,7 @@ namespace Arcy.Battle
     {
         [Header("Bar")]
         [SerializeField] public Image healthBar;
+        [SerializeField] public Image healthBarBg;
         [SerializeField] public TextMeshProUGUI healthTMP;
 
         [Header("HP Changes")]

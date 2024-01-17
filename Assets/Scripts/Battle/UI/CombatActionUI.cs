@@ -11,7 +11,7 @@ namespace Arcy.Battle
     public class CombatActionUI : MonoBehaviour
     {
         /// <summary>
-        /// All player team's CombatActions UI and Buttons. The class is used by Canvas.
+        /// All player team's CombatActions UI and Buttons. The class is put on Canvas.
         /// Connection with relevant character is made in GameManager.
         /// </summary>
 
@@ -22,8 +22,6 @@ namespace Arcy.Battle
         private CombatActionBtn[] _buttons; // All the CombatAction Buttons
 
         private Vector2 _descPanelOrgPos;
-
-        //float _btnPanelHeight;
 
         private void Start()
         {
@@ -54,7 +52,7 @@ namespace Arcy.Battle
             {
                 // Enable the UI if it's a player character's turn
                 case (TurnState.playerTeamsTurn):
-                    DisplayCombatActions(BattleTurnManager.instance.GetCurrentTurnCharacter());
+                    DisplayCombatActions(BattleManager.instance.battleTurnManager.GetCurrentTurnCharacter());
                     return;
                 // Otherwise diable it
                 case (TurnState.enemyTeamsTurn):
@@ -64,22 +62,10 @@ namespace Arcy.Battle
                     Debug.LogWarning("Something Went Wrong!");
                     break;
             }
-
-            // // Enable the UI if it's a player character's turn
-            // if (BattleTurnManager.instance.GetCurrentTurnCharacter().team == BattleCharacterBase.Team.Player)
-            // {
-            //     DisplayCombatActions(BattleTurnManager.instance.GetCurrentTurnCharacter());
-            // }
-            // // Otherwise disable it
-            // else
-            // {
-            //     DisableCombatActions();
-            // }
         }
 
-        public GameObject PickTopBtn(bool chooseBtn = true)
+        public GameObject PickTopBtn(bool chooseBtn = true) // Called in PlayerCOmbatManager
         {
-
             // TODO: Replace and make it better
 
             if (chooseBtn) // Select the top Btn, called by DisplayCombatActions()
@@ -97,7 +83,7 @@ namespace Arcy.Battle
         {
             _btnPanel.SetActive(true);
             float spacingFloat = _btnPanel.GetComponent<VerticalLayoutGroup>().spacing;
-            float _btnPanelHeight = spacingFloat;
+            float btnPanelHeight = spacingFloat;
 
             // Activate buttons according to amount of combatActions available
             for (int i = 0; i < _buttons.Length; i++)
@@ -108,16 +94,27 @@ namespace Arcy.Battle
                     _buttons[i].SetCombatAction(character.combatActions[i]);
 
                     // Set btnPanel height accrording to amount of btns
-                    _btnPanelHeight += (_buttons[i].GetComponent<RectTransform>().sizeDelta.y + spacingFloat);
+                    btnPanelHeight += (_buttons[i].GetComponent<RectTransform>().sizeDelta.y + spacingFloat);
+                    _buttons[i].GetComponent<Button>().interactable = true;
                 }
                 else
                 {
+                    _buttons[i].GetComponent<Button>().interactable = false;
                     _buttons[i].gameObject.SetActive(false);
                 }
 
                 // Set the caBtnPanel Height size
                 RectTransform rT = _btnPanel.GetComponent<RectTransform>();
-                rT.sizeDelta = new Vector2(rT.sizeDelta.x, _btnPanelHeight + spacingFloat);
+                rT.sizeDelta = new Vector2(rT.sizeDelta.x, btnPanelHeight + spacingFloat);
+            }
+        }
+
+        // Called by combatActionBtn when clicking on a ca-button
+        public void EnableCaBtns(bool enableBtns)
+        {
+            foreach (CombatActionBtn btn in _buttons)
+            {
+                btn.gameObject.GetComponent<Button>().interactable = enableBtns;
             }
         }
 
@@ -125,24 +122,20 @@ namespace Arcy.Battle
         public void DisableCombatActions(bool characterChosingPhase)
         {
             //Should the UI be hidden or merely disabled
-            switch (characterChosingPhase)
+            if (characterChosingPhase) // Disable the combatActions-buttons
             {
-                case (true): // Disable the combatActions-buttons
-                    foreach (CombatActionBtn button in _buttons)
-                    {
-                        button.btn.interactable = !characterChosingPhase;
-                    }
-                    break;
-                case (false): //Hide the UI completely
-                    _btnPanel.SetActive(false);
-                    break;
+                foreach (CombatActionBtn button in _buttons)
+                {
+                    button.btn.interactable = !characterChosingPhase;
+                }
             }
-            DisableCombatActionDescription();
-        }
+            else
+            {
+                //Hide the UI completely
+                _btnPanel.SetActive(false);
+            }
 
-        private void ChooseSide()
-        {
-            // Decide if we should be able to choose enemies, player team-mates or only yourself
+            DisableCombatActionDescription();
         }
 
         // Called by CombatActionButton when we hover over a combat action button.
