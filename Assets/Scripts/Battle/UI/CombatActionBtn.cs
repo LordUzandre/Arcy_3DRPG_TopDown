@@ -47,7 +47,6 @@ namespace Arcy.Battle
         {
             BattleManager.instance.playerCombatManager.SetCurrentCombatAction(_ca);
             _combatActionUi?.EnableCaBtns(false);
-            // TODO: Add method (here or in CombatActionUI so that we go into "char-select"-mode
         }
 
         // When mouse clicker enters a new btn

@@ -11,6 +11,7 @@ namespace Arcy.Interaction
     {
         [Header("Dialogue")]
         [SerializeField] private string _speakerID;
+
         [Header("Animation Handler")]
         [SerializeField] private NPCAnimationHandler _npcAnimationHandler;
 
@@ -22,6 +23,7 @@ namespace Arcy.Interaction
             get { return _speakerID; }
             set { _speakerID = value; }
         }
+
 
         private void OnEnable()
         {

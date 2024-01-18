@@ -12,7 +12,6 @@ namespace Arcy.Animation
         //Public:
         [Header("Animator")]
         [SerializeField] public Animator anim;
-        [Space]
 
         //private:
         [SerializeField] private Transform _aimController;
@@ -23,50 +22,36 @@ namespace Arcy.Animation
         private float _weight;
         private Vector3 _aimCtrlPosition = new Vector3(0, 0, 0);
 
+        #region Components
+
         private void OnEnable()
         {
             CheckComponents();
         }
 
-        private void Reset()
+#if UNITY_EDITOR
+        private void OnValidate()
         {
             CheckComponents();
         }
+#endif
 
         private void CheckComponents()
         {
             if (_aimController == null)
-            {
                 foreach (Transform transform in gameObject.GetComponentsInChildren<Transform>(true))
-                {
                     if (transform.name == "aim-control")
-                    {
                         _aimController = transform;
-                    }
-                }
-            }
 
             if (_multiAim == null)
-            {
                 foreach (MultiAimConstraint multiAimConstraint in gameObject.GetComponentsInChildren<MultiAimConstraint>(true))
-                {
                     if (multiAimConstraint.name == "Aim_head")
-                    {
                         _multiAim = multiAimConstraint;
-                    }
-                }
-            }
 
             if (_multiAim.data.constrainedObject == null)
-            {
                 foreach (Transform bone in gameObject.GetComponentsInChildren<Transform>(true))
-                {
                     if (bone.name == "mixamorig:Neck")
-                    {
                         _multiAim.data.constrainedObject = bone;
-                    }
-                }
-            }
 
             if (anim == null)
             {
@@ -74,14 +59,26 @@ namespace Arcy.Animation
                 {
                     anim = animFound;
                 }
+                else
+                {
+                    Transform[] childObjects = new Transform[transform.childCount];
+
+                    for (int i = 0; i < transform.childCount; i++)
+                        childObjects[i] = transform.GetChild(i);
+
+                    foreach (Transform childObject in childObjects)
+                        if (childObject.TryGetComponent<Animator>(out Animator animFoundInChild))
+                            anim = animFoundInChild;
+                }
             }
 
             _aimTarget = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
+        #endregion
+
         private void Update()
         {
-
             if (_aimTarget != null)
             {
                 if (Vector3.Distance(transform.position, _aimTarget.position) < _viewRadius)
@@ -102,10 +99,9 @@ namespace Arcy.Animation
                     }
                 }
 
-                //set weight of the anim constraint
-                _multiAim.weight = Mathf.Lerp(_multiAim.weight, _weight, .05f);
-                //Set position of the aim-controller to player
-                _aimController.position = Vector3.Lerp(_aimController.position, _aimCtrlPosition, .05f);
+                _multiAim.weight = Mathf.Lerp(_multiAim.weight, _weight, .05f); //set weight of the anim constraint
+
+                _aimController.position = Vector3.Lerp(_aimController.position, _aimCtrlPosition, .05f); //Set position of the aim-controller to player
             }
         }
 
@@ -123,9 +119,8 @@ namespace Arcy.Animation
         public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
         {
             if (!angleIsGlobal)
-            {
                 angleInDegrees += transform.eulerAngles.y;
-            }
+
             return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
         }
     }

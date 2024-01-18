@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using DG.Tweening.Core.Easing;
 using System.Linq;
+using Unity.VisualScripting;
 
 namespace Arcy.Battle
 {
@@ -36,18 +37,18 @@ namespace Arcy.Battle
             IEnumerator myCoroutine() // Wait one frame before subscribing to avoid error message.
             {
                 yield return null;
-                BattleTurnManager.onNewTurn += OnNewTurn;
+                BattleTurnManager.OnNewTurn += OnNewTurn;
                 _descriptionText = _descriptionPanel.GetComponentInChildren<TextMeshProUGUI>();
             }
         }
 
         private void OnDisable()
         {
-            BattleTurnManager.onNewTurn -= OnNewTurn;
+            BattleTurnManager.OnNewTurn -= OnNewTurn;
         }
 
         // Action from BattleTurnManager when a new turn has triggered.
-        void OnNewTurn(TurnState turnState)
+        private void OnNewTurn(TurnState turnState)
         {
             switch (turnState)
             {
@@ -55,27 +56,20 @@ namespace Arcy.Battle
                 case (TurnState.playerTeamsTurn):
                     DisplayCombatActions(BattleManager.instance.battleTurnManager.GetCurrentTurnCharacter());
                     return;
-                // Otherwise diable it
+                // Otherwise disable it
                 case (TurnState.enemyTeamsTurn):
                     DisableCombatActions(false);
                     return;
-                default:
-                    Debug.LogWarning("Something Went Wrong!");
-                    break;
             }
         }
 
-        public GameObject PickTopBtn(bool chooseBtn = true) // Called in PlayerCOmbatManager
+        public Button PickTopBtn() // Called by PlayerCombatManager
         {
-            // TODO: Replace and make it better
-            if (chooseBtn) // Select the top Btn, called by DisplayCombatActions()
-            {
-                return _buttons[0].gameObject;
-            }
-            else
-            {
-                return null;
-            }
+            foreach (CombatActionBtn btn in _buttons)
+                if (btn.TryGetComponent<Button>(out Button hit))
+                    return hit;
+
+            return null;
         }
 
         // Called by PlayerCombatManager
@@ -184,13 +178,19 @@ namespace Arcy.Battle
             _descriptionPanel.SetActive(false);
         }
 
+
         // Generate the correct order when entering character-choosing-state
         private void GenerateBtnChoosingOrder()
         {
             BattleCharacterBase[] allCharacters = BattleManager.instance.enemyTeam.ToArray();
 
-            for (int i = 0; i < allCharacters.Length; i++)
+            foreach (BattleCharacterBase enemyUnit in allCharacters)
             {
+                Button myButton = enemyUnit.selectionVisual.GetComponent<Button>();
+                Navigation navigation = myButton.navigation;
+                navigation.mode = Navigation.Mode.Explicit;
+                //myButton.navigation.mode = navigation.mode; 
+
                 // allCharacters[i].selectionVisual.GetComponent<Button>().navigation.mode = Navigation.Mode.Explicit selectOnRight(allCharacters[i+1]);
                 // if (allCharacters[i] == allCharacters.Length)
                 // {

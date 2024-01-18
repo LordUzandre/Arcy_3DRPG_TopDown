@@ -9,7 +9,20 @@ using UnityEngine.UI;
 
 namespace Arcy.Battle
 {
-    public enum PlayerTurnState { defauultStartState, chooseCombatAction, chooseEnemy, choosePlayerChar, choosePlayerTeamChar, chooseItem, chooseAnyChar, enemiesTurn, battleIsOver }
+    public enum PlayerTurnState
+    {
+        defaultStartState,
+        chooseCombatAction,
+        chooseEnemy,
+        chooseSingleChar,
+        choosePlayerTeamChar,
+        chooseItem,
+        chooseAnyChar,
+        enemiesTurn,
+        battleIsOver,
+        playerAttackMiniGame,
+        enemyAttackDefGame
+    }
 
     public class PlayerCombatManager : MonoBehaviour
     {
@@ -43,13 +56,13 @@ namespace Arcy.Battle
             IEnumerator WaitToSubscribe()
             {
                 yield return null;
-                BattleTurnManager.onNewTurn += OnNewTurn;
+                BattleTurnManager.OnNewTurn += OnNewTurn;
             }
         }
 
         private void OnDisable()
         {
-            BattleTurnManager.onNewTurn -= OnNewTurn;
+            BattleTurnManager.OnNewTurn -= OnNewTurn;
         }
 
         // Called when a new turn has triggered.
@@ -71,7 +84,9 @@ namespace Arcy.Battle
             _curSelectionCombatAction = null;
 
             combatActionsUI.EnableCaBtns(true); // enable combatAction Buttons
-            EventSystem.current.SetSelectedGameObject(combatActionsUI.PickTopBtn()); // Pick the top btn in UI
+
+            // TODO: Add a method to check which type of input we are using
+            combatActionsUI.PickTopBtn().Select(); // Highlight the top btn in UI
         }
 
         // Called when we click on a target character with a combat action selected.
@@ -84,7 +99,7 @@ namespace Arcy.Battle
             NewTurnState(PlayerTurnState.enemiesTurn);
         }
 
-        // Called when we click on a combat action in the UI panel.
+        // Called by CombactionBTN when we click on a combat action in the UI panel.
         public void SetCurrentCombatAction(CombatActionBase combatAction)
         {
             _curSelectionCombatAction = combatAction;
@@ -113,32 +128,50 @@ namespace Arcy.Battle
             switch (currentPlayerTurnState)
             {
                 case (PlayerTurnState.chooseCombatAction):
-                    EnablePlayerCombat();
+                    EnablePlayerCombat(); // Turn on CombatActionsUI
+                    combatActionsUI?.EnableCharacterBtns(false, false, false); // Deactivate all characterBtns
                     return;
 
                 case (PlayerTurnState.chooseEnemy):
-                    combatActionsUI.EnableCharacterBtns(true, false, false); // Enable to choose an enemy character
-                    EventSystem.current.SetSelectedGameObject(GetTopEnemyCharacter()); // mark first enemy team member TODO: check whether they are dead!
+                    combatActionsUI?.EnableCharacterBtns(true, false, false); // Enable to choose an enemy character
+
+                    // TODO: Add method to check what type of input we are using
+
+                    MarkFirstLivingCharacterInUi(BattleManager.instance.enemyTeam).Select(); // if we are using keyboard or gamepad => mark first enemy team member
                     return;
 
                 case (PlayerTurnState.choosePlayerTeamChar):
-                    combatActionsUI.EnableCharacterBtns(true, true, false); // Enable full Player-team characters choice
-                    EventSystem.current.SetSelectedGameObject(BattleManager.instance.playerTeam[0].selectionVisual); // mark first player team member TODO: Check whether they are dead!
+                    combatActionsUI?.EnableCharacterBtns(true, true, false); // Enable full Player-team characters choice
+
+                    // TODO: Add method to check what type of input we are using
+
+                    MarkFirstLivingCharacterInUi(BattleManager.instance.playerTeam).Select(); // if we are using keyboard or gamepad => mark first enemy team member
                     return;
 
-                case (PlayerTurnState.choosePlayerChar):
+                case (PlayerTurnState.chooseSingleChar):
                     BattleManager.instance.battleTurnManager.GetCurrentTurnCharacter().selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(true); // Enable current Player-team character choice
                     return;
 
                 case (PlayerTurnState.chooseAnyChar):
-                    combatActionsUI.EnableCharacterBtns(false, false, true); // Enables to choose ANY currently active character
+                    combatActionsUI?.EnableCharacterBtns(false, false, true); // Enables to choose ANY currently active character
                     return;
 
                 case (PlayerTurnState.enemiesTurn):
+                    combatActionsUI?.EnableCharacterBtns(false, false, false); // Deactivate all characterBtns
                     combatActionsUI?.DisableCombatActions(false); // Disable the CombatActionsUI
-                    combatActionsUI.EnableCharacterBtns(false, true, false);
+                    combatActionsUI?.EnableCharacterBtns(false, true, false);
                     BattleManager.instance.battleTurnManager.endTurnButton.gameObject.SetActive(false); // Hide the EndTurnBtn
-                    Invoke(nameof(NextTurnDelay), 1.5f); // Invoke NextTurn after a short delay
+                    StartCoroutine(NextTurnDelay()); // Invoke NextTurn after a short delay
+                    return;
+
+                    IEnumerator NextTurnDelay()
+                    {
+                        yield return new WaitForSeconds(1.5f);
+                        // Initiate the next character's turn after a short wait
+                        BattleManager.instance.battleTurnManager.EndTurn();
+                    }
+
+                case (PlayerTurnState.defaultStartState):
                     return;
 
                 default:
@@ -147,32 +180,15 @@ namespace Arcy.Battle
             }
         }
 
-        private GameObject GetTopEnemyCharacter()
+        private Button MarkFirstLivingCharacterInUi(List<BattleCharacterBase> whichSide)
         {
-            for (int i = 0; i < BattleManager.instance.enemyTeam.Count; i++)
-                if (BattleManager.instance.enemyTeam[i] != null)
-                    return BattleManager.instance.enemyTeam[i].selectionVisual;
+            foreach (BattleCharacterBase enemyUnit in whichSide)
+                if (enemyUnit != null)
+                    return enemyUnit.selectionVisual.GetComponent<Button>();
 
             // If no non-null enemy GameObject is found, return null
-            Debug.LogWarning("No Enemy was found!");
+            Debug.LogWarning("No Character was found!");
             return null;
-        }
-
-        private GameObject GetTopPlayerCharacter()
-        {
-            for (int i = 0; i < BattleManager.instance.playerTeam.Count; i++)
-                if (BattleManager.instance.playerTeam[i] != null)
-                    return BattleManager.instance.playerTeam[i].gameObject;
-
-            // If no non-null playerTeam GameObject is found, return null
-            Debug.LogWarning("No Team Player Char was found!");
-            return null;
-        }
-
-        // Initiate the next character's turn.
-        private void NextTurnDelay()
-        {
-            BattleManager.instance.battleTurnManager.EndTurn();
         }
     }
 }

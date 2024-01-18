@@ -22,12 +22,12 @@ namespace Arcy.Battle
         [SerializeField] public Button endTurnButton; // Used by PlayerCombatManager
 
         // Action for a new turn
-        public static Action<TurnState> onNewTurn;
+        public static Action<TurnState> OnNewTurn;
 
         // Triggered by BattleManager
         public void Begin()
         {
-            GenerateTurnOrder(BattleCharacterBase.Team.Player); // Change the overload if anybody else should start
+            GenerateTurnOrder(BattleCharacterBase.Team.Player); // TODO: Change the overload if anybody else should start
             NewTurn(_turnOrderList[0]);
             endTurnButton.GetComponent<Button>().onClick.AddListener(EndTurn);
         }
@@ -48,20 +48,19 @@ namespace Arcy.Battle
 
         private void NewTurn(BattleCharacterBase character)
         {
-            _curTurnCharacter = character;
-            //onNewTurn?.Invoke();
+            _curTurnCharacter = character; // Set who's character's turn it is
 
             switch (character.team)
             {
                 // It's the player team's turn
                 case (BattleCharacterBase.Team.Player):
-                    if (onNewTurn != null)
-                        onNewTurn(TurnState.playerTeamsTurn);
+                    if (OnNewTurn != null)
+                        OnNewTurn(TurnState.playerTeamsTurn);
                     break;
                 // It's the enemy team's turn
                 case (BattleCharacterBase.Team.Enemy):
-                    if (onNewTurn != null)
-                        onNewTurn(TurnState.enemyTeamsTurn);
+                    if (OnNewTurn != null)
+                        OnNewTurn(TurnState.enemyTeamsTurn);
                     break;
                 default:
                     Debug.LogWarning("Something Went Horribly Wrong!");
@@ -77,19 +76,15 @@ namespace Arcy.Battle
             _curTurnOrderIndex++;
 
             if (_curTurnOrderIndex == _turnOrderList.Count)
-            {
                 _curTurnOrderIndex = 0;
-            }
 
-            // If the character is dead
+            // Check if the characters are dead
             while (_turnOrderList[_curTurnOrderIndex] == null)
             {
                 _curTurnOrderIndex++;
 
-                if (_curTurnOrderIndex == _turnOrderList.Count)
-                {
+                if (_curTurnOrderIndex == _turnOrderList.Count) // Start over if we reach the end of the list
                     _curTurnOrderIndex = 0;
-                }
             }
 
             NewTurn(_turnOrderList[_curTurnOrderIndex]);
@@ -97,7 +92,7 @@ namespace Arcy.Battle
 
         // Used by:
         // BattleCharacterBase
-        // CombatAcitonUI
+        // CombatActionUI
         // PlayerCombatManager
         // EnemyCombatManager
         // to get the current active character

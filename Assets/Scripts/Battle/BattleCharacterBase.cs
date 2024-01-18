@@ -47,12 +47,12 @@ namespace Arcy.Battle
 
         private void OnEnable()
         {
-            BattleTurnManager.onNewTurn += OnNewTurn;
+            BattleTurnManager.OnNewTurn += OnNewTurn;
         }
 
         private void OnDisable()
         {
-            BattleTurnManager.onNewTurn -= OnNewTurn;
+            BattleTurnManager.OnNewTurn -= OnNewTurn;
         }
 
         // Called whenever BattleTurnManager trigger a new turn
