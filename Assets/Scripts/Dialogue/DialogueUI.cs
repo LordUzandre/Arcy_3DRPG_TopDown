@@ -10,16 +10,18 @@ using Arcy.Dialogue;
 public class DialogueUI : MonoBehaviour
 {
     [SerializeField] public TMP_Animated dialogueText;
-    [SerializeField] Image dialogueBox;
-    [SerializeField] Image dialogueArrow;
-    CanvasGroup cvGroup;
+    [SerializeField] private Image _dialogueBox;
+    [SerializeField] private Image _dialogueArrow;
+    [SerializeField] private Button _yesBtn;
+    [SerializeField] private Button _noBtn;
+    private CanvasGroup _cvGroup;
 
     //public bool _currentlyTyping;
 
     private void OnEnable()
     {
         CheckComponents();
-        cvGroup.alpha = 0;
+        _cvGroup.alpha = 0;
     }
 
     private void CheckComponents()
@@ -27,14 +29,13 @@ public class DialogueUI : MonoBehaviour
         if (dialogueText == null)
             dialogueText = GetComponentInChildren<TMP_Animated>();
 
-        if (dialogueBox == null)
-            dialogueBox = GetComponentInChildren<Image>();
+        if (_dialogueBox == null)
+            _dialogueBox = GetComponentInChildren<Image>();
 
-        if (dialogueArrow == null)
-            dialogueArrow = GetComponentInChildren<Image>();
+        if (_dialogueArrow == null)
+            _dialogueArrow = GetComponentInChildren<Image>();
 
-        if (cvGroup == null)
-            cvGroup = GetComponent<CanvasGroup>();
+        _cvGroup ??= TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? _cvGroup = hit : null;
     }
 
     public void FadeUI(bool show, float time, float delay)
@@ -45,13 +46,13 @@ public class DialogueUI : MonoBehaviour
         sequence.AppendInterval(delay);
 
         // Fade in or out depending on bool
-        sequence.Append(cvGroup.DOFade(show ? 1 : 0, time));
+        sequence.Append(_cvGroup.DOFade(show ? 1 : 0, time));
 
         if (show)
         {
             DialogueManager.Instance.dialogueIndex = 0;
             //pop the size of the UI
-            sequence.Join(cvGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
+            sequence.Join(_cvGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
 
             //Start typing the text after the UI is faded in.
             sequence.AppendCallback(() => TypeOutDialogueText(0));
@@ -60,7 +61,7 @@ public class DialogueUI : MonoBehaviour
 
     public void TypeOutDialogueText(int index)
     {
-        dialogueText.ReadText(DialogueManager.Instance.dialogueBlock[index]);
+        dialogueText?.ReadText(DialogueManager.Instance.dialogueBlock[index]);
         //_currentlyTyping = true;
     }
 }

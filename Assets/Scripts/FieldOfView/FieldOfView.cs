@@ -20,7 +20,6 @@ namespace Arcy.Interaction
         public List<InteractibleBase> visibleTargetsList = new List<InteractibleBase>();
         [HideInInspector]
         public InteractibleBase currentInteractible;
-        public GameObject currentInteractibleObject;
 
         public static Action<Vector3> moveInteractionIconHere; //used by interactionIcon
         public static Action noObjectInFocus; //used by interactionIcon, also used in PlayerManager
@@ -84,6 +83,12 @@ namespace Arcy.Interaction
             noObjectInFocus?.Invoke();
         }
 
+        /// <summary> 
+        /// When there are multiple targets in fow. (MultipleTartgetsInView is used by fow.Editor)
+        /// First it narrows the field of search, and if there are no interactibles in the new cone there will be no currentInteractible.
+        /// It then chooses the one closest to player.
+        /// </summary>
+
         private void FindVisibleTargets()
         {
             currentInteractible = null;
@@ -105,21 +110,15 @@ namespace Arcy.Interaction
                 if (angleToTarget < (viewAngle * .5f))
                 {
                     //is the target an interactible
-                    if (collider.TryGetComponent(typeof(InteractibleBase), out Component component))
+                    if (collider.TryGetComponent(typeof(InteractibleBase), out Component interactibleBase))
                     {
                         float dstToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
                         //Is the object blocked by obstacleLayer? (remove and replace)
                         if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                         {
-                            InteractibleBase i = component as InteractibleBase;
+                            InteractibleBase i = interactibleBase as InteractibleBase;
                             visibleTargetsList.Add(i);
-
-                            /// <summary> 
-                            /// When there are multiple targets in fow. (MultipleTartgetsInView is used by fow.Editor)
-	                        /// First it narrows the field of search, and if there are no interactibles in the new cone there will be no currentInteractible.
-	                        /// It then chooses the one closest to player.
-                            /// </summary>
 
                             switch (visibleTargetsList.Count)
                             {

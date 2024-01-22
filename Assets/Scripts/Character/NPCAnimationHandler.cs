@@ -84,7 +84,6 @@ namespace Arcy.Animation
                 if (Vector3.Distance(transform.position, _aimTarget.position) < _viewRadius)
                 {
                     Vector3 dirToTarget = (_aimTarget.transform.position - transform.position).normalized;
-
                     float angleToTarget = Vector3.Angle(transform.forward, dirToTarget);
 
                     if (angleToTarget < (_viewAngle * .5f)) //is the player within the viewCone
@@ -95,7 +94,9 @@ namespace Arcy.Animation
                     }
                     else
                     {
-                        _aimCtrlPosition = transform.position + transform.forward + new Vector3(0, 1.7f, 0);
+                        _aimCtrlPosition = transform.position + transform.forward + new Vector3(0, 1.4f, 0);
+
+                        _weight = 0;
                     }
                 }
 
