@@ -5,26 +5,27 @@ using UnityEngine;
 
 namespace Arcy.Interaction
 {
-    [RequireComponent(typeof(Animator), typeof(BoxCollider))]
-    public class Door : InteractibleBase
+    [RequireComponent(typeof(Animator))]
+    public class Door : MonoBehaviour, InteractibleBase
     {
         [Header("Components")]
-        [SerializeField] Animator animator;
-        [SerializeField] BoxCollider boxCollider;
+        [SerializeField] private Animator _anim;
+
         private bool _isInteractible = true;
-        [HideInInspector] public override bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
+        [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
 
-        private void Reset()
+        [HideInInspector] public Transform ObjectTransform => transform;
+
+#if UNITY_EDITOR
+        private void OnValidate()
         {
-            animator = GetComponent<Animator>();
-            boxCollider = GetComponent<BoxCollider>();
+            _anim ??= TryGetComponent<Animator>(out Animator anim) ? _anim = anim : null;
         }
+#endif
 
-        public override void Interact()
+        public void Interact()
         {
-            base.Interact();
-            animator.SetTrigger("Opening");
-            //print("Interaction triggered");
+            _anim.SetTrigger("Opening");
         }
     }
 }

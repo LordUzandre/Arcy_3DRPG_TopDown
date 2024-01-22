@@ -12,7 +12,6 @@ namespace Arcy.Battle
 
                 [Header("Player and Enemy Teams (Sets automatically)")]
                 public List<BattleCharacterBase> playerTeam; // List that includes all Player Team's characters
-                //public BattleCharacterBase[] enemyTeam; // Array that includes all Enemy Team's characters
                 public List<BattleCharacterBase> enemyTeam; // List that includes all Enemy Team's characters
 
                 //Private:
@@ -105,42 +104,38 @@ namespace Arcy.Battle
                 private void CreateCharacters(PlayerPersistentData playerData, CharacterSet enemyTeamSet)
                 {
                         playerTeam = new List<BattleCharacterBase>();
-                        //enemyTeam = new BattleCharacterBase[enemyTeamSet.characters.Length];
                         enemyTeam = new List<BattleCharacterBase>();
                         _playerBattleCharUIArray = _playerCharacterUiParentObject.GetComponentsInChildren<BattleCharUI>();
                         _enemyBattleCharUIArray = _enemyCharacterUiParentObject.GetComponentsInChildren<BattleCharUI>();
 
                         int playerSpawnIndex = 0;
 
-                        // Spawn in the Player Team Characters
-                        for (int i = 0; i < playerData.characters.Length; i++)
+                        // Spawn in the Player Team Characters based on PersistentPlayerData
+                        foreach (PlayerPersistentCharacter unit in playerData.characters)
                         {
-                                if (!playerData.characters[i].isDead)
+                                if (!unit.isDead)
                                 {
-                                        BattleCharacterBase character = CreateCharacter(playerData.characters[i].characterPrefab, _playerTeamSpawns[playerSpawnIndex]);
-                                        character.curHp = playerData.characters[i].health;
+                                        BattleCharacterBase character = CreateCharacter(unit.characterPrefab, _playerTeamSpawns[playerSpawnIndex]);
+                                        character.curHp = unit.health;
 
-                                        // Spawn UI and connect to newly formed player character
-                                        character.characterUI = _playerBattleCharUIArray[i];
+                                        character.characterUI = _playerBattleCharUIArray[playerSpawnIndex]; // TODO: Replace with a method that spawns a new UI.
                                         character.characterUI.ConnectUItoNewChar(character.displayName, character.curHp, character.maxHp);
 
                                         playerTeam.Add(character);
-                                        playerSpawnIndex++;
                                 }
+                                playerSpawnIndex++;
                         }
 
                         int enemySpawnIndex = 0;
 
-                        //Spawn the enemy Characters
+                        //Spawn the enemy Characters based on enemyTeam-List
                         for (int i = 0; i < enemyTeamSet.characters.Length; i++)
                         {
                                 BattleCharacterBase character = CreateCharacter(enemyTeamSet.characters[i], _enemyTeamSpawns[enemySpawnIndex]);
-                                //enemyTeam[i] = character;
                                 enemyTeam.Add(character);
                                 enemySpawnIndex++;
 
-                                // Spawn the and connect character's UI
-                                character.characterUI = _enemyBattleCharUIArray[i];
+                                character.characterUI = _enemyBattleCharUIArray[i]; // TODO: Replace with a method that spawns a new UI.
                                 character.characterUI.ConnectUItoNewChar(character.displayName, character.curHp, character.maxHp);
                         }
 
@@ -164,43 +159,45 @@ namespace Arcy.Battle
                         int playersRemaining = 0;
                         int enemiesRemaining = 0;
 
-                        for (int i = 0; i < _allCharactersList.Count; i++)
+                        foreach (BattleCharacterBase _char in _allCharactersList)
                         {
-                                if (_allCharactersList[i].team == BattleCharacterBase.Team.Player)
+                                if (_char.team == BattleCharacterBase.Team.Player)
                                         playersRemaining++;
                                 else
                                         enemiesRemaining++;
                         }
 
                         if (enemiesRemaining == 0)
-                                PlayerTeamsWins();
-                        else if (playersRemaining == 0)
-                                EnemyTeamWins();
-                }
-
-                private void PlayerTeamsWins()
-                {
-                        UpdatePlayerPersistentData();
-                        Invoke(nameof(LoadMapScene), 0.5f);
-                        _winningTeam = "Players Team";
-                }
-
-                private void EnemyTeamWins()
-                {
-                        _playerPersistentData.ResetCharacters();
-                        Invoke(nameof(LoadMapScene), 0.5f);
-                        _winningTeam = "Enemy Team";
-                }
-
-                // Update the team's stats when winning.
-                private void UpdatePlayerPersistentData()
-                {
-                        for (int i = 0; i < playerTeam.Count; i++)
                         {
-                                if (playerTeam[i] != null)
-                                        _playerPersistentData.characters[i].health = playerTeam[i].curHp;
-                                else
-                                        _playerPersistentData.characters[i].isDead = true;
+                                BattleIsOver(BattleCharacterBase.Team.Player);
+                        }
+                        else if (playersRemaining == 0)
+                        {
+                                BattleIsOver(BattleCharacterBase.Team.Enemy);
+                        }
+                }
+
+                private void BattleIsOver(BattleCharacterBase.Team winningSide)
+                {
+                        if (winningSide == BattleCharacterBase.Team.Player) //Player won!
+                        {
+                                _winningTeam = "Players Team";
+                                Invoke(nameof(LoadMapScene), 0.5f);
+
+                                // Update the team's stats when winning.
+                                for (int i = 0; i < playerTeam.Count; i++)
+                                {
+                                        if (playerTeam[i] != null)
+                                                _playerPersistentData.characters[i].health = playerTeam[i].curHp;
+                                        else
+                                                _playerPersistentData.characters[i].isDead = true;
+                                }
+                        }
+                        else if (winningSide == BattleCharacterBase.Team.Enemy) // Enemy won!
+                        {
+                                _playerPersistentData.ResetCharacters();
+                                _winningTeam = "Enemy Team";
+                                Invoke(nameof(LoadMapScene), 0.5f);
                         }
                 }
 

@@ -3,13 +3,12 @@ using UnityEngine;
 
 namespace Arcy.Interaction
 {
-    public abstract class InteractibleBase : MonoBehaviour
+    public interface InteractibleBase
     {
+        public Transform ObjectTransform { get; }
+
         public abstract bool isInteractible { get; set; }
 
-        public virtual void Interact()
-        {
-            isInteractible = false;
-        }
+        public abstract void Interact();
     }
 }

@@ -18,12 +18,12 @@ namespace Arcy.Interaction
         private float _yOffset = 2f;
         private float _zOffset = -0.5f;
 
-        #if UINTY_EDITOR
+#if UINTY_EDITOR
         private void Reset()
         {
             CheckComponents();
         }
-        #endif
+#endif
 
         private void Start()
         {
@@ -38,16 +38,14 @@ namespace Arcy.Interaction
             //Replace with future camera system
             if (_mainCamera == null)
             {
-                _mainCamera = CameraManager.Instance.CheckCurrentCamera();
+                _mainCamera = UnityEngine.Camera.main.transform;
                 print("Interaction icon couldn't find camera");
             }
 
             if (_interactionIcon == null)
-            {
                 _interactionIcon = GetComponentInChildren<Image>();
-            }
 
-            _cvGroup = GetComponent<CanvasGroup>();
+            _cvGroup = TryGetComponent<CanvasGroup>(out CanvasGroup cv) ? _cvGroup = cv : null;
             _originalScale = this.transform.localScale;
         }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 
 namespace Arcy.Interaction
 {
@@ -19,6 +20,7 @@ namespace Arcy.Interaction
         public List<InteractibleBase> visibleTargetsList = new List<InteractibleBase>();
         [HideInInspector]
         public InteractibleBase currentInteractible;
+        public GameObject currentInteractibleObject;
 
         public static Action<Vector3> moveInteractionIconHere; //used by interactionIcon
         public static Action noObjectInFocus; //used by interactionIcon, also used in PlayerManager
@@ -54,8 +56,7 @@ namespace Arcy.Interaction
                     if (moveInteractionIconHere != null && currentInteractible.isInteractible)
                     {
                         //calcuate interactionIcons new position
-
-                        moveInteractionIconHere(currentInteractible.transform.position);
+                        moveInteractionIconHere(currentInteractible.ObjectTransform.position);
                     }
 
                     if (_playerManager != null)
@@ -80,10 +81,7 @@ namespace Arcy.Interaction
 
         public void RemoveIcon()
         {
-            if (noObjectInFocus != null)
-            {
-                noObjectInFocus();
-            }
+            noObjectInFocus?.Invoke();
         }
 
         private void FindVisibleTargets()
@@ -95,9 +93,7 @@ namespace Arcy.Interaction
 
             //No colliders in fow
             if (targetsInViewRadiusArray.Length == 0)
-            {
                 return;
-            }
 
             foreach (Collider collider in targetsInViewRadiusArray)
             {
@@ -119,33 +115,29 @@ namespace Arcy.Interaction
                             InteractibleBase i = component as InteractibleBase;
                             visibleTargetsList.Add(i);
 
-                            // go through the list iof interactibles
+                            /// <summary> 
+                            /// When there are multiple targets in fow. (MultipleTartgetsInView is used by fow.Editor)
+	                        /// First it narrows the field of search, and if there are no interactibles in the new cone there will be no currentInteractible.
+	                        /// It then chooses the one closest to player.
+                            /// </summary>
+
                             switch (visibleTargetsList.Count)
                             {
                                 case 0:
                                     // no interactibles within fow
                                     break;
+
                                 case 1:
                                     // 1 interactible in fow
                                     currentInteractible = i;
                                     break;
+
                                 default:
-
-                                    /*
-	                                When there are multiple targets in fow. (MultipleTartgetsInView is used by fow.Editor)
-	                                First it narrows the field of search, and if there are no interactibles in the new cone there will be no currentInteractible.
-	                                It then chooses the one closest to player.
-	                                */
-
                                     multipleTargetsInView = true;
 
                                     if (angleToTarget < (viewAngle * .2f))
-                                    {
                                         if (dstToTarget < _previousInteractibleDistance)
-                                        {
                                             currentInteractible = i;
-                                        }
-                                    }
                                     break;
                             }
                         }

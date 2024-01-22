@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Arcy.Battle
 {
-    public class HealthBar : MonoBehaviour
+    public class BattleUIHealthBar : MonoBehaviour
     {
         [Header("Bar")]
         [SerializeField] public Image healthBar;
