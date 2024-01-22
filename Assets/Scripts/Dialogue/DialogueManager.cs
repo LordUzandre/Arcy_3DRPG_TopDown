@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using System.Data;
 using Mono.Data.Sqlite;
 using UnityEngine;
-using DG.Tweening;
-using Cinemachine;
-using TMPro;
 
 namespace Arcy.Dialogue
 {
@@ -16,10 +13,10 @@ namespace Arcy.Dialogue
         private static DialogueManager instance;
         public static DialogueManager Instance { get; private set; }
 
-        /*
-        This script retrieves the data from the db and sends it to DialgueUI.
-        But shuld be able to finish alone, without the support of DialogueUI.
-        */
+        /// <summary>
+        /// This script retrieves the data from the db and sends it to DialgueUI.
+        /// But shuld be able to finish alone, without the support of DialogueUI. 
+        /// </summary>
 
         [Header("Dialogue UI")]
         [SerializeField] private DialogueUI _dialogueUI;
@@ -35,7 +32,7 @@ namespace Arcy.Dialogue
 
         private void Start()
         {
-            if (Instance == null) { Instance = this; }
+            Instance ??= this;
         }
 
         void OnEnable()
@@ -125,7 +122,7 @@ namespace Arcy.Dialogue
             _canExit = false;
         }
 
-        //Triggered by TMP_Animated or SkipTyping()
+        //Triggered by TMP_Animated
         public void FinishDialogue()
         {
             //_dialogueUI._currentlyTyping = false;
@@ -144,7 +141,7 @@ namespace Arcy.Dialogue
 
 
         /*
-        // All methods below should be put in CameraManager
+        // TODO: All methods below should be put in CameraManager
         */
 
         // public void CameraChange(bool dialogue) //true = dialogue, false = freeroam

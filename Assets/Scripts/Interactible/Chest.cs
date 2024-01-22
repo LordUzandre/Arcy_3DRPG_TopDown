@@ -7,24 +7,26 @@ using Arcy.Dialogue;
 namespace Arcy.Interaction
 {
     [RequireComponent(typeof(BoxCollider), typeof(Animator))]
-    public class Chest : InteractibleBase
+    public class Chest : MonoBehaviour, InteractibleBase
     {
-        [SerializeField] BoxCollider boxCollider;
-        [SerializeField] Animator animator;
+        [SerializeField] BoxCollider _boxCollider;
+        [SerializeField] Animator _anim;
+        [HideInInspector] public Transform ObjectTransform => transform;
 
         private bool _isInteractible = true;
-        [HideInInspector] public override bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
+        [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
 
-        private void Reset()
+#if UNITY_EDITOR
+        private void OnValidate()
         {
-            boxCollider = GetComponent<BoxCollider>();
-            animator = GetComponent<Animator>();
+            _boxCollider ??= TryGetComponent<BoxCollider>(out BoxCollider boxCollider) ? boxCollider : null;
+            _anim ??= TryGetComponent<Animator>(out Animator anim) ? anim : null;
         }
+#endif
 
-        public override void Interact()
+        public void Interact()
         {
-            base.Interact();
-            animator.SetTrigger("Opening");
+            _anim.SetTrigger("Opening");
         }
     }
 }

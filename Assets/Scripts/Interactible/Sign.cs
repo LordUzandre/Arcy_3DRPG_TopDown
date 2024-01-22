@@ -5,16 +5,16 @@ using UnityEngine;
 namespace Arcy.Interaction
 {
     [RequireComponent(typeof(BoxCollider))]
-    public class Sign : InteractibleBase, ISpeakable
+    public class Sign : MonoBehaviour, InteractibleBase, ISpeakable
     {
         [SerializeField] private string speakerID;
         private bool _isInteractible = true;
-        [HideInInspector] public override bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
+        [HideInInspector] public Transform ObjectTransform => transform;
 
-        public string SpeakerID
-        {
-            get { return speakerID; }
-            set { speakerID = value; }
-        }
+        [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
+
+        public string SpeakerID { get { return speakerID; } set { speakerID = value; } }
+
+        public void Interact() { }
     }
 }

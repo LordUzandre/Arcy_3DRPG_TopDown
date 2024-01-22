@@ -90,23 +90,12 @@ namespace TMPro
                     {
                         onAction.Invoke(tag.Split('=')[1]);
                     }
-
-                    //Original below:
-                    // if (tag.StartsWith("speed=")) { speed = float.Parse(tag.Split('=')[1]); }
-                    // else if (tag.StartsWith("pause=")) { return new WaitForSeconds(float.Parse(tag.Split('=')[1])); }
-                    // else if (tag.StartsWith("emotion=")) { onEmotionChange.Invoke((Emotion)System.Enum.Parse(typeof(Emotion), tag.Split('=')[1])); }
-                    // else if (tag.StartsWith("action=")) { onAction.Invoke(tag.Split('=')[1]); }
                 }
                 return null;
             }
 
             //Text has finished typing
             onDialogueFinish.Invoke();
-        }
-
-        public void StopReading()
-        {
-            StopCoroutine(Read());
         }
     }
 }

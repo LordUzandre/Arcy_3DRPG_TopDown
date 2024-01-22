@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 namespace Arcy.Battle
 {
@@ -12,6 +13,11 @@ namespace Arcy.Battle
 
     public class BattleTurnManager : MonoBehaviour
     {
+        /// <summary>
+        /// This class is started by Battlemanager and after that runs the combination, 
+        /// together with PlayerCombatManager and EnemyCombatManager
+        /// </summary>
+
         private TurnState _currentTurnState;
 
         private List<BattleCharacterBase> _turnOrderList = new List<BattleCharacterBase>();
@@ -54,6 +60,9 @@ namespace Arcy.Battle
             {
                 // It's the player team's turn
                 case (BattleCharacterBase.Team.Player):
+                    if (BattleManager.instance.enemyTeam == null)
+                        Debug.Log("Part01");
+
                     if (OnNewTurn != null)
                         OnNewTurn(TurnState.playerTeamsTurn);
                     break;

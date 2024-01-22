@@ -14,7 +14,7 @@ namespace Arcy.Battle
         /// This is the UI that contains all the character's stats during combat , such as name, HP-Bar etc.
         /// </summary>
 
-        [SerializeField] private HealthBar healthbarScript;
+        [SerializeField] private BattleUIHealthBar healthbarScript;
 
         [Header("Turn Visuals")]
         [SerializeField] private Image _turnVisual; // Visual indicator which character's turn it is.
@@ -26,7 +26,7 @@ namespace Arcy.Battle
         private void OnValidate()
         {
             if (healthbarScript == null)
-                healthbarScript = GetComponentInChildren<HealthBar>();
+                healthbarScript = GetComponentInChildren<BattleUIHealthBar>();
         }
 #endif
 

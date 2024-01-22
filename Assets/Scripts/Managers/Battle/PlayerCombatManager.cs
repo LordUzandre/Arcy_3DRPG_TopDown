@@ -19,9 +19,9 @@ namespace Arcy.Battle
         chooseItem,
         chooseAnyChar,
         enemiesTurn,
-        battleIsOver,
         playerAttackMiniGame,
-        enemyAttackDefGame
+        enemyAttackDefGame,
+        battleIsOver
     }
 
     public class PlayerCombatManager : MonoBehaviour
@@ -172,6 +172,10 @@ namespace Arcy.Battle
                     }
 
                 case (PlayerTurnState.defaultStartState):
+                    return;
+
+                case (PlayerTurnState.battleIsOver):
+                    combatActionsUI?.EnableCharacterBtns(false, false, false);
                     return;
 
                 default:

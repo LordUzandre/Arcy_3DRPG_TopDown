@@ -53,9 +53,16 @@ namespace Arcy.Interaction
 
                     if (moveInteractionIconHere != null && currentInteractible.isInteractible)
                     {
-                        //calcuate interactionIcons new position
-
-                        moveInteractionIconHere(currentInteractible.transform.position);
+                        if (currentInteractible is NPCBase npcBase && npcBase.eyeLevel != null)
+                        {
+                            Vector3 newPos = new Vector3(npcBase.eyeLevel.position.x, npcBase.eyeLevel.position.y + 1, npcBase.eyeLevel.position.z);
+                            moveInteractionIconHere(newPos);
+                        }
+                        else
+                        {
+                            //calcuate interactionIcons new position
+                            moveInteractionIconHere(currentInteractible.ObjectTransform.position);
+                        }
                     }
 
                     if (_playerManager != null)
@@ -80,11 +87,14 @@ namespace Arcy.Interaction
 
         public void RemoveIcon()
         {
-            if (noObjectInFocus != null)
-            {
-                noObjectInFocus();
-            }
+            noObjectInFocus?.Invoke();
         }
+
+        /// <summary> 
+        /// When there are multiple targets in fow. (MultipleTartgetsInView is used by fow.Editor)
+        /// First it narrows the field of search, and if there are no interactibles in the new cone there will be no currentInteractible.
+        /// It then chooses the one closest to player.
+        /// </summary>
 
         private void FindVisibleTargets()
         {
@@ -95,9 +105,7 @@ namespace Arcy.Interaction
 
             //No colliders in fow
             if (targetsInViewRadiusArray.Length == 0)
-            {
                 return;
-            }
 
             foreach (Collider collider in targetsInViewRadiusArray)
             {
@@ -109,43 +117,33 @@ namespace Arcy.Interaction
                 if (angleToTarget < (viewAngle * .5f))
                 {
                     //is the target an interactible
-                    if (collider.TryGetComponent(typeof(InteractibleBase), out Component component))
+                    if (collider.TryGetComponent(typeof(InteractibleBase), out Component interactibleBase))
                     {
                         float dstToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
                         //Is the object blocked by obstacleLayer? (remove and replace)
                         if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                         {
-                            InteractibleBase i = component as InteractibleBase;
+                            InteractibleBase i = interactibleBase as InteractibleBase;
                             visibleTargetsList.Add(i);
 
-                            // go through the list iof interactibles
                             switch (visibleTargetsList.Count)
                             {
                                 case 0:
                                     // no interactibles within fow
                                     break;
+
                                 case 1:
                                     // 1 interactible in fow
                                     currentInteractible = i;
                                     break;
+
                                 default:
-
-                                    /*
-	                                When there are multiple targets in fow. (MultipleTartgetsInView is used by fow.Editor)
-	                                First it narrows the field of search, and if there are no interactibles in the new cone there will be no currentInteractible.
-	                                It then chooses the one closest to player.
-	                                */
-
                                     multipleTargetsInView = true;
 
                                     if (angleToTarget < (viewAngle * .2f))
-                                    {
                                         if (dstToTarget < _previousInteractibleDistance)
-                                        {
                                             currentInteractible = i;
-                                        }
-                                    }
                                     break;
                             }
                         }

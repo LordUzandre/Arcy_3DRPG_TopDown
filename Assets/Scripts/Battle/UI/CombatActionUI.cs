@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using DG.Tweening.Core.Easing;
-using System.Linq;
-using Unity.VisualScripting;
 
 namespace Arcy.Battle
 {
@@ -22,6 +19,8 @@ namespace Arcy.Battle
 
         private TextMeshProUGUI _descriptionText; // Text in the descriptionPanel
         private CombatActionBtn[] _buttons; // All the CombatAction Buttons
+
+        private Button _currentlySelectedBtn;
 
         private Vector2 _descPanelOrgPos;
 
@@ -78,27 +77,20 @@ namespace Arcy.Battle
             if (pickOneSide) // Enable character selection on one side
             {
                 foreach (BattleCharacterBase playerUnit in BattleManager.instance.playerTeam)
-                {
-                    // TODO: Check wether character is dead
                     playerUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(goodGuySide);
-                }
 
                 foreach (BattleCharacterBase enemyUnit in BattleManager.instance.enemyTeam)
-                {
                     enemyUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(!goodGuySide);
-                }
+
             }
-            else // Activate all character buttons
+            else // Activate or deactivate all character buttons
             {
                 foreach (BattleCharacterBase playerUnit in BattleManager.instance.playerTeam)
-                {
                     playerUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(enableAllBtns);
-                }
 
                 foreach (BattleCharacterBase enemyUnit in BattleManager.instance.enemyTeam)
-                {
                     enemyUnit.selectionVisual.GetComponent<SelectionVisualBtn>().ActivateBtn(enableAllBtns);
-                }
+
             }
         }
 
@@ -197,6 +189,11 @@ namespace Arcy.Battle
 
                 // }
             }
+        }
+
+        public Button AccesCurrentlySelectedBtn()
+        {
+            return _currentlySelectedBtn;
         }
     }
 }

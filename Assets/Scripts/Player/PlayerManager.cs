@@ -11,6 +11,7 @@ using System;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerManager : MonoBehaviour
 {
+    #region Player Scripts
     //Scripts
     [HideInInspector] public PlayerLocomotion playerLocomotion;
     [HideInInspector] public PlayerAnimationHandler animationHandler;
@@ -18,6 +19,8 @@ public class PlayerManager : MonoBehaviour
     //Other assets
     [HideInInspector] public CharacterController characterController;
     [HideInInspector] public Animator animator;
+    #endregion
+
     //Singleton
     public static PlayerManager instance;
 
@@ -29,6 +32,7 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public bool applyRootMotion;
     [HideInInspector] public bool isInteracting = false;
     #endregion
+
     #region interaction variables
 
     public static Action noObjectInFocus; //used by interactionIcon
@@ -108,9 +112,7 @@ public class PlayerManager : MonoBehaviour
         if (currentInteractible is ISpeakable speakableObject && speakableObject.SpeakerID != null)
         {
             if (!isInteracting)
-            {
                 GameStateManager.Instance.SetState(GameState.Dialogue);
-            }
 
             DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);
         }
@@ -128,10 +130,11 @@ public class PlayerManager : MonoBehaviour
         if (rotateTowards)
         {
             // Get the target position but only use the y component of the target's position
-            Vector3 targetPosition = new Vector3(currentInteractible.transform.position.x, transform.position.y, currentInteractible.transform.position.z);
+            Vector3 targetPosition = new Vector3(currentInteractible.ObjectTransform.position.x, transform.position.y, currentInteractible.ObjectTransform.position.z);
 
-            // Rotate the object to face the modified target position
-            transform.DORotate(targetPosition, 1f, RotateMode.Fast);
+            // Rotate the player to face the modified target position
+            transform.DOLookAt(targetPosition, 1f);
+            //transform.DORotate(targetPosition, 1f, RotateMode.Fast);
         }
 
         if (canCharacterMove == canMove)

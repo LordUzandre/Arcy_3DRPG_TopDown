@@ -108,7 +108,7 @@ namespace Arcy.Battle
 
             if (team == Team.Player)
                 BattleManager.instance.playerTeam.Remove(this);
-            else
+            else if (team == Team.Enemy)
                 BattleManager.instance.enemyTeam.Remove(this);
         }
 
