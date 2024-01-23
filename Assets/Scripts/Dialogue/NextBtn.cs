@@ -11,12 +11,12 @@ namespace Arcy.Dialogue
 
 		private void OnEnable()
 		{
-			TypewriterEffect.CompleteTextRevealed += ShowNextBtn;
+			TypewriterEffect.FinishTyping += ShowNextBtn;
 		}
 
 		private void OnDisable()
 		{
-			TypewriterEffect.CompleteTextRevealed -= ShowNextBtn;
+			TypewriterEffect.FinishTyping -= ShowNextBtn;
 		}
 
 		private void ShowNextBtn()

@@ -9806,7 +9806,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lorem ipsum
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9888,6 +9888,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _textBox: {fileID: 1416812071}
+  _currentlyVisibleCharacterIndex: 0
+  _readyForNewText: 1
 --- !u!4 &1419742540 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2002372730054323502, guid: 61d468a2f1c51574f8882294089b6f10,
@@ -11813,9 +11815,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogueUI: {fileID: 1053396818}
-  tmpText: {fileID: 1416812071}
-  dialogueBlock: []
+  _tmpText: {fileID: 1416812071}
+  visibleChar: 0
   dialogueIndex: 0
+  _dialogueBlock: []
+  _currentlyInDialogue: 0
+  _nextDialogue: 0
+  _canExit: 0
 --- !u!1 &1782248801
 GameObject:
   m_ObjectHideFlags: 0

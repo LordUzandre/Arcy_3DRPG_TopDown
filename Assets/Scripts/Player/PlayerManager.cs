@@ -38,7 +38,7 @@ public class PlayerManager : MonoBehaviour
     public static Action noObjectInFocus; //used by interactionIcon
 
     [HideInInspector] public FieldOfView fow;
-    [HideInInspector] public InteractibleBase currentInteractible;
+    public InteractibleBase currentInteractible;
     #endregion
 
     private void Awake()
@@ -74,9 +74,11 @@ public class PlayerManager : MonoBehaviour
         {
             case GameState.Freeroam:
                 EnableMovement(true, false);
+                isInteracting = false;
                 break;
             case GameState.Dialogue:
                 EnableMovement(false, true);
+                isInteracting = true;
                 break;
             default:
                 break;
@@ -89,22 +91,20 @@ public class PlayerManager : MonoBehaviour
         delta = Time.deltaTime;
 
         if (canMove == true)
-        {
             playerLocomotion.HandleAllMovement(delta);
-        }
     }
 
     #region Interaction
 
 
-    public void InteractibleNotNull() //Subscribe to inputManager
+    public void InteractibleNotNull() //Subscribe to inputManager, triggered by fow
     {
         InputManager.InteractionButtonPressed += InteractionKeyPressed;
     }
 
-    public void UnSubscribeFromInteractible() // UnSubscribe form inputManager
+    public void UnSubscribeFromInteractible() // UnSubscribe form inputManager, triggered by fow
     {
-        InputManager.InteractionButtonPressed += InteractionKeyPressed;
+        InputManager.InteractionButtonPressed -= InteractionKeyPressed;
     }
 
     public void InteractionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
@@ -112,10 +112,7 @@ public class PlayerManager : MonoBehaviour
         if (currentInteractible is ISpeakable speakableObject && speakableObject.SpeakerID != null)
         {
             if (!isInteracting)
-            {
                 GameStateManager.Instance.SetState(GameState.Dialogue);
-                isInteracting = true;
-            }
 
             DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);
         }
@@ -124,7 +121,7 @@ public class PlayerManager : MonoBehaviour
             currentInteractible.Interact();
         }
 
-        fow.RemoveIcon();
+        fow?.RemoveIcon();
     }
     #endregion
 
@@ -133,19 +130,16 @@ public class PlayerManager : MonoBehaviour
     {
         if (rotateTowards)
         {
-            // Get the target position but only use the y component of the target's position
-            Vector3 targetPosition = new Vector3(currentInteractible.ObjectTransform.position.x, transform.position.y, currentInteractible.ObjectTransform.position.z);
-
             // Rotate the player to face the modified target position
+            Vector3 targetPosition = new Vector3(currentInteractible.ObjectTransform.position.x, transform.position.y, currentInteractible.ObjectTransform.position.z);
             transform.DOLookAt(targetPosition, 1f);
         }
 
         if (canCharacterMove == canMove)
             return;
 
-        //when dialogue is finished
+        // Triggered when dialogue is finished
         isInteracting = !canCharacterMove;
-
         playerLocomotion.enabled = canCharacterMove;
         fow.enabled = canCharacterMove;
         canMove = canCharacterMove;

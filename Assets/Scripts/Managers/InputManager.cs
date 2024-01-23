@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using Unity.VisualScripting;
 
 namespace Arcy.InputManager
 {
@@ -58,33 +59,20 @@ namespace Arcy.InputManager
             GameStateManager.OnGameStateChanged -= OnGameStateChanged;
         }
 
-        private void OnGameStateChanged(GameState currentGameState)
+        private void OnGameStateChanged(GameState newGameState)
         {
-            currentGameState = GameStateManager.Instance.CurrentGameState;
+            currentGameState = newGameState;
         }
 
         // When player presses "E"-key
         private void CheckInteractible(InputAction.CallbackContext context)
         {
-            switch (currentGameState)
-            {
-                case (GameState.Freeroam):
-                    InteractionButtonPressed?.Invoke();
-                    Debug.Log("InputManager is in Freeroam-Mode");
-                    // if (PlayerManager.instance.currentInteractible != null)
-                    // {
-                    //     PlayerManager.instance.interactionKeyPressed();
-                    // }
-                    break;
-                default:
-                    Debug.Log("InputManager is in dialogueMode");
-                    break;
-            }
+            InteractionButtonPressed?.Invoke(); // InteractionButton is an Action in PlayerManager.
         }
 
         private void Update()
         {
-            //Which gaestate are we currently in?
+            //Which game-State are we currently in?
             switch (currentGameState)
             {
                 case GameState.Freeroam:

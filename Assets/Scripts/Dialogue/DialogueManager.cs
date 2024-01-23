@@ -21,13 +21,14 @@ namespace Arcy.Dialogue
 
         [Header("Dialogue UI")]
         [SerializeField] private DialogueUI _dialogueUI;
-        [SerializeField] TMP_Text tmpText;
+        [SerializeField] private TMP_Text _tmpText;
+        [SerializeField] private int visibleChar; // Debug
 
         // public:
-        public string[] dialogueBlock;
         public int dialogueIndex = 0;
 
         // private:
+        [SerializeField] private List<string> _dialogueBlock;
         private bool _currentlyInDialogue = false;
         private bool _nextDialogue = false;
         private bool _canExit = false;
@@ -39,50 +40,77 @@ namespace Arcy.Dialogue
 
         void OnEnable()
         {
-            TypewriterEffect.CompleteTextRevealed += FinishDialogue;
-            //_dialogueUI.dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
+            TypewriterEffect.FinishTyping += FinishTyping;
         }
 
         private void OnDisable()
         {
-            TypewriterEffect.CompleteTextRevealed -= FinishDialogue;
+            TypewriterEffect.FinishTyping -= FinishTyping;
+        }
+
+        private void Update()
+        {
+            visibleChar = _tmpText.maxVisibleCharacters;
         }
 
         //Started by PlayerManager when an interactible has dialogue
         public void RunDialogue(string speakerID)
         {
-            tmpText.maxVisibleCharacters = 0;
+            _tmpText.maxVisibleCharacters = 0;
+
+            if (!_tmpText.gameObject.TryGetComponent<TypewriterEffect>(out TypewriterEffect hit))
+            {
+                if (!hit._readyForNewText)
+                    return;
+            }
 
             if (!_currentlyInDialogue)
             {
-                RetrieveDataFromDB(speakerID);
                 _currentlyInDialogue = true;
+
+                // Retrieve dialogue from .db-file
+                dialogueIndex = 0;
+                _dialogueBlock = RetrieveDataFromDB(speakerID);
 
                 // UI
                 _dialogueUI.FadeUI(true, .25f, .025f);
 
-                // Write out text
-                tmpText.text = dialogueBlock[0];
+                _tmpText.text = _dialogueBlock[0]; // Write out text.
 
                 //targetGroup.m_Targets[1].target = otherSpeaker;
             }
-            else if (_nextDialogue)
+            else if (_nextDialogue) // only available once we finish typing out the sentence
             {
-                tmpText.text = dialogueBlock[dialogueIndex];
+                _nextDialogue = false;
+                _tmpText.text = _dialogueBlock[dialogueIndex];
             }
             else if (_canExit)
             {
-                //UI
-                _dialogueUI.FadeUI(false, .2f, .05f);
+                _dialogueUI.FadeUI(false, .2f, .05f); //UI
+
+                _canExit = false;
+
+                // Reset TMP
+                _dialogueBlock.Clear();
+                _tmpText.text = "";
+                dialogueIndex = 0;
+                //_tmpText.maxVisibleCharacters = 0;
+                _currentlyInDialogue = false;
 
                 GameStateManager.Instance.SetState(GameState.Freeroam);
-                _currentlyInDialogue = false;
-                _canExit = false;
+            }
+            else if (_tmpText.gameObject.TryGetComponent<TypewriterEffect>(out TypewriterEffect typewriterEffect))
+            {
+                if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)
+                {
+                    typewriterEffect.Skip();
+                    // Works for the first sentence, but not the second.
+                }
             }
 
         }
 
-        void RetrieveDataFromDB(string speakerID)
+        List<string> RetrieveDataFromDB(string speakerID)
         {
             string dbConnectionPath = "URI=file:" + Application.dataPath + "/Data/Dialogue/DB_Debug-scene.db";
 
@@ -93,53 +121,47 @@ namespace Arcy.Dialogue
             dbDialogue.Open();
             IDbCommand dbCommand = dbDialogue.CreateCommand();
 
+            //Change the table based on which Scene/Scenario is active;
+            string chooseTable = "dialogue01";
+
             // Select all data from row specified by {keyvalue}
-            dbCommand.CommandText = $"SELECT DISTINCT char, choices, mood, english FROM {ChooseTable()} WHERE speakID = {speakerID}";
+            dbCommand.CommandText = $"SELECT DISTINCT char, choices, mood, english FROM {chooseTable} WHERE speakID = {speakerID}";
 
             // Execute the query and retrieve the result
             IDataReader reader = dbCommand.ExecuteReader();
-            dialogueBlock = CollectDiaogueIntoArray(reader);
+
+            List<string> dialogueList = new List<string>();
+
+            // Check if there are rows in the result
+            while (reader.Read())
+            {
+                string value = reader.GetString(3); // Get all the dialogue from 4th column
+                dialogueList.Add(value);
+            }
 
             // Close the connections
             reader.Close();
             dbCommand.Dispose();
             dbDialogue.Close();
 
-            //Change the table based on which Scene/Scenario is active;
-            string ChooseTable()
-            {
-                return "dialogue01";
-            }
-
-            //Convert all the dialogue into an array
-            string[] CollectDiaogueIntoArray(IDataReader reader)
-            {
-                List<string> stringList = new List<string>();
-
-                // Check if there are rows in the result
-                while (reader.Read())
-                {
-                    string value = reader.GetString(3); // Get all the dialogue from 4th column
-                    stringList.Add(value);
-                }
-
-                string[] dialogueArray = stringList.ToArray();
-                return dialogueArray;
-            }
+            return dialogueList;
         }
 
         //Triggered when _textbox finish typing out text
-        public void FinishDialogue()
+        public void FinishTyping()
         {
-            if (dialogueIndex < dialogueBlock.Length - 1)
+            if (_currentlyInDialogue)
             {
-                dialogueIndex++;
-                _nextDialogue = true;
-            }
-            else
-            {
-                _nextDialogue = false;
-                _canExit = true;
+                if (dialogueIndex < _dialogueBlock.Count - 1)
+                {
+                    dialogueIndex++;
+                    _nextDialogue = true;
+                }
+                else
+                {
+                    _nextDialogue = false;
+                    _canExit = true;
+                }
             }
         }
 
