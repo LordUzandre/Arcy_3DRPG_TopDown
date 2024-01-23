@@ -70,12 +70,14 @@ namespace Arcy.InputManager
             {
                 case (GameState.Freeroam):
                     InteractionButtonPressed?.Invoke();
+                    Debug.Log("InputManager is in Freeroam-Mode");
                     // if (PlayerManager.instance.currentInteractible != null)
                     // {
                     //     PlayerManager.instance.interactionKeyPressed();
                     // }
                     break;
                 default:
+                    Debug.Log("InputManager is in dialogueMode");
                     break;
             }
         }
