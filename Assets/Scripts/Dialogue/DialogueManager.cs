@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Mono.Data.Sqlite;
+using TMPro;
 using UnityEngine;
 
 namespace Arcy.Dialogue
@@ -20,6 +21,7 @@ namespace Arcy.Dialogue
 
         [Header("Dialogue UI")]
         [SerializeField] private DialogueUI _dialogueUI;
+        [SerializeField] TMP_Text tmpText;
 
         // public:
         public string[] dialogueBlock;
@@ -37,12 +39,20 @@ namespace Arcy.Dialogue
 
         void OnEnable()
         {
-            _dialogueUI.dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
+            TypewriterEffect.CompleteTextRevealed += FinishDialogue;
+            //_dialogueUI.dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
+        }
+
+        private void OnDisable()
+        {
+            TypewriterEffect.CompleteTextRevealed -= FinishDialogue;
         }
 
         //Started by PlayerManager when an interactible has dialogue
         public void RunDialogue(string speakerID)
         {
+            tmpText.maxVisibleCharacters = 0;
+
             if (!_currentlyInDialogue)
             {
                 RetrieveDataFromDB(speakerID);
@@ -51,12 +61,14 @@ namespace Arcy.Dialogue
                 // UI
                 _dialogueUI.FadeUI(true, .25f, .025f);
 
+                // Write out text
+                tmpText.text = dialogueBlock[0];
+
                 //targetGroup.m_Targets[1].target = otherSpeaker;
             }
             else if (_nextDialogue)
             {
-                // Run next line of dialogue
-                _dialogueUI.TypeOutDialogueText(dialogueIndex);
+                tmpText.text = dialogueBlock[dialogueIndex];
             }
             else if (_canExit)
             {
@@ -64,7 +76,8 @@ namespace Arcy.Dialogue
                 _dialogueUI.FadeUI(false, .2f, .05f);
 
                 GameStateManager.Instance.SetState(GameState.Freeroam);
-                Invoke("ResetState", .8f);
+                _currentlyInDialogue = false;
+                _canExit = false;
             }
 
         }
@@ -91,42 +104,33 @@ namespace Arcy.Dialogue
             reader.Close();
             dbCommand.Dispose();
             dbDialogue.Close();
-        }
 
-        //Change the table based on which Scene/Scenario is active;
-        string ChooseTable()
-        {
-            return "dialogue01";
-        }
-
-        //Convert all the dialogue into an array
-        private string[] CollectDiaogueIntoArray(IDataReader reader)
-        {
-            List<string> stringList = new List<string>();
-
-            // Check if there are rows in the result
-            while (reader.Read())
+            //Change the table based on which Scene/Scenario is active;
+            string ChooseTable()
             {
-                string value = reader.GetString(3);
-                stringList.Add(value);
+                return "dialogue01";
             }
 
-            string[] dialogueArray = stringList.ToArray();
-            return dialogueArray;
+            //Convert all the dialogue into an array
+            string[] CollectDiaogueIntoArray(IDataReader reader)
+            {
+                List<string> stringList = new List<string>();
+
+                // Check if there are rows in the result
+                while (reader.Read())
+                {
+                    string value = reader.GetString(3); // Get all the dialogue from 4th column
+                    stringList.Add(value);
+                }
+
+                string[] dialogueArray = stringList.ToArray();
+                return dialogueArray;
+            }
         }
 
-        public void ResetState()
-        {
-            PlayerManager.instance.EnableMovement(true);
-            _currentlyInDialogue = false;
-            _canExit = false;
-        }
-
-        //Triggered by TMP_Animated
+        //Triggered when _textbox finish typing out text
         public void FinishDialogue()
         {
-            //_dialogueUI._currentlyTyping = false;
-
             if (dialogueIndex < dialogueBlock.Length - 1)
             {
                 dialogueIndex++;

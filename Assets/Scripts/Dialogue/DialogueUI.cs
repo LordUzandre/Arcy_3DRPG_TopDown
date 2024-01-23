@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using System;
 
 namespace Arcy.Dialogue
 {
@@ -15,15 +16,13 @@ namespace Arcy.Dialogue
         /// DialogueManager => dialogue.db => DialogueUI
         /// </summary>
 
-        [SerializeField] public TMP_Animated dialogueText;
-        [SerializeField] private Image _dialogueBox;
+        //[SerializeField] public TMP_Animated dialogueText;
+        [SerializeField] private Image _dialogueBg;
         [SerializeField] private Image _dialogueArrow;
 
         [SerializeField] private Button _yesBtn;
         [SerializeField] private Button _noBtn;
         private CanvasGroup _cvGroup;
-
-        //public bool _currentlyTyping;
 
         private void OnEnable()
         {
@@ -33,11 +32,8 @@ namespace Arcy.Dialogue
 
         private void CheckComponents()
         {
-            if (dialogueText == null)
-                dialogueText = GetComponentInChildren<TMP_Animated>();
-
-            if (_dialogueBox == null)
-                _dialogueBox = GetComponentInChildren<Image>();
+            if (_dialogueBg == null)
+                _dialogueBg = GetComponentInChildren<Image>();
 
             if (_dialogueArrow == null)
                 _dialogueArrow = GetComponentInChildren<Image>();
@@ -45,14 +41,12 @@ namespace Arcy.Dialogue
             _cvGroup ??= TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? hit : null;
         }
 
-        public void FadeUI(bool show, float time, float delay, bool btns = false)
+        // Fade DialogueUI in or out
+        public void FadeUI(bool show, float time, float delay)
         {
-            _yesBtn?.gameObject.SetActive(btns);
-            _noBtn?.gameObject.SetActive(btns);
+            _yesBtn?.gameObject.SetActive(false);
+            _noBtn?.gameObject.SetActive(false);
             WaitForSeconds routineDelay = new WaitForSeconds(delay);
-
-            dialogueText.text = string.Empty;
-
             StartCoroutine(fadeUI());
 
             IEnumerator fadeUI()
@@ -64,35 +58,12 @@ namespace Arcy.Dialogue
                 if (show)
                 {
                     DialogueManager.Instance.dialogueIndex = 0;
+
                     //pop the size of the UI
                     _cvGroup.transform.DOScale(0, time).From().SetEase(Ease.OutBack);
                     yield return routineDelay;
-                    TypeOutDialogueText(0);
                 }
             }
-
-            // Og Sequence (redundant)
-            // Sequence sequence = DOTween.Sequence();
-            // sequence.AppendInterval(delay);
-
-            // // Fade in or out depending on bool
-            // sequence.Append(_cvGroup.DOFade(show ? 1 : 0, time));
-
-            // if (show)
-            // {
-            //     DialogueManager.Instance.dialogueIndex = 0;
-            //     //pop the size of the UI
-            //     sequence.Join(_cvGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
-
-            //     //Start typing the text after the UI is faded in.
-            //     sequence.AppendCallback(() => TypeOutDialogueText(0));
-            // }
-        }
-
-        public void TypeOutDialogueText(int index)
-        {
-            dialogueText?.ReadText(DialogueManager.Instance.dialogueBlock[index]);
-            //_currentlyTyping = true;
         }
     }
 }

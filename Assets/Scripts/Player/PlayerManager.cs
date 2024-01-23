@@ -112,7 +112,10 @@ public class PlayerManager : MonoBehaviour
         if (currentInteractible is ISpeakable speakableObject && speakableObject.SpeakerID != null)
         {
             if (!isInteracting)
+            {
                 GameStateManager.Instance.SetState(GameState.Dialogue);
+                isInteracting = true;
+            }
 
             DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);
         }
@@ -125,6 +128,7 @@ public class PlayerManager : MonoBehaviour
     }
     #endregion
 
+    // Enable or disable character movement
     public void EnableMovement(bool canCharacterMove, bool rotateTowards = false)
     {
         if (rotateTowards)
@@ -134,13 +138,10 @@ public class PlayerManager : MonoBehaviour
 
             // Rotate the player to face the modified target position
             transform.DOLookAt(targetPosition, 1f);
-            //transform.DORotate(targetPosition, 1f, RotateMode.Fast);
         }
 
         if (canCharacterMove == canMove)
-        {
             return;
-        }
 
         //when dialogue is finished
         isInteracting = !canCharacterMove;
