@@ -6,6 +6,8 @@ using Mono.Data.Sqlite;
 using TMPro;
 using UnityEngine;
 
+using UnityEngine.UI;
+
 namespace Arcy.Dialogue
 {
     public class DialogueManager : MonoBehaviour
@@ -21,16 +23,21 @@ namespace Arcy.Dialogue
 
         [Header("Dialogue UI")]
         [SerializeField] private DialogueUI _dialogueUI;
-        [SerializeField] TMP_Text tmpText;
+        [SerializeField] private TMP_Text _tmpText;
 
         // public:
-        public string[] dialogueBlock;
         public int dialogueIndex = 0;
 
         // private:
+        [SerializeField] private List<string> _dialogueBlock;
+        [SerializeField] private List<string> _choices;
+        [SerializeField] private List<string> _moods;
         private bool _currentlyInDialogue = false;
         private bool _nextDialogue = false;
         private bool _canExit = false;
+
+        private WaitForSeconds _shortDelay;
+        [SerializeField] private TypewriterEffect typeWriter;
 
         private void Start()
         {
@@ -39,50 +46,74 @@ namespace Arcy.Dialogue
 
         void OnEnable()
         {
-            TypewriterEffect.CompleteTextRevealed += FinishDialogue;
-            //_dialogueUI.dialogueText.onDialogueFinish.AddListener(() => FinishDialogue());
+            TypewriterEffect.FinishTyping += FinishTyping;
+
+            typeWriter ??= _tmpText.TryGetComponent<TypewriterEffect>(out TypewriterEffect typer) ? typer : null;
+            _shortDelay = new WaitForSeconds(0.5f);
         }
 
         private void OnDisable()
         {
-            TypewriterEffect.CompleteTextRevealed -= FinishDialogue;
+            TypewriterEffect.FinishTyping -= FinishTyping;
         }
 
         //Started by PlayerManager when an interactible has dialogue
         public void RunDialogue(string speakerID)
         {
-            tmpText.maxVisibleCharacters = 0;
+            _tmpText.maxVisibleCharacters = 0;
+            _dialogueUI.EnableDialogueBtns(false, true);
 
             if (!_currentlyInDialogue)
             {
-                RetrieveDataFromDB(speakerID);
                 _currentlyInDialogue = true;
 
-                // UI
-                _dialogueUI.FadeUI(true, .25f, .025f);
+                // Retrieve dialogue from .db-file
+                dialogueIndex = 0;
+                _dialogueBlock = RetrieveDataFromDB(speakerID);
 
-                // Write out text
-                tmpText.text = dialogueBlock[0];
+                // UI
+                _dialogueUI.FadeDialogueUI(true, .25f, .025f);
+
+                StartCoroutine(ShortDelay());
+
+                IEnumerator ShortDelay()
+                {
+                    yield return _shortDelay;
+                    _tmpText.text = _dialogueBlock[0]; // Write out text.
+                }
 
                 //targetGroup.m_Targets[1].target = otherSpeaker;
             }
-            else if (_nextDialogue)
+            else if (_nextDialogue) // only available once we finish typing out the sentence
             {
-                tmpText.text = dialogueBlock[dialogueIndex];
+                _nextDialogue = false;
+                _tmpText.text = _dialogueBlock[dialogueIndex];
             }
             else if (_canExit)
             {
-                //UI
-                _dialogueUI.FadeUI(false, .2f, .05f);
+                _dialogueUI.FadeDialogueUI(false, .2f, .05f); //UI
+
+                _canExit = false;
+
+                // Reset TMP
+                _dialogueBlock.Clear();
+                _choices.Clear();
+                _moods.Clear();
+
+                _tmpText.text = "";
+                dialogueIndex = 0;
+                _currentlyInDialogue = false;
 
                 GameStateManager.Instance.SetState(GameState.Freeroam);
-                _currentlyInDialogue = false;
-                _canExit = false;
             }
-
+            else if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)
+            {
+                typeWriter.Skip();
+                // Works for the first sentence, but not the second.
+            }
         }
 
-        void RetrieveDataFromDB(string speakerID)
+        List<string> RetrieveDataFromDB(string speakerID)
         {
             string dbConnectionPath = "URI=file:" + Application.dataPath + "/Data/Dialogue/DB_Debug-scene.db";
 
@@ -93,54 +124,95 @@ namespace Arcy.Dialogue
             dbDialogue.Open();
             IDbCommand dbCommand = dbDialogue.CreateCommand();
 
+            //Change the table based on which Scene/Scenario is active;
+            string chooseTable = "dialogue01";
+
             // Select all data from row specified by {keyvalue}
-            dbCommand.CommandText = $"SELECT DISTINCT char, choices, mood, english FROM {ChooseTable()} WHERE speakID = {speakerID}";
+            dbCommand.CommandText = $"SELECT DISTINCT choices, mood, english FROM {chooseTable} WHERE speakID LIKE '{speakerID}%'";
 
             // Execute the query and retrieve the result
             IDataReader reader = dbCommand.ExecuteReader();
-            dialogueBlock = CollectDiaogueIntoArray(reader);
+
+            List<string> dialogueList = new List<string>();
+            List<string> moods = new List<string>();
+            List<string> choices = new List<string>();
+
+            // Check if there are rows in the result
+            while (reader.Read())
+            {
+                string choiceColumn = reader["choices"].ToString();
+                string dialogue = reader.GetString(2); // Get all the dialogue from 3rd column
+                string moodColumn = reader["mood"].ToString();
+
+                dialogueList.Add(dialogue);
+
+                // Check choices
+                if (!string.IsNullOrEmpty(moodColumn))
+                    moods.Add(moodColumn);
+                else
+                    moods.Add("null");
+
+                // Check moods
+                if (!string.IsNullOrEmpty(choiceColumn))
+                    choices.Add(choiceColumn);
+                else
+                    choices.Add("null");
+            }
 
             // Close the connections
             reader.Close();
             dbCommand.Dispose();
             dbDialogue.Close();
 
-            //Change the table based on which Scene/Scenario is active;
-            string ChooseTable()
-            {
-                return "dialogue01";
-            }
+            _moods = moods;
+            _choices = choices;
 
-            //Convert all the dialogue into an array
-            string[] CollectDiaogueIntoArray(IDataReader reader)
-            {
-                List<string> stringList = new List<string>();
-
-                // Check if there are rows in the result
-                while (reader.Read())
-                {
-                    string value = reader.GetString(3); // Get all the dialogue from 4th column
-                    stringList.Add(value);
-                }
-
-                string[] dialogueArray = stringList.ToArray();
-                return dialogueArray;
-            }
+            return dialogueList;
         }
 
         //Triggered when _textbox finish typing out text
-        public void FinishDialogue()
+        public void FinishTyping()
         {
-            if (dialogueIndex < dialogueBlock.Length - 1)
+            if (_currentlyInDialogue)
             {
-                dialogueIndex++;
-                _nextDialogue = true;
+                // Check whether there is a question being asked
+                if (_choices[dialogueIndex] != "null")
+                {
+                    _dialogueUI.EnableDialogueBtns(true);
+                    SetUpAnswrBtns();
+                    Debug.Log("Part01");
+                    return;
+                }
+
+                if (dialogueIndex < _dialogueBlock.Count - 1)
+                {
+                    dialogueIndex++;
+                    _nextDialogue = true;
+                    _dialogueUI.EnableDialogueBtns(false, false);
+                }
+                else
+                {
+                    _nextDialogue = false;
+                    _canExit = true;
+                    _dialogueUI.EnableDialogueBtns(false, false);
+                }
             }
-            else
-            {
-                _nextDialogue = false;
-                _canExit = true;
-            }
+        }
+
+        private void SetUpAnswrBtns()
+        {
+            _dialogueUI.answrBtns[0].GetComponent<Button>().onClick.AddListener(YesBtnPressed);
+            _dialogueUI.answrBtns[1].GetComponent<Button>().onClick.AddListener(NoBtnPressed);
+        }
+
+        private void YesBtnPressed()
+        {
+            Debug.Log("YesBtn Pressed");
+        }
+
+        private void NoBtnPressed()
+        {
+            Debug.Log("NoBtn Pressed");
         }
 
 

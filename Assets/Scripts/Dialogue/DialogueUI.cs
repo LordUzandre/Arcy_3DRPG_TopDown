@@ -4,64 +4,94 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
-using Arcy.Dialogue;
+using System;
 
-//This script should handle all the visuals for DialogueUI;
-public class DialogueUI : MonoBehaviour
+namespace Arcy.Dialogue
 {
-    [SerializeField] public TMP_Animated dialogueText;
-    [SerializeField] private Image _dialogueBox;
-    [SerializeField] private Image _dialogueArrow;
-    [SerializeField] private Button _yesBtn;
-    [SerializeField] private Button _noBtn;
-    private CanvasGroup _cvGroup;
-
-    //public bool _currentlyTyping;
-
-    private void OnEnable()
+    public class DialogueUI : MonoBehaviour
     {
-        CheckComponents();
-        _cvGroup.alpha = 0;
-    }
 
-    private void CheckComponents()
-    {
-        if (dialogueText == null)
-            dialogueText = GetComponentInChildren<TMP_Animated>();
+        /// <summary>
+        /// This script should (only) handle the visuals for DialogueUI;
+        /// DialogueManager => dialogue.db => DialogueUI
+        /// </summary>
 
-        if (_dialogueBox == null)
-            _dialogueBox = GetComponentInChildren<Image>();
+        //[SerializeField] public TMP_Animated dialogueText;
+        [SerializeField] private Image _dialogueBg;
+        //[SerializeField] private Image _dialogueArrow;
 
-        if (_dialogueArrow == null)
-            _dialogueArrow = GetComponentInChildren<Image>();
+        [SerializeField] public List<DialogueAnswerBtn> answrBtns;
+        [SerializeField] private GameObject _nextBtn;
+        private CanvasGroup _cvGroup;
 
-        _cvGroup ??= TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? _cvGroup = hit : null;
-    }
-
-    public void FadeUI(bool show, float time, float delay)
-    {
-        dialogueText.text = string.Empty;
-
-        Sequence sequence = DOTween.Sequence();
-        sequence.AppendInterval(delay);
-
-        // Fade in or out depending on bool
-        sequence.Append(_cvGroup.DOFade(show ? 1 : 0, time));
-
-        if (show)
+        private void OnEnable()
         {
-            DialogueManager.Instance.dialogueIndex = 0;
-            //pop the size of the UI
-            sequence.Join(_cvGroup.transform.DOScale(0, time * 2).From().SetEase(Ease.OutBack));
-
-            //Start typing the text after the UI is faded in.
-            sequence.AppendCallback(() => TypeOutDialogueText(0));
+            CheckComponents();
+            _cvGroup.alpha = 0;
         }
-    }
 
-    public void TypeOutDialogueText(int index)
-    {
-        dialogueText?.ReadText(DialogueManager.Instance.dialogueBlock[index]);
-        //_currentlyTyping = true;
+        private void CheckComponents()
+        {
+            _dialogueBg ??= GetComponentInChildren<Image>();
+            _cvGroup ??= TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? hit : null;
+        }
+
+        // When we reach the end of a lien of dialogue, should we activate _nextBtn pr answerBtns?
+        public void EnableDialogueBtns(bool enableAnswrBtns, bool hideAll = false)
+        {
+            if (hideAll) // Hide all btns when a new line of dialogue is printed.
+            {
+                foreach (DialogueAnswerBtn btn in answrBtns)
+                {
+                    btn.gameObject.SetActive(false);
+                    btn.btn.interactable = false;
+                }
+
+                _nextBtn?.gameObject.SetActive(false);
+
+                return;
+            }
+
+            if (enableAnswrBtns) // Is the talker asking a question?
+            {
+                _nextBtn?.gameObject.SetActive(false);
+
+                foreach (DialogueAnswerBtn btn in answrBtns)
+                {
+                    btn.gameObject.SetActive(true);
+                    btn.btn.interactable = true;
+                }
+
+                // Remember: Check what type of input we are using!
+                answrBtns[0].btn.Select();
+            }
+            else // if not, just continue
+            {
+                _nextBtn?.gameObject.SetActive(true);
+            }
+        }
+
+        // Fade DialogueUI in or out
+        public void FadeDialogueUI(bool show, float time, float delay)
+        {
+            WaitForSeconds routineDelay = new WaitForSeconds(delay);
+            StartCoroutine(fadeUI());
+
+            IEnumerator fadeUI()
+            {
+                yield return routineDelay;
+                _cvGroup.DOFade(show ? 1 : 0, time);
+                yield return routineDelay;
+
+                if (show)
+                {
+                    DialogueManager.Instance.dialogueIndex = 0;
+
+                    //pop the size of the UI
+                    _cvGroup.transform.DOScale(0, time).From().SetEase(Ease.OutBack);
+                    yield return routineDelay;
+                }
+            }
+        }
     }
 }

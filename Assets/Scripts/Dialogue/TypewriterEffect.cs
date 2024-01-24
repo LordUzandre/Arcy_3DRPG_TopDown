@@ -19,29 +19,21 @@ namespace Arcy.Dialogue
 		//Basic typewriter functionality
 		private int _currentlyVisibleCharacterIndex;
 		private Coroutine _typewriterCoroutine;
-		private bool _readyForNewText = true;
+		[SerializeField] public bool readyForNewText = true;
 
 		private WaitForSeconds _simpleDelay;
 		private WaitForSeconds _interpunctuationDelay;
 
 		// Typewriter Settings
-		private float _characterPerSecond = 40;
+		private float _characterPerSecond = 50;
 		private float _interpunctionationDelay = 0.2f;
-
-		// Skipping Functionality
-		public bool CurrentlySkipping { get; private set; }
-		private WaitForSeconds _skipDelay;
-
-		// Skippping Options
-		private bool quickSkip;
-		[Min(1)] private int skipSpeedUp = 5;
 
 		// Event Functionality
 		private WaitForSeconds _textBoxFullEventDelay;
 		private float _sendDoneDelay = 0.25f;
 
-		public static event Action CompleteTextRevealed;
-		public static event Action<char> CharacterRevealed;
+		public static event Action FinishTyping;
+		// public static event Action<char> CharacterRevealed;
 
 #if UNITY_EDITOR
 		private void OnValidate()
@@ -52,17 +44,20 @@ namespace Arcy.Dialogue
 
 		private void OnEnable()
 		{
-			_textBox ??= TryGetComponent<TextMeshProUGUI>(out TextMeshProUGUI textMesh) ? textMesh : null;
+			_textBox ??= TryGetComponent<TMP_Text>(out TMP_Text textMesh) ? textMesh : null;
 
 			_simpleDelay = new WaitForSeconds(1 / _characterPerSecond);
 			_interpunctuationDelay = new WaitForSeconds(_interpunctionationDelay);
-			_skipDelay = new WaitForSeconds(1 / _characterPerSecond * skipSpeedUp);
 			_textBoxFullEventDelay = new WaitForSeconds(_sendDoneDelay);
 			_textBox.maxVisibleCharacters = 0;
 
-			TMPro_EventManager.TEXT_CHANGED_EVENT.Add(PrepareForNewText); // Detects changes in ANY TMP-object in the scene
+			StartCoroutine(ShortDelay());
 
-			//TODO: Create a subscription to inputManager for Skip().
+			IEnumerator ShortDelay()
+			{
+				yield return null;
+				TMPro_EventManager.TEXT_CHANGED_EVENT.Add(PrepareForNewText); // Detects changes in ANY TMP-object in the scene
+			}
 		}
 
 		private void OnDisable()
@@ -70,25 +65,26 @@ namespace Arcy.Dialogue
 			TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(PrepareForNewText);
 		}
 
+		// When the text in _textbox is changed by another script, this types it out.
 		private void PrepareForNewText(Object obj)
 		{
-			if (obj != _textBox || !_readyForNewText || _textBox.maxVisibleCharacters >= _textBox.textInfo.characterCount)
+			if (obj != _textBox || !readyForNewText || _textBox.maxVisibleCharacters >= _textBox.textInfo.characterCount)
 				return;
 
-			CurrentlySkipping = false;
-			_readyForNewText = false;
+			//CurrentlySkipping = false;
+			readyForNewText = false;
 
 			if (_typewriterCoroutine != null)
 				StopCoroutine(_typewriterCoroutine);
 
-			_textBox.maxVisibleCharacters = 0; // use maxVisibleCharacters instead of .text to avoid string interpolation
+			_textBox.maxVisibleCharacters = 0; // use .maxVisibleCharacters instead of .text to avoid string interpolation
 			_currentlyVisibleCharacterIndex = 0;
 
-			_typewriterCoroutine = StartCoroutine(routine: TypeWriter());
+			_typewriterCoroutine = StartCoroutine(routine: TypeWriter()); // Use reference so that it is easier to stop.
 
 			IEnumerator TypeWriter()
 			{
-				TMP_TextInfo textInfo = _textBox.textInfo;
+				TMP_TextInfo textInfo = _textBox.textInfo; // TextInfo contains the full text that's going to be printed out
 
 				while (_currentlyVisibleCharacterIndex < textInfo.characterCount + 1)
 				{
@@ -99,49 +95,32 @@ namespace Arcy.Dialogue
 						_textBox.maxVisibleCharacters++;
 						yield return _textBoxFullEventDelay; // Slight delay after typing has been finished
 
-						CompleteTextRevealed?.Invoke();
-						_readyForNewText = true;
+						FinishTyping?.Invoke();
+						readyForNewText = true;
 						yield break;
 					}
 
 					char character = textInfo.characterInfo[_currentlyVisibleCharacterIndex].character;
 					_textBox.maxVisibleCharacters++;
 
-					if (!CurrentlySkipping && (character == '?' || character == '.' || character == ':' || character == ';' || character == '!'))
+					if (character == '?' || character == '.' || character == ':' || character == ';' || character == '!')
 						yield return _interpunctuationDelay; //Slight delay at the end of a sentence.
 					else
-						yield return CurrentlySkipping ? _skipDelay : _simpleDelay; // regular delay based charactersPerSecond
+						yield return _simpleDelay;
 
-					CharacterRevealed?.Invoke(character);
+					// CharacterRevealed?.Invoke(character); // Use if we want to keep tabs of the dialogue ex. count punctioation marks
 					_currentlyVisibleCharacterIndex++;
 				}
 
 			}
 		}
 
-		private void Skip() // Should be triggered by InputManager
+		public void Skip() // Triggered by dialogueManager
 		{
-			if (CurrentlySkipping)
-				return;
-
-			CurrentlySkipping = true;
-
-			if (!quickSkip)
-			{
-				StartCoroutine(routine: SkipSpeedupReset());
-				return;
-			}
-
 			StopCoroutine(_typewriterCoroutine);
 			_textBox.maxVisibleCharacters = _textBox.textInfo.characterCount;
-			_readyForNewText = true;
-			CompleteTextRevealed?.Invoke();
-		}
-
-		private IEnumerator SkipSpeedupReset()
-		{
-			yield return new WaitUntil(() => _textBox.maxVisibleCharacters == _textBox.textInfo.characterCount - 1);
-			CurrentlySkipping = false;
+			readyForNewText = true;
+			FinishTyping?.Invoke();
 		}
 	}
 }
