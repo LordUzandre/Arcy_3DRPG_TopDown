@@ -6,6 +6,8 @@ using Mono.Data.Sqlite;
 using TMPro;
 using UnityEngine;
 
+using UnityEngine.UI;
+
 namespace Arcy.Dialogue
 {
     public class DialogueManager : MonoBehaviour
@@ -22,16 +24,20 @@ namespace Arcy.Dialogue
         [Header("Dialogue UI")]
         [SerializeField] private DialogueUI _dialogueUI;
         [SerializeField] private TMP_Text _tmpText;
-        [SerializeField] private int visibleChar; // Debug
 
         // public:
         public int dialogueIndex = 0;
 
         // private:
         [SerializeField] private List<string> _dialogueBlock;
+        [SerializeField] private List<string> _choices;
+        [SerializeField] private List<string> _moods;
         private bool _currentlyInDialogue = false;
         private bool _nextDialogue = false;
         private bool _canExit = false;
+
+        private WaitForSeconds _shortDelay;
+        [SerializeField] private TypewriterEffect typeWriter;
 
         private void Start()
         {
@@ -41,6 +47,9 @@ namespace Arcy.Dialogue
         void OnEnable()
         {
             TypewriterEffect.FinishTyping += FinishTyping;
+
+            typeWriter ??= _tmpText.TryGetComponent<TypewriterEffect>(out TypewriterEffect typer) ? typer : null;
+            _shortDelay = new WaitForSeconds(0.5f);
         }
 
         private void OnDisable()
@@ -48,21 +57,11 @@ namespace Arcy.Dialogue
             TypewriterEffect.FinishTyping -= FinishTyping;
         }
 
-        private void Update()
-        {
-            visibleChar = _tmpText.maxVisibleCharacters;
-        }
-
         //Started by PlayerManager when an interactible has dialogue
         public void RunDialogue(string speakerID)
         {
             _tmpText.maxVisibleCharacters = 0;
-
-            if (!_tmpText.gameObject.TryGetComponent<TypewriterEffect>(out TypewriterEffect hit))
-            {
-                if (!hit._readyForNewText)
-                    return;
-            }
+            _dialogueUI.EnableDialogueBtns(false, true);
 
             if (!_currentlyInDialogue)
             {
@@ -73,9 +72,15 @@ namespace Arcy.Dialogue
                 _dialogueBlock = RetrieveDataFromDB(speakerID);
 
                 // UI
-                _dialogueUI.FadeUI(true, .25f, .025f);
+                _dialogueUI.FadeDialogueUI(true, .25f, .025f);
 
-                _tmpText.text = _dialogueBlock[0]; // Write out text.
+                StartCoroutine(ShortDelay());
+
+                IEnumerator ShortDelay()
+                {
+                    yield return _shortDelay;
+                    _tmpText.text = _dialogueBlock[0]; // Write out text.
+                }
 
                 //targetGroup.m_Targets[1].target = otherSpeaker;
             }
@@ -86,28 +91,26 @@ namespace Arcy.Dialogue
             }
             else if (_canExit)
             {
-                _dialogueUI.FadeUI(false, .2f, .05f); //UI
+                _dialogueUI.FadeDialogueUI(false, .2f, .05f); //UI
 
                 _canExit = false;
 
                 // Reset TMP
                 _dialogueBlock.Clear();
+                _choices.Clear();
+                _moods.Clear();
+
                 _tmpText.text = "";
                 dialogueIndex = 0;
-                //_tmpText.maxVisibleCharacters = 0;
                 _currentlyInDialogue = false;
 
                 GameStateManager.Instance.SetState(GameState.Freeroam);
             }
-            else if (_tmpText.gameObject.TryGetComponent<TypewriterEffect>(out TypewriterEffect typewriterEffect))
+            else if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)
             {
-                if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)
-                {
-                    typewriterEffect.Skip();
-                    // Works for the first sentence, but not the second.
-                }
+                typeWriter.Skip();
+                // Works for the first sentence, but not the second.
             }
-
         }
 
         List<string> RetrieveDataFromDB(string speakerID)
@@ -125,24 +128,44 @@ namespace Arcy.Dialogue
             string chooseTable = "dialogue01";
 
             // Select all data from row specified by {keyvalue}
-            dbCommand.CommandText = $"SELECT DISTINCT char, choices, mood, english FROM {chooseTable} WHERE speakID = {speakerID}";
+            dbCommand.CommandText = $"SELECT DISTINCT choices, mood, english FROM {chooseTable} WHERE speakID LIKE '{speakerID}%'";
 
             // Execute the query and retrieve the result
             IDataReader reader = dbCommand.ExecuteReader();
 
             List<string> dialogueList = new List<string>();
+            List<string> moods = new List<string>();
+            List<string> choices = new List<string>();
 
             // Check if there are rows in the result
             while (reader.Read())
             {
-                string value = reader.GetString(3); // Get all the dialogue from 4th column
-                dialogueList.Add(value);
+                string choiceColumn = reader["choices"].ToString();
+                string dialogue = reader.GetString(2); // Get all the dialogue from 3rd column
+                string moodColumn = reader["mood"].ToString();
+
+                dialogueList.Add(dialogue);
+
+                // Check choices
+                if (!string.IsNullOrEmpty(moodColumn))
+                    moods.Add(moodColumn);
+                else
+                    moods.Add("null");
+
+                // Check moods
+                if (!string.IsNullOrEmpty(choiceColumn))
+                    choices.Add(choiceColumn);
+                else
+                    choices.Add("null");
             }
 
             // Close the connections
             reader.Close();
             dbCommand.Dispose();
             dbDialogue.Close();
+
+            _moods = moods;
+            _choices = choices;
 
             return dialogueList;
         }
@@ -152,17 +175,44 @@ namespace Arcy.Dialogue
         {
             if (_currentlyInDialogue)
             {
+                // Check whether there is a question being asked
+                if (_choices[dialogueIndex] != "null")
+                {
+                    _dialogueUI.EnableDialogueBtns(true);
+                    SetUpAnswrBtns();
+                    Debug.Log("Part01");
+                    return;
+                }
+
                 if (dialogueIndex < _dialogueBlock.Count - 1)
                 {
                     dialogueIndex++;
                     _nextDialogue = true;
+                    _dialogueUI.EnableDialogueBtns(false, false);
                 }
                 else
                 {
                     _nextDialogue = false;
                     _canExit = true;
+                    _dialogueUI.EnableDialogueBtns(false, false);
                 }
             }
+        }
+
+        private void SetUpAnswrBtns()
+        {
+            _dialogueUI.answrBtns[0].GetComponent<Button>().onClick.AddListener(YesBtnPressed);
+            _dialogueUI.answrBtns[1].GetComponent<Button>().onClick.AddListener(NoBtnPressed);
+        }
+
+        private void YesBtnPressed()
+        {
+            Debug.Log("YesBtn Pressed");
+        }
+
+        private void NoBtnPressed()
+        {
+            Debug.Log("NoBtn Pressed");
         }
 
 

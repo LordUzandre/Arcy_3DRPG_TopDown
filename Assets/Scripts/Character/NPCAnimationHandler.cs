@@ -11,9 +11,10 @@ namespace Arcy.Animation
     {
         //Public:
         [Header("Animator")]
-        [SerializeField] public Animator anim;
+        [SerializeField] public Animator animator;
 
         //private:
+        [Header("IK")]
         [SerializeField] private Transform _aimController;
         [SerializeField] private MultiAimConstraint _multiAim;
         private Transform _aimTarget;
@@ -53,11 +54,11 @@ namespace Arcy.Animation
                     if (bone.name == "mixamorig:Neck")
                         _multiAim.data.constrainedObject = bone;
 
-            if (anim == null)
+            if (animator == null)
             {
                 if (TryGetComponent<Animator>(out Animator animFound))
                 {
-                    anim = animFound;
+                    animator = animFound;
                 }
                 else
                 {
@@ -68,7 +69,7 @@ namespace Arcy.Animation
 
                     foreach (Transform childObject in childObjects)
                         if (childObject.TryGetComponent<Animator>(out Animator animFoundInChild))
-                            anim = animFoundInChild;
+                            animator = animFoundInChild;
                 }
             }
 

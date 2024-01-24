@@ -18,10 +18,10 @@ namespace Arcy.Dialogue
 
         //[SerializeField] public TMP_Animated dialogueText;
         [SerializeField] private Image _dialogueBg;
-        [SerializeField] private Image _dialogueArrow;
+        //[SerializeField] private Image _dialogueArrow;
 
-        [SerializeField] private Button _yesBtn;
-        [SerializeField] private Button _noBtn;
+        [SerializeField] public List<DialogueAnswerBtn> answrBtns;
+        [SerializeField] private GameObject _nextBtn;
         private CanvasGroup _cvGroup;
 
         private void OnEnable()
@@ -32,20 +32,48 @@ namespace Arcy.Dialogue
 
         private void CheckComponents()
         {
-            if (_dialogueBg == null)
-                _dialogueBg = GetComponentInChildren<Image>();
-
-            if (_dialogueArrow == null)
-                _dialogueArrow = GetComponentInChildren<Image>();
-
+            _dialogueBg ??= GetComponentInChildren<Image>();
             _cvGroup ??= TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? hit : null;
         }
 
-        // Fade DialogueUI in or out
-        public void FadeUI(bool show, float time, float delay)
+        // When we reach the end of a lien of dialogue, should we activate _nextBtn pr answerBtns?
+        public void EnableDialogueBtns(bool enableAnswrBtns, bool hideAll = false)
         {
-            _yesBtn?.gameObject.SetActive(false);
-            _noBtn?.gameObject.SetActive(false);
+            if (hideAll) // Hide all btns when a new line of dialogue is printed.
+            {
+                foreach (DialogueAnswerBtn btn in answrBtns)
+                {
+                    btn.gameObject.SetActive(false);
+                    btn.btn.interactable = false;
+                }
+
+                _nextBtn?.gameObject.SetActive(false);
+
+                return;
+            }
+
+            if (enableAnswrBtns) // Is the talker asking a question?
+            {
+                _nextBtn?.gameObject.SetActive(false);
+
+                foreach (DialogueAnswerBtn btn in answrBtns)
+                {
+                    btn.gameObject.SetActive(true);
+                    btn.btn.interactable = true;
+                }
+
+                // Remember: Check what type of input we are using!
+                answrBtns[0].btn.Select();
+            }
+            else // if not, just continue
+            {
+                _nextBtn?.gameObject.SetActive(true);
+            }
+        }
+
+        // Fade DialogueUI in or out
+        public void FadeDialogueUI(bool show, float time, float delay)
+        {
             WaitForSeconds routineDelay = new WaitForSeconds(delay);
             StartCoroutine(fadeUI());
 

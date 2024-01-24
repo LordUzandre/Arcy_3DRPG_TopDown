@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arcy.Animation;
 using Arcy.Dialogue;
+using Arcy.Battle;
 
 namespace Arcy.Interaction
 {
@@ -22,6 +23,9 @@ namespace Arcy.Interaction
         [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
         [HideInInspector] public Transform ObjectTransform => transform;
 
+        [Header("Battle Stats")]
+        [SerializeField] public BattleCharacterBase battleCharBaseStats;
+
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -39,7 +43,7 @@ namespace Arcy.Interaction
         public void Interact()
         {
             if (_speakerID != null)
-                _npcAnimationHandler.anim.SetTrigger("talking");
+                _npcAnimationHandler.animator.SetTrigger("talking");
             else
                 Debug.Log("NPC doesn't have any dialogue");
         }
