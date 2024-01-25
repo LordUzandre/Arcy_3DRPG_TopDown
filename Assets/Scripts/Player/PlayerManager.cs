@@ -11,6 +11,9 @@ using System;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerManager : MonoBehaviour
 {
+    //Singleton
+    public static PlayerManager instance;
+
     #region Player Scripts
     //Scripts
     [HideInInspector] public PlayerLocomotion playerLocomotion;
@@ -20,9 +23,6 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public CharacterController characterController;
     [HideInInspector] public Animator animator;
     #endregion
-
-    //Singleton
-    public static PlayerManager instance;
 
     #region movement variables
     private float delta;
@@ -115,16 +115,19 @@ public class PlayerManager : MonoBehaviour
                 GameStateManager.Instance.SetState(GameState.Dialogue);
 
             DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);
-        }
-        else
-        {
-            currentInteractible.Interact();
+
+            if (DialogueManager.Instance.otherSpeakerTransform == null)
+            {
+                DialogueManager.Instance.otherSpeakerTransform = currentInteractible.ObjectTransform;
+            }
         }
 
+        currentInteractible.Interact();
         fow?.RemoveIcon();
     }
     #endregion
 
+    // Enable or disable character movement
     public void EnableMovement(bool canCharacterMove, bool rotateTowards = false)
     {
         if (rotateTowards)
@@ -132,13 +135,10 @@ public class PlayerManager : MonoBehaviour
             // Rotate the player to face the modified target position
             Vector3 targetPosition = new Vector3(currentInteractible.ObjectTransform.position.x, transform.position.y, currentInteractible.ObjectTransform.position.z);
             transform.DOLookAt(targetPosition, 1f);
-            //transform.DORotate(targetPosition, 1f, RotateMode.Fast);
         }
 
         if (canCharacterMove == canMove)
-        {
             return;
-        }
 
         // Triggered when dialogue is finished
         isInteracting = !canCharacterMove;

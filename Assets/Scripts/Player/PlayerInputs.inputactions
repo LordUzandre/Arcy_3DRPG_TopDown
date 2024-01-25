@@ -572,6 +572,17 @@
                 },
                 {
                     "name": "",
+                    "id": "cd0e759c-d389-42c4-a3c2-eb2f20af96f3",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "388cc477-3339-437e-ad64-f599b409bbf3",
                     "path": "*/{Cancel}",
                     "interactions": "",

@@ -5,7 +5,6 @@ using System.Data;
 using Mono.Data.Sqlite;
 using TMPro;
 using UnityEngine;
-
 using UnityEngine.UI;
 
 namespace Arcy.Dialogue
@@ -27,29 +26,40 @@ namespace Arcy.Dialogue
 
         // public:
         public int dialogueIndex = 0;
+        [SerializeField] private string _speakerID;
+        public string language = "english"; // Remember: Set up language handler
 
         // private:
         [SerializeField] private List<string> _dialogueBlock;
         [SerializeField] private List<string> _choices;
         [SerializeField] private List<string> _moods;
+
         private bool _currentlyInDialogue = false;
+        private bool _choice = false;
         private bool _nextDialogue = false;
         private bool _canExit = false;
 
         private WaitForSeconds _shortDelay;
         [SerializeField] private TypewriterEffect typeWriter;
 
+        [Header("Other Speaker")]
+        [SerializeField] public Transform otherSpeakerTransform;
+
         private void Start()
         {
             Instance ??= this;
+
+            // Set up AnswerBtns
+            _dialogueUI.answrBtns[0].GetComponent<Button>().onClick.AddListener(YesButtonPressed);
+            _dialogueUI.answrBtns[1].GetComponent<Button>().onClick.AddListener(NoButtonPressed);
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             TypewriterEffect.FinishTyping += FinishTyping;
 
             typeWriter ??= _tmpText.TryGetComponent<TypewriterEffect>(out TypewriterEffect typer) ? typer : null;
-            _shortDelay = new WaitForSeconds(0.5f);
+            _shortDelay = new WaitForSeconds(0.4f);
         }
 
         private void OnDisable()
@@ -57,22 +67,23 @@ namespace Arcy.Dialogue
             TypewriterEffect.FinishTyping -= FinishTyping;
         }
 
-        //Started by PlayerManager when an interactible has dialogue
+        #region Input from InputManager
+        // Input started by PlayerManager when an interactible has dialogue
         public void RunDialogue(string speakerID)
         {
-            _tmpText.maxVisibleCharacters = 0;
-            _dialogueUI.EnableDialogueBtns(false, true);
+            if (_choice) //Choice is handled by AnswrBtnPressed
+                return;
 
-            if (!_currentlyInDialogue)
+            _tmpText.maxVisibleCharacters = 0;
+            _dialogueUI.EnableDialogueBtns(false, true); // Hide all dialogue Btns
+
+            if (!_currentlyInDialogue) // Start up dialogue
             {
                 _currentlyInDialogue = true;
-
-                // Retrieve dialogue from .db-file
+                _speakerID = speakerID;
                 dialogueIndex = 0;
-                _dialogueBlock = RetrieveDataFromDB(speakerID);
-
-                // UI
-                _dialogueUI.FadeDialogueUI(true, .25f, .025f);
+                _dialogueBlock = RetrieveDataFromDB(speakerID); // Retrieve dialogue from .db-file
+                _dialogueUI.FadeDialogueUI(true, .25f, .025f); // Fade in UI
 
                 StartCoroutine(ShortDelay());
 
@@ -83,15 +94,19 @@ namespace Arcy.Dialogue
                 }
 
                 //targetGroup.m_Targets[1].target = otherSpeaker;
+
+                return;
             }
             else if (_nextDialogue) // only available once we finish typing out the sentence
             {
                 _nextDialogue = false;
                 _tmpText.text = _dialogueBlock[dialogueIndex];
+
+                return;
             }
             else if (_canExit)
             {
-                _dialogueUI.FadeDialogueUI(false, .2f, .05f); //UI
+                _dialogueUI.FadeDialogueUI(false, .2f, .05f); // fade out UI
 
                 _canExit = false;
 
@@ -99,20 +114,25 @@ namespace Arcy.Dialogue
                 _dialogueBlock.Clear();
                 _choices.Clear();
                 _moods.Clear();
-
-                _tmpText.text = "";
+                _speakerID = null;
+                _tmpText.text = null;
                 dialogueIndex = 0;
                 _currentlyInDialogue = false;
 
                 GameStateManager.Instance.SetState(GameState.Freeroam);
+
+                return;
             }
             else if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)
             {
                 typeWriter.Skip();
-                // Works for the first sentence, but not the second.
+
+                return;
             }
         }
+        #endregion
 
+        #region SQL-query
         List<string> RetrieveDataFromDB(string speakerID)
         {
             string dbConnectionPath = "URI=file:" + Application.dataPath + "/Data/Dialogue/DB_Debug-scene.db";
@@ -128,7 +148,7 @@ namespace Arcy.Dialogue
             string chooseTable = "dialogue01";
 
             // Select all data from row specified by {keyvalue}
-            dbCommand.CommandText = $"SELECT DISTINCT choices, mood, english FROM {chooseTable} WHERE speakID LIKE '{speakerID}%'";
+            dbCommand.CommandText = $"SELECT DISTINCT choices, mood, {language} FROM {chooseTable} WHERE speakID LIKE '{speakerID}%'";
 
             // Execute the query and retrieve the result
             IDataReader reader = dbCommand.ExecuteReader();
@@ -141,7 +161,7 @@ namespace Arcy.Dialogue
             while (reader.Read())
             {
                 string choiceColumn = reader["choices"].ToString();
-                string dialogue = reader.GetString(2); // Get all the dialogue from 3rd column
+                string dialogue = reader["english"].ToString();
                 string moodColumn = reader["mood"].ToString();
 
                 dialogueList.Add(dialogue);
@@ -169,8 +189,9 @@ namespace Arcy.Dialogue
 
             return dialogueList;
         }
+        #endregion
 
-        //Triggered when _textbox finish typing out text
+        //Triggered when _textbox finishes typing out text
         public void FinishTyping()
         {
             if (_currentlyInDialogue)
@@ -178,9 +199,16 @@ namespace Arcy.Dialogue
                 // Check whether there is a question being asked
                 if (_choices[dialogueIndex] != "null")
                 {
-                    _dialogueUI.EnableDialogueBtns(true);
-                    SetUpAnswrBtns();
-                    Debug.Log("Part01");
+                    StartCoroutine(ShortDelay());
+
+                    IEnumerator ShortDelay()
+                    {
+                        yield return _shortDelay;
+                        _dialogueUI?.EnableDialogueBtns(true);
+                        // _dialogueUI?.SetUpAnswrBtns();
+                        _choice = true;
+                    }
+
                     return;
                 }
 
@@ -188,58 +216,107 @@ namespace Arcy.Dialogue
                 {
                     dialogueIndex++;
                     _nextDialogue = true;
-                    _dialogueUI.EnableDialogueBtns(false, false);
+                    _dialogueUI?.EnableDialogueBtns(false, false); // Only Show _nxtBtn
                 }
                 else
                 {
+                    _choice = false;
                     _nextDialogue = false;
                     _canExit = true;
-                    _dialogueUI.EnableDialogueBtns(false, false);
+                    _dialogueUI?.EnableDialogueBtns(false, true); // Hide all dialogueBtns
                 }
             }
         }
 
-        private void SetUpAnswrBtns()
+        // Called by _dialogueUI
+        private void AnswrBtnPressed(bool yesBtn)
         {
-            _dialogueUI.answrBtns[0].GetComponent<Button>().onClick.AddListener(YesBtnPressed);
-            _dialogueUI.answrBtns[1].GetComponent<Button>().onClick.AddListener(NoBtnPressed);
+            Debug.Log($"Value going in = '{_speakerID}'");
+            _dialogueUI.EnableDialogueBtns(false, false);
+            _tmpText.text = "";
+            _choice = false;
+
+            if (yesBtn) // Yes-btn pressed
+            {
+                _currentlyInDialogue = false;
+                _speakerID = AnswerFromBtn(_speakerID, 1);
+            }
+            else // No-btn pressed
+            {
+                _currentlyInDialogue = false;
+                _speakerID = AnswerFromBtn(_speakerID, 2);
+            }
+
+            // Create a new string based on which AnswrBtn is pressed
+            string AnswerFromBtn(string ogString, int addValue)
+            {
+                string numericPart = "";
+                string updatedString = "";
+
+                // Extract numeric part from the string
+                foreach (char charLetter in ogString)
+                {
+                    if (char.IsDigit(charLetter))
+                        numericPart += charLetter;
+                    else
+                        break; // Stop when a non-digit character is encountered
+                }
+
+                // Convert numeric part to an integer
+                if (int.TryParse(numericPart, out int numericValue))
+                {
+                    // Perform the desired operation on the numeric value
+                    numericValue += addValue;
+
+                    // Convert the updated numeric value back to string and append the non-numeric part
+                    updatedString = numericValue.ToString() + ogString.Substring(numericPart.Length);
+                }
+
+                return updatedString;
+            }
+            RunDialogue(_speakerID);
+            Debug.Log($"Value going out = '{_speakerID}'");
         }
 
-        private void YesBtnPressed()
+        // When Yes-button is pressed
+        private void YesButtonPressed()
         {
-            Debug.Log("YesBtn Pressed");
+            AnswrBtnPressed(true);
         }
 
-        private void NoBtnPressed()
+        // When Yes-button is pressed
+        private void NoButtonPressed()
         {
-            Debug.Log("NoBtn Pressed");
+            AnswrBtnPressed(false);
         }
 
 
         /*
+
         // TODO: All methods below should be put in CameraManager
+
+        public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
+        {
+            if (dialogueCam != null)
+            {
+                gameCam.SetActive(!dialogue);
+                dialogueCam.SetActive(dialogue);
+            }
+
+            //Depth of field modifier
+            if (dialogueDof != null)
+            {
+                float dofWeight = dialogueCam.activeSelf ? 1 : 0;
+                DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
+            }
+        }
+
+        public void DialogueDOF(float x)
+        {
+            dialogueDof.weight = x;
+        }
+
         */
-
-        // public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
-        // {
-        //     if (dialogueCam != null)
-        //     {
-        //         gameCam.SetActive(!dialogue);
-        //         dialogueCam.SetActive(dialogue);
-        //     }
-
-        //     //Depth of field modifier
-        //     if (dialogueDof != null)
-        //     {
-        //         float dofWeight = dialogueCam.activeSelf ? 1 : 0;
-        //         DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
-        //     }
-        // }
-
-        // public void DialogueDOF(float x)
-        // {
-        //     dialogueDof.weight = x;
-        // }
     }
 
 }

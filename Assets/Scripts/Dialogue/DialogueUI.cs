@@ -12,17 +12,21 @@ namespace Arcy.Dialogue
     {
 
         /// <summary>
-        /// This script should (only) handle the visuals for DialogueUI;
+        /// This script SHOULD only handle the visuals for DialogueUI (right now it does more);
         /// DialogueManager => dialogue.db => DialogueUI
         /// </summary>
 
-        //[SerializeField] public TMP_Animated dialogueText;
         [SerializeField] private Image _dialogueBg;
-        //[SerializeField] private Image _dialogueArrow;
-
         [SerializeField] public List<DialogueAnswerBtn> answrBtns;
         [SerializeField] private GameObject _nextBtn;
         private CanvasGroup _cvGroup;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            CheckComponents();
+        }
+#endif
 
         private void OnEnable()
         {
@@ -36,15 +40,15 @@ namespace Arcy.Dialogue
             _cvGroup ??= TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? hit : null;
         }
 
-        // When we reach the end of a lien of dialogue, should we activate _nextBtn pr answerBtns?
+        // When we reach the end of a line of dialogue, should we activate _nextBtn or answerBtns?
         public void EnableDialogueBtns(bool enableAnswrBtns, bool hideAll = false)
         {
             if (hideAll) // Hide all btns when a new line of dialogue is printed.
             {
-                foreach (DialogueAnswerBtn btn in answrBtns)
+                foreach (DialogueAnswerBtn button in answrBtns)
                 {
-                    btn.gameObject.SetActive(false);
-                    btn.btn.interactable = false;
+                    button.gameObject.SetActive(false);
+                    button.btn.interactable = false;
                 }
 
                 _nextBtn?.gameObject.SetActive(false);
@@ -56,18 +60,27 @@ namespace Arcy.Dialogue
             {
                 _nextBtn?.gameObject.SetActive(false);
 
-                foreach (DialogueAnswerBtn btn in answrBtns)
+                foreach (DialogueAnswerBtn button in answrBtns)
                 {
-                    btn.gameObject.SetActive(true);
-                    btn.btn.interactable = true;
+                    button.gameObject.SetActive(true);
+                    button.btn.interactable = true;
                 }
 
                 // Remember: Check what type of input we are using!
                 answrBtns[0].btn.Select();
             }
-            else // if not, just continue
+            else // if not, just continue and show nextBtn
             {
                 _nextBtn?.gameObject.SetActive(true);
+
+                if (!answrBtns[0].btn.interactable)
+                    return;
+
+                foreach (DialogueAnswerBtn btn in answrBtns)
+                {
+                    btn.btn.interactable = false;
+                    btn.gameObject.SetActive(false);
+                }
             }
         }
 

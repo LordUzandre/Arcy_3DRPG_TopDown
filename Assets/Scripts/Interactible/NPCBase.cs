@@ -5,6 +5,7 @@ using UnityEngine;
 using Arcy.Animation;
 using Arcy.Dialogue;
 using Arcy.Battle;
+using DG.Tweening;
 
 namespace Arcy.Interaction
 {
@@ -22,9 +23,12 @@ namespace Arcy.Interaction
         private bool _isInteractible = true;
         [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
         [HideInInspector] public Transform ObjectTransform => transform;
+        private Vector3 _ogRotation;
 
         [Header("Battle Stats")]
         [SerializeField] public BattleCharacterBase battleCharBaseStats;
+
+        private string _currentMood = "";
 
 
 #if UNITY_EDITOR
@@ -43,9 +47,35 @@ namespace Arcy.Interaction
         public void Interact()
         {
             if (_speakerID != null)
-                _npcAnimationHandler.animator.SetTrigger("talking");
+            {
+                _ogRotation = transform.rotation.eulerAngles;
+                RoateTowardsPlayer(true);
+            }
             else
-                Debug.Log("NPC doesn't have any dialogue");
+            {
+                Debug.LogWarning("NPC doesn't have any dialogue");
+            }
+        }
+
+        private void RoateTowardsPlayer(bool shouldTurn)
+        {
+            if (shouldTurn)
+            {
+                transform.DOLookAt(PlayerManager.instance.gameObject.transform.position, 1f);
+            }
+            else
+            {
+                transform.DOLookAt(_ogRotation, 1f);
+            }
+        }
+
+        private void ChangeMood(string newMood)
+        {
+            if (newMood == _currentMood || newMood == "null")
+                return;
+
+            _currentMood = newMood;
+            Debug.Log($"Mood Changed to '{newMood}'");
         }
     }
 }
