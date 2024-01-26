@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028353, g: 0.22571383, b: 0.30692253, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -866,10 +866,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1125409a225584d38b9734d3f4e5435e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveAmount: 0
-  walkingSpeed: 2
-  runningSpeed: 5
-  rotationSpeed: 15
+  _walkingSpeed: 2
+  _runningSpeed: 5
+  _rotationSpeed: 15
+  _inputX: 0
+  _inputY: 0
+  _moveAmount: 0
+  _movementSpeed: 0
 --- !u!1 &61605550
 GameObject:
   m_ObjectHideFlags: 3
@@ -1914,7 +1917,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
-  m_LocalRotation: {x: 0.5847103, y: 0.000000037584513, z: -0.000000027089383, w: 0.8112422}
+  m_LocalRotation: {x: 0.5847103, y: -0.000000037584513, z: 0.000000027089383, w: 0.8112422}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 8.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5076,7 +5079,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 686353314}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
@@ -9489,7 +9492,7 @@ MonoBehaviour:
   m_Actions: {fileID: -944628639613478452, guid: 985f85ecde8674b70a6ad233456e75de,
     type: 3}
   m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
+  m_UIInputModule: {fileID: 686353318}
   m_DeviceLostEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -9502,7 +9505,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Gameplay
+  m_DefaultActionMap: Freeroam
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &1295529082
@@ -9517,11 +9520,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6680bc37a2dbe4dcab7b98f32ae2e3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementInput: {x: 0, y: 0}
-  inputY: 0
-  inputX: 0
-  moveAmount: 0
-  dodgeInput: 0
+  inputLocked: 0
+  _playerInput: {fileID: 1295529081}
 --- !u!4 &1300682991 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9109923322198681756, guid: 61d468a2f1c51574f8882294089b6f10,
@@ -11788,11 +11788,13 @@ MonoBehaviour:
   _dialogueUI: {fileID: 1053396818}
   _tmpText: {fileID: 1416812071}
   dialogueIndex: 0
+  _speakerID: 
   language: english
   _dialogueBlock: []
   _choices: []
   _moods: []
   typeWriter: {fileID: 0}
+  otherSpeakerTransform: {fileID: 0}
 --- !u!1 &1782248801
 GameObject:
   m_ObjectHideFlags: 0

@@ -191,7 +191,7 @@ namespace Arcy.Dialogue
         }
         #endregion
 
-        //Triggered when _textbox finishes typing out text
+        //Triggered when TypeWriterEffect finishes typing out text
         public void FinishTyping()
         {
             if (_currentlyInDialogue)
@@ -231,7 +231,6 @@ namespace Arcy.Dialogue
         // Called by _dialogueUI
         private void AnswrBtnPressed(bool yesBtn)
         {
-            Debug.Log($"Value going in = '{_speakerID}'");
             _dialogueUI.EnableDialogueBtns(false, false);
             _tmpText.text = "";
             _choice = false;
@@ -275,7 +274,6 @@ namespace Arcy.Dialogue
                 return updatedString;
             }
             RunDialogue(_speakerID);
-            Debug.Log($"Value going out = '{_speakerID}'");
         }
 
         // When Yes-button is pressed

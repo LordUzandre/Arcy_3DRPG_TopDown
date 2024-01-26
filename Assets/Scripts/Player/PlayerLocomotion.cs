@@ -7,67 +7,105 @@ public class PlayerLocomotion : MonoBehaviour
 {
     PlayerManager playerManager;
 
-    public float moveAmount;
+    [SerializeField] private float _walkingSpeed = 2;
+    [SerializeField] private float _runningSpeed = 5;
+    [SerializeField] private float _rotationSpeed = 15;
 
-    float movementSpeed;
-    [SerializeField] float walkingSpeed = 2;
-    [SerializeField] float runningSpeed = 5;
-    [SerializeField] float rotationSpeed = 15;
+    [SerializeField] private float _inputX = 0;
+    [SerializeField] private float _inputY = 0;
+    [SerializeField] private float _moveAmount = 0;
+    [SerializeField] private float _movementSpeed = 0;
 
-    private float gravity = 9.8f;
-    private Vector3 velocity;
+    private float _gravity = 9.8f;
+    private Vector3 _velocity;
 
     private void Start()
     {
         playerManager = GetComponent<PlayerManager>();
     }
 
+    private void OnEnable()
+    {
+        StartCoroutine(shortDelay());
+
+        // Wait one frame before subscribing
+        IEnumerator shortDelay()
+        {
+            yield return null;
+            InputManager.instance.WASDInput += HandleMovementInput;
+        }
+    }
+
+    private void OnDisable()
+    {
+        InputManager.instance.WASDInput -= HandleMovementInput;
+    }
+
+    // Decide walking direction
     private Vector3 GetYourBearings()
     {
         Vector3 worldSetting;
 
-        // Create switch statement based on either world nornal or camera
-        worldSetting = (InputManager.instance.inputY * Vector3.forward) + (InputManager.instance.inputX * Vector3.right);
+        // Remember: Create switch statement based on either world nornal or camera
+        worldSetting = (_inputY * Vector3.forward) + (_inputX * Vector3.right);
         worldSetting.Normalize();
         worldSetting.y = 0;
 
         return worldSetting;
     }
 
+    // Called every update from PlayerManager
     public void HandleAllMovement(float delta)
     {
         Vector3 moveDirection = GetYourBearings();
 
+        //HandleMovementInput();
         HandleGroundedMovement(delta, moveDirection);
         HandleRotation(delta, moveDirection);
     }
 
-    public void HandleGroundedMovement(float delta, Vector3 moveDirection)
+    private void HandleMovementInput(Vector2 MoveInput)
     {
-        if (InputManager.instance.moveAmount > 0.5f)
+        _inputX = MoveInput.x;
+        _inputY = MoveInput.y;
+
+        _moveAmount = Mathf.Clamp01(Mathf.Abs(_inputY) + Mathf.Abs(_inputX));
+
+        if (_moveAmount <= 0.5 && _moveAmount > 0)
         {
-            movementSpeed = runningSpeed;
+            _moveAmount = 0.5f;
         }
-        else if (InputManager.instance.moveAmount <= 0.5f)
+        else if (_moveAmount > 0.5 && _moveAmount <= 1)
         {
-            movementSpeed = walkingSpeed;
+            _moveAmount = 1;
+        }
+    }
+
+    private void HandleGroundedMovement(float delta, Vector3 moveDirection)
+    {
+        if (_moveAmount > 0.5f)
+        {
+            _movementSpeed = _runningSpeed;
+        }
+        else if (_moveAmount <= 0.5f)
+        {
+            _movementSpeed = _walkingSpeed;
         }
 
-        velocity = moveDirection * movementSpeed * delta;
+        _velocity = moveDirection * _movementSpeed * delta;
 
         // Apply gravity
-        //velocity.y = playerManager.characterController.isGrounded ? 0 : gravity * delta;
         if (playerManager.characterController.isGrounded)
         {
-            velocity.y = 0;
+            _velocity.y = 0;
         }
         else
         {
-            velocity.y = -gravity;
+            _velocity.y = -_gravity;
         }
 
-        playerManager.characterController.Move(velocity);
-        playerManager.animationHandler.locomotion = InputManager.instance.moveAmount;
+        playerManager.characterController.Move(_velocity);
+        playerManager.animationHandler.locomotion = _moveAmount;
         playerManager.animationHandler.UpdateLocomotion();
     }
 
@@ -84,29 +122,7 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
         Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
-        Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * delta);
+        Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, _rotationSpeed * delta);
         transform.rotation = targetRotation;
-    }
-
-    public void AttemptToPerformDodge()
-    {
-        Vector3 rollDirection;
-
-        if (playerManager.isPerformingAction)
-            return;
-
-        if (InputManager.instance.moveAmount > 0) //roll if we are moving
-        {
-            rollDirection = GetYourBearings();
-
-            Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
-            playerManager.transform.rotation = playerRotation;
-
-            playerManager.animationHandler.PlayTargetActionAnimation("Roll_Forward_01", true, true);
-        }
-        else //Backstep
-        {
-            playerManager.animationHandler.PlayTargetActionAnimation("Back_Step_01", true, true);
-        }
     }
 }

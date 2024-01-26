@@ -3,27 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
-using Unity.VisualScripting;
 
 namespace Arcy.InputManager
 {
     public class InputManager : MonoBehaviour
     {
-        public static Action InteractionButtonPressed;
+        public static InputManager instance { get; private set; }
 
-        public static InputManager instance;
+        public event Action<Vector2> WASDInput;
+        public event Action InteractionInputPressed;
+        public event Action RunInputHeld;
+        public event Action PauseInputPressed;
+        public bool inputLocked = false;
 
-        private PlayerInputs playerInputs;
-
-        [Header("Player Movement")]
-        [SerializeField] Vector2 movementInput;
-        public float inputY;
-        public float inputX;
-        public float moveAmount;
-
-        [Header("Action Inputs")]
-        public bool dodgeInput = false;
-        private GameState currentGameState;
+        private GameState _currentGameState;
+        [SerializeField] private PlayerInput _playerInput;
 
         private void Awake()
         {
@@ -32,72 +26,91 @@ namespace Arcy.InputManager
 
         private void OnEnable()
         {
-            if (playerInputs == null)
-            {
-                //movementInput
-                playerInputs = new PlayerInputs();
-                playerInputs.Gameplay.move.performed += i => movementInput = i.ReadValue<Vector2>();
-                playerInputs.Gameplay.move.canceled += i => movementInput = i.ReadValue<Vector2>();
+            _playerInput ??= TryGetComponent<PlayerInput>(out PlayerInput plInput) ? plInput : null;
 
-                //dodge- and runInput
-                playerInputs.Gameplay.run.performed += i => dodgeInput = true;
-
-                //interactInput
-                playerInputs.Gameplay.interact.performed += CheckInteractible;
-
-                // subscribe to gameStateManager
-                currentGameState = GameStateManager.Instance.CurrentGameState;
-                GameStateManager.OnGameStateChanged += OnGameStateChanged;
-            }
-
-            playerInputs.Enable();
-        }
-
-        private void OnDisable()
-        {
-            playerInputs.Disable();
-            GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+            // subscribe to gameStateManager
+            _currentGameState = GameStateManager.Instance.CurrentGameState;
+            GameStateManager.OnGameStateChanged += OnGameStateChanged;
         }
 
         private void OnGameStateChanged(GameState newGameState)
         {
-            currentGameState = newGameState;
+            _currentGameState = newGameState;
+
+            switch (newGameState)
+            {
+                case (GameState.Freeroam):
+                    _playerInput.SwitchCurrentActionMap("Freeroam");
+                    return;
+                default:
+                    return;
+            }
         }
 
-        // When player presses "E"-key
-        private void CheckInteractible(InputAction.CallbackContext context)
+        private void OnDisable()
         {
-            InteractionButtonPressed?.Invoke(); // InteractionButton is an Action in PlayerManager.
+            GameStateManager.OnGameStateChanged -= OnGameStateChanged;
         }
 
         private void Update()
         {
-            //Which game-State are we currently in?
-            switch (currentGameState)
+            if (!inputLocked)
             {
-                case GameState.Freeroam:
-                    HandleMovementInput();
-                    break;
-                default:
-                    break;
+                // if (_playerInput.currentActionMap == _playerInput.actions.FindActionMap("Freeroam"))
+                // {
+                OnWASD();
+                OnInteractKeyPressed();
+                OnRunKeyHeld();
+                OnPauseKeyPressed();
+                // }
             }
         }
 
-        private void HandleMovementInput()
+        private void OnWASD()
         {
-            inputY = movementInput.y;
-            inputX = movementInput.x;
+            WASDInput?.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
+        }
 
-            moveAmount = Mathf.Clamp01(Mathf.Abs(inputY) + Mathf.Abs(inputX));
+        // When player presses "E"-key
+        private void OnInteractKeyPressed()
+        {
+            if (_playerInput.actions["interact"].WasPressedThisFrame())
+            {
+                InteractionInputPressed?.Invoke(); // InteractionButton is an Action in PlayerManager.
 
-            if (moveAmount <= 0.5 && moveAmount > 0)
-            {
-                moveAmount = 0.5f;
+                if (_playerInput.currentActionMap == _playerInput.actions.FindActionMap("UI"))
+                {
+                    Debug.Log("aehgaerjhfhafh");
+                }
+                return;
             }
-            else if (moveAmount > 0.5 && moveAmount <= 1)
+
+        }
+
+        private void OnRunKeyHeld()
+        {
+            if (_playerInput.actions["run"].WasPressedThisFrame())
             {
-                moveAmount = 1;
+                RunInputHeld?.Invoke();
             }
+        }
+
+        private void OnPauseKeyPressed()
+        {
+
+            if (_playerInput.actions["pause"].WasPressedThisFrame())
+            {
+                PauseInputPressed?.Invoke();
+            }
+        }
+
+        public void SwapActionMap(InputActionMap actionMap)
+        {
+            if (actionMap.enabled)
+                return;
+
+            //_playerInput.Disable();
+            actionMap.Enable();
         }
     }
 }
