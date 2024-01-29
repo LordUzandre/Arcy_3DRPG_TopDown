@@ -56,13 +56,10 @@ namespace Arcy.InputManager
         {
             if (!inputLocked)
             {
-                // if (_playerInput.currentActionMap == _playerInput.actions.FindActionMap("Freeroam"))
-                // {
                 OnWASD();
                 OnInteractKeyPressed();
                 OnRunKeyHeld();
                 OnPauseKeyPressed();
-                // }
             }
         }
 
@@ -77,11 +74,6 @@ namespace Arcy.InputManager
             if (_playerInput.actions["interact"].WasPressedThisFrame())
             {
                 InteractionInputPressed?.Invoke(); // InteractionButton is an Action in PlayerManager.
-
-                if (_playerInput.currentActionMap == _playerInput.actions.FindActionMap("UI"))
-                {
-                    Debug.Log("aehgaerjhfhafh");
-                }
                 return;
             }
 

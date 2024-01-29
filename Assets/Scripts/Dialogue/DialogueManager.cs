@@ -15,6 +15,8 @@ namespace Arcy.Dialogue
         private static DialogueManager instance;
         public static DialogueManager Instance { get; private set; }
 
+        public event Action Skip;
+
         /// <summary>
         /// This script retrieves the data from the db and sends it to DialgueUI.
         /// But shuld be able to finish alone, without the support of DialogueUI. 
@@ -25,7 +27,7 @@ namespace Arcy.Dialogue
         [SerializeField] private TMP_Text _tmpText;
 
         // public:
-        public int dialogueIndex = 0;
+        public int _dialogueIndex = 0;
         [SerializeField] private string _speakerID;
         public string language = "english"; // Remember: Set up language handler
 
@@ -34,16 +36,15 @@ namespace Arcy.Dialogue
         [SerializeField] private List<string> _choices;
         [SerializeField] private List<string> _moods;
 
-        private bool _currentlyInDialogue = false;
-        private bool _choice = false;
+        [SerializeField] private bool _currentlyInDialogue = false;
+        [SerializeField] private bool _choice = false;
         private bool _nextDialogue = false;
         private bool _canExit = false;
 
-        private WaitForSeconds _shortDelay;
-        [SerializeField] private TypewriterEffect typeWriter;
+        private WaitForSeconds _delayBeforeDialogue;
 
         [Header("Other Speaker")]
-        [SerializeField] public Transform otherSpeakerTransform;
+        [SerializeField] public Transform otherSpeakerTransform; // TODO: Should be other object's eyes, not just their transform.
 
         private void Start()
         {
@@ -58,8 +59,8 @@ namespace Arcy.Dialogue
         {
             TypewriterEffect.FinishTyping += FinishTyping;
 
-            typeWriter ??= _tmpText.TryGetComponent<TypewriterEffect>(out TypewriterEffect typer) ? typer : null;
-            _shortDelay = new WaitForSeconds(0.4f);
+            //_shortDelay = new WaitForSeconds(0.05f);
+            _delayBeforeDialogue = new WaitForSeconds(0.5f);
         }
 
         private void OnDisable()
@@ -71,25 +72,31 @@ namespace Arcy.Dialogue
         // Input started by PlayerManager when an interactible has dialogue
         public void RunDialogue(string speakerID)
         {
-            if (_choice) //Choice is handled by AnswrBtnPressed
-                return;
-
             _tmpText.maxVisibleCharacters = 0;
             _dialogueUI.EnableDialogueBtns(false, true); // Hide all dialogue Btns
 
-            if (!_currentlyInDialogue) // Start up dialogue
+            if (_choice) // Choice is handled by AnswrBtnPressed
+            {
+                Debug.Log("_choice is blocking");
+                _choice = false;
+                return;
+            }
+
+            if (!_currentlyInDialogue) // Runs when a new dialogue plays up
             {
                 _currentlyInDialogue = true;
                 _speakerID = speakerID;
-                dialogueIndex = 0;
+                _dialogueIndex = 0;
                 _dialogueBlock = RetrieveDataFromDB(speakerID); // Retrieve dialogue from .db-file
-                _dialogueUI.FadeDialogueUI(true, .25f, .025f); // Fade in UI
+
+                if (_dialogueUI.cvGroup.alpha != 1)
+                    _dialogueUI.FadeDialogueUI(true, .25f, .025f); // Fade in UI
 
                 StartCoroutine(ShortDelay());
 
                 IEnumerator ShortDelay()
                 {
-                    yield return _shortDelay;
+                    yield return _delayBeforeDialogue;
                     _tmpText.text = _dialogueBlock[0]; // Write out text.
                 }
 
@@ -97,14 +104,14 @@ namespace Arcy.Dialogue
 
                 return;
             }
-            else if (_nextDialogue) // only available once we finish typing out the sentence
+            else if (_nextDialogue) // What happens once we finish typing out the sentence
             {
                 _nextDialogue = false;
-                _tmpText.text = _dialogueBlock[dialogueIndex];
+                _tmpText.text = _dialogueBlock[_dialogueIndex];
 
                 return;
             }
-            else if (_canExit)
+            else if (_canExit) // What happens when we reach the end of the dialogue, and there's no question being asked.
             {
                 _dialogueUI.FadeDialogueUI(false, .2f, .05f); // fade out UI
 
@@ -116,7 +123,7 @@ namespace Arcy.Dialogue
                 _moods.Clear();
                 _speakerID = null;
                 _tmpText.text = null;
-                dialogueIndex = 0;
+                _dialogueIndex = 0;
                 _currentlyInDialogue = false;
 
                 GameStateManager.Instance.SetState(GameState.Freeroam);
@@ -125,8 +132,9 @@ namespace Arcy.Dialogue
             }
             else if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)
             {
-                typeWriter.Skip();
-
+                // TODO! For some reason this runs whenever we answer a question
+                Skip?.Invoke();
+                Debug.Log("Skip triggered");
                 return;
             }
         }
@@ -191,30 +199,22 @@ namespace Arcy.Dialogue
         }
         #endregion
 
-        //Triggered when TypeWriterEffect finishes typing out text
+        // Triggered when TypeWriterEffect finishes typing out text
         public void FinishTyping()
         {
             if (_currentlyInDialogue)
             {
                 // Check whether there is a question being asked
-                if (_choices[dialogueIndex] != "null")
+                if (_choices[_dialogueIndex] != "null")
                 {
-                    StartCoroutine(ShortDelay());
-
-                    IEnumerator ShortDelay()
-                    {
-                        yield return _shortDelay;
-                        _dialogueUI?.EnableDialogueBtns(true);
-                        // _dialogueUI?.SetUpAnswrBtns();
-                        _choice = true;
-                    }
-
+                    _choice = true;
+                    _dialogueUI?.EnableDialogueBtns(true);
                     return;
                 }
 
-                if (dialogueIndex < _dialogueBlock.Count - 1)
+                if (_dialogueIndex < _dialogueBlock.Count - 1)
                 {
-                    dialogueIndex++;
+                    _dialogueIndex++;
                     _nextDialogue = true;
                     _dialogueUI?.EnableDialogueBtns(false, false); // Only Show _nxtBtn
                 }
@@ -223,28 +223,22 @@ namespace Arcy.Dialogue
                     _choice = false;
                     _nextDialogue = false;
                     _canExit = true;
-                    _dialogueUI?.EnableDialogueBtns(false, true); // Hide all dialogueBtns
+                    _dialogueUI?.EnableDialogueBtns(false, false); // Hide all dialogueBtns
                 }
             }
         }
 
-        // Called by _dialogueUI
+        // When we push one of the AnswrBtns
         private void AnswrBtnPressed(bool yesBtn)
         {
-            _dialogueUI.EnableDialogueBtns(false, false);
+            // _dialogueUI.EnableDialogueBtns(false, false);
             _tmpText.text = "";
             _choice = false;
 
             if (yesBtn) // Yes-btn pressed
-            {
-                _currentlyInDialogue = false;
                 _speakerID = AnswerFromBtn(_speakerID, 1);
-            }
             else // No-btn pressed
-            {
-                _currentlyInDialogue = false;
                 _speakerID = AnswerFromBtn(_speakerID, 2);
-            }
 
             // Create a new string based on which AnswrBtn is pressed
             string AnswerFromBtn(string ogString, int addValue)
@@ -273,7 +267,10 @@ namespace Arcy.Dialogue
 
                 return updatedString;
             }
-            RunDialogue(_speakerID);
+
+            _currentlyInDialogue = false;
+
+            RunDialogue(_speakerID); // Launch a new conversation, based on a new _speakerID
         }
 
         // When Yes-button is pressed
@@ -288,11 +285,8 @@ namespace Arcy.Dialogue
             AnswrBtnPressed(false);
         }
 
-
         /*
-
         // TODO: All methods below should be put in CameraManager
-
         public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
         {
             if (dialogueCam != null)
@@ -312,8 +306,7 @@ namespace Arcy.Dialogue
         public void DialogueDOF(float x)
         {
             dialogueDof.weight = x;
-        }
-
+        }ws
         */
     }
 

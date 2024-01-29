@@ -19,7 +19,7 @@ namespace Arcy.Dialogue
         [SerializeField] private Image _dialogueBg;
         [SerializeField] public List<DialogueAnswerBtn> answrBtns;
         [SerializeField] private GameObject _nextBtn;
-        private CanvasGroup _cvGroup;
+        [HideInInspector] public CanvasGroup cvGroup;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -31,13 +31,13 @@ namespace Arcy.Dialogue
         private void OnEnable()
         {
             CheckComponents();
-            _cvGroup.alpha = 0;
+            cvGroup.alpha = 0;
         }
 
         private void CheckComponents()
         {
             _dialogueBg ??= GetComponentInChildren<Image>();
-            _cvGroup ??= TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? hit : null;
+            cvGroup ??= TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? hit : null;
         }
 
         // When we reach the end of a line of dialogue, should we activate _nextBtn or answerBtns?
@@ -93,15 +93,13 @@ namespace Arcy.Dialogue
             IEnumerator fadeUI()
             {
                 yield return routineDelay;
-                _cvGroup.DOFade(show ? 1 : 0, time);
+                cvGroup.DOFade(show ? 1 : 0, time);
                 yield return routineDelay;
 
                 if (show)
                 {
-                    DialogueManager.Instance.dialogueIndex = 0;
-
                     //pop the size of the UI
-                    _cvGroup.transform.DOScale(0, time).From().SetEase(Ease.OutBack);
+                    cvGroup.transform.DOScale(0, time).From().SetEase(Ease.OutBack);
                     yield return routineDelay;
                 }
             }

@@ -554,7 +554,7 @@
                     "path": "*/{Submit}",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
+                    "groups": "Keyboard&Mouse;Touch;Joystick;XR;Keyboard",
                     "action": "interact",
                     "isComposite": false,
                     "isPartOfComposite": false

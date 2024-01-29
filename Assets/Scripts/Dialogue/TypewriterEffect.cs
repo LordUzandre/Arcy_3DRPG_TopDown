@@ -57,12 +57,14 @@ namespace Arcy.Dialogue
 			{
 				yield return null;
 				TMPro_EventManager.TEXT_CHANGED_EVENT.Add(PrepareForNewText); // Detects changes in ANY TMP-object in the scene
+				DialogueManager.Instance.Skip += Skip;
 			}
 		}
 
 		private void OnDisable()
 		{
 			TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(PrepareForNewText);
+			DialogueManager.Instance.Skip -= Skip;
 		}
 
 		// When the text in _textbox is changed by another script, this types it out.
@@ -71,7 +73,6 @@ namespace Arcy.Dialogue
 			if (obj != _textBox || !readyForNewText || _textBox.maxVisibleCharacters >= _textBox.textInfo.characterCount)
 				return;
 
-			//CurrentlySkipping = false;
 			readyForNewText = false;
 
 			if (_typewriterCoroutine != null)

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028353, g: 0.22571383, b: 0.30692253, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1790,11 +1790,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 814277678}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0.2509804}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9245283, g: 0.66023517, b: 0.3794055, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_SelectedColor: {r: 0.9622642, g: 0.800167, b: 0.6309185, a: 1}
+    m_DisabledColor: {r: 0.25, g: 0.24818006, b: 0.1875, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5079,7 +5079,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 686353314}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
@@ -5104,14 +5104,14 @@ MonoBehaviour:
     type: 3}
   m_RightClickAction: {fileID: -8868715845415717120, guid: 985f85ecde8674b70a6ad233456e75de,
     type: 3}
-  m_ScrollWheelAction: {fileID: 5897965527082926901, guid: 985f85ecde8674b70a6ad233456e75de,
+  m_ScrollWheelAction: {fileID: 4502412055082496612, guid: 985f85ecde8674b70a6ad233456e75de,
     type: 3}
   m_TrackedDevicePositionAction: {fileID: 4142664489503899108, guid: 985f85ecde8674b70a6ad233456e75de,
     type: 3}
   m_TrackedDeviceOrientationAction: {fileID: -8823521430870476242, guid: 985f85ecde8674b70a6ad233456e75de,
     type: 3}
   m_DeselectOnBackgroundClick: 1
-  m_PointerBehavior: 0
+  m_PointerBehavior: 1
   m_CursorLockBehavior: 0
 --- !u!4 &688509988 stripped
 Transform:
@@ -5998,11 +5998,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 243302041}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0.2509804}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9245283, g: 0.66023517, b: 0.3794055, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_SelectedColor: {r: 0.9622642, g: 0.800167, b: 0.6309185, a: 1}
+    m_DisabledColor: {r: 0.25, g: 0.24818006, b: 0.1875, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -11793,7 +11793,8 @@ MonoBehaviour:
   _dialogueBlock: []
   _choices: []
   _moods: []
-  typeWriter: {fileID: 0}
+  _currentlyInDialogue: 0
+  _choice: 0
   otherSpeakerTransform: {fileID: 0}
 --- !u!1 &1782248801
 GameObject:
