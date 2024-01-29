@@ -5,23 +5,24 @@ using UnityEngine;
 
 namespace Arcy.Interaction
 {
-    [RequireComponent(typeof(Animator))]
     public class Door : MonoBehaviour, InteractibleBase
     {
-        [Header("Components")]
-        [SerializeField] private Animator _anim;
-
         private bool _isInteractible = true;
         [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
 
+        [HideInInspector] public Transform ObjectTransform => transform;
+
+        [Header("Components")]
+        [SerializeField] private Animator _anim;
+        [SerializeField] private Transform _doorModel;
         bool doorIsOpen = false;
 
-        [HideInInspector] public Transform ObjectTransform => transform;
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            _anim ??= TryGetComponent<Animator>(out Animator anim) ? _anim = anim : null;
+            //_anim ??= TryGetComponent<Animator>(out Animator anim) ? _anim = anim : null;
+            _anim ??= GetComponentInChildren<Animator>();
         }
 #endif
 
