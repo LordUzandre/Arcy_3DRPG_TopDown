@@ -9,6 +9,10 @@ namespace Arcy.Animation
 {
     public class NPCAnimationHandler : MonoBehaviour
     {
+        /// <summary>
+        /// This script handles 
+        /// </summary>
+
         //Public:
         [Header("Animator")]
         [SerializeField] public Animator animator;
@@ -25,9 +29,19 @@ namespace Arcy.Animation
 
         #region Components
 
-        private void OnEnable()
+        private void Start()
         {
             CheckComponents();
+
+            StartCoroutine(ShortDelay());
+
+            IEnumerator ShortDelay() // Wait one frame to allow for the playerManager to be instanced
+            {
+                yield return null;
+                _aimTarget ??= PlayerManager.instance.animationHandler.playerEyeLevel;
+                _aimTarget ??= GameObject.FindGameObjectWithTag("Player").transform;
+                StartCoroutine(FowRoutine());
+            }
         }
 
 #if UNITY_EDITOR
@@ -72,37 +86,46 @@ namespace Arcy.Animation
                             animator = animFoundInChild;
                 }
             }
-
-            _aimTarget = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
         #endregion
+
+        //private void Update()
+        IEnumerator FowRoutine()
+        {
+            float angleToTarget;
+            Vector3 aimCtrlOffset = new Vector3(0, 2f, 0);
+            WaitForSeconds fowDelay = new WaitForSeconds(0.2f);
+            Vector3 dirToTarget = new Vector3();
+
+            while (_aimTarget != null)
+            {
+                dirToTarget = (_aimTarget.transform.position - transform.position).normalized;
+                angleToTarget = Vector3.Angle(transform.forward, dirToTarget);
+
+                if (angleToTarget < (_viewAngle * .5f)) //is the player within the viewCone
+                {
+                    if (Vector3.Distance(transform.position, _aimTarget.position) < _viewRadius) // Is the player within distance?
+                    {
+                        _weight = 1;
+                        _aimCtrlPosition = _aimTarget.position; // Sets the _aimCtrl at Player's eyeLevel
+                    }
+                }
+                else
+                {
+                    _aimCtrlPosition = transform.position + (transform.forward * 3) + aimCtrlOffset;
+                    _weight = 0;
+                }
+
+                yield return fowDelay;
+            }
+        }
 
         private void Update()
         {
             if (_aimTarget != null)
             {
-                if (Vector3.Distance(transform.position, _aimTarget.position) < _viewRadius)
-                {
-                    Vector3 dirToTarget = (_aimTarget.transform.position - transform.position).normalized;
-                    float angleToTarget = Vector3.Angle(transform.forward, dirToTarget);
-
-                    if (angleToTarget < (_viewAngle * .5f)) //is the player within the viewCone
-                    {
-                        _weight = 1;
-                        _aimCtrlPosition = _aimTarget.position + Vector3.up;
-
-                    }
-                    else
-                    {
-                        _aimCtrlPosition = transform.position + transform.forward + new Vector3(0, 1.4f, 0);
-
-                        _weight = 0;
-                    }
-                }
-
-                _multiAim.weight = Mathf.Lerp(_multiAim.weight, _weight, .05f); //set weight of the anim constraint
-
+                _multiAim.weight = Mathf.Lerp(_multiAim.weight, _weight, .02f); //set weight of the anim constraint
                 _aimController.position = Vector3.Lerp(_aimController.position, _aimCtrlPosition, .05f); //Set position of the aim-controller to player
             }
         }

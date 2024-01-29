@@ -14,6 +14,8 @@ namespace Arcy.Interaction
         private bool _isInteractible = true;
         [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
 
+        bool doorIsOpen = false;
+
         [HideInInspector] public Transform ObjectTransform => transform;
 
 #if UNITY_EDITOR
@@ -25,7 +27,30 @@ namespace Arcy.Interaction
 
         public void Interact()
         {
-            _anim.SetTrigger("Opening");
+            if (!doorIsOpen)
+            {
+                _anim.SetTrigger("Opening");
+                _isInteractible = true;
+            }
+            else
+            {
+                _anim.SetTrigger("Closing");
+                _isInteractible = false;
+            }
+
+            Invoke(nameof(MakeDoorInteractibleAgain), 1f);
+        }
+
+        private void MakeDoorInteractibleAgain()
+        {
+            doorIsOpen = ToggleBool(doorIsOpen);
+            isInteractible = true;
+
+            bool ToggleBool(bool input)
+            {
+                return !input;
+            }
+
         }
     }
 }

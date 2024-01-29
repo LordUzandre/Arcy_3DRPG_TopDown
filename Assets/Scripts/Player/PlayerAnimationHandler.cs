@@ -8,6 +8,7 @@ namespace Arcy.Animation
     {
         [HideInInspector] public PlayerManager playerManager;
         [HideInInspector] public float locomotion;
+        [SerializeField] public Transform playerEyeLevel;
 
         private void Start()
         {
