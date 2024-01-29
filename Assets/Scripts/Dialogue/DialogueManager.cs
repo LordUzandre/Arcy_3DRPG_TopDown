@@ -36,15 +36,18 @@ namespace Arcy.Dialogue
         [SerializeField] private List<string> _choices;
         [SerializeField] private List<string> _moods;
 
-        [SerializeField] private bool _currentlyInDialogue = false;
-        [SerializeField] private bool _choice = false;
-        private bool _nextDialogue = false;
-        private bool _canExit = false;
+        private bool _newDialogueStarted = true;
+        private bool _currentlyInDialogueBool = false;
+        private bool _choiceBool = false;
+        private bool _nextDialogueBool = false;
+        private bool _canExitBool = false;
 
         private WaitForSeconds _delayBeforeDialogue;
 
         [Header("Other Speaker")]
         [SerializeField] public Transform otherSpeakerTransform; // TODO: Should be other object's eyes, not just their transform.
+
+        #region Check Components
 
         private void Start()
         {
@@ -68,35 +71,40 @@ namespace Arcy.Dialogue
             TypewriterEffect.FinishTyping -= FinishTyping;
         }
 
+        #endregion
+
         #region Input from InputManager
+
         // Input started by PlayerManager when an interactible has dialogue
         public void RunDialogue(string speakerID)
         {
             _tmpText.maxVisibleCharacters = 0;
             _dialogueUI.EnableDialogueBtns(false, true); // Hide all dialogue Btns
 
-            if (_choice) // Choice is handled by AnswrBtnPressed
+            if (_choiceBool) // Choice is handled by AnswrBtnPressed
             {
-                Debug.Log("_choice is blocking");
-                _choice = false;
                 return;
             }
 
-            if (!_currentlyInDialogue) // Runs when a new dialogue plays up
+            if (!_currentlyInDialogueBool) // Runs when a new dialogue plays up or we answer a question
             {
-                _currentlyInDialogue = true;
+                _currentlyInDialogueBool = true;
                 _speakerID = speakerID;
                 _dialogueIndex = 0;
                 _dialogueBlock = RetrieveDataFromDB(speakerID); // Retrieve dialogue from .db-file
 
-                if (_dialogueUI.cvGroup.alpha != 1)
+                if (_dialogueUI.cvGroup.alpha != 1 || _newDialogueStarted)
                     _dialogueUI.FadeDialogueUI(true, .25f, .025f); // Fade in UI
 
                 StartCoroutine(ShortDelay());
 
                 IEnumerator ShortDelay()
                 {
-                    yield return _delayBeforeDialogue;
+                    if (_newDialogueStarted)
+                        yield return _delayBeforeDialogue;
+                    else if (true)
+                        yield return null;
+
                     _tmpText.text = _dialogueBlock[0]; // Write out text.
                 }
 
@@ -104,27 +112,28 @@ namespace Arcy.Dialogue
 
                 return;
             }
-            else if (_nextDialogue) // What happens once we finish typing out the sentence
+            else if (_nextDialogueBool) // Happens once we finish typing out the sentence
             {
-                _nextDialogue = false;
+                _nextDialogueBool = false;
                 _tmpText.text = _dialogueBlock[_dialogueIndex];
 
                 return;
             }
-            else if (_canExit) // What happens when we reach the end of the dialogue, and there's no question being asked.
+            else if (_canExitBool) // What happens when we reach the end of the dialogue (and there's no question being asked).
             {
                 _dialogueUI.FadeDialogueUI(false, .2f, .05f); // fade out UI
 
-                _canExit = false;
+                _canExitBool = false;
 
-                // Reset TMP
+                // Reset all components
                 _dialogueBlock.Clear();
                 _choices.Clear();
                 _moods.Clear();
                 _speakerID = null;
                 _tmpText.text = null;
                 _dialogueIndex = 0;
-                _currentlyInDialogue = false;
+                _currentlyInDialogueBool = false;
+                _newDialogueStarted = false;
 
                 GameStateManager.Instance.SetState(GameState.Freeroam);
 
@@ -132,9 +141,7 @@ namespace Arcy.Dialogue
             }
             else if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)
             {
-                // TODO! For some reason this runs whenever we answer a question
                 Skip?.Invoke();
-                Debug.Log("Skip triggered");
                 return;
             }
         }
@@ -202,12 +209,12 @@ namespace Arcy.Dialogue
         // Triggered when TypeWriterEffect finishes typing out text
         public void FinishTyping()
         {
-            if (_currentlyInDialogue)
+            if (_currentlyInDialogueBool)
             {
                 // Check whether there is a question being asked
                 if (_choices[_dialogueIndex] != "null")
                 {
-                    _choice = true;
+                    _choiceBool = true;
                     _dialogueUI?.EnableDialogueBtns(true);
                     return;
                 }
@@ -215,14 +222,14 @@ namespace Arcy.Dialogue
                 if (_dialogueIndex < _dialogueBlock.Count - 1)
                 {
                     _dialogueIndex++;
-                    _nextDialogue = true;
+                    _nextDialogueBool = true;
                     _dialogueUI?.EnableDialogueBtns(false, false); // Only Show _nxtBtn
                 }
                 else
                 {
-                    _choice = false;
-                    _nextDialogue = false;
-                    _canExit = true;
+                    _choiceBool = false;
+                    _nextDialogueBool = false;
+                    _canExitBool = true;
                     _dialogueUI?.EnableDialogueBtns(false, false); // Hide all dialogueBtns
                 }
             }
@@ -231,46 +238,50 @@ namespace Arcy.Dialogue
         // When we push one of the AnswrBtns
         private void AnswrBtnPressed(bool yesBtn)
         {
-            // _dialogueUI.EnableDialogueBtns(false, false);
-            _tmpText.text = "";
-            _choice = false;
+            StartCoroutine(ShortDelayBeforeExecution());
 
-            if (yesBtn) // Yes-btn pressed
-                _speakerID = AnswerFromBtn(_speakerID, 1);
-            else // No-btn pressed
-                _speakerID = AnswerFromBtn(_speakerID, 2);
-
-            // Create a new string based on which AnswrBtn is pressed
-            string AnswerFromBtn(string ogString, int addValue)
+            IEnumerator ShortDelayBeforeExecution()
             {
-                string numericPart = "";
-                string updatedString = "";
+                if (yesBtn) // Yes-btn pressed
+                    _speakerID = GetNewSpeakerId(_speakerID, 1);
+                else // No-btn pressed
+                    _speakerID = GetNewSpeakerId(_speakerID, 2);
 
-                // Extract numeric part from the string
-                foreach (char charLetter in ogString)
+                // Create a new string based on which AnswrBtn is pressed
+                string GetNewSpeakerId(string ogString, int addValue)
                 {
-                    if (char.IsDigit(charLetter))
-                        numericPart += charLetter;
-                    else
-                        break; // Stop when a non-digit character is encountered
+                    string numericPart = "";
+                    string updatedString = "";
+
+                    // Extract numeric part from the string
+                    foreach (char charLetter in ogString)
+                    {
+                        if (char.IsDigit(charLetter))
+                            numericPart += charLetter;
+                        else
+                            break; // Stop when a non-digit character is encountered
+                    }
+
+                    // Convert numeric part to an integer
+                    if (int.TryParse(numericPart, out int numericValue))
+                    {
+                        // Perform the desired operation on the numeric value
+                        numericValue += addValue;
+
+                        // Convert the updated numeric value back to string and append the non-numeric part
+                        updatedString = numericValue.ToString() + ogString.Substring(numericPart.Length);
+                    }
+
+                    return updatedString;
                 }
 
-                // Convert numeric part to an integer
-                if (int.TryParse(numericPart, out int numericValue))
-                {
-                    // Perform the desired operation on the numeric value
-                    numericValue += addValue;
+                yield return null;
 
-                    // Convert the updated numeric value back to string and append the non-numeric part
-                    updatedString = numericValue.ToString() + ogString.Substring(numericPart.Length);
-                }
-
-                return updatedString;
+                _choiceBool = false;
+                _currentlyInDialogueBool = false;
+                _newDialogueStarted = false;
+                RunDialogue(_speakerID); // Launch a new conversation, based on a new _speakerID
             }
-
-            _currentlyInDialogue = false;
-
-            RunDialogue(_speakerID); // Launch a new conversation, based on a new _speakerID
         }
 
         // When Yes-button is pressed
