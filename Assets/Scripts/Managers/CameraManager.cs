@@ -11,16 +11,18 @@ namespace Arcy.Camera
     public class CameraManager : MonoBehaviour
     {
         #region Serializefield components
+
         //public:
         [Header("CineMachine Brain")]
         public CinemachineBrain CM_Brain;
-        [Space]
+
         [Header("cameras")]
-        public CinemachineVirtualCamera gameplayCamera;
-        public CinemachineVirtualCamera topViewCamera;
-        public CinemachineVirtualCamera dialogueCamera;
+        [SerializeField] public CinemachineVirtualCamera gameplayCamera;
+        [SerializeField] public CinemachineVirtualCamera topViewCamera;
+        [SerializeField] public CinemachineVirtualCamera dialogueCamera;
+
         [Header("Dialogue Specific")]
-        public CinemachineTargetGroup targetGroup;
+        [SerializeField] public CinemachineTargetGroup targetGroup;
         [SerializeField] public Volume dialogueDof;
         #endregion
 
@@ -42,32 +44,27 @@ namespace Arcy.Camera
             cameraList.Add(gameplayCamera);
             cameraList.Add(topViewCamera);
             cameraList.Add(dialogueCamera);
-
-            //myMethod += gameplayCamera.GetComponent<CinemachineCollider>().IsTargetObscured(gameplayCamera);
         }
 
         private void OnDisable()
         {
             GameStateManager.OnGameStateChanged -= GameStateChanged;
         }
+
         #endregion
 
         #region Freeroam
         IEnumerator CheckIfCameraIsBlockedInFreeroam()
         {
+            bool targetIsObscured;
+            WaitForSeconds delay = new WaitForSeconds(.4f);
+
             yield return new WaitForSeconds(.2f);
 
             if (GameStateManager.Instance.CurrentGameState != GameState.Freeroam)
-            {
                 yield return null;
-            }
             else
-            {
                 _isFreeroam = true;
-            }
-
-            bool targetIsObscured;
-            WaitForSeconds delay = new WaitForSeconds(.4f);
 
             while (_isFreeroam == true)
             {
@@ -79,7 +76,6 @@ namespace Arcy.Camera
 
                 yield return delay;
             }
-
         }
         #endregion
 
@@ -101,11 +97,6 @@ namespace Arcy.Camera
                 default:
                     break;
             }
-        }
-
-        public Transform CheckCurrentCamera()
-        {
-            return cameraList[cameraListIndex].transform;
         }
 
         void ChangeCamera(int index = 0, bool cameraChange = false)

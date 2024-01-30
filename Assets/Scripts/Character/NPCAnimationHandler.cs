@@ -23,8 +23,9 @@ namespace Arcy.Animation
         [SerializeField] private MultiAimConstraint _multiAim;
         private Transform _aimTarget;
         private float _viewRadius = 5f;
-        private float _viewAngle = 120f;
+        private float _viewAngle = 140f;
         private float _weight;
+        bool _playerInView = false;
         private Vector3 _aimCtrlPosition = new Vector3(0, 0, 0);
 
         #region Components
@@ -95,8 +96,9 @@ namespace Arcy.Animation
         {
             float angleToTarget;
             Vector3 aimCtrlOffset = new Vector3(0, 2f, 0);
-            WaitForSeconds fowDelay = new WaitForSeconds(0.2f);
             Vector3 dirToTarget = new Vector3();
+            WaitForSeconds fowDelay = new WaitForSeconds(0.2f);
+            WaitForSeconds shortDelay = new WaitForSeconds(0.05f);
 
             while (_aimTarget != null)
             {
@@ -107,17 +109,22 @@ namespace Arcy.Animation
                 {
                     if (Vector3.Distance(transform.position, _aimTarget.position) < _viewRadius) // Is the player within distance?
                     {
+                        _playerInView = true;
                         _weight = 1;
                         _aimCtrlPosition = _aimTarget.position; // Sets the _aimCtrl at Player's eyeLevel
                     }
                 }
                 else
                 {
-                    _aimCtrlPosition = transform.position + (transform.forward * 3) + aimCtrlOffset;
+                    _playerInView = false;
                     _weight = 0;
+                    _aimCtrlPosition = transform.position + (transform.forward * 3) + aimCtrlOffset;
                 }
 
-                yield return fowDelay;
+                if (_playerInView)
+                    yield return fowDelay;
+                else
+                    yield return shortDelay;
             }
         }
 
@@ -125,7 +132,7 @@ namespace Arcy.Animation
         {
             if (_aimTarget != null)
             {
-                _multiAim.weight = Mathf.Lerp(_multiAim.weight, _weight, .02f); //set weight of the anim constraint
+                _multiAim.weight = Mathf.Lerp(_multiAim.weight, _weight, .05f); //set weight of the anim constraint
                 _aimController.position = Vector3.Lerp(_aimController.position, _aimCtrlPosition, .05f); //Set position of the aim-controller to player
             }
         }

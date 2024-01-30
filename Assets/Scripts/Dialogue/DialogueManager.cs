@@ -82,9 +82,7 @@ namespace Arcy.Dialogue
             _dialogueUI.EnableDialogueBtns(false, true); // Hide all dialogue Btns
 
             if (_choiceBool) // Choice is handled by AnswrBtnPressed
-            {
                 return;
-            }
 
             if (!_currentlyInDialogueBool) // Runs when a new dialogue plays up or we answer a question
             {
@@ -295,30 +293,5 @@ namespace Arcy.Dialogue
         {
             AnswrBtnPressed(false);
         }
-
-        /*
-        // TODO: All methods below should be put in CameraManager
-        public void CameraChange(bool dialogue) //true = dialogue, false = freeroam
-        {
-            if (dialogueCam != null)
-            {
-                gameCam.SetActive(!dialogue);
-                dialogueCam.SetActive(dialogue);
-            }
-
-            //Depth of field modifier
-            if (dialogueDof != null)
-            {
-                float dofWeight = dialogueCam.activeSelf ? 1 : 0;
-                DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
-            }
-        }
-
-        public void DialogueDOF(float x)
-        {
-            dialogueDof.weight = x;
-        }ws
-        */
     }
-
 }

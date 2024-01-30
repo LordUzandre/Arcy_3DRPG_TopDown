@@ -2,41 +2,45 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Arcy.Interaction
 {
     public class Door : MonoBehaviour, InteractibleBase
     {
-        private bool _isInteractible = true;
-        [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
-
         [HideInInspector] public Transform ObjectTransform => transform;
 
-        [Header("Components")]
-        [SerializeField] private Animator _anim;
-        [SerializeField] private Transform _doorModel;
-        bool doorIsOpen = false;
-
-
-#if UNITY_EDITOR
-        private void OnValidate()
+        private bool _isInteractible = true;
+        [HideInInspector]
+        public bool isInteractible
         {
-            //_anim ??= TryGetComponent<Animator>(out Animator anim) ? _anim = anim : null;
-            _anim ??= GetComponentInChildren<Animator>();
+            get { return _isInteractible; }
+            set { _isInteractible = value; }
         }
-#endif
+
+        [Header("Components")]
+        [SerializeField] private Transform _doorPivot;
+        private Vector3 _ogRotation;
+        private Vector3 _openRotation;
+        private bool _doorIsOpen = false;
+
+        private void Start()
+        {
+            _ogRotation = _doorPivot.transform.rotation.eulerAngles;
+            _openRotation = _ogRotation + new Vector3(0, -80, 0);
+        }
 
         public void Interact()
         {
-            if (!doorIsOpen)
+            if (!_doorIsOpen)
             {
-                _anim.SetTrigger("Opening");
                 _isInteractible = true;
+                _doorPivot.transform.DORotate(_openRotation, 1f);
             }
             else
             {
-                _anim.SetTrigger("Closing");
                 _isInteractible = false;
+                _doorPivot.transform.DORotate(_ogRotation, 1f);
             }
 
             Invoke(nameof(MakeDoorInteractibleAgain), 1f);
@@ -44,7 +48,7 @@ namespace Arcy.Interaction
 
         private void MakeDoorInteractibleAgain()
         {
-            doorIsOpen = ToggleBool(doorIsOpen);
+            _doorIsOpen = ToggleBool(_doorIsOpen);
             isInteractible = true;
 
             bool ToggleBool(bool input)
