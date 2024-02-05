@@ -135,7 +135,7 @@ namespace Arcy.Battle
                 case (PlayerTurnState.chooseEnemy):
                     combatActionsUI?.EnableCharacterBtns(true, false, false); // Enable to choose an enemy character
 
-                    // TODO: Add method to check what type of input we are using
+                    // Remember: Add method to check what type of input we are using
 
                     MarkFirstLivingCharacterInUi(BattleManager.instance.enemyTeam).Select(); // if we are using keyboard or gamepad => mark first enemy team member
                     return;
@@ -143,7 +143,7 @@ namespace Arcy.Battle
                 case (PlayerTurnState.choosePlayerTeamChar):
                     combatActionsUI?.EnableCharacterBtns(true, true, false); // Enable full Player-team characters choice
 
-                    // TODO: Add method to check what type of input we are using
+                    // Remember: Add method to check what type of input we are using
 
                     MarkFirstLivingCharacterInUi(BattleManager.instance.playerTeam).Select(); // if we are using keyboard or gamepad => mark first enemy team member
                     return;

@@ -25,7 +25,7 @@ namespace Arcy.Battle
         {
             EffectInstance effectInstance = new EffectInstance(effect);
 
-            //TODO: Use object pooling instead
+            //Remember: Use object pooling instead
             if (effect.activePrefab != null)
             {
                 effectInstance.curActiveGameObject = Instantiate(effect.activePrefab, transform);

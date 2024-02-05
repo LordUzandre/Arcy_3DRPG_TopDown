@@ -51,6 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Arcy_Project.sln",
+    "dotnet.defaultSolution": "Arcy_3DRPG_TopDown.sln",
     "dotnet.preferCSharpExtension": true
 }

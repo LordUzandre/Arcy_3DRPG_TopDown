@@ -11,8 +11,8 @@ public class PlayerLocomotion : MonoBehaviour
     [SerializeField] private float _runningSpeed = 5;
     [SerializeField] private float _rotationSpeed = 15;
 
-    [SerializeField] private float _inputX = 0;
-    [SerializeField] private float _inputY = 0;
+    private float _inputX = 0;
+    private float _inputY = 0;
     [SerializeField] private float _moveAmount = 0;
     [SerializeField] private float _movementSpeed = 0;
 

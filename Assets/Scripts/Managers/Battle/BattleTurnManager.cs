@@ -33,7 +33,7 @@ namespace Arcy.Battle
         // Triggered by BattleManager
         public void Begin()
         {
-            GenerateTurnOrder(BattleCharacterBase.Team.Player); // TODO: Change the overload if anybody else should start
+            GenerateTurnOrder(BattleCharacterBase.Team.Player); // Remember: Change the overload if anybody else should start
             NewTurn(_turnOrderList[0]);
             endTurnButton.GetComponent<Button>().onClick.AddListener(EndTurn);
         }

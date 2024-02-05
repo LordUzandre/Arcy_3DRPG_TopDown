@@ -94,19 +94,19 @@ namespace Arcy.Dialogue
                 if (_dialogueUI.cvGroup.alpha != 1 || _newDialogueStarted)
                     _dialogueUI.FadeDialogueUI(true, .25f, .025f); // Fade in UI
 
+                otherSpeakerTransform = PlayerManager.instance.currentInteractible.ObjectTransform;
+
                 StartCoroutine(ShortDelay());
 
                 IEnumerator ShortDelay()
                 {
                     if (_newDialogueStarted)
                         yield return _delayBeforeDialogue;
-                    else if (true)
+                    else
                         yield return null;
 
                     _tmpText.text = _dialogueBlock[0]; // Write out text.
                 }
-
-                //targetGroup.m_Targets[1].target = otherSpeaker;
 
                 return;
             }
@@ -128,6 +128,7 @@ namespace Arcy.Dialogue
                 _choices.Clear();
                 _moods.Clear();
                 _speakerID = null;
+                otherSpeakerTransform = null;
                 _tmpText.text = null;
                 _dialogueIndex = 0;
                 _currentlyInDialogueBool = false;

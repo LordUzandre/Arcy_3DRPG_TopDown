@@ -118,7 +118,10 @@ namespace Arcy.Dialogue
 
 		public void Skip() // Triggered by dialogueManager
 		{
-			StopCoroutine(_typewriterCoroutine);
+			if (_typewriterCoroutine != null)
+			{
+				StopCoroutine(_typewriterCoroutine);
+			}
 			_textBox.maxVisibleCharacters = _textBox.textInfo.characterCount;
 			readyForNewText = true;
 			FinishTyping?.Invoke();

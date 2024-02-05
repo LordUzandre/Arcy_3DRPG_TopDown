@@ -102,7 +102,7 @@ namespace Arcy.Battle
         // Called when hp reaches 0
         private void Die()
         {
-            // TODO: Right now the object is simply destroyed. Make it something more impressive.
+            // Remember: Right now the object is simply destroyed. Make it something more impressive.
             onCharacterDeath?.Invoke(this);
             Destroy(gameObject);
 

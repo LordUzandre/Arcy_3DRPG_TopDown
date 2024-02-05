@@ -5,6 +5,8 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.Rendering;
 using DG.Tweening;
+using Arcy.Dialogue;
+using Arcy.Interaction;
 
 namespace Arcy.Camera
 {
@@ -26,24 +28,37 @@ namespace Arcy.Camera
         [SerializeField] public Volume dialogueDof;
         #endregion
 
+        // Singleton
         private static CameraManager instance;
         public static CameraManager Instance { get; private set; }
 
-        private List<CinemachineVirtualCamera> cameraList = new List<CinemachineVirtualCamera>();
-        [HideInInspector] public float distanceToPlayer;
-        [HideInInspector] public int cameraListIndex;
+        // private List<CinemachineVirtualCamera> cameraList = new List<CinemachineVirtualCamera>();
+        [SerializeField] private Dictionary<int, CinemachineVirtualCamera> _cameraList = new Dictionary<int, CinemachineVirtualCamera>();
+        private float _distanceToPlayer;
+        private int _camListIndex = 0;
         private bool _isFreeroam;
 
         #region Subscriptions
+
+        private void Start()
+        {
+            _cameraList.Clear();
+            _cameraList.Add(0, gameplayCamera);
+            _cameraList.Add(1, topViewCamera);
+            _cameraList.Add(2, dialogueCamera);
+        }
+
         private void OnEnable()
         {
-            GameStateChanged(GameStateManager.Instance.CurrentGameState);
-            GameStateManager.OnGameStateChanged += GameStateChanged;
+            StartCoroutine(ShortDelay());
 
-            cameraList.Clear();
-            cameraList.Add(gameplayCamera);
-            cameraList.Add(topViewCamera);
-            cameraList.Add(dialogueCamera);
+            IEnumerator ShortDelay()
+            {
+                yield return null;
+                GameStateChanged(GameStateManager.Instance.CurrentGameState);
+                GameStateManager.OnGameStateChanged += GameStateChanged;
+            }
+
         }
 
         private void OnDisable()
@@ -51,20 +66,51 @@ namespace Arcy.Camera
             GameStateManager.OnGameStateChanged -= GameStateChanged;
         }
 
+        private void GameStateChanged(GameState newGameState)
+        {
+            StopCoroutine(BlockedViewChecker());
+
+            switch (newGameState)
+            {
+                case GameState.Freeroam:
+                    _isFreeroam = true;
+                    ChangeCamera(0);
+                    StartCoroutine(BlockedViewChecker());
+                    break;
+                case GameState.Dialogue:
+                    _isFreeroam = false;
+                    // Don't change camera if the ISpeakable is a sign
+                    if (PlayerManager.instance.currentInteractible is Sign)
+                        break;
+
+                    ChangeCamera(2);
+                    break;
+                default:
+                    break;
+            }
+
+            StartCoroutine(CheckTargetGroup());
+        }
+
         #endregion
 
         #region Freeroam
-        IEnumerator CheckIfCameraIsBlockedInFreeroam()
+        // Coroutine that checks whether Freeroam-Camera is blocked
+        private IEnumerator BlockedViewChecker()
         {
             bool targetIsObscured;
             WaitForSeconds delay = new WaitForSeconds(.4f);
 
-            yield return new WaitForSeconds(.2f);
+            yield return delay;
 
-            if (GameStateManager.Instance.CurrentGameState != GameState.Freeroam)
-                yield return null;
-            else
+            if (GameStateManager.Instance.CurrentGameState == GameState.Freeroam)
+            {
                 _isFreeroam = true;
+            }
+            else
+            {
+                yield break;
+            }
 
             while (_isFreeroam == true)
             {
@@ -72,62 +118,58 @@ namespace Arcy.Camera
                 targetIsObscured = gameplayCamera.GetComponent<CinemachineCollider>().IsTargetObscured(gameplayCamera);
 
                 //Switch to topview camera
-                ChangeCamera(targetIsObscured ? 1 : 0, true);
+                ChangeCamera(targetIsObscured ? 1 : 0);
 
                 yield return delay;
             }
         }
         #endregion
 
-        void GameStateChanged(GameState newGameState)
-        {
-            StopCoroutine(CheckIfCameraIsBlockedInFreeroam());
-
-            switch (newGameState)
-            {
-                case GameState.Freeroam:
-                    _isFreeroam = true;
-                    ChangeCamera(0, true);
-                    StartCoroutine(CheckIfCameraIsBlockedInFreeroam());
-                    break;
-                case GameState.Dialogue:
-                    _isFreeroam = false;
-                    ChangeCamera(2, true);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        void ChangeCamera(int index = 0, bool cameraChange = false)
+        void ChangeCamera(int camIndex)
         {
             // Check so that we actually need to change camera
-            if (index == cameraListIndex)
-            {
-                //print("CameraManager: index == cameraIndex");
+            if (camIndex == _camListIndex)
                 return;
-            }
 
-            cameraListIndex = index;
+            _camListIndex = camIndex;
 
-            foreach (CinemachineVirtualCamera camera in cameraList)
+            foreach (KeyValuePair<int, CinemachineVirtualCamera> camera in _cameraList)
             {
-                camera.Priority = 9;
+                if (camera.Key == camIndex)
+                {
+                    _cameraList[camera.Key].Priority = 10;
+                }
+                else
+                {
+                    _cameraList[camera.Key].Priority = 1;
+                }
             }
 
-            cameraList[index].Priority = 10;
-
-            //Depth of field modifier
-            if (dialogueDof != null)
-            {
-                float dofWeight = dialogueCamera.enabled ? 1 : 0;
-                DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
-            }
+            // // Depth of field modifier
+            // if (dialogueDof != null)
+            // {
+            //     float dofWeight = dialogueCamera.enabled ? 1 : 0;
+            //     DOVirtual.Float(dialogueDof.weight, dofWeight, .8f, DialogueDOF);
+            // }
         }
 
-        public void DialogueDOF(float x)
+        IEnumerator CheckTargetGroup()
         {
-            dialogueDof.weight = x;
+            yield return null;
+
+            if (GameStateManager.Instance.CurrentGameState == GameState.Dialogue)
+            {
+                targetGroup.m_Targets[1].target = DialogueManager.Instance.otherSpeakerTransform;
+            }
+            else
+            {
+                targetGroup.m_Targets[1].target = null;
+            }
         }
+
+        // public void DialogueDOF(float x)
+        // {
+        //     dialogueDof.weight = x;
+        // }
     }
 }

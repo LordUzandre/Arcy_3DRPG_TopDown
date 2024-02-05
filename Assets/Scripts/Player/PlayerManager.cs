@@ -96,7 +96,6 @@ public class PlayerManager : MonoBehaviour
 
     #region Interaction
 
-
     public void InteractibleNotNull() //Subscribe to inputManager, triggered by fow
     {
         InputManager.instance.InteractionInputPressed += InteractionKeyPressed;
@@ -112,14 +111,11 @@ public class PlayerManager : MonoBehaviour
         if (currentInteractible is ISpeakable speakableObject && speakableObject.SpeakerID != null)
         {
             if (!isInteracting)
+            {
                 GameStateManager.Instance.SetState(GameState.Dialogue);
+            }
 
             DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);
-
-            if (DialogueManager.Instance.otherSpeakerTransform == null)
-            {
-                DialogueManager.Instance.otherSpeakerTransform = currentInteractible.ObjectTransform;
-            }
         }
 
         currentInteractible.Interact();
