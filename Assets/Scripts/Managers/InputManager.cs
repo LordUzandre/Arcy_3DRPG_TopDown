@@ -4,16 +4,20 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
-namespace Arcy.InputManager
+namespace Arcy.InputManagement
 {
     public class InputManager : MonoBehaviour
     {
-        public static InputManager instance { get; private set; }
+        public static InputManager instance;
 
+        // Vector2 Wasd
         public event Action<Vector2> WASDInput;
+
+        // Action buttons pressed
         public event Action InteractionInputPressed;
         public event Action RunInputHeld;
         public event Action PauseInputPressed;
+
         public bool inputLocked = false;
 
         private GameState _currentGameState;

@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "cancel",
+                    "type": "Button",
+                    "id": "1aaae94b-ed53-4f74-83e7-1a47faac213e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -183,6 +192,17 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3af4618-9c70-47dc-83b1-39452d8f0152",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -550,17 +570,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f42d0a40-75e7-456d-bf29-6a1e86481346",
-                    "path": "*/{Submit}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse;Touch;Joystick;XR;Keyboard",
-                    "action": "interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "cd0e759c-d389-42c4-a3c2-eb2f20af96f3",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -572,11 +581,22 @@
                 },
                 {
                     "name": "",
-                    "id": "388cc477-3339-437e-ad64-f599b409bbf3",
-                    "path": "*/{Cancel}",
+                    "id": "44882544-ac99-433f-91db-423e56e68da7",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
+                    "groups": "",
+                    "action": "interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "532023bd-1b0b-48aa-8ba0-7fc7899e4786",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false

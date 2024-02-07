@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Arcy.InputManager;
+using Arcy.InputManagement;
 
 public class PlayerLocomotion : MonoBehaviour
 {

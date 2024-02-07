@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum GameState
 {
-    Freeroam, Battle, Dialogue, Cutscene
+    Freeroam, Battle, Dialogue, Cutscene, Pause
 }

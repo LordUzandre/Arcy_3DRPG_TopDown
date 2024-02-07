@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arcy.Dialogue;
 using Arcy.Animation;
-using Arcy.InputManager;
+using Arcy.InputManagement;
 using Arcy.Interaction;
 using DG.Tweening;
 using System;
