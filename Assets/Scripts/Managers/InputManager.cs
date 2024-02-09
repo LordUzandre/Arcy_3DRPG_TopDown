@@ -19,6 +19,7 @@ namespace Arcy.InputManagement
         public event Action PauseInputPressed;
 
         public bool inputLocked = false;
+        private bool _freeroamMode;
 
         private GameState _currentGameState;
         [SerializeField] private PlayerInput _playerInput;
@@ -46,6 +47,9 @@ namespace Arcy.InputManagement
                 case (GameState.Freeroam):
                     _playerInput.SwitchCurrentActionMap("Freeroam");
                     return;
+                case (GameState.Pause):
+                    _playerInput.SwitchCurrentActionMap("UI");
+                    return;
                 default:
                     return;
             }
@@ -69,7 +73,26 @@ namespace Arcy.InputManagement
 
         private void OnWASD()
         {
-            WASDInput?.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
+            switch (_currentGameState)
+            {
+                case GameState.Freeroam:
+                    if (WASDInput != null)
+                    {
+                        WASDInput.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
+                    }
+                    return;
+                case GameState.Pause:
+                    if (_playerInput.actions["move"].WasPressedThisFrame())
+                    {
+                        if (WASDInput != null)
+                        {
+                            WASDInput.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
+                        }
+                    }
+                    return;
+            }
+
+
         }
 
         // When player presses "E"-key
@@ -77,7 +100,7 @@ namespace Arcy.InputManagement
         {
             if (_playerInput.actions["interact"].WasPressedThisFrame())
             {
-                InteractionInputPressed?.Invoke(); // InteractionButton is an Action in PlayerManager.
+                InteractionInputPressed?.Invoke();
                 return;
             }
 
@@ -96,17 +119,12 @@ namespace Arcy.InputManagement
 
             if (_playerInput.actions["pause"].WasPressedThisFrame())
             {
-                PauseInputPressed?.Invoke();
+                if (GameStateManager.Instance.CurrentGameState == GameState.Freeroam)
+                {
+                    PauseInputPressed?.Invoke();
+                    _playerInput.SwitchCurrentActionMap("UI");
+                }
             }
-        }
-
-        public void SwapActionMap(InputActionMap actionMap)
-        {
-            if (actionMap.enabled)
-                return;
-
-            //_playerInput.Disable();
-            actionMap.Enable();
         }
     }
 }

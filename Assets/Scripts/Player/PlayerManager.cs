@@ -73,15 +73,16 @@ public class PlayerManager : MonoBehaviour
         switch (state)
         {
             case GameState.Freeroam:
-                EnableMovement(true, false);
+                EnableMovement(true, false); // Enable Movement
                 isInteracting = false;
-                break;
+                return;
             case GameState.Dialogue:
-                EnableMovement(false, true);
+                EnableMovement(false, true); // Disable Movement and rotate towrds the speaker
                 isInteracting = true;
-                break;
+                return;
             default:
-                break;
+                EnableMovement(false); // Disable Movement and hold still
+                return;
         }
     }
     #endregion

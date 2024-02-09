@@ -30,8 +30,10 @@ namespace Arcy.UI
 		[SerializeField] private List<MenuBtn> _characterMenuRightBtnList = new List<MenuBtn>();
 		[Header("Quest Menu")]
 		[SerializeField] private List<MenuBtn> _questLogBtnList = new List<MenuBtn>();
+		// private List<MenuBtn> _currentMenuList = new List<MenuBtn>();
 
-		private int _currentIndex;
+		private int _currentHeaderIndex;
+		private int _currentMenuIndex;
 
 		private MenuBtn _currentlySelectedBtn;
 		private MenuBtn _previouslySelectedBtn;
@@ -39,7 +41,22 @@ namespace Arcy.UI
 		private void OnEnable()
 		{
 			GameStateManager.OnGameStateChanged += OnGameStateChanged;
+		}
 
+		private void myMethod()
+		{
+			StartCoroutine(ShortDelay());
+
+			IEnumerator ShortDelay()
+			{
+				yield return null;
+
+				_currentHeaderIndex = 0;
+				_currentlySelectedBtn = _headerBtnList[_currentHeaderIndex];
+				_currentlySelectedBtn.OnSelected();
+
+				Debug.Log(_currentHeaderIndex);
+			}
 		}
 
 		private void OnDisable()
@@ -52,6 +69,7 @@ namespace Arcy.UI
 			switch (newGameState)
 			{
 				case GameState.Pause:
+					myMethod();
 					SubscribeToInputManager();
 					return;
 				default:
@@ -65,6 +83,7 @@ namespace Arcy.UI
 		{
 			// TODO: Set up a list of subscriptions to inputmanager
 			InputManager.instance.InteractionInputPressed += OnInteractBtnClicked;
+			InputManager.instance.WASDInput += InputVector;
 		}
 
 		private void UnSubscribeFromInputManager()
@@ -78,7 +97,8 @@ namespace Arcy.UI
 			switch (_currentMenuState)
 			{
 				case MenuStates.Header:
-					OpenNewMenu(_currentIndex);
+					_currentlySelectedBtn.OnHighlighted();
+					OpenNewMenu(_currentHeaderIndex);
 					return;
 				default:
 					return;
@@ -94,13 +114,50 @@ namespace Arcy.UI
 					// TODO: Leave the menu and return to game
 					return;
 				case MenuStates.SettingsMenu:
-					// TODO: Return to Header
+					SetPauseMenuState(MenuStates.Header);
 					return;
 				case MenuStates.CharacterMenu:
-					// TODO: Return to Header
+					SetPauseMenuState(MenuStates.Header);
 					return;
 				case MenuStates.QuestLogMenu:
-					// TODO: Return to Header
+					SetPauseMenuState(MenuStates.Header);
+					return;
+				default:
+					return;
+			}
+		}
+
+		private void SetPauseMenuState(MenuStates newMenuState)
+		{
+			if (newMenuState == _currentMenuState)
+				return;
+
+			_currentMenuState = newMenuState;
+
+			switch (_currentMenuState)
+			{
+				case MenuStates.Header:
+					int listIndex = 0;
+
+					foreach (MenuBtn btn in _headerBtnList)
+					{
+						listIndex++;
+
+						if (listIndex == _headerBtnList.IndexOf(btn))
+						{
+							_headerBtnList[_currentHeaderIndex].OnSelected();
+						}
+						else
+						{
+							btn.OnDeselected();
+						}
+					}
+					return;
+				case MenuStates.SettingsMenu:
+					return;
+				case MenuStates.CharacterMenu:
+					return;
+				case MenuStates.QuestLogMenu:
 					return;
 				default:
 					return;
@@ -112,14 +169,55 @@ namespace Arcy.UI
 			// TODO: Return to game
 		}
 
+		private void InputVector(Vector2 ogInputVector)
+		{
+			float xFloat = ogInputVector.x;
+			float yFloat = ogInputVector.y;
+
+			if (xFloat != 0)
+			{
+				if (xFloat < -0.5f)
+				{
+					OnLeftInput();
+				}
+				else if (xFloat > 0.5f)
+				{
+					OnRightInput();
+				}
+			}
+			else if (yFloat != 0)
+			{
+				if (yFloat < -0.5f)
+				{
+					OnDownInput();
+				}
+				else if (yFloat > 0.5f)
+				{
+					OnUpInput();
+				}
+			}
+		}
+
 		private void OnRightInput()
 		{
-			// TODO: When the player clicks right-btn
+			if (_currentlySelectedBtn?.OnRightSelect != null)
+			{
+				_currentlySelectedBtn.OnDeselected();
+				_currentlySelectedBtn = _currentlySelectedBtn.OnRightSelect;
+				_currentlySelectedBtn.OnSelected();
+				_currentHeaderIndex = _headerBtnList.IndexOf(_currentlySelectedBtn);
+			}
 		}
 
 		private void OnLeftInput()
 		{
-			// When the player clicks left-btn
+			if (_currentlySelectedBtn?.OnLeftSelect != null)
+			{
+				_currentlySelectedBtn.OnDeselected();
+				_currentlySelectedBtn = _currentlySelectedBtn.OnLeftSelect;
+				_currentlySelectedBtn.OnSelected();
+				_currentHeaderIndex = _headerBtnList.IndexOf(_currentlySelectedBtn);
+			}
 		}
 
 		private void OnUpInput()
@@ -139,15 +237,21 @@ namespace Arcy.UI
 			foreach (GameObject menus in allMenus)
 			{
 				localInt++;
+
 				if (localInt != headerMenuIndex)
 				{
-					menus.SetActive(false);
+					break;
 				}
 				else
 				{
 					menus.SetActive(true);
 				}
 			}
+		}
+
+		private List<MenuBtn> _currentMenuList(List<MenuBtn> myValues)
+		{
+			return myValues;
 		}
 
 	}

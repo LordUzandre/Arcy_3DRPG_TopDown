@@ -15,6 +15,12 @@ namespace Arcy.UI
 		[SerializeField] private Sprite _highlightAndSelected;
 		[SerializeField] private Sprite _selectedImage;
 
+		[Header("Explicit")]
+		[SerializeField] public MenuBtn OnUpSelect;
+		[SerializeField] public MenuBtn OnLeftSelect;
+		[SerializeField] public MenuBtn OnRightSelect;
+		[SerializeField] public MenuBtn OnDownSelect;
+
 		private Image _imageElement;
 
 		private void OnEnable()
@@ -29,12 +35,12 @@ namespace Arcy.UI
 
 		public void OnHighlighted()
 		{
-
+			_imageElement.sprite = _highlightedImage;
 		}
 
 		public void OnDeselected()
 		{
-
+			_imageElement.sprite = _disabledImage;
 		}
 	}
 }

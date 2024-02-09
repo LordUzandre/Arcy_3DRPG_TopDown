@@ -998,17 +998,6 @@
                 },
                 {
                     "name": "",
-                    "id": "8c7ef71d-ad21-4a42-9a18-33e04a50ddc9",
-                    "path": "*/{Submit}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Submit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "8051a7b1-f46c-43e9-be34-d95c3abc27dd",
                     "path": "<Keyboard>/e",
                     "interactions": "",
