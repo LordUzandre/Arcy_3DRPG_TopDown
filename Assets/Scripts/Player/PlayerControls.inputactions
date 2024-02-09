@@ -231,7 +231,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Cancel",
+                    "name": "cancel",
                     "type": "Button",
                     "id": "47604c17-cef8-4cdf-b283-60afce759a89",
                     "expectedControlType": "Button",
@@ -597,7 +597,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Cancel",
+                    "action": "cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

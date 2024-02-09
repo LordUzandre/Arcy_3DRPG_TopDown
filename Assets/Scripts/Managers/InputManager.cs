@@ -15,6 +15,7 @@ namespace Arcy.InputManagement
 
         // Action buttons pressed
         public event Action InteractionInputPressed;
+        public event Action CancelInputPressed;
         public event Action RunInputHeld;
         public event Action PauseInputPressed;
 
@@ -68,6 +69,7 @@ namespace Arcy.InputManagement
                 OnInteractKeyPressed();
                 OnRunKeyHeld();
                 OnPauseKeyPressed();
+                OnCancelKeyPressed();
             }
         }
 
@@ -91,8 +93,6 @@ namespace Arcy.InputManagement
                     }
                     return;
             }
-
-
         }
 
         // When player presses "E"-key
@@ -116,7 +116,6 @@ namespace Arcy.InputManagement
 
         private void OnPauseKeyPressed()
         {
-
             if (_playerInput.actions["pause"].WasPressedThisFrame())
             {
                 if (GameStateManager.Instance.CurrentGameState == GameState.Freeroam)
@@ -124,6 +123,14 @@ namespace Arcy.InputManagement
                     PauseInputPressed?.Invoke();
                     _playerInput.SwitchCurrentActionMap("UI");
                 }
+            }
+        }
+
+        private void OnCancelKeyPressed()
+        {
+            if (_playerInput.actions["cancel"].WasPressedThisFrame())
+            {
+                CancelInputPressed?.Invoke();
             }
         }
     }
