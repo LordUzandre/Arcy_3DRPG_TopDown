@@ -19,9 +19,9 @@ namespace Arcy.UI
 		[SerializeField] private GameObject _settingsMenu;
 		[SerializeField] private GameObject _characterMenu;
 		[SerializeField] private GameObject _questLogMenu;
-		[SerializeField] private List<GameObject> _allMenuObjects = new List<GameObject>();
+		[SerializeField] private List<GameObject> _allMenuGameObjects = new List<GameObject>();
 
-		// ALl the btns available in each menu
+		// All btns available in each menu
 		[Header("Header Menu")]
 		[SerializeField] private List<MenuBtn> _headerBtnList = new List<MenuBtn>();
 		[Header("Settings Menu")]
@@ -32,56 +32,35 @@ namespace Arcy.UI
 		[Header("Quest Menu")]
 		[SerializeField] private List<MenuBtn> _questLogBtnList = new List<MenuBtn>();
 
-		private List<List<MenuBtn>> _allMenusList = new List<List<MenuBtn>>();
-		private List<MenuBtn> _currentMenuList = new List<MenuBtn>();
+		[Space]
+		private List<List<MenuBtn>> _listWithAllMenus = new List<List<MenuBtn>>();
+		[SerializeField] private List<MenuBtn> _currentSubMenuList = new List<MenuBtn>();
 
 		// This int is based on which menu-btn is currently selected and decides which corresponding menu should be opened.
 		// 0 = settings, 1 = character Menu, 2 = Quest Log etc.
 		private int _currentHeaderIndex;
-		private int _currentMenuIndex;
-
 		private MenuBtn _currentlySelectedBtn;
-		private MenuBtn _previouslySelectedBtn;
 
 		private void Start()
 		{
-			if (_allMenuObjects.Count == 0)
-			{
-				_allMenuObjects.Add(_headerObject);
-				_allMenuObjects.Add(_settingsMenu);
-				_allMenuObjects.Add(_characterMenu);
-				_allMenuObjects.Add(_questLogMenu);
-			}
+			_allMenuGameObjects.Clear();
+			//_allMenuGameObjects.Add(_headerObject);
+			_allMenuGameObjects.Add(_settingsMenu);
+			_allMenuGameObjects.Add(_characterMenu);
+			_allMenuGameObjects.Add(_questLogMenu);
 
 			// All the menus
-			if (_allMenusList.Count == 0)
-			{
-				_allMenusList.Add(_headerBtnList);
-				_allMenusList.Add(_settingsBtnList);
-				_allMenusList.Add(_characterMenuLeftBtnList);
-				_allMenusList.Add(_characterMenuRightBtnList);
-				_allMenusList.Add(_questLogBtnList);
-			}
+			_listWithAllMenus.Clear();
+			_listWithAllMenus.Add(_headerBtnList);
+			_listWithAllMenus.Add(_settingsBtnList);
+			_listWithAllMenus.Add(_characterMenuLeftBtnList);
+			_listWithAllMenus.Add(_characterMenuRightBtnList);
+			_listWithAllMenus.Add(_questLogBtnList);
 		}
 
 		private void OnEnable()
 		{
 			GameStateManager.OnGameStateChanged += OnGameStateChanged;
-		}
-
-		private void myMethod() // For Debug purposes. Remove when implementation is happening
-		{
-			StartCoroutine(ShortDelay());
-
-			IEnumerator ShortDelay()
-			{
-				yield return null;
-
-				_currentHeaderIndex = 0;
-				OpenNewMenu(_currentHeaderIndex);
-				_currentlySelectedBtn = _headerBtnList[_currentHeaderIndex];
-				_currentlySelectedBtn.OnSelected();
-			}
 		}
 
 		private void OnDisable()
@@ -94,7 +73,7 @@ namespace Arcy.UI
 			switch (newGameState)
 			{
 				case GameState.Pause:
-					myMethod();
+					OpenPauseMenu();
 					SubscribeToInputManager();
 					return;
 				default:
@@ -102,6 +81,17 @@ namespace Arcy.UI
 					return;
 			}
 		}
+
+		// Can currently only open on the default state of 'Settings'
+		private void OpenPauseMenu()
+		{
+			_currentHeaderIndex = 0;
+			_currentlySelectedBtn = _headerBtnList[_currentHeaderIndex];
+			_currentlySelectedBtn.OnSelected();
+			ShowSubMenu(_currentHeaderIndex);
+		}
+
+		#region Subscriptions
 
 		// When we enter Pause-state
 		private void SubscribeToInputManager()
@@ -118,6 +108,8 @@ namespace Arcy.UI
 			InputManager.instance.CancelInputPressed -= OnBackBtnClicked;
 			InputManager.instance.WASDInput -= InputVector;
 		}
+
+		#endregion
 
 		#region Input-methods
 
@@ -203,7 +195,7 @@ namespace Arcy.UI
 					{
 						ChooseNewBtn(_currentlySelectedBtn.OnRightSelect);
 						_currentHeaderIndex = _headerBtnList.IndexOf(_currentlySelectedBtn);
-						OpenNewMenu(_currentHeaderIndex);
+						ShowSubMenu(_currentHeaderIndex);
 					}
 					break;
 			}
@@ -218,7 +210,7 @@ namespace Arcy.UI
 					{
 						ChooseNewBtn(_currentlySelectedBtn.OnLeftSelect);
 						_currentHeaderIndex = _headerBtnList.IndexOf(_currentlySelectedBtn);
-						OpenNewMenu(_currentHeaderIndex);
+						ShowSubMenu(_currentHeaderIndex);
 					}
 					return;
 			}
@@ -226,6 +218,13 @@ namespace Arcy.UI
 
 		private void OnUpInput()
 		{
+			if (_currentlySelectedBtn == _currentSubMenuList[0])
+			{
+				Debug.Log("Return to header");
+				SetPauseMenuState(MenuStates.Header);
+				return;
+			}
+
 			// When the player clicks up-btn
 			switch (_currentMenuState)
 			{
@@ -240,20 +239,23 @@ namespace Arcy.UI
 
 		private void OnDownInput()
 		{
-			Debug.Log("On Down Input");
-
 			// When the player clicks down-btn
 			switch (_currentMenuState)
 			{
 				case MenuStates.Header:
 					if (_currentlySelectedBtn?.OnDownSelect != null)
 					{
-						ChooseNewBtn(_currentMenuList[0]);
+						SetPauseMenuState(MenuStateBasedOnInt(_currentHeaderIndex + 1));
 					}
 					return;
 				case MenuStates.SettingsMenu:
 					if (_currentlySelectedBtn?.OnDownSelect != null)
-						ChooseNewBtn(_currentlySelectedBtn.OnDownSelect);
+					{
+						if (_currentlySelectedBtn.OnDownSelect.isInteractible)
+						{
+							ChooseNewBtn(_currentlySelectedBtn.OnDownSelect);
+						}
+					}
 					return;
 				default:
 					return;
@@ -269,49 +271,44 @@ namespace Arcy.UI
 			_currentlySelectedBtn.OnSelected();
 		}
 
-		// Open a new Menu Window and assign the appropriate list Should not select a new btn
-		private void OpenNewMenu(int headerMenuIndex)
+		// Open a new Menu Window and assign the appropriate list. Should not select a new btn
+		private void ShowSubMenu(int currentHeaderIndex)
 		{
-			SetPauseMenuState(SetStateBasedOnInt(headerMenuIndex));
-
-			foreach (GameObject menuObject in _allMenuObjects)
+			for (int i = 0; i < _allMenuGameObjects.Count; i++)
 			{
-				int localInt = 0;
-
-				if (headerMenuIndex == localInt)
+				if (i == currentHeaderIndex)
 				{
-					menuObject.SetActive(true);
-					_currentMenuList = _allMenusList[localInt];
-					localInt++;
-					break;
+					// Show the current sub-menu
+					_allMenuGameObjects[i].SetActive(true);
+					_currentSubMenuList = _listWithAllMenus[i + 1];
+					// Debug.Log($"i = '{i}', _currentHeaderIndex = '{_currentHeaderIndex}', currently selected btn = '{_currentlySelectedBtn.name}', \n currently showing menu = '{_allMenuGameObjects[i].name}'");
 				}
 				else
 				{
-					// Inactivate all other menus (except header)
-					if (localInt != 0)
-					{
-						menuObject.SetActive(false);
-					}
-					localInt++;
-					break;
+					// Inactivate all other menus
+					_allMenuGameObjects[i].SetActive(false);
 				}
 			}
 		}
 
-		private MenuStates SetStateBasedOnInt(int headerIndex)
+		private MenuStates MenuStateBasedOnInt(int headerIndex)
 		{
 			switch (headerIndex)
 			{
 				case 0:
+					Debug.Log("Header-state by int");
 					return MenuStates.Header;
 				case 1:
+					Debug.Log("Settings-state by int");
 					return MenuStates.SettingsMenu;
 				case 2:
+					Debug.Log("Char-state by int");
 					return MenuStates.CharacterMenu;
 				case 3:
+					Debug.Log("Quest-state by int");
 					return MenuStates.QuestLogMenu;
 				default:
-					Debug.Log("Something went wrong");
+					Debug.LogWarning("MenuBasedOnInt - Something went wrong!");
 					return MenuStates.Header;
 			}
 		}
@@ -319,33 +316,24 @@ namespace Arcy.UI
 		private void SetPauseMenuState(MenuStates newMenuState)
 		{
 			if (newMenuState == _currentMenuState)
+			{
+				Debug.LogWarning("SetState Failed");
 				return;
+			}
 
 			_currentMenuState = newMenuState;
-			Debug.Log($"new Menu State = {_currentMenuState}");
 
 			switch (_currentMenuState)
 			{
 				case MenuStates.Header:
-					int listIndex = 0;
-
-					foreach (MenuBtn btn in _headerBtnList)
-					{
-						listIndex++;
-
-						if (listIndex == _headerBtnList.IndexOf(btn))
-						{
-							_headerBtnList[_currentHeaderIndex].OnSelected();
-						}
-						else
-						{
-							btn.OnDeselected();
-						}
-					}
+					ChooseNewBtn(_headerBtnList[_currentHeaderIndex]);
 					return;
 				case MenuStates.SettingsMenu:
+					ChooseNewBtn(_settingsBtnList[0]);
+					Debug.Log("Settings Menu State");
 					return;
 				case MenuStates.CharacterMenu:
+					ChooseNewBtn(_characterMenuLeftBtnList[0]);
 					return;
 				case MenuStates.QuestLogMenu:
 					return;

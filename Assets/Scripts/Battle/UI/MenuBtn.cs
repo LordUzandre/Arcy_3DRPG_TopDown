@@ -4,26 +4,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Events;
 
 namespace Arcy.UI
 {
 	public class MenuBtn : MonoBehaviour
 	{
 		[Header("Non-selected images")]
-		[SerializeField] private Sprite _disabledImage;
-		[SerializeField] private Sprite _highlightedImage;
-		[Header("selected system")]
-		[SerializeField] private Sprite _highlightAndSelected;
-		[SerializeField] private Sprite _selectedImage;
+		[SerializeField] private Sprite _disabledSprite;
+		[SerializeField] private Sprite _neutralSprite;
+		[SerializeField] private Sprite _highlightedSprite;
 
-		[Header("Explicit")]
+		[Header("selected system")]
+		[SerializeField] private Sprite _highlightAndSelectedSprite;
+		[SerializeField] private Sprite _selectedImageSprite;
+
+		[Header("Explicit Navigation")]
 		[SerializeField] public MenuBtn OnUpSelect;
 		[SerializeField] public MenuBtn OnLeftSelect;
 		[SerializeField] public MenuBtn OnRightSelect;
 		[SerializeField] public MenuBtn OnDownSelect;
 
-		[HideInInspector] public bool isInteractible = true;
+		[SerializeField] public bool isInteractible = true;
 		[HideInInspector] public bool isHighlighted = false;
+
+		[SerializeField] public UnityEvent onBtnClick;
 
 		private Image _imageElement;
 		private TMP_Text _textMeshPro;
@@ -34,32 +39,44 @@ namespace Arcy.UI
 			_textMeshPro = GetComponentInChildren<TMP_Text>();
 		}
 
+		private void OnValidate()
+		{
+			if (!isInteractible)
+			{
+				_imageElement.sprite = _disabledSprite;
+			}
+		}
+
 		public void OnSelected()
 		{
 			if (!isHighlighted)
 			{
-				_imageElement.sprite = _selectedImage;
+				_imageElement.sprite = _selectedImageSprite;
 			}
 			else
 			{
-				_imageElement.sprite = _highlightAndSelected;
+				_imageElement.sprite = _highlightAndSelectedSprite;
 			}
 		}
 
 		public void OnHighlighted()
 		{
-			_imageElement.sprite = _highlightedImage;
+			_imageElement.sprite = _highlightedSprite;
 		}
 
 		public void OnDeselected()
 		{
-			if (!isHighlighted)
+			if (isHighlighted)
 			{
-				_imageElement.sprite = _disabledImage;
+				_imageElement.sprite = _highlightedSprite;
+			}
+			else if (isInteractible)
+			{
+				_imageElement.sprite = _neutralSprite;
 			}
 			else
 			{
-				_imageElement.sprite = _highlightedImage;
+				_imageElement.sprite = _disabledSprite;
 			}
 		}
 
