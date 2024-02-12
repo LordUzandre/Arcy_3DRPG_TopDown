@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61ae206a2b352064db8557e521f97931, type: 3}
+  m_Name: Learn the Ropes
+  m_EditorClassIdentifier: 
+  questIcon: {fileID: 0}
+  questGiverIcon: {fileID: 0}
+  questLocationIcon: {fileID: 0}
+  questTitle: 
+  questGiver: 
+  questLocation: 
+  description:
+  - You have just arrived in this strange land and need to learn to find your way
+    around. A map, for instance, would be dead-useful.
+  isAvailable: 0
+  inProgress: 0
+  isFinished: 0

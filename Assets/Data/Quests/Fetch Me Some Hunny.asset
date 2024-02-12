@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61ae206a2b352064db8557e521f97931, type: 3}
+  m_Name: Fetch Me Some Hunny
+  m_EditorClassIdentifier: 
+  questIcon: {fileID: 0}
+  questGiverIcon: {fileID: 0}
+  questLocationIcon: {fileID: 0}
+  questTitle: Fetch Me Some Hunny!
+  questGiver: Winnie the Pooh
+  questLocation: Hundred-Acre Woods
+  description:
+  - ' You run into a willy nilly silly old bear, stuffed with fluff. He seems to
+    have misplaced his jar of "hunny", whatever that is, he was not very specific.
+    All he told you was that it was yellow, sticky and very sweet. Have a look around
+    and see if you can find some for him.'
+  isAvailable: 0
+  inProgress: 0
+  isFinished: 0

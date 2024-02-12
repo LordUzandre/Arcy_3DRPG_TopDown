@@ -5,17 +5,11 @@ using UnityEngine;
 
 namespace Arcy.Quest
 {
-	[CreateAssetMenu(fileName = "QuestManager", menuName = "Quest/New QuestManager")]
 	public class QuestManager : ScriptableObject
 	{
-		public List<Quest> ongoingQuests = new List<Quest>();
-		public List<Quest> finishedQuests = new List<Quest>();
+		public List<QuestObject> ongoingQuests = new List<QuestObject>();
+		public List<QuestObject> finishedQuests = new List<QuestObject>();
 
 		public static QuestManager instance;
-
-		private void Awake()
-		{
-			if (instance == null) { instance = this; } else { Destroy(this); }
-		}
 	}
 }

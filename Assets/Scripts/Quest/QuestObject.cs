@@ -6,15 +6,25 @@ using UnityEngine;
 namespace Arcy.Quest
 {
     [CreateAssetMenu(fileName = "Quest", menuName = "Quest/New Quest")]
-    public class Quest : ScriptableObject
+    public class QuestObject : ScriptableObject
     {
+        [Header("Icons")]
         public Sprite questIcon;
         public Sprite questGiverIcon;
         public Sprite questLocationIcon;
 
-        public string questName;
+        [Header("Important parts")]
+        public string questTitle;
         public string questGiver;
         public string questLocation;
+        [TextArea(4, 10)]
+        public string[] description;
+
+        [Header("Bools")]
+        public bool isAvailable;
+        public bool inProgress;
+        public bool isFinished;
+
 
         // Pre-requisites
 

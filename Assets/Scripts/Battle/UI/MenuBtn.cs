@@ -28,6 +28,7 @@ namespace Arcy.UI
 		[SerializeField] public bool isInteractible = true;
 		[HideInInspector] public bool isHighlighted = false;
 
+		[Space]
 		[SerializeField] public UnityEvent onBtnClick;
 
 		private Image _imageElement;
