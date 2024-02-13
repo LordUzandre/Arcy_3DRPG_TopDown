@@ -23,6 +23,9 @@ MonoBehaviour:
     have misplaced his jar of "hunny", whatever that is, he was not very specific.
     All he told you was that it was yellow, sticky and very sweet. Have a look around
     and see if you can find some for him.'
+  steps:
+  - {fileID: 0}
+  - {fileID: 0}
   isAvailable: 0
   inProgress: 0
   isFinished: 0

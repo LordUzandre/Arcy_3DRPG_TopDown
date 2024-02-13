@@ -15,12 +15,15 @@ MonoBehaviour:
   questIcon: {fileID: 0}
   questGiverIcon: {fileID: 0}
   questLocationIcon: {fileID: 0}
-  questTitle: 
+  questTitle: Learn the Ropes
   questGiver: 
-  questLocation: 
+  questLocation: The Docks
   description:
   - You have just arrived in this strange land and need to learn to find your way
     around. A map, for instance, would be dead-useful.
+  steps:
+  - {fileID: 0}
+  - {fileID: 0}
   isAvailable: 0
   inProgress: 0
   isFinished: 0

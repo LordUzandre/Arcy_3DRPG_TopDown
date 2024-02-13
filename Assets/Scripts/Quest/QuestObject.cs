@@ -19,6 +19,7 @@ namespace Arcy.Quest
         public string questLocation;
         [TextArea(4, 10)]
         public string[] description;
+        public QuestRequirementBase[] steps;
 
         [Header("Bools")]
         public bool isAvailable;
