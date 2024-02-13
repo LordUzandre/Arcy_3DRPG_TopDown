@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Arcy.InputManagement;
+using Arcy.Quest;
 
 namespace Arcy.UI
 {
@@ -257,6 +258,8 @@ namespace Arcy.UI
 						}
 					}
 					return;
+				case MenuStates.QuestLogMenu:
+					return;
 				default:
 					return;
 			}
@@ -336,6 +339,10 @@ namespace Arcy.UI
 					ChooseNewBtn(_characterMenuLeftBtnList[0]);
 					return;
 				case MenuStates.QuestLogMenu:
+					// if (QuestManager.instance.ongoingQuests.Count != null)
+					// {
+					// ChooseNewBtn();
+					// }
 					return;
 				default:
 					return;
