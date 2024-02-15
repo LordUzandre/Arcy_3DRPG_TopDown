@@ -8,6 +8,9 @@ namespace Arcy.Quest
     [CreateAssetMenu(fileName = "Quest", menuName = "Quest/New Quest")]
     public class QuestObject : ScriptableObject
     {
+        [Header("quest index")]
+        public string questIndex;
+
         [Header("Icons")]
         public Sprite questIcon;
         public Sprite questGiverIcon;
@@ -19,7 +22,10 @@ namespace Arcy.Quest
         public string questLocation;
         [TextArea(4, 10)]
         public string[] description;
+        [Header("Requirements")]
         public QuestRequirementBase[] steps;
+        [Header("Reward")]
+        public Inventory.InventoryItemBase[] rewards;
 
         [Header("Bools")]
         public bool isAvailable;

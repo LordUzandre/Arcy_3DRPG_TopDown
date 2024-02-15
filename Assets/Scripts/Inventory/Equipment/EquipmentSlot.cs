@@ -11,7 +11,6 @@ namespace Arcy.Inventory
 	public class EquipmentSlot : MonoBehaviour
 	{
 		public Image icon;
-		public Button removeButton;
 
 		InventoryItemBase item; // Current item in the slot
 
@@ -22,7 +21,6 @@ namespace Arcy.Inventory
 
 			icon.sprite = item.inventoryIcon;
 			icon.enabled = true;
-			removeButton.interactable = true;
 		}
 
 		// Clear the slot
@@ -32,7 +30,6 @@ namespace Arcy.Inventory
 
 			icon.sprite = null;
 			icon.enabled = false;
-			removeButton.interactable = false;
 		}
 
 		// If the remove button is pressed, this function will be called.

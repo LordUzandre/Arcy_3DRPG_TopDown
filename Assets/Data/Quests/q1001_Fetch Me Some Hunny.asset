@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61ae206a2b352064db8557e521f97931, type: 3}
-  m_Name: Learn the Ropes
+  m_Name: q1001_Fetch Me Some Hunny
   m_EditorClassIdentifier: 
   questIcon: {fileID: 0}
   questGiverIcon: {fileID: 0}
   questLocationIcon: {fileID: 0}
-  questTitle: Learn the Ropes
-  questGiver: 
-  questLocation: The Docks
+  questTitle: Fetch Me Some Hunny!
+  questGiver: Winnie the Pooh
+  questLocation: Hundred-Acre Woods
   description:
-  - You have just arrived in this strange land and need to learn to find your way
-    around. A map, for instance, would be dead-useful.
+  - ' You run into a willy nilly silly old bear, stuffed with fluff. He seems to
+    have misplaced his jar of "hunny", whatever that is, he was not very specific.
+    All he told you was that it was yellow, sticky and very sweet. Have a look around
+    and see if you can find some for him.'
   steps:
   - {fileID: 0}
   - {fileID: 0}

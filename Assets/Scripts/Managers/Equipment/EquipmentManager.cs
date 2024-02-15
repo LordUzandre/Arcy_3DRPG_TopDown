@@ -8,6 +8,7 @@ namespace Arcy.Management
 {
 	public class EquipmentManager : MonoBehaviour
 	{
+		#region Singleton
 		public static EquipmentManager instance
 		{
 			get
@@ -25,6 +26,7 @@ namespace Arcy.Management
 		{
 			_instance = this;
 		}
+		#endregion
 
 		public Equipment[] defaultWear;
 

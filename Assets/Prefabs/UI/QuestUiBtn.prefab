@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7790320649811148473}
   - component: {fileID: 991272542052158371}
   m_Layer: 0
-  m_Name: LocationTMP
+  m_Name: QuestGiverTMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -320,13 +320,13 @@ MonoBehaviour:
   onBtnClick:
     m_PersistentCalls:
       m_Calls: []
-  quest: {fileID: 0}
-  questIcon: {fileID: 0}
-  questTitleTMP: {fileID: 4489397556453423673}
-  questGiverTMP: {fileID: 991272542052158371}
-  questGiverIcon: {fileID: 0}
-  questLocationTMP: {fileID: 0}
-  questLocationIcon: {fileID: 0}
+  _quest: {fileID: 0}
+  _questTitleTMP: {fileID: 4489397556453423673}
+  _questGiverTMP: {fileID: 991272542052158371}
+  _questLocationTMP: {fileID: 0}
+  _questIcon: {fileID: 0}
+  _questGiverIcon: {fileID: 0}
+  _questLocationIcon: {fileID: 0}
 --- !u!1 &4286844931631615097
 GameObject:
   m_ObjectHideFlags: 0

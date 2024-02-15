@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,8 +17,7 @@ namespace Arcy.Inventory
 
 		#endregion
 
-		public delegate void OnItemChanged();
-		public OnItemChanged onItemChangedCallback;
+		public System.Action onItemChangedCallback;
 
 		public int space = 10;  // Amount of item spaces
 

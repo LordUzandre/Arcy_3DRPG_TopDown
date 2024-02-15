@@ -5,6 +5,7 @@ using Arcy.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 namespace Arcy.Quest
 {
@@ -17,32 +18,8 @@ namespace Arcy.Quest
 		[SerializeField] private List<QuestObject> _finishedQuests = new List<QuestObject>();
 		[Header("Quest UI Btn Prefab")]
 		[SerializeField] private GameObject _questUiBtnPrefab;
-		[Header("TextMeshPro Components")]
-		[SerializeField] private TMP_Text _questWindowTitle;
-		[SerializeField] private TMP_Text _questWindowGiverText;
-		[SerializeField] private TMP_Text _questWindowLocationText;
-		[SerializeField] private TMP_Text _questWindowDescriptionText;
-		[Header("Icons")]
-		[SerializeField] private Image _questWindowGiverIcon;
-		[SerializeField] private Image _questWindowLocationIcon;
-
-#if UNITY_EDITOR
-		private void OnValidate()
-		{
-			CheckComponents();
-		}
-#endif
-
-		private void CheckComponents()
-		{
-
-		}
-
-		private void UpdateQuestText(QuestObject quest)
-		{
-			_questWindowTitle.text = quest.questTitle;
-			_questWindowGiverText.text = quest.questGiver;
-			_questWindowLocationText.text = quest.questLocation;
-		}
+		[Header("Right Window Panel")]
+		[SerializeField] private QuestWindow _questWindow;
+		[SerializeField] private Transform onGoingListParent;
 	}
 }
