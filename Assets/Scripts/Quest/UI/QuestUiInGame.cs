@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace Arcy.Quest
+namespace Arcy.Quests
 {
 	public class QuestUiInGame : MonoBehaviour
 	{

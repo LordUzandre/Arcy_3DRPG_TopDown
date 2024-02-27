@@ -4,11 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arcy.Battle;
 
-namespace Arcy.Quest
+namespace Arcy.Quests
 {
 	[CreateAssetMenu(fileName = "Battle Requirement", menuName = "Quest/Requirements/New Battle Requirement")]
 	public class QuestR_Battle : QuestRequirementBase
 	{
 		[SerializeField] private BattleCharacterBase _characterToDefeat;
+
+		public override void OnFinish()
+		{
+
+		}
 	}
 }

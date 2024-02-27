@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Arcy.Quest;
+using Arcy.Quests;
 using TMPro;
 using Unity.VisualScripting;
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Arcy.Quest;
+using Arcy.Quests;
 using TMPro;
 
 namespace Arcy.UI

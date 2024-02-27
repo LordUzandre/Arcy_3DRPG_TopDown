@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Arcy.Quest
+namespace Arcy.Quests
 {
 	public class QuestUiStep : MonoBehaviour
 	{
@@ -14,9 +14,12 @@ namespace Arcy.Quest
 
 		private void Start()
 		{
-			_descriptiveText ??= GetComponentInChildren<TMP_Text>();
+			if (_descriptiveText == null)
+			{
+				GetComponentInChildren<TMP_Text>();
+			}
 
-			_descriptiveText.text = _questStepRequirement.requirementDescription;
+			_descriptiveText.text = _questStepRequirement.descriptionText;
 		}
 
 #if UNITY_EDITOR

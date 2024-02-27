@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arcy.Quest
+namespace Arcy.Quests
 {
     [CreateAssetMenu(fileName = "Quest", menuName = "Quest/New Quest")]
     public class QuestObject : ScriptableObject
@@ -15,16 +15,13 @@ namespace Arcy.Quest
         public Sprite questIcon;
         public Sprite questGiverIcon;
         public Sprite questLocationIcon;
-
         [Header("Important parts")]
         public string questTitle;
         public string questGiver;
         public string questLocation;
-        [TextArea(4, 10)]
-        public string[] description;
         [Header("Requirements")]
-        public QuestRequirementBase[] steps;
-        [Header("Reward")]
+        public List<QuestRequirementBase> questObjectives;
+        [Header("Rewards on finish")]
         public Inventory.InventoryItemBase[] rewards;
 
         [Header("Bools")]
@@ -34,10 +31,13 @@ namespace Arcy.Quest
 
 
         // Pre-requisites
+        // Remember to 
 
         // Progress
+        //Tick off finished steps and open next step
 
         // Reward
+        // Add rewards to inventory, clean up quest log and/or progress story
 
     }
 }

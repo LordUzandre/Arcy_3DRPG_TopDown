@@ -3,11 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arcy.Quest
+namespace Arcy.Quests
 {
-	public class QuestRequirementBase : ScriptableObject
+	public abstract class QuestRequirementBase : ScriptableObject
 	{
+		//private Quest _quest;
 		[SerializeField] public UnityEngine.UI.Image spriteIcon;
-		[SerializeField] public string requirementDescription;
+		[Space]
+		[TextArea(2, 6)][SerializeField] public string descriptionText;
+
+		public abstract void OnFinish();
 	}
 }
