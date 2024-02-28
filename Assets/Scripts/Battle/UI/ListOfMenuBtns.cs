@@ -19,8 +19,10 @@ namespace Arcy.UI
 
 		private void CheckComponents()
 		{
-			if (listOfBtns.Count == 0)
+			if (listOfBtns.Count == 0 || listOfBtns[0] == null)
 			{
+				listOfBtns.RemoveRange(0, listOfBtns.Count);
+
 				if (_parentObject == null)
 				{
 					foreach (Transform child in transform)

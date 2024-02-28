@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61ae206a2b352064db8557e521f97931, type: 3}
-  m_Name: q1002_FetchMeSomeHunny
+  m_Name: q1001_PlaceholderFinishedQuest
   m_EditorClassIdentifier: 
-  questIndex: 
   questIcon: {fileID: 0}
   questGiverIcon: {fileID: 0}
   questLocationIcon: {fileID: 0}
-  questTitle: Fetch Me Some Hunny!
-  questGiver: Winnie the Pooh
-  questLocation: Hundred-Acre Woods
+  questTitle: Learn the Ropes
+  questGiver: 
+  questLocation: The Docks
+  description:
+  - You have just arrived in this strange land and need to learn to find your way
+    around. A map, for instance, would be dead-useful.
   steps:
-  - {fileID: 11400000, guid: d5645f63588f0404a925215b016f2bc2, type: 2}
-  rewards:
-  - {fileID: 11400000, guid: c45f0b6e5ca5222408c9f04428b82016, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   isAvailable: 0
   inProgress: 0
   isFinished: 0

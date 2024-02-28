@@ -9,7 +9,7 @@ namespace Arcy.Inventory
 	public class InventoryItemBase : ScriptableObject
 	{
 		public string itemName;
-		public Sprite inventoryIcon;
+		public UnityEngine.UI.Image inventoryIcon;
 		public bool showInInventory = true;
 
 		// Called when the item is pressed in the inventory
@@ -22,7 +22,7 @@ namespace Arcy.Inventory
 		// Call this method to remove the item from inventory
 		public void RemoveFromInventory()
 		{
-			InventorySingleton.instance.Remove(this);
+			// InventorySingleton.instance.Remove(this);
 		}
 	}
 }

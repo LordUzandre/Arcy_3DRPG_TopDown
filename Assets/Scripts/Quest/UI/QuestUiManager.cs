@@ -15,6 +15,7 @@ namespace Arcy.Quests
 		[SerializeField] private QuestManager _questManager;
 		[Header("Left Window")]
 		[SerializeField] private GameObject _ongoingQuestParent;
+		[SerializeField] private GameObject _finishedQuestParent;
 		[Header("Quest Lists")]
 		[SerializeField] private List<QuestObject> _ongoingQuests = new List<QuestObject>();
 		[SerializeField] private List<QuestObject> _finishedQuests = new List<QuestObject>();
@@ -22,29 +23,70 @@ namespace Arcy.Quests
 		[SerializeField] private GameObject _questUiBtnPrefab;
 		[Header("Right Window Panel")]
 		[SerializeField] private QuestWindow _questWindow;
-		//[SerializeField] private Transform ongoingListParent;
+
+#if UNITY_EDITOR
+		private void OnValidate()
+		{
+			// SetRectSize(_ongoingQuestParent.gameObject.GetComponent<RectTransform>(), _ongoingQuests);
+			// SetRectSize(_finishedQuestParent.gameObject.GetComponent<RectTransform>(), _finishedQuests);
+		}
+#endif
 
 		private void Start()
 		{
+			CheckComponents();
+		}
+
+		private void CheckComponents()
+		{
+			if (_ongoingQuestParent == null)
+			{
+				_ongoingQuestParent = transform.Find("QuestUiParent").gameObject;
+			}
+
+			if (_finishedQuestParent == null)
+			{
+				_finishedQuestParent = transform.Find("FinishedUiParent").gameObject;
+			}
+
+			// Add the ongoingQuests and spawn all the finished quests in QuestManager from QuestManager
+			if (_ongoingQuestParent != null)
+			{
+				PopulateLists(_ongoingQuests, _questManager.ongoingQuests, _ongoingQuestParent.transform);
+			}
+
+			if (_finishedQuestParent != null)
+			{
+				PopulateLists(_finishedQuests, _questManager.finishedQuests, _finishedQuestParent.transform);
+			}
+		}
+
+		private void PopulateLists(List<QuestObject> questListToPopulate, List<QuestObject> ogList, Transform parentTransform)
+		{
 			// Destroy any placeholder quest in the list
-			foreach (Transform child in _ongoingQuestParent.transform)
+			foreach (Transform child in parentTransform)
 			{
 				Destroy(child.gameObject);
 			}
 
-			_ongoingQuests.Clear();
-			_finishedQuests.Clear();
+			questListToPopulate.Clear();
+			questListToPopulate.AddRange(ogList);
+			questListToPopulate = ogList;
 
-			// Add the ongoingQuests from QuestManager
-			foreach (QuestObject ongoingQuest in _questManager.ongoingQuests)
+			for (int i = 0; i < questListToPopulate.Count; i++)
 			{
-				GameObject questBtn = Instantiate(_questUiBtnPrefab, _ongoingQuestParent.transform);
-				_ongoingQuests.Add(questBtn.GetComponent<QuestObject>());
+				GameObject questBtnObj = Instantiate(_questUiBtnPrefab, parentTransform);
+				QuestUiBtn questBtn = questBtnObj.GetComponent<QuestUiBtn>();
+				questBtn.NewBtnSpawned(ogList[i]);
 			}
 
 			// Set the size of _ongoingQuestsParent.rect based on number of quests?
+			SetRectSize(parentTransform.gameObject.GetComponent<RectTransform>(), questListToPopulate);
+		}
 
-			// TODO: Also spawn all the finished quests in QuestManager
+		private void SetRectSize(RectTransform rect, List<QuestObject> quests)
+		{
+			rect.sizeDelta = new Vector2(rect.sizeDelta.x, 120 * quests.Count);
 		}
 	}
 }

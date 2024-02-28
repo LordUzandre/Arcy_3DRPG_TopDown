@@ -23,8 +23,9 @@ namespace Arcy.UI
 		[SerializeField] private GameObject _headerBarObject;
 		[SerializeField] private GameObject _settingsMenuObject;
 		[SerializeField] private GameObject _characterMenuObject;
-		[SerializeField] private GameObject _itemsMenuObject;
+		[SerializeField] private GameObject _inventoryMenuObject;
 		[SerializeField] private GameObject _questLogMenuObject;
+		[SerializeField] private GameObject _mapMenuObject;
 		[Space]
 		[SerializeField] private List<GameObject> _allMenuGameObjects = new List<GameObject>();
 
@@ -111,10 +112,10 @@ namespace Arcy.UI
 					_characterMenuObject = tempTransform.gameObject;
 				}
 
-				if (_itemsMenuObject == null)
+				if (_inventoryMenuObject == null)
 				{
 					Transform tempTransform = _uiParentObject.transform.Find("ItemsInventory");
-					_itemsMenuObject = tempTransform.gameObject;
+					_inventoryMenuObject = tempTransform.gameObject;
 				}
 
 				if (_questLogMenuObject == null)
@@ -122,16 +123,26 @@ namespace Arcy.UI
 					Transform tempTransform = _uiParentObject.transform.Find("QuestWindow");
 					_questLogMenuObject = tempTransform.gameObject;
 				}
+
+				if (_mapMenuObject == null)
+				{
+					Transform tempTransform = _uiParentObject.transform.Find("MapWindow");
+					_mapMenuObject = tempTransform.gameObject;
+				}
 				#endregion
 
-				PopulateList(_headerBtnList, _headerBarObject);
-				PopulateList(_settingsBtnList, _settingsMenuObject);
-				PopulateList(_questLogBtnList, _questLogMenuObject);
+				PopulateList(_headerBarObject, _headerBtnList);
+				PopulateList(_settingsMenuObject, _settingsBtnList);
+				PopulateList(_inventoryMenuObject, _itemsBtnsList);
+				PopulateList(_questLogMenuObject, _questLogBtnList);
+				// Remember: add the map
 
 				_allMenuGameObjects.Clear();
 				_allMenuGameObjects.Add(_settingsMenuObject);
 				_allMenuGameObjects.Add(_characterMenuObject);
+				_allMenuGameObjects.Add(_inventoryMenuObject);
 				_allMenuGameObjects.Add(_questLogMenuObject);
+				_allMenuGameObjects.Add(_mapMenuObject);
 
 				// All the menus
 				_listWithAllMenus.Clear();
@@ -140,15 +151,18 @@ namespace Arcy.UI
 				_listWithAllMenus.Add(_characterMenuLeftBtnList);
 				_listWithAllMenus.Add(_characterMenuRightBtnList);
 				_listWithAllMenus.Add(_questLogBtnList);
+				// Remember: add the map
 			}
 		}
 
-		private void PopulateList(List<MenuBtn> currentList, GameObject currentObject)
+		private void PopulateList(GameObject gameObjectWithList, List<MenuBtn> listToBePopulated)
 		{
-			if (currentObject.TryGetComponent<ListOfMenuBtns>(out ListOfMenuBtns hitObject))
+			if (gameObjectWithList.TryGetComponent<ListOfMenuBtns>(out ListOfMenuBtns ogListOfMenuBtns))
 			{
-				currentList.Clear();
-				currentList = hitObject.listOfBtns;
+				listToBePopulated.Clear();
+				listToBePopulated.RemoveRange(0, listToBePopulated.Count);
+				listToBePopulated.InsertRange(0, ogListOfMenuBtns.listOfBtns);
+				listToBePopulated = ogListOfMenuBtns.listOfBtns;
 			}
 		}
 

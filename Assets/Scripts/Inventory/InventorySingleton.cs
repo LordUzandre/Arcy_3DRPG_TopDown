@@ -4,51 +4,18 @@ using UnityEngine;
 
 namespace Arcy.Inventory
 {
-	public class InventorySingleton : MonoBehaviour
+	public class InventorySingleton : ScriptableObject
 	{
-		#region Singleton
+		[SerializeField] public Dictionary<InventoryItemBase, int> inventoryDictionary;
 
-		public static InventorySingleton instance;
-
-		void Awake()
+		private void AddItem(InventoryItemBase itemToAdd, int amountToAdd)
 		{
-			instance = this;
+
 		}
 
-		#endregion
-
-		public System.Action onItemChangedCallback;
-
-		public int space = 10;  // Amount of item spaces
-
-		// Our current list of items in the inventory
-		public List<InventoryItemBase> items = new List<InventoryItemBase>();
-
-		// Add a new item if enough room
-		public void Add(InventoryItemBase item)
+		private void RemoveItem(InventoryItemBase itemToRemove, int amountToRemove)
 		{
-			if (item.showInInventory)
-			{
-				if (items.Count >= space)
-				{
-					Debug.Log("Not enough room.");
-					return;
-				}
 
-				items.Add(item);
-
-				if (onItemChangedCallback != null)
-					onItemChangedCallback.Invoke();
-			}
-		}
-
-		// Remove an item
-		public void Remove(InventoryItemBase item)
-		{
-			items.Remove(item);
-
-			if (onItemChangedCallback != null)
-				onItemChangedCallback.Invoke();
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Arcy.Quests
 {
@@ -12,9 +13,9 @@ namespace Arcy.Quests
         public string questIndex;
 
         [Header("Icons")]
-        public Sprite questIcon;
-        public Sprite questGiverIcon;
-        public Sprite questLocationIcon;
+        public Image questIcon;
+        public Image questGiverIcon;
+        public Image questLocationIcon;
         [Header("Important parts")]
         public string questTitle;
         public string questGiver;
@@ -25,13 +26,11 @@ namespace Arcy.Quests
         public Inventory.InventoryItemBase[] rewards;
 
         [Header("Bools")]
-        public bool isAvailable;
-        public bool inProgress;
-        public bool isFinished;
-
+        public bool isAvailable = false;
+        public bool inProgress = false;
+        public bool isFinished = false;
 
         // Pre-requisites
-        // Remember to 
 
         // Progress
         //Tick off finished steps and open next step

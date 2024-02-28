@@ -11,13 +11,14 @@ namespace Arcy.UI
 	public class QuestUiBtn : MenuBtn
 	{
 		[Header("Quest")]
-		public QuestObject _quest;
+		[SerializeField] private QuestObject _quest;
 		[Space]
-		public TMP_Text _questTitleTMP;
-		public TMP_Text _questGiverTMP;
-		public Sprite _questIcon;
+		[SerializeField] private TMP_Text _questTitleTMP;
+		[SerializeField] private TMP_Text _questGiverTMP;
+		[SerializeField] private UnityEngine.UI.Image _questIcon;
 
-		private void SpawnNewBtn(QuestObject quest)
+		// Method is called by Quest UI Manager when spawning a new btn
+		public void NewBtnSpawned(QuestObject quest)
 		{
 			_quest = quest;
 			_questTitleTMP.text = quest.questTitle;
