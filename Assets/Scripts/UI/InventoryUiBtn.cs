@@ -7,7 +7,7 @@ using TMPro;
 
 namespace Arcy.UI
 {
-	public class InventoryBtn : MenuBtn
+	public class InventoryUiBtn : MenuBtn
 	{
 		[SerializeField] private bool _slotIsPopulated;
 		[SerializeField] private InventoryItemBase item;
@@ -20,7 +20,7 @@ namespace Arcy.UI
 		}
 #endif
 
-		private void Start()
+		public void OnBtnSpawn(InventoryItem itemToShow = null)
 		{
 			_slotIsPopulated = item ? true : false;
 			isInteractible = _slotIsPopulated;

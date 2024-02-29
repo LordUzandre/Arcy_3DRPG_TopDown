@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Arcy.Inventory
 {
@@ -9,7 +10,7 @@ namespace Arcy.Inventory
 	public class InventoryItemBase : ScriptableObject
 	{
 		public string itemName;
-		public UnityEngine.UI.Image inventoryIcon;
+		public Sprite inventoryIcon;
 		public bool showInInventory = true;
 
 		// Called when the item is pressed in the inventory

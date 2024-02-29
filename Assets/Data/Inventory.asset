@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a6e709887db5f34383a8afd803aefac, type: 3}
+  m_Name: Inventory
+  m_EditorClassIdentifier: 
+  items:
+  - item: {fileID: 11400000, guid: d509341324f5da1468acbf69bf262c9c, type: 2}
+    amount: 4
+  - item: {fileID: 11400000, guid: c45f0b6e5ca5222408c9f04428b82016, type: 2}
+    amount: 8
+  _inventorySize: 16
+  currentlyUsedSlots: 0
