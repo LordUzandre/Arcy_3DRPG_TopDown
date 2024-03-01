@@ -51,6 +51,7 @@ namespace Arcy.UI
 		[Space]
 		[SerializeField] private int _currentHeaderIndex;
 		private MenuBtn _currentlySelectedBtn;
+		private bool _pauseMenuIsActive;
 
 #if UNITY_EDITOR
 		private void OnValidate()
@@ -62,6 +63,13 @@ namespace Arcy.UI
 		private void Start()
 		{
 			GameStateManager.OnGameStateChanged += OnGameStateChanged;
+			StartCoroutine(PopulateAlllistsCoroutine());
+
+			IEnumerator PopulateAlllistsCoroutine()
+			{
+				yield return null;
+				PopulateAllLists();
+			}
 		}
 
 		private void OnDisable()
@@ -74,16 +82,22 @@ namespace Arcy.UI
 			switch (newGameState)
 			{
 				case GameState.Pause:
-					OpenPauseMenu();
-					SubscribeToInputManager();
+					if (!_pauseMenuIsActive)
+					{
+						OpenPauseMenu();
+						SubscribeToInputManager();
+					}
 					return;
 				default:
-					CloseDownPauseMenu();
-					UnSubscribeFromInputManager();
+					if (_pauseMenuIsActive)
+					{
+						CloseDownPauseMenu();
+					}
 					return;
 			}
 		}
 
+		#region Components
 		private void CheckComponents()
 		{
 			if (_uiParentObject == null)
@@ -131,28 +145,34 @@ namespace Arcy.UI
 				}
 				#endregion
 
-				PopulateList(_headerBarObject, _headerBtnList);
-				PopulateList(_settingsMenuObject, _settingsBtnList);
-				PopulateList(_inventoryMenuObject, _itemsBtnsList);
-				PopulateList(_questLogMenuObject, _questLogBtnList);
-				// Remember: add the map
+				PopulateAllLists();
 
-				_allMenuGameObjects.Clear();
-				_allMenuGameObjects.Add(_settingsMenuObject);
-				_allMenuGameObjects.Add(_characterMenuObject);
-				_allMenuGameObjects.Add(_inventoryMenuObject);
-				_allMenuGameObjects.Add(_questLogMenuObject);
-				_allMenuGameObjects.Add(_mapMenuObject);
-
-				// All the menus
-				_listWithAllMenus.Clear();
-				_listWithAllMenus.Add(_headerBtnList);
-				_listWithAllMenus.Add(_settingsBtnList);
-				_listWithAllMenus.Add(_characterMenuLeftBtnList);
-				_listWithAllMenus.Add(_characterMenuRightBtnList);
-				_listWithAllMenus.Add(_questLogBtnList);
-				// Remember: add the map
 			}
+		}
+
+		private void PopulateAllLists()
+		{
+			PopulateList(_headerBarObject, _headerBtnList);
+			PopulateList(_settingsMenuObject, _settingsBtnList);
+			PopulateList(_inventoryMenuObject, _itemsBtnsList);
+			PopulateList(_questLogMenuObject, _questLogBtnList);
+			// Remember: add the map
+
+			_allMenuGameObjects.Clear();
+			_allMenuGameObjects.Add(_settingsMenuObject);
+			_allMenuGameObjects.Add(_characterMenuObject);
+			_allMenuGameObjects.Add(_inventoryMenuObject);
+			_allMenuGameObjects.Add(_questLogMenuObject);
+			_allMenuGameObjects.Add(_mapMenuObject);
+
+			// All the menus
+			_listWithAllMenus.Clear();
+			_listWithAllMenus.Add(_headerBtnList);
+			_listWithAllMenus.Add(_settingsBtnList);
+			_listWithAllMenus.Add(_characterMenuLeftBtnList);
+			_listWithAllMenus.Add(_characterMenuRightBtnList);
+			_listWithAllMenus.Add(_questLogBtnList);
+			// Remember: add the map
 		}
 
 		private void PopulateList(GameObject gameObjectWithList, List<MenuBtn> listToBePopulated)
@@ -165,6 +185,7 @@ namespace Arcy.UI
 				listToBePopulated = ogListOfMenuBtns.listOfBtns;
 			}
 		}
+		#endregion
 
 		// Currently only opens on the default state of 'Settings'
 		private void OpenPauseMenu()
@@ -172,6 +193,7 @@ namespace Arcy.UI
 			CheckComponents();
 
 			_uiParentObject.SetActive(true);
+			_pauseMenuIsActive = true;
 			_currentHeaderIndex = 0;
 			_currentlySelectedBtn = _headerBtnList[_currentHeaderIndex];
 			_currentlySelectedBtn.OnSelected();
@@ -180,8 +202,11 @@ namespace Arcy.UI
 
 		private void CloseDownPauseMenu()
 		{
+			UnSubscribeFromInputManager();
 			CheckComponents();
 
+			_pauseMenuIsActive = false;
+			GameStateManager.Instance.SetState(GameState.Freeroam);
 			_uiParentObject.SetActive(false);
 		}
 
@@ -194,6 +219,7 @@ namespace Arcy.UI
 			InputManager.instance.InteractionInputPressed += OnInteractBtnClicked;
 			InputManager.instance.CancelInputPressed += OnBackBtnClicked;
 			InputManager.instance.WASDInput += InputVector;
+			InputManager.instance.PauseInputPressed += OnEscapeBtnClicked;
 		}
 
 		private void UnSubscribeFromInputManager()
@@ -201,6 +227,7 @@ namespace Arcy.UI
 			InputManager.instance.InteractionInputPressed -= OnInteractBtnClicked;
 			InputManager.instance.CancelInputPressed -= OnBackBtnClicked;
 			InputManager.instance.WASDInput -= InputVector;
+			InputManager.instance.PauseInputPressed -= OnEscapeBtnClicked;
 		}
 
 		#endregion
@@ -314,7 +341,6 @@ namespace Arcy.UI
 		{
 			if (_currentlySelectedBtn == _currentSubMenuList[0])
 			{
-				Debug.Log("Return to header");
 				SetPauseMenuState(MenuStates.Header);
 				return;
 			}
@@ -352,6 +378,14 @@ namespace Arcy.UI
 					}
 					return;
 				case MenuStates.QuestLogMenu:
+					if (false)
+					{
+
+					}
+					else if (true)
+					{
+
+					}
 					return;
 				default:
 					return;
@@ -377,7 +411,6 @@ namespace Arcy.UI
 					// Show the current sub-menu
 					_allMenuGameObjects[i].SetActive(true);
 					_currentSubMenuList = _listWithAllMenus[i + 1];
-					// Debug.Log($"i = '{i}', _currentHeaderIndex = '{_currentHeaderIndex}', currently selected btn = '{_currentlySelectedBtn.name}', \n currently showing menu = '{_allMenuGameObjects[i].name}'");
 				}
 				else
 				{
@@ -392,17 +425,17 @@ namespace Arcy.UI
 			switch (headerIndex)
 			{
 				case 0:
-					Debug.Log("Header-state by int");
 					return MenuStates.Header;
 				case 1:
-					Debug.Log("Settings-state by int");
 					return MenuStates.SettingsMenu;
 				case 2:
-					Debug.Log("Char-state by int");
 					return MenuStates.CharacterMenu;
 				case 3:
-					Debug.Log("Quest-state by int");
+					return MenuStates.ItemsInventory;
+				case 4:
 					return MenuStates.QuestLogMenu;
+				case 5:
+					return MenuStates.Map;
 				default:
 					Debug.LogWarning("MenuBasedOnInt - Something went wrong!");
 					return MenuStates.Header;
@@ -426,15 +459,18 @@ namespace Arcy.UI
 					return;
 				case MenuStates.SettingsMenu:
 					ChooseNewBtn(_settingsBtnList[0]);
-					Debug.Log("Settings Menu State");
 					return;
 				case MenuStates.CharacterMenu:
 					ChooseNewBtn(_characterMenuLeftBtnList[0]);
 					return;
 				case MenuStates.QuestLogMenu:
-					// if (QuestManager.instance.ongoingQuests.Count != null)
+					// if (true)
 					// {
 					// ChooseNewBtn();
+					// }
+					// else if (true)
+					// {
+
 					// }
 					return;
 				default:

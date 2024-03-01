@@ -46,10 +46,8 @@ namespace Arcy.InputManagement
             switch (newGameState)
             {
                 case (GameState.Freeroam):
-                    _playerInput.SwitchCurrentActionMap("Freeroam");
                     return;
                 case (GameState.Pause):
-                    _playerInput.SwitchCurrentActionMap("UI");
                     return;
                 default:
                     return;
@@ -78,18 +76,12 @@ namespace Arcy.InputManagement
             switch (_currentGameState)
             {
                 case GameState.Freeroam:
-                    if (WASDInput != null)
-                    {
-                        WASDInput.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
-                    }
+                    WASDInput?.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
                     return;
                 case GameState.Pause:
                     if (_playerInput.actions["move"].WasPressedThisFrame())
                     {
-                        if (WASDInput != null)
-                        {
-                            WASDInput.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
-                        }
+                        WASDInput?.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
                     }
                     return;
             }
@@ -103,7 +95,6 @@ namespace Arcy.InputManagement
                 InteractionInputPressed?.Invoke();
                 return;
             }
-
         }
 
         private void OnRunKeyHeld()
@@ -116,13 +107,9 @@ namespace Arcy.InputManagement
 
         private void OnPauseKeyPressed()
         {
-            if (_playerInput.actions["pause"].WasPressedThisFrame())
+            if (_playerInput.actions["Pause"].WasPressedThisFrame())
             {
-                if (GameStateManager.Instance.CurrentGameState == GameState.Freeroam)
-                {
-                    PauseInputPressed?.Invoke();
-                    _playerInput.SwitchCurrentActionMap("UI");
-                }
+                PauseInputPressed?.Invoke();
             }
         }
 

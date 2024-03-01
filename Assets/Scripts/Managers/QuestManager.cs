@@ -37,5 +37,15 @@ namespace Arcy.Quests
 				questFinished?.Invoke(quest);
 			}
 		}
+
+		private static void speakingObjectiveFinished(string speakerID)
+		{
+
+		}
+
+		private void QuestUpdated(QuestRequirementBase objective)
+		{
+			// Send a message to UI to update the inGame-UI
+		}
 	}
 }

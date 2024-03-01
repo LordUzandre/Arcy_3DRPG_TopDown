@@ -27,8 +27,10 @@ namespace Arcy.Quests
 #if UNITY_EDITOR
 		private void OnValidate()
 		{
-			// SetRectSize(_ongoingQuestParent.gameObject.GetComponent<RectTransform>(), _ongoingQuests);
-			// SetRectSize(_finishedQuestParent.gameObject.GetComponent<RectTransform>(), _finishedQuests);
+			// _ongoingQuests.Clear();
+			// _ongoingQuests.RemoveRange(0, _ongoingQuests.Count);
+			// _ongoingQuests.InsertRange(0, _questManager.ongoingQuests);
+			// _ongoingQuests = _questManager.ongoingQuests;
 		}
 #endif
 

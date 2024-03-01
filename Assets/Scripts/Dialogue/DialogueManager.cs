@@ -16,6 +16,7 @@ namespace Arcy.Dialogue
         public static DialogueManager Instance { get; private set; }
 
         public event Action Skip;
+        public Action<string> DialogueFinished;
 
         /// <summary>
         /// This script retrieves the data from the db and sends it to DialgueUI.
@@ -123,6 +124,8 @@ namespace Arcy.Dialogue
 
                 _canExitBool = false;
 
+                DialogueFinished?.Invoke(_speakerID);
+
                 // Reset all components
                 _dialogueBlock.Clear();
                 _choices.Clear();
@@ -149,7 +152,7 @@ namespace Arcy.Dialogue
         #region SQL-query
         List<string> RetrieveDataFromDB(string speakerID)
         {
-            string dbConnectionPath = "URI=file:" + Application.dataPath + "/Data/Dialogue/DB_Debug-scene.db";
+            string dbConnectionPath = $"URI=file:{Application.dataPath}/Data/Dialogue/DB_Debug-scene.db";
 
             // Connect to the SQLite database
             IDbConnection dbDialogue = new SqliteConnection(dbConnectionPath);

@@ -13,6 +13,8 @@ namespace Arcy.Inventory
 		[SerializeField] public int inventorySize = 16;
 		[SerializeField] public int currentlyUsedSlots;
 
+		public Action<InventoryItem> newItemAdded;
+
 		private void AddItem(InventoryItemBase itemToAdd, int amountToAdd)
 		{
 			if (currentlyUsedSlots >= inventorySize)
