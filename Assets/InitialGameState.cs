@@ -15,17 +15,13 @@ namespace Arcy.Management
         private void Start()
         {
             StartCoroutine(InitialDelay());
+
+            IEnumerator InitialDelay()
+            {
+                yield return new WaitForSeconds(.5f);
+                GameStateManager.Instance.SetState(_startingGameState);
+            }
         }
 
-        IEnumerator InitialDelay()
-        {
-            yield return null;
-            yield return null;
-            yield return null;
-            yield return null;
-            yield return null;
-            yield return null;
-            GameStateManager.Instance.SetState(_startingGameState);
-        }
     }
 }

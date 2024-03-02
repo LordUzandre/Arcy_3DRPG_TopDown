@@ -51,7 +51,7 @@ namespace Arcy.UI
 		[Space]
 		[SerializeField] private int _currentHeaderIndex;
 		private MenuBtn _currentlySelectedBtn;
-		private bool _pauseMenuIsActive;
+		// private bool _pauseMenuIsActive;
 
 #if UNITY_EDITOR
 		private void OnValidate()
@@ -79,20 +79,16 @@ namespace Arcy.UI
 
 		private void OnGameStateChanged(GameState newGameState)
 		{
+			Debug.Log("PauseMenu - OnGameStateChanged " + newGameState);
+
 			switch (newGameState)
 			{
 				case GameState.Pause:
-					if (!_pauseMenuIsActive)
-					{
-						OpenPauseMenu();
-						SubscribeToInputManager();
-					}
+					OpenPauseMenu();
 					return;
 				default:
-					if (_pauseMenuIsActive)
-					{
-						CloseDownPauseMenu();
-					}
+					Debug.Log("Closing down pause-menu");
+					CloseDownPauseMenu();
 					return;
 			}
 		}
@@ -188,13 +184,14 @@ namespace Arcy.UI
 		#endregion
 
 		// Currently only opens on the default state of 'Settings'
-		private void OpenPauseMenu()
+		private void OpenPauseMenu(int myInt = 0)
 		{
+			SubscribeToInputManager();
 			CheckComponents();
 
 			_uiParentObject.SetActive(true);
-			_pauseMenuIsActive = true;
-			_currentHeaderIndex = 0;
+			// _pauseMenuIsActive = true;
+			_currentHeaderIndex = myInt;
 			_currentlySelectedBtn = _headerBtnList[_currentHeaderIndex];
 			_currentlySelectedBtn.OnSelected();
 			ShowSubMenu(_currentHeaderIndex);
@@ -205,7 +202,7 @@ namespace Arcy.UI
 			UnSubscribeFromInputManager();
 			CheckComponents();
 
-			_pauseMenuIsActive = false;
+			// _pauseMenuIsActive = false;
 			GameStateManager.Instance.SetState(GameState.Freeroam);
 			_uiParentObject.SetActive(false);
 		}

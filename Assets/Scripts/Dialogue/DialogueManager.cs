@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Arcy.InputManagement;
 using Mono.Data.Sqlite;
 using TMPro;
 using UnityEngine;
@@ -82,10 +83,12 @@ namespace Arcy.Dialogue
             _tmpText.maxVisibleCharacters = 0;
             _dialogueUI.EnableDialogueBtns(false, true); // Hide all dialogue Btns
 
-            if (_choiceBool) // Choice is handled by AnswrBtnPressed
+            // Choice is handled by AnswrBtnPressed
+            if (_choiceBool)
                 return;
 
-            if (!_currentlyInDialogueBool) // Runs when a new dialogue plays up or we answer a question
+            // Runs when a new dialogue plays up or we answer a question
+            if (!_currentlyInDialogueBool)
             {
                 _currentlyInDialogueBool = true;
                 _speakerID = speakerID;
