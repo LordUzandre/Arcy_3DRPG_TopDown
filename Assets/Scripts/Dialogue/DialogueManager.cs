@@ -85,7 +85,9 @@ namespace Arcy.Dialogue
 
             // Choice is handled by AnswrBtnPressed
             if (_choiceBool)
+            {
                 return;
+            }
 
             // Runs when a new dialogue plays up or we answer a question
             if (!_currentlyInDialogueBool)
@@ -139,9 +141,7 @@ namespace Arcy.Dialogue
                 _dialogueIndex = 0;
                 _currentlyInDialogueBool = false;
                 _newDialogueStarted = false;
-
                 GameStateManager.Instance.SetState(GameState.Freeroam);
-
                 return;
             }
             else if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)

@@ -12,6 +12,11 @@ namespace Arcy.Management
 
         [SerializeField] private GameState _startingGameState;
 
+        private void Awake()
+        {
+            GameStateManager.Instance.SetState(GameState.RedundantGameState);
+        }
+
         private void Start()
         {
             StartCoroutine(InitialDelay());

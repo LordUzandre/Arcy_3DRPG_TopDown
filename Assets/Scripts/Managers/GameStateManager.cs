@@ -26,7 +26,7 @@ public class GameStateManager
         if (newGameState == CurrentGameState)
             return;
 
-        Debug.Log("New Game State Set = " + newGameState);
+        Debug.LogWarning("New Game Set = " + newGameState);
 
         CurrentGameState = newGameState;
 
