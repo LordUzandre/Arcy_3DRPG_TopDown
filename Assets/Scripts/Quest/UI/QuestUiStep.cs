@@ -10,7 +10,7 @@ namespace Arcy.Quests
 	public class QuestUiStep : MonoBehaviour
 	{
 		[SerializeField] private TMP_Text _descriptiveText;
-		[SerializeField] private QuestRequirementBase _questStepRequirement;
+		[SerializeField] private QuestObjectiveBase _questStepRequirement;
 
 		private void Start()
 		{

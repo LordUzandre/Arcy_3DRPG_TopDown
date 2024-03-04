@@ -17,7 +17,7 @@ namespace Arcy.Dialogue
         public static DialogueManager Instance { get; private set; }
 
         public event Action Skip;
-        public Action<string> DialogueFinished;
+        public static Action<string> DialogueFinished;
 
         /// <summary>
         /// This script retrieves the data from the db and sends it to DialgueUI.
@@ -130,6 +130,7 @@ namespace Arcy.Dialogue
                 _canExitBool = false;
 
                 DialogueFinished?.Invoke(_speakerID);
+                Debug.Log(_speakerID);
 
                 // Reset all components
                 _dialogueBlock.Clear();

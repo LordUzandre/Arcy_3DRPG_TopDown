@@ -20,7 +20,9 @@ MonoBehaviour:
   questGiver: Winnie the Pooh
   questLocation: Hundred-Acre Woods
   questObjectives:
+  - {fileID: 11400000, guid: b603054094e3c4ac0aee27cfd87d2563, type: 2}
   - {fileID: 11400000, guid: d5645f63588f0404a925215b016f2bc2, type: 2}
+  completedObjectives: []
   rewards:
   - {fileID: 11400000, guid: c45f0b6e5ca5222408c9f04428b82016, type: 2}
   isAvailable: 0
