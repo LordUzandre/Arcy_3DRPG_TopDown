@@ -20,10 +20,10 @@ namespace Arcy.UI
 		// Method is called by Quest UI Manager when spawning a new btn
 		public void NewBtnSpawned(Quest quest)
 		{
-			_quest = quest;
-			_questTitleTMP.text = quest.questDisplayNAme;
-			_questGiverTMP.text = quest.questGiver;
-			_questIcon = quest.questIcon;
+			// _quest = quest;
+			// _questTitleTMP.text = quest.questDisplayNAme;
+			// _questGiverTMP.text = quest.questGiver;
+			// _questIcon = quest.questIcon;
 		}
 	}
 }

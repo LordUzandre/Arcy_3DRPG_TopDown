@@ -23,60 +23,10 @@ namespace Arcy.Quests
 		[SerializeField] private TMP_Text _pressJToLearnMoreTMP;
 
 		[Header("Quest objectives(?)")]
-		[SerializeField] private QuestObjectiveBase _previousQuestStep;
-		[SerializeField] private QuestObjectiveBase _currentQuestStep;
+		[SerializeField] private QuestObjective _previousQuestStep;
+		[SerializeField] private QuestObjective _currentQuestStep;
 
 		[Header("Parent GameObject")]
 		[SerializeField] private GameObject _parentObject;
-
-		private void OnEnable()
-		{
-			QuestManager.questObjectiveCompleted += NewQuestAdded;
-			QuestManager.questObjectiveCompleted += QuestUpdated;
-			QuestManager.questFinished += QuestFinished;
-		}
-
-		private void OnDisable()
-		{
-			QuestManager.questObjectiveCompleted -= NewQuestAdded;
-			QuestManager.questObjectiveCompleted -= QuestUpdated;
-			QuestManager.questFinished -= QuestFinished;
-		}
-
-		private void UiRollIn()
-		{
-			// Activate the gameobject and roll in ui
-		}
-
-		private void UiRollOut()
-		{
-			StartCoroutine(myRoutine());
-
-			IEnumerator myRoutine()
-			{
-				yield return new WaitForSeconds(2f);
-				// Roll out Ui
-				yield return null;
-				//deactivate the gameobject
-			}
-		}
-
-		private void NewQuestAdded(Quest quest)
-		{
-			_questUpdatedTMP.text = "New Quest";
-			_questTMP.text = quest.name;
-		}
-
-		private void QuestUpdated(Quest quest)
-		{
-			_questUpdatedTMP.text = "Quest Updated";
-			_questTMP.text = quest.name;
-		}
-
-		private void QuestFinished(Quest quest)
-		{
-			_questUpdatedTMP.text = "Quest Finished";
-			_questTMP.text = quest.name;
-		}
 	}
 }

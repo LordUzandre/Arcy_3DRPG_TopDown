@@ -11,8 +11,6 @@ namespace Arcy.Quests
 {
 	public class QuestUiManager : MonoBehaviour
 	{
-		[Header("Quest Manager")]
-		[SerializeField] private QuestManager _questManager;
 		[Header("Left Window")]
 		[SerializeField] private GameObject _ongoingQuestParent;
 		[SerializeField] private GameObject _finishedQuestParent;
@@ -54,12 +52,12 @@ namespace Arcy.Quests
 			// Add the ongoingQuests and spawn all the finished quests in QuestManager from QuestManager
 			if (_ongoingQuestParent != null)
 			{
-				PopulateLists(_ongoingQuests, _questManager.ongoingQuests, _ongoingQuestParent.transform);
+				// PopulateLists(_ongoingQuests, _questManager.ongoingQuests, _ongoingQuestParent.transform);
 			}
 
 			if (_finishedQuestParent != null)
 			{
-				PopulateLists(_finishedQuests, _questManager.finishedQuests, _finishedQuestParent.transform);
+				// PopulateLists(_finishedQuests, _questManager.finishedQuests, _finishedQuestParent.transform);
 			}
 		}
 

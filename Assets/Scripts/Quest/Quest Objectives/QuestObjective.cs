@@ -1,27 +1,35 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arcy.Management;
 using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Arcy.Quests
 {
-	public abstract class QuestObjectiveBase : ScriptableObject
+	public abstract class QuestObjective : MonoBehaviour
 	{
 		[TextArea(2, 6)][SerializeField] public string descriptionText;
 
 		public abstract bool ThisObjectiveCanBeSkipped { get; set; }
-		private bool isFinished = false;
+		private bool _isFinished = false;
+		private string _questId;
 		public abstract void ObjectiveActivate();
 		public abstract void OnFinish();
 
-		public abstract event Action<QuestObjectiveBase> ObjectiveFinished;
+		public abstract event Action<QuestObjective> ObjectiveFinished;
+
+		public void InitializeQuestObjective(string questId)
+		{
+			this._questId = questId;
+		}
 
 		protected void FinishObjective()
 		{
-			if (!isFinished)
+			if (!_isFinished)
 			{
-				isFinished = true;
+				_isFinished = true;
+				GameEventManager.instance.questEvents.AdvanceQuest(_questId);
 
 				// Advance the quest forward now that the step is finished
 

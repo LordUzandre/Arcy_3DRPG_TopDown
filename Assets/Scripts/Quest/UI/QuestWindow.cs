@@ -21,9 +21,9 @@ namespace Arcy.UI
 
 		private void UpdateQuestText(Quest quest)
 		{
-			_titleTMP.text = quest.questDisplayNAme;
-			_questGiverTMP.text = quest.questGiver;
-			_questLocationTMP.text = quest.questLocation;
+			// _titleTMP.text = quest.questDisplayNAme;
+			// _questGiverTMP.text = quest.questGiver;
+			// _questLocationTMP.text = quest.questLocation;
 		}
 
 	}

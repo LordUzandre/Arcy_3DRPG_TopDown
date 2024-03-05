@@ -6,8 +6,7 @@ using UnityEngine;
 
 namespace Arcy.Quests
 {
-	[CreateAssetMenu(fileName = "Speaking Requirement", menuName = "Quest/Objectives/New Speaking Objectives")]
-	public class Objective_Speak : QuestObjectiveBase
+	public class Objective_Speak : QuestObjective
 	{
 		/// <summary>
 		/// This is a quest-objective that requires that you speak with an NPC to be finished.
@@ -17,7 +16,7 @@ namespace Arcy.Quests
 		[SerializeField] private bool thisObjectiveCanBeSkipped;
 		public override bool ThisObjectiveCanBeSkipped { get { return thisObjectiveCanBeSkipped; } set { thisObjectiveCanBeSkipped = value; } }
 
-		public override event Action<QuestObjectiveBase> ObjectiveFinished;
+		public override event Action<QuestObjective> ObjectiveFinished;
 
 		public override void ObjectiveActivate()
 		{

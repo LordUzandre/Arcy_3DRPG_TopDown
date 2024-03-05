@@ -6,61 +6,57 @@ using UnityEngine.UI;
 
 namespace Arcy.Quests
 {
-    [CreateAssetMenu(fileName = "Quest", menuName = "Quest/New Quest")]
-    public class Quest : ScriptableObject
+    public class Quest : MonoBehaviour
     {
-        [field: SerializeField] public string id { get; private set; }
+        // static info
+        public QuestInfoSO info;
 
-        [Header("Icons")]
-        public Image questIcon;
-        public Image questGiverIcon;
-        public Image questLocationIcon;
-        [Header("Important parts")]
-        public string questDisplayNAme;
-        public string questGiver;
-        public string questLocation;
-        [Space]
-        [Header("Quest Requirements")]
-        [SerializeField] private List<QuestPrerequisite> preRequisite;
-        [Header("Objectives")]
-        public QuestObjectiveBase[] questObjectives;
-        [Header("Rewards on finish")]
-        public Inventory.InventoryItemBase[] rewards;
+        // state info
+        public QuestState state;
 
-        [Header("Bools")]
-        public bool isAvailable = false;
-        public bool inProgress = false;
-        public bool isFinished = false;
+        private int currentQuestObjectiveIndex;
 
-        public Action<Quest> ObjectiveCompletedAction;
-
-        // Ensure that the id is always the same as the Scriptable Object Asset
-        private void OnValidate()
+        public Quest(QuestInfoSO questInfo)
         {
-#if UNITY_EDITOR
-            id = this.name;
-            UnityEditor.EditorUtility.SetDirty(this);
-#endif
-        }
-        // Pre-requisites
-
-        // Triggered by QuestManager when either the game starts, or when the quest is started in-game
-        public void Startup()
-        {
-            questObjectives[0].ObjectiveActivate();
-            questObjectives[0].ObjectiveFinished += ObjectiveCompleted;
+            this.info = questInfo;
+            this.state = QuestState.REQUIREMENTS_NOT_MET;
+            this.currentQuestObjectiveIndex = 0;
         }
 
-        // Tick off finished objectives and open the next one in the list
-        #region Progress
-        private void ObjectiveCompleted(QuestObjectiveBase objective)
+        public void MoveToNextObjective()
         {
-
+            currentQuestObjectiveIndex++;
         }
-        #endregion
 
-        // Reward
-        // Add rewards to inventory, clean up quest log and/or progress story
+        public bool CurrentObjectiveExists()
+        {
+            return (currentQuestObjectiveIndex < info.questObjectivePrefabs.Length);
+        }
 
+        public void InstantiateCurrentQuestObjective(Transform parentTransform)
+        {
+            GameObject questObjectivePrefab = GetCurrentQuestObjectivePrefab();
+            if (questObjectivePrefab != null)
+            {
+                // Use object Pooling instead of instantiation
+                QuestObjective objective = UnityEngine.Object.Instantiate<GameObject>(questObjectivePrefab, parentTransform).GetComponent<QuestObjective>();
+                objective.InitializeQuestObjective(info.id);
+            }
+        }
+
+        private GameObject GetCurrentQuestObjectivePrefab()
+        {
+            GameObject questObjectivePrefab = null;
+            if (CurrentObjectiveExists())
+            {
+                questObjectivePrefab = info.questObjectivePrefabs[currentQuestObjectiveIndex];
+            }
+            else
+            {
+                Debug.LogWarning("Tried to get quest step prefab, but stepIndex was out of range indicating that "
+                + "there's no current step: QuestId=" + info.id + ", stepIndex=" + currentQuestObjectiveIndex);
+            }
+            return questObjectivePrefab;
+        }
     }
 }

@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arcy.UI
+namespace Arcy
 {
-	public class QuestUiRequirement : MonoBehaviour
+	public class QuestData : MonoBehaviour
 	{
-
+		
 	}
 }
