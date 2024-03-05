@@ -19,9 +19,9 @@ namespace Arcy.UI
 		[Header("Rewards")]
 		[SerializeField] private List<GameObject> _questRewards = new List<GameObject>();
 
-		private void UpdateQuestText(QuestObject quest)
+		private void UpdateQuestText(Quest quest)
 		{
-			_titleTMP.text = quest.questTitle;
+			_titleTMP.text = quest.questDisplayNAme;
 			_questGiverTMP.text = quest.questGiver;
 			_questLocationTMP.text = quest.questLocation;
 		}

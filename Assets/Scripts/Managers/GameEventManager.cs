@@ -1,0 +1,33 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Arcy.InputManagement;
+using Arcy.Quests;
+using UnityEngine;
+
+namespace Arcy.Management
+{
+	public class GameEventManager : MonoBehaviour
+	{
+		public static GameEventManager instance { get; private set; }
+
+		// Subscribe to events:
+		public InputEvents inputEvents;
+		public QuestEvents questEvents;
+		// InventoryEvents
+		// DialogueEvents
+
+		private void Awake()
+		{
+			if (instance != null)
+			{
+				Debug.LogError("Found more than one Game Events Manager in the scene.");
+			}
+			instance = this;
+
+			//initialize all events
+			inputEvents = new InputEvents();
+			questEvents = new QuestEvents();
+		}
+	}
+}

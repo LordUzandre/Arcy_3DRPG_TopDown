@@ -7,6 +7,7 @@ using Arcy.InputManagement;
 using Arcy.Interaction;
 using DG.Tweening;
 using System;
+using Arcy.Management;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerManager : MonoBehaviour
@@ -46,7 +47,6 @@ public class PlayerManager : MonoBehaviour
         //Movement scripts
         playerLocomotion = GetComponent<PlayerLocomotion>();
         animationHandler = GetComponent<PlayerAnimationHandler>();
-        inputManager = GetComponent<InputManager>();
         characterController = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
 
@@ -99,12 +99,12 @@ public class PlayerManager : MonoBehaviour
 
     public void InteractibleNotNull() //Subscribe to inputManager, triggered by fow
     {
-        InputManager.instance.InteractionInputPressed += InteractionKeyPressed;
+        GameEventManager.instance.inputEvents.InteractionInputPressed += InteractionKeyPressed;
     }
 
     public void UnSubscribeFromInteractible() // UnSubscribe form inputManager, triggered by fow
     {
-        InputManager.instance.InteractionInputPressed -= InteractionKeyPressed;
+        GameEventManager.instance.inputEvents.InteractionInputPressed -= InteractionKeyPressed;
     }
 
     public void InteractionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible

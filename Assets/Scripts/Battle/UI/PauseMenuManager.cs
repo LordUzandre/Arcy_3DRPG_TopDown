@@ -5,6 +5,7 @@ using UnityEngine;
 using Arcy.InputManagement;
 using Arcy.Quests;
 using UnityEditor;
+using Arcy.Management;
 
 namespace Arcy.UI
 {
@@ -213,18 +214,18 @@ namespace Arcy.UI
 		private void SubscribeToInputManager()
 		{
 			// TODO: Set up a list of subscriptions to inputmanager
-			InputManager.instance.InteractionInputPressed += OnInteractBtnClicked;
-			InputManager.instance.CancelInputPressed += OnBackBtnClicked;
-			InputManager.instance.WASDInput += InputVector;
-			InputManager.instance.PauseInputPressed += OnEscapeBtnClicked;
+			GameEventManager.instance.inputEvents.InteractionInputPressed += OnInteractBtnClicked;
+			GameEventManager.instance.inputEvents.CancelInputPressed += OnBackBtnClicked;
+			GameEventManager.instance.inputEvents.WASDInput += InputVector;
+			GameEventManager.instance.inputEvents.PauseInputPressed += OnEscapeBtnClicked;
 		}
 
 		private void UnSubscribeFromInputManager()
 		{
-			InputManager.instance.InteractionInputPressed -= OnInteractBtnClicked;
-			InputManager.instance.CancelInputPressed -= OnBackBtnClicked;
-			InputManager.instance.WASDInput -= InputVector;
-			InputManager.instance.PauseInputPressed -= OnEscapeBtnClicked;
+			GameEventManager.instance.inputEvents.InteractionInputPressed -= OnInteractBtnClicked;
+			GameEventManager.instance.inputEvents.CancelInputPressed -= OnBackBtnClicked;
+			GameEventManager.instance.inputEvents.WASDInput -= InputVector;
+			GameEventManager.instance.inputEvents.PauseInputPressed -= OnEscapeBtnClicked;
 		}
 
 		#endregion

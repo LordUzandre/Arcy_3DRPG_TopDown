@@ -17,8 +17,8 @@ namespace Arcy.Quests
 		[SerializeField] private GameObject _ongoingQuestParent;
 		[SerializeField] private GameObject _finishedQuestParent;
 		[Header("Quest Lists")]
-		[SerializeField] private List<QuestObject> _ongoingQuests = new List<QuestObject>();
-		[SerializeField] private List<QuestObject> _finishedQuests = new List<QuestObject>();
+		[SerializeField] private List<Quest> _ongoingQuests = new List<Quest>();
+		[SerializeField] private List<Quest> _finishedQuests = new List<Quest>();
 		[Header("Quest UI Btn Prefab")]
 		[SerializeField] private GameObject _questUiBtnPrefab;
 		[Header("Right Window Panel")]
@@ -63,7 +63,7 @@ namespace Arcy.Quests
 			}
 		}
 
-		private void PopulateLists(List<QuestObject> questListToPopulate, List<QuestObject> ogList, Transform parentTransform)
+		private void PopulateLists(List<Quest> questListToPopulate, List<Quest> ogList, Transform parentTransform)
 		{
 			// Destroy any placeholder quest in the list
 			foreach (Transform child in parentTransform)
@@ -86,7 +86,7 @@ namespace Arcy.Quests
 			SetRectSize(parentTransform.gameObject.GetComponent<RectTransform>(), questListToPopulate);
 		}
 
-		private void SetRectSize(RectTransform rect, List<QuestObject> quests)
+		private void SetRectSize(RectTransform rect, List<Quest> quests)
 		{
 			rect.sizeDelta = new Vector2(rect.sizeDelta.x, 120 * quests.Count);
 		}

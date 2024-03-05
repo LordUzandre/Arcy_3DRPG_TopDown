@@ -3,36 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using Arcy.Management;
 
 namespace Arcy.InputManagement
 {
+    [RequireComponent(typeof(PlayerInput))]
     public class InputManager : MonoBehaviour
     {
-        public static InputManager instance;
+        /// <summary>
+        /// This script acts as a proxy for the PlayerInput component
+        /// such that the input events the game needs to proces will 
+        /// be sent through the GameEventManager. This lets any other
+        /// script in the project easily subscribe to an input action
+        /// without having to deal with the PlayerInput component directly.
+        /// </summary>
 
-        // Vector2 Wasd
-        public event Action<Vector2> WASDInput;
-
-        // Action buttons pressed
-        public event Action InteractionInputPressed;
-        public event Action CancelInputPressed;
-        public event Action RunInputHeld;
-        public event Action PauseInputPressed;
-
-        public bool inputLocked = false;
-        private bool _freeroamMode;
+        // public bool inputLocked = false;
+        // private bool _freeroamMode;
 
         private GameState _currentGameState;
-        [SerializeField] private PlayerInput _playerInput;
-
-        private void Awake()
-        {
-            if (instance == null) { instance = this; } else { Destroy(this); }
-        }
+        // [SerializeField] private PlayerInput _playerInput;
 
         private void OnEnable()
         {
-            _playerInput ??= TryGetComponent<PlayerInput>(out PlayerInput plInput) ? plInput : null;
+            // _playerInput ??= TryGetComponent<PlayerInput>(out PlayerInput plInput) ? plInput : null;
 
             // subscribe to gameStateManager
             _currentGameState = GameStateManager.Instance.CurrentGameState;
@@ -59,65 +53,54 @@ namespace Arcy.InputManagement
             GameStateManager.OnGameStateChanged -= OnGameStateChanged;
         }
 
-        private void Update()
-        {
-            if (!inputLocked)
-            {
-                OnWASD();
-                OnInteractKeyPressed();
-                OnRunKeyHeld();
-                OnPauseKeyPressed();
-                OnCancelKeyPressed();
-            }
-        }
-
-        private void OnWASD()
+        public void OnWASD(InputAction.CallbackContext context)
         {
             switch (_currentGameState)
             {
                 case GameState.Freeroam:
-                    WASDInput?.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
+                    if (context.performed || context.canceled)
+                    {
+                        GameEventManager.instance.inputEvents.MovePressed(context.ReadValue<Vector2>());
+                    }
                     return;
                 case GameState.Pause:
-                    if (_playerInput.actions["move"].WasPressedThisFrame())
+                    if (context.started)
                     {
-                        WASDInput?.Invoke(_playerInput.actions["move"].ReadValue<Vector2>());
+                        GameEventManager.instance.inputEvents.MovePressed(context.ReadValue<Vector2>());
                     }
                     return;
             }
         }
 
-        // When player presses "E"-key
-        private void OnInteractKeyPressed()
+        public void OnInteractKeyPressed(InputAction.CallbackContext context)
         {
-            if (_playerInput.actions["interact"].WasPressedThisFrame())
+            if (context.started)
             {
-                InteractionInputPressed?.Invoke();
-                return;
+                GameEventManager.instance.inputEvents.OnInteractKeyPressed();
             }
         }
 
-        private void OnRunKeyHeld()
+        public void OnCancelKeyPressed(InputAction.CallbackContext context)
         {
-            if (_playerInput.actions["run"].WasPressedThisFrame())
+            if (context.performed)
             {
-                RunInputHeld?.Invoke();
+                GameEventManager.instance.inputEvents.OnCancelKeyPressed();
             }
         }
 
-        private void OnPauseKeyPressed()
+        public void OnRunKeyHeld(InputAction.CallbackContext context)
         {
-            if (_playerInput.actions["Pause"].WasPressedThisFrame())
+            if (context.performed)
             {
-                PauseInputPressed?.Invoke();
+                GameEventManager.instance.inputEvents.OnRunKeyHeld();
             }
         }
 
-        private void OnCancelKeyPressed()
+        public void OnPauseKeyPressed(InputAction.CallbackContext context)
         {
-            if (_playerInput.actions["cancel"].WasPressedThisFrame())
+            if (context.performed)
             {
-                CancelInputPressed?.Invoke();
+                GameEventManager.instance.inputEvents.OnPauseKeyPressed();
             }
         }
     }

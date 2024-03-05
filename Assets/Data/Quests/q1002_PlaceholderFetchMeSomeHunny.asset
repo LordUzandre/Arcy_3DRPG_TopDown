@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61ae206a2b352064db8557e521f97931, type: 3}
   m_Name: q1002_PlaceholderFetchMeSomeHunny
   m_EditorClassIdentifier: 
-  questIndex: 
+  <id>k__BackingField: q1002_PlaceholderFetchMeSomeHunny
   questIcon: {fileID: 0}
   questGiverIcon: {fileID: 0}
   questLocationIcon: {fileID: 0}
-  questTitle: Fetch Me Some Hunny!
+  questDisplayNAme: 
   questGiver: Winnie the Pooh
   questLocation: Hundred-Acre Woods
+  preRequisite: []
   questObjectives:
   - {fileID: 11400000, guid: b603054094e3c4ac0aee27cfd87d2563, type: 2}
   - {fileID: 11400000, guid: d5645f63588f0404a925215b016f2bc2, type: 2}
-  completedObjectives: []
   rewards:
   - {fileID: 11400000, guid: c45f0b6e5ca5222408c9f04428b82016, type: 2}
   isAvailable: 0
-  inProgress: 0
+  inProgress: 1
   isFinished: 0

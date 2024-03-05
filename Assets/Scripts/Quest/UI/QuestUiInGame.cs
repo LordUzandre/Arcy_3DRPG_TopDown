@@ -29,11 +29,6 @@ namespace Arcy.Quests
 		[Header("Parent GameObject")]
 		[SerializeField] private GameObject _parentObject;
 
-		private void Start()
-		{
-			_questManager.QuestUpdated();
-		}
-
 		private void OnEnable()
 		{
 			QuestManager.questObjectiveCompleted += NewQuestAdded;
@@ -66,19 +61,19 @@ namespace Arcy.Quests
 			}
 		}
 
-		private void NewQuestAdded(QuestObject quest)
+		private void NewQuestAdded(Quest quest)
 		{
 			_questUpdatedTMP.text = "New Quest";
 			_questTMP.text = quest.name;
 		}
 
-		private void QuestUpdated(QuestObject quest)
+		private void QuestUpdated(Quest quest)
 		{
 			_questUpdatedTMP.text = "Quest Updated";
 			_questTMP.text = quest.name;
 		}
 
-		private void QuestFinished(QuestObject quest)
+		private void QuestFinished(Quest quest)
 		{
 			_questUpdatedTMP.text = "Quest Finished";
 			_questTMP.text = quest.name;

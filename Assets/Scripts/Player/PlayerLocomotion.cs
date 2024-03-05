@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Arcy.InputManagement;
+using Arcy.Management;
 
 public class PlayerLocomotion : MonoBehaviour
 {
@@ -32,13 +33,13 @@ public class PlayerLocomotion : MonoBehaviour
         IEnumerator shortDelay()
         {
             yield return null;
-            InputManager.instance.WASDInput += HandleMovementInput;
+            GameEventManager.instance.inputEvents.WASDInput += HandleMovementInput;
         }
     }
 
     private void OnDisable()
     {
-        InputManager.instance.WASDInput -= HandleMovementInput;
+        GameEventManager.instance.inputEvents.WASDInput -= HandleMovementInput;
     }
 
     // Decide walking direction

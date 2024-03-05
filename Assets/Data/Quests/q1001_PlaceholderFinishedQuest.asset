@@ -12,18 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61ae206a2b352064db8557e521f97931, type: 3}
   m_Name: q1001_PlaceholderFinishedQuest
   m_EditorClassIdentifier: 
+  <id>k__BackingField: q1001_PlaceholderFinishedQuest
   questIcon: {fileID: 0}
   questGiverIcon: {fileID: 0}
   questLocationIcon: {fileID: 0}
-  questTitle: Learn the Ropes
+  questDisplayNAme: 
   questGiver: 
   questLocation: The Docks
-  description:
-  - You have just arrived in this strange land and need to learn to find your way
-    around. A map, for instance, would be dead-useful.
-  steps:
-  - {fileID: 0}
-  - {fileID: 0}
+  preRequisite: []
+  questObjectives: []
+  rewards: []
   isAvailable: 0
   inProgress: 0
-  isFinished: 0
+  isFinished: 1
