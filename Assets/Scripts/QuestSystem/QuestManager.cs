@@ -9,6 +9,9 @@ namespace Arcy.Quests
 {
 	public class QuestManager : MonoBehaviour
 	{
+		[Header("Config")]
+		[SerializeField] private bool loadQuestState = true;
+
 		private Dictionary<string, Quest> _questMap;
 
 		// Quest start requirements:
@@ -24,6 +27,8 @@ namespace Arcy.Quests
 			GameEventManager.instance.questEvents.onStartQuest += StartQuest;
 			GameEventManager.instance.questEvents.onAdvanceQuest += AdvanceQuest;
 			GameEventManager.instance.questEvents.onFinishQuest += FinishQuest;
+
+			GameEventManager.instance.questEvents.onQuestObjectiveStateChange += QuestObjectiveStateChange;
 		}
 
 		private void OnDisable()
@@ -31,13 +36,20 @@ namespace Arcy.Quests
 			GameEventManager.instance.questEvents.onStartQuest -= StartQuest;
 			GameEventManager.instance.questEvents.onAdvanceQuest -= AdvanceQuest;
 			GameEventManager.instance.questEvents.onFinishQuest -= FinishQuest;
+
+			GameEventManager.instance.questEvents.onQuestObjectiveStateChange -= QuestObjectiveStateChange;
 		}
 
 		private void Start()
 		{
-			// broadcast the initial state of all quests on startup
 			foreach (Quest quest in _questMap.Values)
 			{
+				if (quest.state == QuestState.IN_PROGRESS)
+				{
+					quest.InstantiateCurrentQuestObjective(this.transform);
+				}
+
+				// broadcast the initial state of all quests on startup
 				GameEventManager.instance.questEvents.QuestStateChange(quest);
 			}
 		}
@@ -116,10 +128,19 @@ namespace Arcy.Quests
 			ChangeQuestState(quest.info.id, QuestState.FINISHED);
 		}
 
+		// Claim the rewards after finishing a quest.
 		private void ClaimRewards(Quest quest)
 		{
+
 			// GameEventManager.instance.goldEvents.GoldGoldGained(quest.info.goldReward);
 			// GameEventManager.instance.playerEvents.ExperienceGained(quest.info.experienceReward);
+		}
+
+		private void QuestObjectiveStateChange(string id, int objectiveIndex, QuestObjectiveState questObjectiveState)
+		{
+			Quest quest = GetQuestById(id);
+			quest.StoreQuestStepState(questObjectiveState, objectiveIndex);
+			ChangeQuestState(id, quest.state);
 		}
 
 		private Dictionary<string, Quest> CreateQuestMap()
@@ -136,7 +157,7 @@ namespace Arcy.Quests
 				{
 					Debug.LogWarning("Duplicate ID found when creating quest map: " + questInfo.id);
 				}
-				idToQuestMap.Add(questInfo.id, new Quest(questInfo));
+				idToQuestMap.Add(questInfo.id, LoadQuest(questInfo));
 			}
 
 			return idToQuestMap;
@@ -148,6 +169,59 @@ namespace Arcy.Quests
 			if (quest == null)
 			{
 				Debug.LogError("ID not found in the Quest Map: " + id);
+			}
+			return quest;
+		}
+
+		// TODO - Change so that the changes saves at convenient intervals, rather than when quitting the game
+		private void OnApplicationQuit()
+		{
+			foreach (Quest quest in _questMap.Values)
+			{
+				SaveQuest(quest);
+			}
+		}
+
+		// TODO - Switch to the implemented saving system
+		private void SaveQuest(Quest quest)
+		{
+			try
+			{
+				QuestData questData = quest.GetQuestData();
+				// serialize using JsonUtility, but use whatever you want here (like JSON.NET)
+				string serializedData = JsonUtility.ToJson(questData);
+				// PlayerPrefs.SetString(quest.info.id, serializedData);
+
+				Debug.Log(serializedData);
+			}
+			catch (System.Exception e)
+			{
+				Debug.LogError("Failed to save quest with id " + quest.info.id + ": " + e);
+			}
+		}
+
+		// TODO - Switch to the implemented saving system
+		private Quest LoadQuest(QuestInfoSO questInfo)
+		{
+			Quest quest = null;
+			try
+			{
+				// load quest from saved data
+				if (PlayerPrefs.HasKey(questInfo.id) && loadQuestState)
+				{
+					string serializedData = PlayerPrefs.GetString(questInfo.id);
+					QuestData questData = JsonUtility.FromJson<QuestData>(serializedData);
+					quest = new Quest(questInfo, questData.state, questData.questObjectiveIndex, questData.questObjectiveStates);
+				}
+				// otherwise, initialize a new quest
+				else
+				{
+					quest = new Quest(questInfo);
+				}
+			}
+			catch (System.Exception e)
+			{
+				Debug.LogError("Failed to load quest with id " + quest.info.id + ": " + e);
 			}
 			return quest;
 		}

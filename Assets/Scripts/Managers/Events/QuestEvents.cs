@@ -43,12 +43,12 @@ namespace Arcy.Quests
 			}
 		}
 
-		public event Action<string, int, QuestObjectiveState> onQuestStepStateChange;
-		public void QuestStepStateChange(string id, int stepIndex, QuestObjectiveState questStepState)
+		public event Action<string, int, QuestObjectiveState> onQuestObjectiveStateChange;
+		public void QuestObjectiveStateChange(string id, int stepIndex, QuestObjectiveState questStepState)
 		{
-			if (onQuestStepStateChange != null)
+			if (onQuestObjectiveStateChange != null)
 			{
-				onQuestStepStateChange(id, stepIndex, questStepState);
+				onQuestObjectiveStateChange(id, stepIndex, questStepState);
 			}
 		}
 	}

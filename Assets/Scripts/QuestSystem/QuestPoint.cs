@@ -29,13 +29,13 @@ namespace Arcy.Quests
 		private void OnEnable()
 		{
 			GameEventManager.instance.questEvents.onQuestStateChange += QuestStateChange;
-			GameEventManager.instance.inputEvents.InteractionInputPressed += SubmitPressed;
+			GameEventManager.instance.inputEvents.onInteractionInputPressed += SubmitPressed;
 		}
 
 		private void OnDisable()
 		{
 			GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;
-			GameEventManager.instance.inputEvents.InteractionInputPressed -= SubmitPressed;
+			GameEventManager.instance.inputEvents.onInteractionInputPressed -= SubmitPressed;
 		}
 
 		private void QuestStateChange(Quest quest)

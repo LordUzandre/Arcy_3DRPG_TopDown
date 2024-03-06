@@ -214,18 +214,18 @@ namespace Arcy.UI
 		private void SubscribeToInputManager()
 		{
 			// TODO: Set up a list of subscriptions to inputmanager
-			GameEventManager.instance.inputEvents.InteractionInputPressed += OnInteractBtnClicked;
-			GameEventManager.instance.inputEvents.CancelInputPressed += OnBackBtnClicked;
-			GameEventManager.instance.inputEvents.WASDInput += InputVector;
-			GameEventManager.instance.inputEvents.PauseInputPressed += OnEscapeBtnClicked;
+			GameEventManager.instance.inputEvents.onInteractionInputPressed += OnInteractBtnClicked;
+			GameEventManager.instance.inputEvents.onCancelInputPressed += OnBackBtnClicked;
+			GameEventManager.instance.inputEvents.onWASDInput += InputVector;
+			GameEventManager.instance.inputEvents.onPauseInputPressed += OnEscapeBtnClicked;
 		}
 
 		private void UnSubscribeFromInputManager()
 		{
-			GameEventManager.instance.inputEvents.InteractionInputPressed -= OnInteractBtnClicked;
-			GameEventManager.instance.inputEvents.CancelInputPressed -= OnBackBtnClicked;
-			GameEventManager.instance.inputEvents.WASDInput -= InputVector;
-			GameEventManager.instance.inputEvents.PauseInputPressed -= OnEscapeBtnClicked;
+			GameEventManager.instance.inputEvents.onInteractionInputPressed -= OnInteractBtnClicked;
+			GameEventManager.instance.inputEvents.onCancelInputPressed -= OnBackBtnClicked;
+			GameEventManager.instance.inputEvents.onWASDInput -= InputVector;
+			GameEventManager.instance.inputEvents.onPauseInputPressed -= OnEscapeBtnClicked;
 		}
 
 		#endregion

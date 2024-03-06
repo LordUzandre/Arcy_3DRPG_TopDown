@@ -33,13 +33,13 @@ public class PlayerLocomotion : MonoBehaviour
         IEnumerator shortDelay()
         {
             yield return null;
-            GameEventManager.instance.inputEvents.WASDInput += HandleMovementInput;
+            GameEventManager.instance.inputEvents.onWASDInput += HandleMovementInput;
         }
     }
 
     private void OnDisable()
     {
-        GameEventManager.instance.inputEvents.WASDInput -= HandleMovementInput;
+        GameEventManager.instance.inputEvents.onWASDInput -= HandleMovementInput;
     }
 
     // Decide walking direction

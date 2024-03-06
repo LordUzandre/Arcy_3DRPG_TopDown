@@ -16,8 +16,6 @@ namespace Arcy.Quests
 		[SerializeField] private bool thisObjectiveCanBeSkipped;
 		public override bool ThisObjectiveCanBeSkipped { get { return thisObjectiveCanBeSkipped; } set { thisObjectiveCanBeSkipped = value; } }
 
-		public override event Action<QuestObjective> ObjectiveFinished;
-
 		public override void ObjectiveActivate()
 		{
 			DialogueManager.DialogueFinished += ConversationFinished;
@@ -36,11 +34,18 @@ namespace Arcy.Quests
 		public override void OnFinish()
 		{
 			DialogueManager.DialogueFinished -= ConversationFinished;
+		}
 
-			if (ObjectiveFinished != null)
-			{
-				ObjectiveFinished(this);
-			}
+		private void UpdateState()
+		{
+			// string state = coindCollected.ToString();
+			// ChangeState(state);
+		}
+
+		protected override void SetQuestObjectiveState(string state)
+		{
+			// this.coinsCollected = System.Int32.Parse(state);
+			UpdateState();
 		}
 	}
 }

@@ -60,13 +60,13 @@ namespace Arcy.InputManagement
                 case GameState.Freeroam:
                     if (context.performed || context.canceled)
                     {
-                        GameEventManager.instance.inputEvents.MovePressed(context.ReadValue<Vector2>());
+                        GameEventManager.instance.inputEvents.WASDPressed(context.ReadValue<Vector2>());
                     }
                     return;
                 case GameState.Pause:
                     if (context.started)
                     {
-                        GameEventManager.instance.inputEvents.MovePressed(context.ReadValue<Vector2>());
+                        GameEventManager.instance.inputEvents.WASDPressed(context.ReadValue<Vector2>());
                     }
                     return;
             }
@@ -76,7 +76,7 @@ namespace Arcy.InputManagement
         {
             if (context.started)
             {
-                GameEventManager.instance.inputEvents.OnInteractKeyPressed();
+                GameEventManager.instance.inputEvents.InteractKeyPressed();
             }
         }
 
@@ -84,7 +84,7 @@ namespace Arcy.InputManagement
         {
             if (context.performed)
             {
-                GameEventManager.instance.inputEvents.OnCancelKeyPressed();
+                GameEventManager.instance.inputEvents.CancelKeyPressed();
             }
         }
 
@@ -100,7 +100,7 @@ namespace Arcy.InputManagement
         {
             if (context.performed)
             {
-                GameEventManager.instance.inputEvents.OnPauseKeyPressed();
+                GameEventManager.instance.inputEvents.PauseKeyPressed();
             }
         }
     }

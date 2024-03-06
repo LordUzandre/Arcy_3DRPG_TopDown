@@ -14,14 +14,20 @@ namespace Arcy.Quests
 		public abstract bool ThisObjectiveCanBeSkipped { get; set; }
 		private bool _isFinished = false;
 		private string _questId;
+		private int _objectiveIndex;
+
 		public abstract void ObjectiveActivate();
 		public abstract void OnFinish();
 
-		public abstract event Action<QuestObjective> ObjectiveFinished;
-
-		public void InitializeQuestObjective(string questId)
+		public void InitializeQuestObjective(string questId, int objectiveIndex, string questObjectiveState)
 		{
 			this._questId = questId;
+			this._objectiveIndex = objectiveIndex;
+
+			if (questObjectiveState != null && questObjectiveState != "")
+			{
+				SetQuestObjectiveState(questObjectiveState);
+			}
 		}
 
 		protected void FinishObjective()
@@ -30,11 +36,16 @@ namespace Arcy.Quests
 			{
 				_isFinished = true;
 				GameEventManager.instance.questEvents.AdvanceQuest(_questId);
-
-				// Advance the quest forward now that the step is finished
-
 				// Destroy(this.gameObject);
 			}
 		}
+
+		protected void ChangeState(string newState)
+		{
+			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState));
+		}
+
+		// Quest Data Load upon startup
+		protected abstract void SetQuestObjectiveState(string state);
 	}
 }

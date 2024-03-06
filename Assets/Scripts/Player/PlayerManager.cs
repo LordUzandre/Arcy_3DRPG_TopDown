@@ -99,12 +99,12 @@ public class PlayerManager : MonoBehaviour
 
     public void InteractibleNotNull() //Subscribe to inputManager, triggered by fow
     {
-        GameEventManager.instance.inputEvents.InteractionInputPressed += InteractionKeyPressed;
+        GameEventManager.instance.inputEvents.onInteractionInputPressed += InteractionKeyPressed;
     }
 
     public void UnSubscribeFromInteractible() // UnSubscribe form inputManager, triggered by fow
     {
-        GameEventManager.instance.inputEvents.InteractionInputPressed -= InteractionKeyPressed;
+        GameEventManager.instance.inputEvents.onInteractionInputPressed -= InteractionKeyPressed;
     }
 
     public void InteractionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible

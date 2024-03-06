@@ -7,37 +7,37 @@ namespace Arcy.InputManagement
 {
 	public class InputEvents
 	{
-		public event Action<Vector2> WASDInput;
-		public void MovePressed(Vector2 moveDir)
+		public event Action<Vector2> onWASDInput;
+		public void WASDPressed(Vector2 moveDir)
 		{
-			if (WASDInput != null)
+			if (onWASDInput != null)
 			{
-				WASDInput(moveDir);
+				onWASDInput(moveDir);
 			}
 		}
 
-		public event Action InteractionInputPressed;
-		public void OnInteractKeyPressed()
+		public event Action onInteractionInputPressed;
+		public void InteractKeyPressed()
 		{
-			InteractionInputPressed?.Invoke();
+			onInteractionInputPressed?.Invoke();
 		}
 
-		public event Action RunInputHeld;
+		public event Action onRunInputHeld;
 		public void OnRunKeyHeld()
 		{
-			RunInputHeld?.Invoke();
+			onRunInputHeld?.Invoke();
 		}
 
-		public event Action PauseInputPressed;
-		public void OnPauseKeyPressed()
+		public event Action onPauseInputPressed;
+		public void PauseKeyPressed()
 		{
-			PauseInputPressed?.Invoke();
+			onPauseInputPressed?.Invoke();
 		}
 
-		public event Action CancelInputPressed;
-		public void OnCancelKeyPressed()
+		public event Action onCancelInputPressed;
+		public void CancelKeyPressed()
 		{
-			CancelInputPressed?.Invoke();
+			onCancelInputPressed?.Invoke();
 		}
 	}
 }
