@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    [CreateAssetMenu(fileName = "Effect Combat Action", menuName = "Battle/Combat Actions/Effect Combat Action")]
+    [CreateAssetMenu(fileName = "Effect Combat Action", menuName = "Battle/Combat Actions/Effect Combat Action", order = 150)]
     public class CombatAction_Effect : CombatActionBase
     {
         /// <summary>
         /// Who should the Combat Action Affect
         /// </summary>
 
-        public VSlice_BattleEffectBase effectToCast;
+        public BattleEffectBase effectToCast;
         public bool canEffectSelf;
         public bool canEffectTeam;
         public bool canEffectEnemy;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-	public abstract class VSlice_BattleEffectBase : ScriptableObject
+	public abstract class BattleEffectBase : ScriptableObject
 	{
 		public int durationTurns;
 

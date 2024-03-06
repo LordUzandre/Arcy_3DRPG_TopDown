@@ -21,7 +21,7 @@ namespace Arcy.Battle
         }
 
         // Called by CombatActionEffect
-        public void AddNewEffect(VSlice_BattleEffectBase effect)
+        public void AddNewEffect(BattleEffectBase effect)
         {
             EffectInstance effectInstance = new EffectInstance(effect);
 

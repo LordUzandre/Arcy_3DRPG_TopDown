@@ -5,9 +5,13 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    [CreateAssetMenu(fileName = "Player Persitent Data", menuName = "Character Sets/New Player Persistent Data")]
+    [CreateAssetMenu(fileName = "Player Team Persitent Data", menuName = "Battle Character Sets/Player Team Persistent Data", order = 150)]
     public class PlayerPersistentData : ScriptableObject
     {
+        /// <summary>
+        /// This class is used to the character-setup in the player's party.
+        /// </summary>
+
         public PlayerPersistentCharacter[] characters;
 
 #if UNITY_EDITOR

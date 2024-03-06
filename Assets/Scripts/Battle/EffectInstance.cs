@@ -7,13 +7,13 @@ namespace Arcy.Battle
 {
 	public class EffectInstance
 	{
-		public VSlice_BattleEffectBase effect;
+		public BattleEffectBase effect;
 		public int turnRemaining;
 
 		public GameObject curActiveGameObject;
 		public ParticleSystem curTickParticle;
 
-		public EffectInstance(VSlice_BattleEffectBase effect)
+		public EffectInstance(BattleEffectBase effect)
 		{
 			this.effect = effect;
 			turnRemaining = effect.durationTurns;

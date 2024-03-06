@@ -16,7 +16,7 @@ namespace Arcy.Battle
         [SerializeField] private int _damage;
         [SerializeField] private int _heal;
         [SerializeField] private float _moveSpeed;
-        [SerializeField] private VSlice_BattleEffectBase _effectToApply;
+        [SerializeField] private BattleEffectBase _effectToApply;
 
         private BattleCharacterBase _target; //Sets automatically by CombatActionRanged
         private Vector3 _yOffset = new Vector3(0, 0.6f, 0);
