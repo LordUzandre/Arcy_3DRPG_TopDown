@@ -22,15 +22,17 @@ namespace Arcy.InputManagement
         // private bool _freeroamMode;
 
         private GameState _currentGameState;
-        // [SerializeField] private PlayerInput _playerInput;
 
         private void OnEnable()
         {
-            // _playerInput ??= TryGetComponent<PlayerInput>(out PlayerInput plInput) ? plInput : null;
-
             // subscribe to gameStateManager
             _currentGameState = GameStateManager.Instance.CurrentGameState;
             GameStateManager.OnGameStateChanged += OnGameStateChanged;
+        }
+
+        private void OnDisable()
+        {
+            GameStateManager.OnGameStateChanged -= OnGameStateChanged;
         }
 
         private void OnGameStateChanged(GameState newGameState)
@@ -46,11 +48,6 @@ namespace Arcy.InputManagement
                 default:
                     return;
             }
-        }
-
-        private void OnDisable()
-        {
-            GameStateManager.OnGameStateChanged -= OnGameStateChanged;
         }
 
         public void OnWASD(InputAction.CallbackContext context)
@@ -82,7 +79,7 @@ namespace Arcy.InputManagement
 
         public void OnCancelKeyPressed(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.started)
             {
                 GameEventManager.instance.inputEvents.CancelKeyPressed();
             }
@@ -98,9 +95,17 @@ namespace Arcy.InputManagement
 
         public void OnPauseKeyPressed(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.started)
             {
                 GameEventManager.instance.inputEvents.PauseKeyPressed();
+            }
+        }
+
+        public void OnJournalKeyPressed(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                GameEventManager.instance.inputEvents.JournalKeyPressed();
             }
         }
     }

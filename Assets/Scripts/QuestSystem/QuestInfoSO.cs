@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Quests
 {
-    [CreateAssetMenu(fileName = "Quest Info", menuName = "Quest/Quest Info", order = 110)]
+    [CreateAssetMenu(fileName = "Quest Info", menuName = "Quest/Quest Info", order = 63)]
     public class QuestInfoSO : ScriptableObject
     {
         /// <summary>

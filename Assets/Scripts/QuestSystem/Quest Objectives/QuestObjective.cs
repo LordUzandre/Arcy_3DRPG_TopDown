@@ -40,9 +40,13 @@ namespace Arcy.Quests
 			}
 		}
 
-		protected void ChangeState(string newState)
+		protected void ChangeState(string newState, string newStatus)
 		{
-			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState));
+			GameEventManager.instance.questEvents.QuestObjectiveStateChange(
+				_questId,
+				_objectiveIndex,
+				new QuestObjectiveState(newState, newStatus)
+				);
 		}
 
 		// Quest Data Load upon startup

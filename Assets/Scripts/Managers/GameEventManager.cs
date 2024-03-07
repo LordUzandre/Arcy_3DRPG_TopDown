@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Arcy.InputManagement;
+using Arcy.Inventory;
 using Arcy.Quests;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Arcy.Management
 		// Subscribe to events:
 		public InputEvents inputEvents;
 		public QuestEvents questEvents;
-		// InventoryEvents
+		public InventoryEvents inventoryEvents;
 		// DialogueEvents
 
 		private void Awake()
@@ -28,6 +29,7 @@ namespace Arcy.Management
 			//initialize all events
 			inputEvents = new InputEvents();
 			questEvents = new QuestEvents();
+			inventoryEvents = new InventoryEvents();
 		}
 	}
 }

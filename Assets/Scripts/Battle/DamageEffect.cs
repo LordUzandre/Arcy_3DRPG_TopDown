@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-	[CreateAssetMenu(fileName = "Damage Effect", menuName = "Battle/Effects/Damage Effect", order = 210)]
+	[CreateAssetMenu(fileName = "Damage Effect", menuName = "Battle/Effects/Damage Effect", order = 77)]
 	public class DamageEffect : BattleEffectBase
 	{
 		public int damage;

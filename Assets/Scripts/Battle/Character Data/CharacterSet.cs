@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    [CreateAssetMenu(fileName = "New Enemy Set", menuName = "Battle Character Sets/Enemy Character Set", order = 155)]
+    [CreateAssetMenu(fileName = "New Enemy Set", menuName = "Battle Character Sets/Enemy Character Set", order = 79)]
     public class CharacterSet : ScriptableObject
     {
         /// <summary>

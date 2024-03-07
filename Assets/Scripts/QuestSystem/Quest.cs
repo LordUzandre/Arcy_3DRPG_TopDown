@@ -100,5 +100,36 @@ namespace Arcy.Quests
         {
             return new QuestData(state, currentQuestObjectiveIndex, questObjectiveStates);
         }
+
+        public string GetFullStatusText()
+        {
+            string fullStatus = "";
+
+            if (state == QuestState.REQUIREMENTS_NOT_MET)
+            {
+                fullStatus = "Requirements are not met yet to start this quest";
+            }
+            else if (state == QuestState.CAN_START)
+            {
+                fullStatus = "This Quest can be started";
+            }
+            else
+            {
+                for (int i = 0; i < currentQuestObjectiveIndex; i++)
+                {
+                    fullStatus += "<s>" + questObjectiveStates[i].status + "</s>\n";
+                }
+
+                if (state == QuestState.CAN_FINISH)
+                {
+                    fullStatus += "The quest is ready to be turned in.";
+                }
+                else if (state == QuestState.FINISHED)
+                {
+                    fullStatus += "The quest has been completed";
+                }
+            }
+            return fullStatus;
+        }
     }
 }

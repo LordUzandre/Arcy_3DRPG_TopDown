@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    [CreateAssetMenu(fileName = "Effect Combat Action", menuName = "Battle/Combat Actions/Effect Combat Action", order = 150)]
+    [CreateAssetMenu(fileName = "Effect Combat Action", menuName = "Battle/Combat Actions/Effect Combat Action", order = 76)]
     public class CombatAction_Effect : CombatActionBase
     {
         /// <summary>

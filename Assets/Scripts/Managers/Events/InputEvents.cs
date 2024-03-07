@@ -39,5 +39,11 @@ namespace Arcy.InputManagement
 		{
 			onCancelInputPressed?.Invoke();
 		}
+
+		public event Action onJournalInputPressed;
+		public void JournalKeyPressed()
+		{
+			onCancelInputPressed?.Invoke();
+		}
 	}
 }

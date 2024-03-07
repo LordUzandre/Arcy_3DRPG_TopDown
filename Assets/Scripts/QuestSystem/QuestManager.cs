@@ -145,7 +145,7 @@ namespace Arcy.Quests
 
 		private Dictionary<string, Quest> CreateQuestMap()
 		{
-			// Loads all QuestInfo Scriptable Objects under the Assets/Resources/Quests folder
+			// Load all QuestInfo Scriptable Objects in the Assets/Resources/Quests folder
 			QuestInfoSO[] allQuests = Resources.LoadAll<QuestInfoSO>("Quests");
 
 			// Create the quest map
