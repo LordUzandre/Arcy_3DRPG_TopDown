@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arcy.Dialogue;
 using Arcy.InputManagement;
 using Arcy.Inventory;
 using Arcy.Quests;
@@ -16,6 +17,8 @@ namespace Arcy.Management
 		public InputEvents inputEvents;
 		public QuestEvents questEvents;
 		public InventoryEvents inventoryEvents;
+		public GameStateManager gameStateManager;
+		public DialogueEvents dialogueEvents;
 		// DialogueEvents
 
 		private void Awake()
@@ -30,6 +33,8 @@ namespace Arcy.Management
 			inputEvents = new InputEvents();
 			questEvents = new QuestEvents();
 			inventoryEvents = new InventoryEvents();
+			gameStateManager = new GameStateManager();
+			dialogueEvents = new DialogueEvents();
 		}
 	}
 }

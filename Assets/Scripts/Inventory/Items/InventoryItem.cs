@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace Arcy.Inventory
 {
 	[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item", order = 60)]
-	public class InventoryItemBase : ScriptableObject
+	public class InventoryItem : ScriptableObject
 	{
 		public string itemName;
 		public Sprite inventoryIcon;

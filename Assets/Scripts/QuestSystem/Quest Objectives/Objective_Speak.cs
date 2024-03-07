@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Arcy.Dialogue;
+using Arcy.Management;
 using UnityEngine;
 
 namespace Arcy.Quests
@@ -18,8 +19,12 @@ namespace Arcy.Quests
 
 		public override void ObjectiveActivate()
 		{
-			DialogueManager.DialogueFinished += ConversationFinished;
-			Debug.Log(this.name + " is activated");
+			GameEventManager.instance.dialogueEvents.onDialogueFinish += ConversationFinished;
+		}
+
+		public override void OnFinish()
+		{
+			GameEventManager.instance.dialogueEvents.onDialogueFinish += ConversationFinished;
 		}
 
 		private void ConversationFinished(string speakerID)
@@ -29,11 +34,6 @@ namespace Arcy.Quests
 				Debug.LogWarning("Quest should be updated");
 				OnFinish();
 			}
-		}
-
-		public override void OnFinish()
-		{
-			DialogueManager.DialogueFinished -= ConversationFinished;
 		}
 
 		private void UpdateState()

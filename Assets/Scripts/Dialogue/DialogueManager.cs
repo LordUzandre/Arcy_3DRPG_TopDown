@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Arcy.InputManagement;
+using Arcy.Management;
 using Mono.Data.Sqlite;
 using TMPro;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace Arcy.Dialogue
         public static DialogueManager Instance { get; private set; }
 
         public event Action Skip;
-        public static Action<string> DialogueFinished;
+        // public static Action<string> DialogueFinished;
 
         /// <summary>
         /// This script retrieves the data from the db and sends it to DialgueUI.
@@ -125,12 +126,12 @@ namespace Arcy.Dialogue
             }
             else if (_canExitBool) // What happens when we reach the end of the dialogue (and there's no question being asked).
             {
-                _dialogueUI.FadeDialogueUI(false, .2f, .05f); // fade out UI
+                // fade out UI
+                _dialogueUI.FadeDialogueUI(false, .2f, .05f);
 
                 _canExitBool = false;
 
-                DialogueFinished?.Invoke(_speakerID);
-                Debug.Log(_speakerID);
+                GameEventManager.instance.dialogueEvents.DialogueFinished(_speakerID);
 
                 // Reset all components
                 _dialogueBlock.Clear();
@@ -142,7 +143,7 @@ namespace Arcy.Dialogue
                 _dialogueIndex = 0;
                 _currentlyInDialogueBool = false;
                 _newDialogueStarted = false;
-                GameStateManager.Instance.SetState(GameState.Freeroam);
+                GameEventManager.instance.gameStateManager.SetState(GameState.Freeroam);
                 return;
             }
             else if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)

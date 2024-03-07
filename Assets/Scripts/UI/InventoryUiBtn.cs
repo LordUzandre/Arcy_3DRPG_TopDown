@@ -10,7 +10,7 @@ namespace Arcy.UI
 	public class InventoryUiBtn : MenuBtn
 	{
 		[SerializeField] private bool _slotIsPopulated;
-		[SerializeField] private InventoryItemBase item;
+		[SerializeField] private InventoryItem item;
 		[SerializeField] private TMP_Text amountTMP;
 
 #if UNITY_EDITOR

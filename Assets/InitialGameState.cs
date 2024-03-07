@@ -14,7 +14,7 @@ namespace Arcy.Management
 
         private void Awake()
         {
-            GameStateManager.Instance.SetState(GameState.RedundantGameState);
+            GameEventManager.instance.gameStateManager.SetState(GameState.RedundantGameState);
         }
 
         private void Start()
@@ -24,7 +24,7 @@ namespace Arcy.Management
             IEnumerator InitialDelay()
             {
                 yield return new WaitForSeconds(.5f);
-                GameStateManager.Instance.SetState(_startingGameState);
+                GameEventManager.instance.gameStateManager.SetState(_startingGameState);
             }
         }
 

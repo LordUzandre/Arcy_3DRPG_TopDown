@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 using DG.Tweening;
 using Arcy.Dialogue;
 using Arcy.Interaction;
+using Arcy.Management;
 
 namespace Arcy.Camera
 {
@@ -50,23 +51,15 @@ namespace Arcy.Camera
 
         private void OnEnable()
         {
-            StartCoroutine(ShortDelay());
-
-            IEnumerator ShortDelay()
-            {
-                yield return null;
-                GameStateChanged(GameStateManager.Instance.CurrentGameState);
-                GameStateManager.OnGameStateChanged += GameStateChanged;
-            }
-
+            GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
         }
 
         private void OnDisable()
         {
-            GameStateManager.OnGameStateChanged -= GameStateChanged;
+            GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
         }
 
-        private void GameStateChanged(GameState newGameState)
+        private void OnGameStateChanged(GameState newGameState)
         {
             StopCoroutine(BlockedViewChecker());
 
@@ -103,7 +96,7 @@ namespace Arcy.Camera
 
             yield return delay;
 
-            if (GameStateManager.Instance.CurrentGameState == GameState.Freeroam)
+            if (GameEventManager.instance.gameStateManager.CurrentGameState == GameState.Freeroam)
             {
                 _isFreeroam = true;
             }
@@ -157,7 +150,7 @@ namespace Arcy.Camera
         {
             yield return null;
 
-            if (GameStateManager.Instance.CurrentGameState == GameState.Dialogue)
+            if (GameEventManager.instance.gameStateManager.CurrentGameState == GameState.Dialogue)
             {
                 targetGroup.m_Targets[1].target = DialogueManager.Instance.otherSpeakerTransform;
             }

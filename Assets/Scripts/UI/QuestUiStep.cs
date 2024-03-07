@@ -19,7 +19,7 @@ namespace Arcy.Quests
 				GetComponentInChildren<TMP_Text>();
 			}
 
-			_descriptiveText.text = _questStepRequirement.descriptionText;
+			_descriptiveText.text = _questStepRequirement.statusText;
 		}
 
 #if UNITY_EDITOR

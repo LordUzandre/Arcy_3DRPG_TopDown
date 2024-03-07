@@ -65,7 +65,7 @@ namespace Arcy.UI
 		{
 			_pauseMenuIsActive = _uiParentObject.activeInHierarchy;
 
-			GameStateManager.OnGameStateChanged += OnGameStateChanged;
+			GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
 			StartCoroutine(PopulateAlllistsCoroutine());
 
 			IEnumerator PopulateAlllistsCoroutine()
@@ -77,7 +77,7 @@ namespace Arcy.UI
 
 		private void OnDisable()
 		{
-			GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+			GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
 		}
 
 		private void OnGameStateChanged(GameState newGameState)
@@ -273,9 +273,9 @@ namespace Arcy.UI
 
 		private void OnEscapeBtnClicked()
 		{
-			if (GameStateManager.Instance.CurrentGameState == GameState.Pause)
+			if (GameEventManager.instance.gameStateManager.CurrentGameState == GameState.Pause)
 			{
-				GameStateManager.Instance.SetState(GameState.Freeroam);
+				GameEventManager.instance.gameStateManager.SetState(GameState.Freeroam);
 				CloseDownPauseMenu();
 			}
 		}

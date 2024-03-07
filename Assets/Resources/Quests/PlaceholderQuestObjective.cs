@@ -8,10 +8,14 @@ namespace Arcy.Quests
 {
 	public class PlaceholderQuestObjective : QuestObjective
 	{
+		/// <summary>
+		/// This serves as a placeholder so that we can learn how the quest system works
+		/// </summary>
+
 		private bool _thisObjectiveCanBeSkipped;
 		public override bool ThisObjectiveCanBeSkipped { get { return _thisObjectiveCanBeSkipped; } set { value = _thisObjectiveCanBeSkipped; } }
 
-		[SerializeField] private Inventory.InventoryItemBase _item;
+		[SerializeField] private Inventory.InventoryItem _item;
 
 		private string _status = "Visit the 1st pillar";
 
@@ -42,7 +46,7 @@ namespace Arcy.Quests
 			throw new NotImplementedException();
 		}
 
-		private void ItemAddedToInventory(Inventory.InventoryItemBase item)
+		private void ItemAddedToInventory(Inventory.InventoryItem item)
 		{
 			if (item == _item)
 			{

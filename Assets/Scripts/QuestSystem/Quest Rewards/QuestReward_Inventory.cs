@@ -10,7 +10,7 @@ namespace Arcy.Quests
 	[Serializable]
 	public class QuestReward_Inventory : QuestRewards
 	{
-		[SerializeField] public InventoryItemBase rewardItem;
+		[SerializeField] public InventoryItem rewardItem;
 		[SerializeField] public int amount;
 	}
 }

@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Arcy.Inventory;
+using Arcy.Management;
 
 namespace Arcy.UI
 {
 	public class InventoryUi : MonoBehaviour
 	{
 		[Header("Inventory")]
-		[SerializeField] private InventorySingleton _inventory;
+		[SerializeField] private InventoryManager _inventory;
 		[Header("Consumables-components")]
 		[SerializeField] private Transform _gridParent;
 		[SerializeField] private GameObject _itemSlotPrefab;
@@ -18,12 +19,12 @@ namespace Arcy.UI
 
 		private void OnEnable()
 		{
-			GameStateManager.OnGameStateChanged += OnGameStateChanged;
+			GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
 		}
 
 		private void OnDisable()
 		{
-			GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+			GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
 		}
 
 		private void OnGameStateChanged(GameState state)

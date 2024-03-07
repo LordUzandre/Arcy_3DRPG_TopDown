@@ -27,14 +27,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void OnEnable()
     {
-        StartCoroutine(shortDelay());
-
-        // Wait one frame before subscribing
-        IEnumerator shortDelay()
-        {
-            yield return null;
-            GameEventManager.instance.inputEvents.onWASDInput += HandleMovementInput;
-        }
+        GameEventManager.instance.inputEvents.onWASDInput += HandleMovementInput;
     }
 
     private void OnDisable()
@@ -47,7 +40,10 @@ public class PlayerLocomotion : MonoBehaviour
     {
         Vector3 worldSetting;
 
-        // Remember: Create switch statement based on either world nornal or camera
+        // Right now, we can only walk based on the world normal
+        // REMEMBER: set up a system tht can change the walking direction, 
+        // based on whichever scenario we are currently in
+
         worldSetting = (_inputY * Vector3.forward) + (_inputX * Vector3.right);
         worldSetting.Normalize();
         worldSetting.y = 0;
@@ -55,20 +51,19 @@ public class PlayerLocomotion : MonoBehaviour
         return worldSetting;
     }
 
-    // Called every update from PlayerManager
+    // Called every Update from PlayerManager
     public void HandleAllMovement(float delta)
     {
         Vector3 moveDirection = GetYourBearings();
 
-        //HandleMovementInput();
         HandleGroundedMovement(delta, moveDirection);
         HandleRotation(delta, moveDirection);
     }
 
-    private void HandleMovementInput(Vector2 MoveInput)
+    private void HandleMovementInput(Vector2 movementInput)
     {
-        _inputX = MoveInput.x;
-        _inputY = MoveInput.y;
+        _inputX = movementInput.x;
+        _inputY = movementInput.y;
 
         _moveAmount = Mathf.Clamp01(Mathf.Abs(_inputY) + Mathf.Abs(_inputX));
 

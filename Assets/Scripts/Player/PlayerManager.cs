@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviour
     //Singleton
     public static PlayerManager instance;
 
-    #region Player Scripts
+    #region Variables
     //Scripts
     [HideInInspector] public PlayerLocomotion playerLocomotion;
     [HideInInspector] public PlayerAnimationHandler animationHandler;
@@ -23,18 +23,13 @@ public class PlayerManager : MonoBehaviour
     //Other assets
     [HideInInspector] public CharacterController characterController;
     [HideInInspector] public Animator animator;
-    #endregion
 
-    #region movement variables
     private float delta;
     [HideInInspector] public bool canMove = true;
     [HideInInspector] public bool canRotate = true;
     [HideInInspector] public bool isPerformingAction = false;
     [HideInInspector] public bool applyRootMotion;
     [HideInInspector] public bool isInteracting = false;
-    #endregion
-
-    #region interaction variables
 
     public static Action noObjectInFocus; //used by interactionIcon
 
@@ -58,14 +53,15 @@ public class PlayerManager : MonoBehaviour
     }
 
     #region GameState Subscription
+
     private void OnEnable()
     {
-        GameStateManager.OnGameStateChanged += OnGameStateChanged;
+        GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
     }
 
     private void OnDisable()
     {
-        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+        GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
     }
 
     private void OnGameStateChanged(GameState state)
@@ -113,7 +109,7 @@ public class PlayerManager : MonoBehaviour
         {
             if (!isInteracting)
             {
-                GameStateManager.Instance.SetState(GameState.Dialogue);
+                GameEventManager.instance.gameStateManager.SetState(GameState.Dialogue);
             }
 
             DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);

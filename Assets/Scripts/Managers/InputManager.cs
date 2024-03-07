@@ -25,14 +25,13 @@ namespace Arcy.InputManagement
 
         private void OnEnable()
         {
-            // subscribe to gameStateManager
-            _currentGameState = GameStateManager.Instance.CurrentGameState;
-            GameStateManager.OnGameStateChanged += OnGameStateChanged;
+            _currentGameState = GameEventManager.instance.gameStateManager.CurrentGameState;
+            GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
         }
 
         private void OnDisable()
         {
-            GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+            GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
         }
 
         private void OnGameStateChanged(GameState newGameState)

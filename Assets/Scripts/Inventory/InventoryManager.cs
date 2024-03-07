@@ -6,16 +6,15 @@ using UnityEngine;
 namespace Arcy.Inventory
 {
 	// [CreateAssetMenu(fileName = "Inventory", menuName = "Inventory/Inventory")]
-	public class InventorySingleton : ScriptableObject
+	public class InventoryManager : ScriptableObject
 	{
 		[SerializeField] public List<InventoryItem> items;
-		//[SerializeField] private List<InventoryItemBase> _database;
 		[SerializeField] public int inventorySize = 16;
 		[SerializeField] public int currentlyUsedSlots;
 
 		public Action<InventoryItem> newItemAdded;
 
-		private void AddItem(InventoryItemBase itemToAdd, int amountToAdd)
+		private void AddItem(InventoryItem itemToAdd, int amountToAdd)
 		{
 			if (currentlyUsedSlots >= inventorySize)
 			{
@@ -26,21 +25,14 @@ namespace Arcy.Inventory
 			// if not, add a new slot for it.
 		}
 
-		private void UseItem(InventoryItemBase itemToUse)
+		private void UseItem(InventoryItem itemToUse)
 		{
 
 		}
 
-		private void RemoveItem(InventoryItemBase itemToRemove, int amountToRemove)
+		private void RemoveItem(InventoryItem itemToRemove, int amountToRemove)
 		{
 			// If inventoryslot is 0, remove the slot from inventory
 		}
-	}
-
-	[Serializable]
-	public class InventoryItem
-	{
-		[SerializeField] public InventoryItemBase item;
-		[SerializeField] public int amount;
 	}
 }

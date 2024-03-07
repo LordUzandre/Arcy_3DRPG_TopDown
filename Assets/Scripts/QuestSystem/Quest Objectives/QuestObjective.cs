@@ -9,7 +9,7 @@ namespace Arcy.Quests
 {
 	public abstract class QuestObjective : MonoBehaviour
 	{
-		[TextArea(2, 6)][SerializeField] public string descriptionText;
+		[TextArea(2, 6)][SerializeField] public string statusText;
 
 		public abstract bool ThisObjectiveCanBeSkipped { get; set; }
 		private bool _isFinished = false;
@@ -36,7 +36,9 @@ namespace Arcy.Quests
 			{
 				_isFinished = true;
 				GameEventManager.instance.questEvents.AdvanceQuest(_questId);
-				// Destroy(this.gameObject);
+
+				// Destroy the gameobject after the objective is finished(?)
+				Destroy(this.gameObject);
 			}
 		}
 
