@@ -23,7 +23,7 @@ namespace Arcy.Quests
 
 		private void Awake()
 		{
-			questId = questInfoForPoint.id;
+			questId = questInfoForPoint.guid;
 		}
 
 		private void OnEnable()
@@ -41,13 +41,14 @@ namespace Arcy.Quests
 		private void QuestStateChange(Quest quest)
 		{
 			// Only update the quest state if tis point has the corresponding quest
-			if (quest.info.id.Equals(questId))
+			if (quest.info.guid.Equals(questId))
 			{
 				currentQuestState = quest.state;
 				Debug.Log("Quest ith id: " + questId + " updated to state: " + currentQuestState);
 			}
 		}
 
+		// TODO - implement into the interaction-system
 		private void SubmitPressed()
 		{
 			if (!_playerIsNear)

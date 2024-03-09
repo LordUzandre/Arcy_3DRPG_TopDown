@@ -33,7 +33,7 @@ namespace Arcy.UI
 			GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;
 		}
 
-		#region TODO - replace with own parent system
+		#region FadeUI. TODO - replace with own pause Menu system
 
 		private void QuestLogTogglePressed()
 		{
@@ -64,6 +64,8 @@ namespace Arcy.UI
 
 		#endregion
 
+		#region UI Buttons
+
 		private void QuestStateChange(Quest quest)
 		{
 			// add the button to the scrolling list if not already added
@@ -79,6 +81,10 @@ namespace Arcy.UI
 			questLogBtn.SetState(quest.state);
 		}
 
+		#endregion
+
+		#region Big Ui window
+
 		private void SetQuestLogInfo(Quest quest)
 		{
 			// quest Name
@@ -88,7 +94,7 @@ namespace Arcy.UI
 			_questStatusText.text = quest.GetFullStatusText();
 
 			// requirements
-			_levelRequirementText.text = "Level " + quest.info.levelRequirement;
+			// _levelRequirementText.text = "Level " + quest.info.levelRequirement;
 			_questRequirementText.text = "";
 
 			foreach (QuestInfoSO prerequisiteQuestInfo in quest.info.questPrerequisites)
@@ -100,5 +106,7 @@ namespace Arcy.UI
 			_goldRewardsText.text = quest.info.goldReward + " Gold";
 			_experienceRewardText.text = quest.info.experienceReward + " XP";
 		}
+
+		#endregion
 	}
 }

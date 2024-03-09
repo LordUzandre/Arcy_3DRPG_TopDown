@@ -9,6 +9,13 @@ namespace Arcy.Quests
 {
 	public abstract class QuestObjective : MonoBehaviour
 	{
+		/// <summary>
+		/// This class acts as a parent class for quest objectives.
+		/// Child scripts should be attached to gameobjects and attached as prefabs on the questInfoSO.
+		/// The prefabs will be spawned into the scene by QuestManager and destroyed upon completion.
+		/// </summary>
+
+		[Header("Status text for Journal ui")]
 		[TextArea(2, 6)][SerializeField] public string statusText;
 
 		public abstract bool ThisObjectiveCanBeSkipped { get; set; }
@@ -19,6 +26,7 @@ namespace Arcy.Quests
 		public abstract void ObjectiveActivate();
 		public abstract void OnFinish();
 
+		// called by Quest
 		public void InitializeQuestObjective(string questId, int objectiveIndex, string questObjectiveState)
 		{
 			this._questId = questId;
@@ -42,13 +50,10 @@ namespace Arcy.Quests
 			}
 		}
 
+		// Called by QuestPoint when the requirements are met and we press the interact-key
 		protected void ChangeState(string newState, string newStatus)
 		{
-			GameEventManager.instance.questEvents.QuestObjectiveStateChange(
-				_questId,
-				_objectiveIndex,
-				new QuestObjectiveState(newState, newStatus)
-				);
+			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newStatus));
 		}
 
 		// Quest Data Load upon startup

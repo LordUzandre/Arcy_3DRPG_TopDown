@@ -17,8 +17,6 @@ namespace Arcy.Quests
 
 		[SerializeField] private Inventory.InventoryItem _item;
 
-		private string _status = "Visit the 1st pillar";
-
 		private void Start()
 		{
 			UpdateState();
@@ -26,7 +24,9 @@ namespace Arcy.Quests
 
 		private void UpdateState()
 		{
+			// state = 
 			string state = _item.name.ToString();
+			// status is only for ui
 			string status = "you have foundthe item: " + state;
 			ChangeState(state, status);
 		}

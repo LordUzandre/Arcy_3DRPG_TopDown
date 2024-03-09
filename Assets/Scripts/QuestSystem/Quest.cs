@@ -44,7 +44,7 @@ namespace Arcy.Quests
                 Debug.LogWarning("Quest Step Prefabs and Quest Step States are "
                 + "of different lengths. This indicates that something has changed. "
                 + "with the QuestInfo and the saved data is now out of sync. "
-                + "Reset your data - as this might cause issues. Quest id: " + this.info.id);
+                + "Reset your data - as this might cause issues. Quest id: " + this.info.guid);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Arcy.Quests
             {
                 // Use object Pooling instead of instantiation
                 QuestObjective objective = UnityEngine.Object.Instantiate<GameObject>(questObjectivePrefab, parentTransform).GetComponent<QuestObjective>();
-                objective.InitializeQuestObjective(info.id, currentQuestObjectiveIndex, questObjectiveStates[currentQuestObjectiveIndex].state);
+                objective.InitializeQuestObjective(info.guid, currentQuestObjectiveIndex, questObjectiveStates[currentQuestObjectiveIndex].state);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Arcy.Quests
             else
             {
                 Debug.LogWarning("Tried to get quest step prefab, but stepIndex was out of range indicating that "
-                + "there's no current step: QuestId=" + info.id + ", stepIndex=" + currentQuestObjectiveIndex);
+                + "there's no current step: QuestId=" + info.guid + ", stepIndex=" + currentQuestObjectiveIndex);
             }
             return questObjectivePrefab;
         }
@@ -92,7 +92,7 @@ namespace Arcy.Quests
             }
             else
             {
-                Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + info.id + ",quest index = " + stepIndex);
+                Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + info.guid + ",quest index = " + stepIndex);
             }
         }
 

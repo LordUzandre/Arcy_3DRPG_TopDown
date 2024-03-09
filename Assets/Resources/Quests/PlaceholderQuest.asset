@@ -12,12 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2d7a5cdb609db0489ed03bf35805cfb, type: 3}
   m_Name: PlaceholderQuest
   m_EditorClassIdentifier: 
-  <id>k__BackingField: PlaceholderQuest
   <guid>k__BackingField: b5ccb457-34a3-43bc-8eff-db4ee3a37b0b
-  displayName: 
-  levelRequirement: 0
+  displayName: Placeholder quest
   questPrerequisites: []
+  dialoguePrerequisites: 0
+  item: {fileID: 0}
   questObjectivePrefabs:
   - {fileID: 0}
-  goldReward: 0
-  experienceReward: 0
+  rewardItems:
+  - item: {fileID: 11400000, guid: c45f0b6e5ca5222408c9f04428b82016, type: 2}
+    amount: 4
+  goldReward:
+    item: {fileID: 0}
+    amount: 0
+  experienceReward:
+    item: {fileID: 0}
+    amount: 0

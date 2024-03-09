@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Arcy.Inventory;
 using Arcy.Management;
 
 namespace Arcy.Quests
@@ -14,8 +13,8 @@ namespace Arcy.Quests
 
 		private Dictionary<string, Quest> _questMap;
 
-		// Quest start requirements:
-		private int _currentPlayerLevel;
+		// Quest requirements:
+		// private int _currentPlayerLevel;
 
 		private void Awake()
 		{
@@ -44,8 +43,11 @@ namespace Arcy.Quests
 		{
 			foreach (Quest quest in _questMap.Values)
 			{
+				Debug.Log("QM - Part01");
+
 				if (quest.state == QuestState.IN_PROGRESS)
 				{
+					Debug.Log("QM - Part03");
 					quest.InstantiateCurrentQuestObjective(this.transform);
 				}
 
@@ -54,58 +56,67 @@ namespace Arcy.Quests
 			}
 		}
 
-		private void ChangeQuestState(string id, QuestState state)
-		{
-			Quest quest = GetQuestById(id);
-			quest.state = state;
-			GameEventManager.instance.questEvents.QuestStateChange(quest);
-		}
-
 		private bool CheckRequirementMet(Quest quest)
 		{
-			// Start true and require to be false
+			// Start true and require to be set to false
 			bool meetsRequirement = true;
 
 			// Check player level requirement
-			if (_currentPlayerLevel < quest.info.levelRequirement)
-				meetsRequirement = false;
+			// if (_currentPlayerLevel < quest.info.levelRequirement)
+			// {
+			// 	meetsRequirement = false;
+			// }
 
 			// check quest prerequisites for completion
 			foreach (QuestInfoSO prerequisiteQuestInfo in quest.info.questPrerequisites)
 			{
-				if (GetQuestById(prerequisiteQuestInfo.id).state != QuestState.FINISHED)
+				if (GetQuestByGuid(prerequisiteQuestInfo.guid).state != QuestState.FINISHED)
 				{
 					meetsRequirement = false;
 					break;
 				}
 			}
 
+			// TODO - Check item in inventory requirement
+
+			// TODO - Check dialogue requirement
+
 			return meetsRequirement;
 		}
 
 		private void Update()
 		{
+			// TODO - subscribe to appropriate events rather than check every frame
+
 			// Loop Through all the quests
 			foreach (Quest quest in _questMap.Values)
 			{
 				// if we're now meeting the requirements, switch over to the CAN_START state
 				if (quest.state == QuestState.REQUIREMENTS_NOT_MET && CheckRequirementMet(quest))
 				{
-					ChangeQuestState(quest.info.id, QuestState.CAN_START);
+					ChangeQuestState(quest.info.guid, QuestState.CAN_START);
 				}
 			}
 		}
 
+		// called from questPoint TODO - fix(!)
 		private void StartQuest(string id)
 		{
-			Quest quest = GetQuestById(id);
+			Quest quest = GetQuestByGuid(id);
 			quest.InstantiateCurrentQuestObjective(this.transform);
-			ChangeQuestState(quest.info.id, QuestState.IN_PROGRESS);
+			ChangeQuestState(quest.info.guid, QuestState.IN_PROGRESS);
+		}
+
+		private void ChangeQuestState(string id, QuestState state)
+		{
+			Quest quest = GetQuestByGuid(id);
+			quest.state = state;
+			GameEventManager.instance.questEvents.QuestStateChange(quest);
 		}
 
 		private void AdvanceQuest(string id)
 		{
-			Quest quest = GetQuestById(id);
+			Quest quest = GetQuestByGuid(id);
 
 			// move on to the next objective
 			quest.MoveToNextObjective();
@@ -117,32 +128,34 @@ namespace Arcy.Quests
 			}
 			else
 			{
-				ChangeQuestState(quest.info.id, QuestState.CAN_FINISH);
+				ChangeQuestState(quest.info.guid, QuestState.CAN_FINISH);
 			}
 		}
 
 		private void FinishQuest(string id)
 		{
-			Quest quest = GetQuestById(id);
+			Quest quest = GetQuestByGuid(id);
 			ClaimRewards(quest);
-			ChangeQuestState(quest.info.id, QuestState.FINISHED);
+			ChangeQuestState(quest.info.guid, QuestState.FINISHED);
 		}
 
 		// Claim the rewards after finishing a quest.
 		private void ClaimRewards(Quest quest)
 		{
-
 			// GameEventManager.instance.goldEvents.GoldGoldGained(quest.info.goldReward);
 			// GameEventManager.instance.playerEvents.ExperienceGained(quest.info.experienceReward);
 		}
 
 		private void QuestObjectiveStateChange(string id, int objectiveIndex, QuestObjectiveState questObjectiveState)
 		{
-			Quest quest = GetQuestById(id);
+			Quest quest = GetQuestByGuid(id);
 			quest.StoreQuestStepState(questObjectiveState, objectiveIndex);
 			ChangeQuestState(id, quest.state);
 		}
 
+		#region questMap
+
+		// create quest map during Awake()
 		private Dictionary<string, Quest> CreateQuestMap()
 		{
 			// Load all QuestInfo Scriptable Objects in the Assets/Resources/Quests folder
@@ -153,17 +166,17 @@ namespace Arcy.Quests
 
 			foreach (QuestInfoSO questInfo in allQuests)
 			{
-				if (idToQuestMap.ContainsKey(questInfo.id))
+				if (idToQuestMap.ContainsKey(questInfo.guid))
 				{
-					Debug.LogWarning("Duplicate ID found when creating quest map: " + questInfo.id);
+					Debug.LogWarning("Duplicate ID found when creating quest map: " + questInfo.guid);
 				}
-				idToQuestMap.Add(questInfo.id, LoadQuest(questInfo));
+				idToQuestMap.Add(questInfo.guid, LoadQuest(questInfo));
 			}
 
 			return idToQuestMap;
 		}
 
-		private Quest GetQuestById(string id)
+		private Quest GetQuestByGuid(string id)
 		{
 			Quest quest = _questMap[id];
 			if (quest == null)
@@ -173,14 +186,18 @@ namespace Arcy.Quests
 			return quest;
 		}
 
+		#endregion
+
+		#region Save/Load
+
 		// TODO - Change so that the changes saves at convenient intervals, rather than when quitting the game
-		private void OnApplicationQuit()
-		{
-			foreach (Quest quest in _questMap.Values)
-			{
-				SaveQuest(quest);
-			}
-		}
+		// private void OnApplicationQuit()
+		// {
+		// 	foreach (Quest quest in _questMap.Values)
+		// 	{
+		// 		SaveQuest(quest);
+		// 	}
+		// }
 
 		// TODO - Switch to the implemented saving system
 		private void SaveQuest(Quest quest)
@@ -190,13 +207,13 @@ namespace Arcy.Quests
 				QuestData questData = quest.GetQuestData();
 				// serialize using JsonUtility, but use whatever you want here (like JSON.NET)
 				string serializedData = JsonUtility.ToJson(questData);
-				// PlayerPrefs.SetString(quest.info.id, serializedData);
+				// PlayerPrefs.SetString(quest.info.guid, serializedData);
 
 				Debug.Log(serializedData);
 			}
 			catch (System.Exception e)
 			{
-				Debug.LogError("Failed to save quest with id " + quest.info.id + ": " + e);
+				Debug.LogError("Failed to save quest with id " + quest.info.guid + ": " + e);
 			}
 		}
 
@@ -207,9 +224,9 @@ namespace Arcy.Quests
 			try
 			{
 				// load quest from saved data
-				if (PlayerPrefs.HasKey(questInfo.id) && loadQuestState)
+				if (PlayerPrefs.HasKey(questInfo.guid) && loadQuestState)
 				{
-					string serializedData = PlayerPrefs.GetString(questInfo.id);
+					string serializedData = PlayerPrefs.GetString(questInfo.guid);
 					QuestData questData = JsonUtility.FromJson<QuestData>(serializedData);
 					quest = new Quest(questInfo, questData.state, questData.questObjectiveIndex, questData.questObjectiveStates);
 				}
@@ -221,9 +238,11 @@ namespace Arcy.Quests
 			}
 			catch (System.Exception e)
 			{
-				Debug.LogError("Failed to load quest with id " + quest.info.id + ": " + e);
+				Debug.LogError("Failed to load quest with id " + quest.info.guid + ": " + e);
 			}
 			return quest;
 		}
+
+		#endregion
 	}
 }

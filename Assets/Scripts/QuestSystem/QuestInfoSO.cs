@@ -9,38 +9,42 @@ namespace Arcy.Quests
     public class QuestInfoSO : ScriptableObject
     {
         /// <summary>
-        /// Every quest should be their own script/class, but be accompanied by one of these
+        /// Every quest should be their own script/class, and be accompanied by one of these.
+        /// These hold the requirements, the rewards and acts as a container for all the objectives.
         /// </summary>
 
-        [field: SerializeField] public string id { get; private set; }
         [field: SerializeField] public string guid { get; private set; }
 
         [Header("General")]
         [SerializeField] public string displayName;
 
         [Header("Requirements")]
-        [SerializeField] public int levelRequirement; // does the quest require a minimum level to accessible?
-        [SerializeField] public QuestInfoSO[] questPrerequisites; // Do other Quests need to be finished before this can accessed?
+        // [SerializeField] public int levelRequirement; // does the quest require a minimum level to accessible?
+        [SerializeField] public QuestInfoSO[] questPrerequisites; // Other finished quests reeuirements
+        [SerializeField] public int dialoguePrerequisites; // Dialogue prerequirement
+        [SerializeField] public Inventory.InventoryItem item; // Inventory item
 
         [Header("Objectives")]
         [SerializeField] public GameObject[] questObjectivePrefabs;
 
         [Header("Rewards")]
-        [SerializeField] public int goldReward;
-        [SerializeField] public int experienceReward;
+        [SerializeField] public Inventory.InventorySlot[] rewardItems;
+        [SerializeField] public Inventory.InventorySlot goldReward;
+        [SerializeField] public Inventory.InventorySlot experienceReward;
 
-        [ContextMenu("Generate Unique Identifier")]
-        private void GenerateGuid()
-        {
-            // Generate a unique identifier
-            guid = System.Guid.NewGuid().ToString();
-        }
+        // Generate a unique identifier
+        [ContextMenu("Generate Unique Identifier (guid)")]
+        private void GenerateGuid() { guid = System.Guid.NewGuid().ToString(); }
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            // Ensure that the id is always the same as the Scriptable Object Asset
-            id = this.name;
+            // id = this.name;
+            if (guid == null)
+            {
+                guid = System.Guid.NewGuid().ToString();
+            }
+
             UnityEditor.EditorUtility.SetDirty(this);
         }
 #endif
