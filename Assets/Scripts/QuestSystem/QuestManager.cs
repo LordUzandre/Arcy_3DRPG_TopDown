@@ -99,7 +99,7 @@ namespace Arcy.Quests
 			}
 		}
 
-		// called from questPoint TODO - fix(!)
+		// called from questPoint (TODO - fix!)
 		private void StartQuest(string id)
 		{
 			Quest quest = GetQuestByGuid(id);

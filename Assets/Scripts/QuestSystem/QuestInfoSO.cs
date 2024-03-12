@@ -20,7 +20,7 @@ namespace Arcy.Quests
 
         [Header("Requirements")]
         // [SerializeField] public int levelRequirement; // does the quest require a minimum level to accessible?
-        [SerializeField] public QuestInfoSO[] questPrerequisites; // Other finished quests reeuirements
+        [SerializeField] public QuestInfoSO[] questPrerequisites; // Other finished quests required
         [SerializeField] public int dialoguePrerequisites; // Dialogue prerequirement
         [SerializeField] public Inventory.InventoryItem item; // Inventory item
 

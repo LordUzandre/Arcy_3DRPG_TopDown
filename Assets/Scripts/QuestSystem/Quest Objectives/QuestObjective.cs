@@ -15,10 +15,10 @@ namespace Arcy.Quests
 		/// The prefabs will be spawned into the scene by QuestManager and destroyed upon completion.
 		/// </summary>
 
-		[Header("Status text for Journal ui")]
+		[Header("Status text for Journal UI")]
 		[TextArea(2, 6)][SerializeField] public string statusText;
 
-		public abstract bool ThisObjectiveCanBeSkipped { get; set; }
+		public abstract bool ThisObjectiveCanBeSkipped { get; set; } // Not yet implemented
 		private bool _isFinished = false;
 		private string _questId;
 		private int _objectiveIndex;
@@ -26,7 +26,10 @@ namespace Arcy.Quests
 		public abstract void ObjectiveActivate();
 		public abstract void OnFinish();
 
-		// called by Quest
+		// Quest Data Load upon startup
+		protected abstract void SetQuestObjectiveState(string state);
+
+		// called by Questmanager via Quest-class when this QuestObjective is instatiated (during either Start, Questpoint or QM.AdvanceQuest)
 		public void InitializeQuestObjective(string questId, int objectiveIndex, string questObjectiveState)
 		{
 			this._questId = questId;
@@ -38,6 +41,7 @@ namespace Arcy.Quests
 			}
 		}
 
+		// TODO - so far this is not called
 		protected void FinishObjective()
 		{
 			if (!_isFinished)
@@ -55,8 +59,5 @@ namespace Arcy.Quests
 		{
 			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newStatus));
 		}
-
-		// Quest Data Load upon startup
-		protected abstract void SetQuestObjectiveState(string state);
 	}
 }
