@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1348946699991943749}
   - component: {fileID: -3011234204428208362}
   m_Layer: 0
-  m_Name: QuestObjective
+  m_Name: QuestObjective_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2333ce713a585041936a1cd3ca7a4d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statusText: 
-  _item: {fileID: 0}
+  statusText: You run into a willy, nilly old bear asking you to fetch some "hunny"
+    for him.
+  _item: {fileID: 11400000, guid: d509341324f5da1468acbf69bf262c9c, type: 2}

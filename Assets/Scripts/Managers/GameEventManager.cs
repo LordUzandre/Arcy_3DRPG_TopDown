@@ -19,15 +19,15 @@ namespace Arcy.Management
 		public InventoryEvents inventoryEvents;
 		public GameStateManager gameStateManager;
 		public DialogueEvents dialogueEvents;
-		// DialogueEvents
 
-		private void Awake()
+		public void Awake()
 		{
 			if (instance != null)
 			{
 				Debug.LogError("Found more than one Game Events Manager in the scene.");
 			}
 			instance = this;
+			Debug.Log("Succefully instances");
 
 			//initialize all events
 			inputEvents = new InputEvents();

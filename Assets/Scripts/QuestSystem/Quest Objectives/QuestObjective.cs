@@ -55,6 +55,7 @@ namespace Arcy.Quests
 		}
 
 		// Called by QuestPoint when the requirements are met and we press the interact-key
+		// Also called by QuestObjective during Start()
 		protected void ChangeState(string newState, string newStatus)
 		{
 			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newStatus));

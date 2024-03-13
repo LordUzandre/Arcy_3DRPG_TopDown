@@ -18,7 +18,28 @@ namespace Arcy.Quests
 
 		private void Awake()
 		{
-			CreateQuestMap();
+			_questMap = CreateQuestMap();
+		}
+
+		// create quest map during Awake()
+		private Dictionary<string, Quest> CreateQuestMap()
+		{
+			// Load all QuestInfo Scriptable Objects in the Assets/Resources/Quests folder
+			QuestInfoSO[] allQuests = Resources.LoadAll<QuestInfoSO>("Quests");
+
+			// Create the quest map
+			Dictionary<string, Quest> idToQuestMap = new Dictionary<string, Quest>();
+
+			foreach (QuestInfoSO questInfo in allQuests)
+			{
+				if (idToQuestMap.ContainsKey(questInfo.guid))
+				{
+					Debug.LogWarning("Duplicate ID found when creating quest map: " + questInfo.guid);
+				}
+				idToQuestMap.Add(questInfo.guid, LoadQuest(questInfo));
+			}
+
+			return idToQuestMap;
 		}
 
 		private void OnEnable()
@@ -43,11 +64,9 @@ namespace Arcy.Quests
 		{
 			foreach (Quest quest in _questMap.Values)
 			{
-				Debug.Log("QM - Part01");
-
 				if (quest.state == QuestState.IN_PROGRESS)
 				{
-					Debug.Log("QM - Part03");
+					Debug.Log($"QuestManager: {quest.info.guid} is ongoing");
 					quest.InstantiateCurrentQuestObjective(this.transform);
 				}
 
@@ -56,6 +75,7 @@ namespace Arcy.Quests
 			}
 		}
 
+		// Run during update
 		private bool CheckRequirementMet(Quest quest)
 		{
 			// Start true and require to be set to false
@@ -142,8 +162,10 @@ namespace Arcy.Quests
 		// Claim the rewards after finishing a quest.
 		private void ClaimRewards(Quest quest)
 		{
-			// GameEventManager.instance.goldEvents.GoldGoldGained(quest.info.goldReward);
-			// GameEventManager.instance.playerEvents.ExperienceGained(quest.info.experienceReward);
+			foreach (Inventory.InventorySlot item in quest.info.rewardItems)
+			{
+				// Add items to inventory
+			}
 		}
 
 		private void QuestObjectiveStateChange(string id, int objectiveIndex, QuestObjectiveState questObjectiveState)
@@ -154,27 +176,6 @@ namespace Arcy.Quests
 		}
 
 		#region questMap
-
-		// create quest map during Awake()
-		private Dictionary<string, Quest> CreateQuestMap()
-		{
-			// Load all QuestInfo Scriptable Objects in the Assets/Resources/Quests folder
-			QuestInfoSO[] allQuests = Resources.LoadAll<QuestInfoSO>("Quests");
-
-			// Create the quest map
-			Dictionary<string, Quest> idToQuestMap = new Dictionary<string, Quest>();
-
-			foreach (QuestInfoSO questInfo in allQuests)
-			{
-				if (idToQuestMap.ContainsKey(questInfo.guid))
-				{
-					Debug.LogWarning("Duplicate ID found when creating quest map: " + questInfo.guid);
-				}
-				idToQuestMap.Add(questInfo.guid, LoadQuest(questInfo));
-			}
-
-			return idToQuestMap;
-		}
 
 		private Quest GetQuestByGuid(string id)
 		{

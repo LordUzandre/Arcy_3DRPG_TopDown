@@ -24,5 +24,17 @@ namespace Arcy.Inventory
 				onInventoryItemUsed(item);
 			}
 		}
+
+		// When an item is removed (like after a quest)
+		public event Action<InventoryItem, int> onInventoryItemRemoved;
+		public void InventoryItemRemoved(InventoryItem item, int amount = 1)
+		{
+			int myAmount = amount;
+
+			if (onInventoryItemRemoved != null)
+			{
+				onInventoryItemRemoved(item, myAmount);
+			}
+		}
 	}
 }

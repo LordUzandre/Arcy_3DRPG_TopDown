@@ -6,12 +6,8 @@ using UnityEngine.UI;
 
 namespace Arcy.Quests
 {
-    public class Quest : MonoBehaviour
+    public class Quest
     {
-        /// <summary>
-        /// 
-        /// </summary>
-
         // static info
         public QuestInfoSO info;
         // state info

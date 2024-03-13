@@ -18,7 +18,6 @@ namespace Arcy.Dialogue
         public static DialogueManager Instance { get; private set; }
 
         public event Action Skip;
-        // public static Action<string> DialogueFinished;
 
         /// <summary>
         /// This script retrieves the data from the db and sends it to DialgueUI.

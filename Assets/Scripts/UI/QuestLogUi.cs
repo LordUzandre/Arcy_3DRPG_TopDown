@@ -103,8 +103,8 @@ namespace Arcy.UI
 			}
 
 			// rewards
-			_goldRewardsText.text = quest.info.goldReward + " Gold";
-			_experienceRewardText.text = quest.info.experienceReward + " XP";
+			// _goldRewardsText.text = quest.info.goldReward + " Gold";
+			// _experienceRewardText.text = quest.info.experienceReward + " XP";
 		}
 
 		#endregion

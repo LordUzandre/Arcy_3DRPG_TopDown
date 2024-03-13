@@ -19,11 +19,5 @@ namespace Arcy.Inventory
 			// Use the item
 			// Something may happen
 		}
-
-		// Call this method to remove the item from inventory
-		public void RemoveFromInventory()
-		{
-			// InventorySingleton.instance.Remove(this);
-		}
 	}
 }

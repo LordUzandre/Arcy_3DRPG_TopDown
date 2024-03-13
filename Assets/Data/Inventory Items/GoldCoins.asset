@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 806149572b91ad742a195133f78504b2, type: 3}
+  m_Name: GoldCoins
+  m_EditorClassIdentifier: 
+  itemName: Gold coins
+  inventoryIcon: {fileID: 21300000, guid: cba57ee7089101b46921769794ad762f, type: 3}
+  showInInventory: 1

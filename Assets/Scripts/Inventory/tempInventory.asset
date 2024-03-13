@@ -9,13 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a6e709887db5f34383a8afd803aefac, type: 3}
-  m_Name: Inventory
+  m_Script: {fileID: 11500000, guid: 47da992a695bbf243bf83c2631c95b97, type: 3}
+  m_Name: tempInventory
   m_EditorClassIdentifier: 
-  items:
-  - item: {fileID: 11400000, guid: d509341324f5da1468acbf69bf262c9c, type: 2}
-    amount: 4
+  inventorySlots:
   - item: {fileID: 11400000, guid: c45f0b6e5ca5222408c9f04428b82016, type: 2}
-    amount: 8
-  _inventorySize: 16
-  currentlyUsedSlots: 0
+    amount: 4

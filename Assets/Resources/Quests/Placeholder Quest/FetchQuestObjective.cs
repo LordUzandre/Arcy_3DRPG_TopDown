@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Arcy.Quests
 {
-	public class PlaceholderQuestObjective : QuestObjective
+	public class FetchQuestObjective : QuestObjective
 	{
 		/// <summary>
 		/// This serves as a placeholder so that we can learn how the quest system works
@@ -24,7 +24,6 @@ namespace Arcy.Quests
 
 		private void UpdateState()
 		{
-			// state = 
 			string state = _item.name.ToString();
 			// status is only for ui
 			string status = "you have foundthe item: " + state;

@@ -18,13 +18,9 @@ MonoBehaviour:
   dialoguePrerequisites: 0
   item: {fileID: 0}
   questObjectivePrefabs:
-  - {fileID: 0}
+  - {fileID: 3617655435119772927, guid: ee2da28d3025fb941b47b42196cf1e84, type: 3}
   rewardItems:
-  - item: {fileID: 11400000, guid: c45f0b6e5ca5222408c9f04428b82016, type: 2}
-    amount: 4
-  goldReward:
-    item: {fileID: 0}
-    amount: 0
-  experienceReward:
-    item: {fileID: 0}
-    amount: 0
+  - item: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
+    amount: 500
+  - item: {fileID: 11400000, guid: 70b74864747cf4c46a91a701f8bc2ce7, type: 2}
+    amount: 750
