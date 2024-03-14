@@ -64,7 +64,7 @@ namespace Arcy.UI
 
 		#endregion
 
-		#region UI Buttons
+		#region Quest Log Buttons
 
 		private void QuestStateChange(Quest quest)
 		{

@@ -22,13 +22,11 @@ namespace Arcy.Inventory
 			CreateInventoryFromTemp();
 #else
 			CreateInventoryFromSaveData();
-			// TODO - Load from SaveData
 #endif
 		}
 
 		private List<InventorySlot> CreateInventoryFromTemp()
 		{
-
 			// Load from a temp Editor-friendly Inventory
 			if (_editorInventory != null)
 			{
@@ -59,7 +57,7 @@ namespace Arcy.Inventory
 
 		private void CreateInventoryFromSaveData()
 		{
-
+			// TODO - Load from SaveData
 		}
 
 		private void AddItem(InventoryItem itemToAdd, int amountToAdd)

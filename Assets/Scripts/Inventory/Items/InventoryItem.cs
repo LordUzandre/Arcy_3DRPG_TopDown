@@ -10,7 +10,7 @@ namespace Arcy.Inventory
 	public class InventoryItem : ScriptableObject
 	{
 		public string itemName;
-		public Sprite inventoryIcon;
+		public Image inventoryIcon;
 		public bool showInInventory = true;
 
 		// Called when the item is pressed in the inventory
