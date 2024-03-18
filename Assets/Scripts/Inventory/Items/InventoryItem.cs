@@ -10,8 +10,25 @@ namespace Arcy.Inventory
 	public class InventoryItem : ScriptableObject
 	{
 		public string itemName;
-		public Image inventoryIcon;
+		public string guid;
+
+		[Header("Components")]
+		public Sprite inventoryIcon;
+		public GameObject prefab;
+		[Space]
 		public bool showInInventory = true;
+
+#if UNITY_EDITOR
+		// Generate a unique identifier
+		[ContextMenu("Generate Unique Identifier (guid)")]
+		private void GenerateGuid() { guid = System.Guid.NewGuid().ToString(); }
+
+		private void OnValidate()
+		{
+			if (guid == null)
+				GenerateGuid();
+		}
+#endif
 
 		// Called when the item is pressed in the inventory
 		public virtual void Use()

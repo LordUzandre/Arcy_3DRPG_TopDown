@@ -22,10 +22,10 @@ namespace Arcy.Quests
 			UpdateState();
 		}
 
+		// Below is only for quest log ui
 		private void UpdateState()
 		{
 			string state = _item.name.ToString();
-			// status is only for ui
 			string status = "you have foundthe item: " + state;
 			ChangeState(state, status);
 		}
@@ -45,12 +45,16 @@ namespace Arcy.Quests
 			throw new NotImplementedException();
 		}
 
-		private void ItemAddedToInventory(Inventory.InventoryItem item)
+		private void ItemAddedToInventory(Inventory.InventoryItem item, int amountAdded)
 		{
-			if (item == _item)
+			if (item.itemName == _item.itemName)
 			{
 				Debug.Log("Quest: You found the requested item");
+
+				// Check amount in Inventory
+				// if (amountInInventory == requested amount) => ObjectiveCompleted
 			}
+
 		}
 	}
 }

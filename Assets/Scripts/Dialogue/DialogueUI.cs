@@ -56,7 +56,7 @@ namespace Arcy.Dialogue
                 return;
             }
 
-            if (enableAnswrBtns) // Is the talker asking a question?
+            if (enableAnswrBtns) // Is the speaker asking a question?
             {
                 _nextBtn?.gameObject.SetActive(false);
 

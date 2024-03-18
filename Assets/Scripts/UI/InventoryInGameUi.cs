@@ -14,11 +14,6 @@ namespace Arcy.UI
 		[Space]
 		[SerializeField] private List<RewardSlotUi> _slotsCurrentlyInUse;
 
-		private RectTransform _rect;
-		private float _tmpRect;
-
-		private bool _sameItem;
-
 		private void OnEnable()
 		{
 			GameEventManager.instance.inventoryEvents.onInventoryItemAdded += ItemsAdded;
@@ -29,24 +24,33 @@ namespace Arcy.UI
 			GameEventManager.instance.inventoryEvents.onInventoryItemAdded -= ItemsAdded;
 		}
 
-		public void ItemsAdded(InventoryItem item)
+		public void ItemsAdded(InventoryItem item, int amountAdded)
 		{
 			// Check if any of the slots currently contain the item in question
 			foreach (RewardSlotUi slot in _slotsCurrentlyInUse)
 			{
-				if (slot.item == item)
+				if (slot.item.itemName == item.itemName)
 				{
-					// TODO - add code
+					Debug.Log("add number to already populated slot");
+
+					// Put at the top of the list
+					//slot.transform.SetSiblingIndex(0);
+
+					slot.amountAddedInt += amountAdded;
+
+					slot.MoveUiSlotOut(slot.transform, slot.GetComponent<CanvasGroup>());
 					return;
 				}
 			}
 
 			// Otherwise occupy the first unused slot
-			foreach (RewardSlotUi slot in _slots)
+			for (int i = 0; i < _slots.Length; i++)
 			{
-				if (!slot.currentlyInUse)
+				if (!_slots[i].currentlyInUse)
 				{
 					// TODO - add code
+					Debug.Log("slot.item.name = " + _slots[i].item.guid + ", item.name = " + item.guid);
+					_slots[i].Initialize(item, amountAdded);
 					return;
 				}
 			}

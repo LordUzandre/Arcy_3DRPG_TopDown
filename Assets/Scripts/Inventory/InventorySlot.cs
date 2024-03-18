@@ -10,5 +10,6 @@ namespace Arcy.Inventory
 	{
 		[SerializeField] public InventoryItem item;
 		[SerializeField] public int amount;
+		[SerializeField] public GameObject prefab;
 	}
 }

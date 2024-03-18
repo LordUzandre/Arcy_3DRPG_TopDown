@@ -7,12 +7,12 @@ namespace Arcy.Inventory
 {
 	public class InventoryEvents
 	{
-		public event Action<InventoryItem> onInventoryItemAdded;
-		public void InventoryItemAdded(InventoryItem item)
+		public event Action<InventoryItem, int> onInventoryItemAdded;
+		public void InventoryItemAdded(InventoryItem item, int amountAdded = 1)
 		{
 			if (onInventoryItemAdded != null)
 			{
-				onInventoryItemAdded(item);
+				onInventoryItemAdded(item, amountAdded);
 			}
 		}
 

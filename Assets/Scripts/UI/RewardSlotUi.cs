@@ -10,19 +10,32 @@ namespace Arcy.UI
 	[RequireComponent(typeof(CanvasGroup))]
 	public class RewardSlotUi : MonoBehaviour
 	{
+		// public
+		[Header("Item currently in slot")]
+		[SerializeField] public Inventory.InventoryItem item;
+
+		[Header("Components")]
 		[SerializeField] public Image icon;
 		[SerializeField] public TMPro.TMP_Text amountTMP;
 
 		public bool currentlyInUse;
-		public Inventory.InventoryItem item;
+		[HideInInspector] public int amountAddedInt = 0;
 
-		private float startPosX;
+		// private:
+		// private Sequence sequence;
+		private float insidePos = 0;
 		private float outsidePos = -420;
+		private float _timer = 0;
 
 
 #if UNITY_EDITOR
 		private void OnValidate()
 		{
+			if (icon == null)
+			{
+				icon = transform.Find("RewardImage").GetComponent<Image>();
+			}
+
 			if (amountTMP == null && icon != null)
 				amountTMP = icon.GetComponentInChildren<TMPro.TMP_Text>();
 		}
@@ -30,39 +43,70 @@ namespace Arcy.UI
 
 		private void Start()
 		{
-			startPosX = this.transform.position.x;
-			// CanvasGroup cvGroup = TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? hit : null;
+			insidePos = this.transform.position.x;
 
 			// Move the slots out of view;
 			transform.DOMoveX(outsidePos, 1f, true);
 		}
 
-		public void SetUp(Inventory.InventoryItem item, int amount = 1)
+		public void Initialize(Inventory.InventoryItem item, int amount)
 		{
-			icon = item.inventoryIcon;
-			amountTMP.text = amount.ToString();
+			// Components:
+			currentlyInUse = true;
+			amountAddedInt = amount;
+			icon.sprite = item.inventoryIcon;
+			amountTMP.text = amountAddedInt.ToString();
+			_timer = 0;
+
+			MoveUiSlotIn(this.transform, GetComponent<CanvasGroup>());
 		}
 
+		#region UI-animations
 		private void MoveUiSlotIn(Transform localTransform, CanvasGroup cvGroup)
 		{
+			cvGroup.alpha = 0;
 			Sequence sequence = DOTween.Sequence();
 
-			sequence.Append(localTransform.DOMoveX(startPosX, 0.5f).SetEase(Ease.OutCubic)) // move in
-			.Join(cvGroup.DOFade(1, 0.25f)) // fade in
-			.OnComplete(() => MoveUiSlotOut(localTransform, cvGroup));
+			sequence.Append(localTransform.DOMoveX(insidePos, 0.2f).SetEase(Ease.OutCubic)) // move in
+				.Join(cvGroup.DOFade(1, 0.25f)) // fade in
+				.OnComplete(() => MoveUiSlotOut(localTransform, cvGroup));
 		}
 
-		private void MoveUiSlotOut(Transform localTransform, CanvasGroup cvGroup)
+		public void MoveUiSlotOut(Transform localTransform, CanvasGroup cvGroup)
 		{
 			Sequence sequence = DOTween.Sequence();
+
+			// Chack starting position
+			if (this.transform.position.x != insidePos)
+			{
+				sequence.Append(localTransform.DOMoveX(insidePos, 0.1f).SetEase(Ease.OutCubic)); // move in
+			}
+
 			sequence.AppendInterval(1f) // short delay
 			.Append(localTransform.DOMoveX(-420, 1f).SetEase(Ease.InCubic)) // move out
-			.Join(cvGroup.DOFade(0, 1f)); // fade out
+			.Join(cvGroup.DOFade(0, 1f)) // fade out
+			.OnComplete(() => ResetSlot());
+		}
+		#endregion
+
+		// After the Slot have moved out of view
+		private void ResetSlot()
+		{
+			currentlyInUse = false;
+			item = null;
+			amountAddedInt = 1;
 		}
 
-		private void ItemResumed()
+		private void Update()
 		{
-			//DOTween.Kill();
+			if (_timer < 10)
+			{
+				_timer += Time.deltaTime;
+			}
+			else
+			{
+				_timer = 0;
+			}
 		}
 	}
 }

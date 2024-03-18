@@ -5,6 +5,7 @@ using Arcy.Dialogue;
 using Arcy.InputManagement;
 using Arcy.Inventory;
 using Arcy.Quests;
+using Arcy.Player;
 using UnityEngine;
 
 namespace Arcy.Management
@@ -13,11 +14,14 @@ namespace Arcy.Management
 	{
 		public static GameEventManager instance { get; private set; }
 
-		// Subscribe to events:
+		// input 
 		public InputEvents inputEvents;
+		// gamestate-manager
+		public GameStateManager gameStateManager;
+
+		public PlayerEvents playerEvents;
 		public QuestEvents questEvents;
 		public InventoryEvents inventoryEvents;
-		public GameStateManager gameStateManager;
 		public DialogueEvents dialogueEvents;
 
 		public void Awake()
@@ -30,9 +34,10 @@ namespace Arcy.Management
 
 			//initialize all events
 			inputEvents = new InputEvents();
+			gameStateManager = new GameStateManager();
+			playerEvents = new PlayerEvents();
 			questEvents = new QuestEvents();
 			inventoryEvents = new InventoryEvents();
-			gameStateManager = new GameStateManager();
 			dialogueEvents = new DialogueEvents();
 		}
 	}

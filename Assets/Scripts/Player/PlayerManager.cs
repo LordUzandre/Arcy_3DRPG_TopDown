@@ -5,6 +5,7 @@ using Arcy.Dialogue;
 using Arcy.Animation;
 using Arcy.InputManagement;
 using Arcy.Interaction;
+using Arcy.Player;
 using DG.Tweening;
 using System;
 using Arcy.Management;
