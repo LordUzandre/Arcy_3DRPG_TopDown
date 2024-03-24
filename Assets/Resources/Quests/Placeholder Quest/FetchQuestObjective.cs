@@ -47,13 +47,13 @@ namespace Arcy.Quests
 
 		private void ItemAddedToInventory(Inventory.InventoryItem item, int amountAdded)
 		{
-			if (item.itemName == _item.itemName)
-			{
-				Debug.Log("Quest: You found the requested item");
+			// if (item.itemName == _item.itemName)
+			// {
+			// 	Debug.Log("Quest: You found the requested item");
 
-				// Check amount in Inventory
-				// if (amountInInventory == requested amount) => ObjectiveCompleted
-			}
+			// 	// Check amount in Inventory
+			// 	// if (amountInInventory == requested amount) => ObjectiveCompleted
+			// }
 
 		}
 	}

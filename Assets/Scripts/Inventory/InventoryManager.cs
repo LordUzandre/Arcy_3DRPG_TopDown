@@ -8,81 +8,234 @@ namespace Arcy.Inventory
 	// [CreateAssetMenu(fileName = "Inventory", menuName = "Inventory/Inventory")]
 	public class InventoryManager : MonoBehaviour
 	{
-		public List<InventorySlot> inventory;
 		[SerializeField] public int inventorySize = 16;
-		[SerializeField] public int currentlyUsedSlots;
 
-		[SerializeField] private EditorInventory _editorInventory;
+		// STATE
+		InventorySlot[] slots;
 
-		public Action<InventoryItem> newItemAdded;
-
-		private void Start()
+		public struct InventorySlot
 		{
-#if UNITY_EDITOR
-			CreateInventoryFromTemp();
-#else
-			CreateInventoryFromSaveData();
-#endif
+			public InventoryItem item;
+			public int number;
 		}
 
-		private List<InventorySlot> CreateInventoryFromTemp()
-		{
-			// Load from a temp Editor-friendly Inventory
-			if (_editorInventory != null)
-			{
-				InventorySlot[] items = _editorInventory.inventorySlots;
-				List<InventorySlot> tempInventory = new List<InventorySlot>(items.Length);
+		// Public:
+		public event Action inventoryUpdated;
 
-				if (items.Length > -1)
+		public static InventoryManager GetPlayerInventory()
+		{
+			return null;
+		}
+
+		public bool HasSpaceFor(InventoryItem item)
+		{
+			return false;
+		}
+
+		/// <summary>
+		/// How many slots are in the inventory?
+		/// </summary>
+		public int GetSize()
+		{
+			return slots.Length;
+		}
+
+		/// <summary>
+		/// Attempt to add the items to the first available slot.
+		/// </summary>
+		/// <param name="item">The item to add.</param>
+		/// <param name="number">The number to add.</param>
+		/// <returns>Whether or not the item could be added.</returns>
+		public bool AddToFirstEmptySlot(InventoryItem item, int number)
+		{
+			int i = FindSlot(item);
+
+			if (i < 0)
+			{
+				return false;
+			}
+
+			slots[i].item = item;
+			slots[i].number += number;
+			if (inventoryUpdated != null)
+			{
+				inventoryUpdated();
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Is there an instance of the item in the inventory?
+		/// </summary>
+		public bool HasItem(InventoryItem item)
+		{
+			for (int i = 0; i < slots.Length; i++)
+			{
+				if (object.ReferenceEquals(slots[i].item, item))
 				{
-					foreach (InventorySlot item in items)
-					{
-						if (item.item != null)
-						{
-							tempInventory.Add(item);
-							// Debug.Log("Inventory Item Added: " + item.item.itemName);
-							// Debug.Log("Length = " + items.Length);
-						}
-					}
+					return true;
 				}
-
-				return tempInventory;
-
 			}
-			else
+			return false;
+		}
+
+		/// <summary>
+		/// Return the item type in the given slot.
+		/// </summary>
+		public InventoryItem GetItemInSlot(int slot)
+		{
+			return slots[slot].item;
+		}
+
+		/// <summary>
+		/// Get the number of items in the given slot.
+		/// </summary>
+		public int GetNumberInSlot(int slot)
+		{
+			return slots[slot].number;
+		}
+
+		/// <summary>
+		/// Remove a number of items from the given slot. Will never remove more
+		/// that there are.
+		/// </summary>
+		public void RemoveFromSlot(int slot, int number)
+		{
+			slots[slot].number -= number;
+			if (slots[slot].number <= 0)
 			{
-				return null;
+				slots[slot].number = 0;
+				slots[slot].item = null;
 			}
-		}
-
-		private void CreateInventoryFromSaveData()
-		{
-			// TODO - Load from SaveData
-		}
-
-		private void AddItem(InventoryItem itemToAdd, int amountToAdd)
-		{
-			if (currentlyUsedSlots >= inventorySize)
+			if (inventoryUpdated != null)
 			{
-				// Check if there is space for it.
+				inventoryUpdated.Invoke();
+			}
+		}
+
+		/// <summary>
+		/// Will add an item to the given slot if possible. If there is already
+		/// a stack of this type, it will add to the existing stack. Otherwise,
+		/// it will be added to the first empty slot.
+		/// </summary>
+		/// <param name="slot">The slot to attempt to add to.</param>
+		/// <param name="item">The item type to add.</param>
+		/// <param name="number">The number of items to add.</param>
+		/// <returns>True if the item was added anywhere in the inventory.</returns>
+		public bool AddItemToSlot(int slot, InventoryItem item, int number)
+		{
+			if (slots[slot].item != null)
+			{
+				return AddToFirstEmptySlot(item, number); ;
 			}
 
-			// foreach (InventoryItem item in items)
-			// {
-			// 	if (item == itemToAdd)
-			// 	{
+			var i = FindStack(item);
+			if (i >= 0)
+			{
+				slot = i;
+			}
 
-			// 		return;
-			// 	}
-			// }
-
-			// Check if there is already an instance of the item in inventory,
-			// if not, add a new slot for it.
+			slots[slot].item = item;
+			slots[slot].number += number;
+			if (inventoryUpdated != null)
+			{
+				inventoryUpdated();
+			}
+			return true;
 		}
 
-		private void RemoveItem(InventoryItem itemToRemove, int amountToRemove)
+
+		// PRIVATE
+
+		private void Awake()
 		{
-			// If inventoryslot is 0, remove the slot from inventory
+			slots = new InventorySlot[inventorySize];
 		}
+
+		/// <summary>
+		/// Find an empty slot.
+		/// </summary>
+		/// <returns>-1 if all slots are full.</returns>
+		private int FindEmptySlot()
+		{
+			for (int i = 0; i < slots.Length; i++)
+			{
+				if (slots[i].item == null)
+				{
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		/// <summary>
+		/// Find a slot that can accomodate the given item.
+		/// </summary>
+		/// <returns>-1 if no slot is found.</returns>
+		private int FindSlot(InventoryItem item)
+		{
+			int i = FindStack(item);
+			if (i < 0)
+			{
+				i = FindEmptySlot();
+			}
+			return i;
+		}
+
+		/// <summary>
+		/// Find an existing stack of this item type.
+		/// </summary>
+		/// <returns>-1 if no stack exists or if the item is not stackable.</returns>
+		private int FindStack(InventoryItem item)
+		{
+			if (!item.IsStackable())
+			{
+				return -1;
+			}
+
+			for (int i = 0; i < slots.Length; i++)
+			{
+				if (object.ReferenceEquals(slots[i].item, item))
+				{
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		[System.Serializable]
+		private struct InventorySlotRecord
+		{
+			public string itemID;
+			public int number;
+		}
+
+		// object ISaveable.CaptureState()
+		// {
+		// 	var slotStrings = new InventorySlotRecord[inventorySize];
+		// 	for (int i = 0; i < inventorySize; i++)
+		// 	{
+		// 		if (slots[i].item != null)
+		// 		{
+		// 			slotStrings[i].itemID = slots[i].item.GetItemID();
+		// 			slotStrings[i].number = slots[i].number;
+		// 		}
+		// 	}
+		// 	return slotStrings;
+		// }
+
+		// void ISaveable.RestoreState(object state)
+		// {
+		// 	var slotStrings = (InventorySlotRecord[])state;
+		// 	for (int i = 0; i < inventorySize; i++)
+		// 	{
+		// 		slots[i].item = InventoryItem.GetFromID(slotStrings[i].itemID);
+		// 		slots[i].number = slotStrings[i].number;
+		// 	}
+		// 	if (inventoryUpdated != null)
+		// 	{
+		// 		inventoryUpdated();
+		// 	}
+		// }
 	}
 }

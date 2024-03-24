@@ -49,7 +49,7 @@ namespace Arcy.UI
 				if (!_slots[i].currentlyInUse)
 				{
 					// TODO - add code
-					Debug.Log("slot.item.name = " + _slots[i].item.guid + ", item.name = " + item.guid);
+					Debug.Log("slot.item.name = " + _slots[i].item.GetGuid() + ", item.name = " + item.GetGuid());
 					_slots[i].Initialize(item, amountAdded);
 					return;
 				}

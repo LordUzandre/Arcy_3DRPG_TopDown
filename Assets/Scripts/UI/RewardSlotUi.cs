@@ -54,7 +54,7 @@ namespace Arcy.UI
 			// Components:
 			currentlyInUse = true;
 			amountAddedInt = amount;
-			icon.sprite = item.inventoryIcon;
+			icon.sprite = item.GetIcon();
 			amountTMP.text = amountAddedInt.ToString();
 			_timer = 0;
 
