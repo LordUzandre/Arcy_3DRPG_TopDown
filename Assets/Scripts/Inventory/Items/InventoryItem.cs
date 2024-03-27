@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Arcy.Inventory
 {
-	[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item", order = 60)]
+	[CreateAssetMenu(fileName = "New Item", menuName = "Arcy/Inventory/Item", order = 60)]
 	public class InventoryItem : ScriptableObject
 	{
 		[SerializeField] string itemName;
@@ -18,46 +18,32 @@ namespace Arcy.Inventory
 		[Space]
 		[SerializeField] bool showInInventory = true;
 		[SerializeField] bool stackable = false;
-		[TextArea(1, 3)]
+		[TextArea(3, 6)]
 		[SerializeField] string description;
 
-#if UNITY_EDITOR
-		// Generate a unique identifier
-		[ContextMenu("Generate Unique Identifier (guid)")]
-		private void GenerateGuid() { guid = System.Guid.NewGuid().ToString(); }
-
-		private void OnValidate()
-		{
-			if (guid == null)
-				GenerateGuid();
-		}
-#endif
-
-		// STATE
+		// static so that there is only one cache, and not one for every item
 		static Dictionary<string, InventoryItem> itemLookupCache;
 
-		// PUBLIC
+		// PUBLIC:
 
-		/// <summary>
 		/// Get the inventory item instance from its UUID.
-		/// </summary>
-		/// <param name="itemID">
 		/// String UUID that persists between game instances.
-		/// </param>
-		/// <returns>
 		/// Inventory item instance corresponding to the ID.
-		/// </returns>
 		public static InventoryItem GetFromID(string itemID)
 		{
+			// during first run:
 			if (itemLookupCache == null)
 			{
 				itemLookupCache = new Dictionary<string, InventoryItem>();
+
+				// Load all iventory items
 				var itemList = Resources.LoadAll<InventoryItem>("");
+
 				foreach (InventoryItem item in itemList)
 				{
 					if (itemLookupCache.ContainsKey(item.guid))
 					{
-						Debug.LogError(string.Format("Looks like there's a duplicate GameDevTV.UI.InventorySystem ID for objects: {0} and {1}", itemLookupCache[item.guid], item));
+						Debug.LogError("Looks like there's a duplicate GameDevTV.UI.InventorySystem ID for objects: " + itemLookupCache[item.guid] + " and " + item);
 						continue;
 					}
 
@@ -65,7 +51,9 @@ namespace Arcy.Inventory
 				}
 			}
 
+			// failsafe
 			if (itemID == null || !itemLookupCache.ContainsKey(itemID)) return null;
+
 			return itemLookupCache[itemID];
 		}
 
@@ -100,5 +88,18 @@ namespace Arcy.Inventory
 		{
 			return description;
 		}
+
+		// Private:
+#if UNITY_EDITOR
+		// Generate a unique identifier
+		[ContextMenu("Generate Unique Identifier (guid)")]
+		private void GenerateGuid() { guid = System.Guid.NewGuid().ToString(); }
+
+		private void OnValidate()
+		{
+			if (guid == null)
+				GenerateGuid();
+		}
+#endif
 	}
 }

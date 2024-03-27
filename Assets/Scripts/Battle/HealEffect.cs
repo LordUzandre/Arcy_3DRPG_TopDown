@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-	[CreateAssetMenu(fileName = "Heal Effect", menuName = "Battle/Effects/Heal Effect", order = 78)]
+	[CreateAssetMenu(fileName = "Heal Effect", menuName = "Arcy/Battle/Effects/Heal Effect", order = 78)]
 	public class HealEffect : BattleEffectBase
 	{
 		public int heal;

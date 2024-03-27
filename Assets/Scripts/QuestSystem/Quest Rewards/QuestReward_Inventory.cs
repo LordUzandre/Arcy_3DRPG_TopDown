@@ -6,7 +6,7 @@ using Arcy.Inventory;
 
 namespace Arcy.Quests
 {
-	[CreateAssetMenu(fileName = "Inventory Reward", menuName = "Quest/Rewards/Inventory Reward", order = 65)]
+	[CreateAssetMenu(fileName = "Inventory Reward", menuName = "Arcy/Quest/Rewards/Inventory Reward", order = 65)]
 	[Serializable]
 	public class QuestReward_Inventory : QuestRewards
 	{

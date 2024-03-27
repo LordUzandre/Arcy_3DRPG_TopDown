@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    [CreateAssetMenu(fileName = "Player Team Persitent Data", menuName = "Battle Character Sets/Player Team Persistent Data", order = 79)]
+    [CreateAssetMenu(fileName = "Player Team Persitent Data", menuName = "Arcy/Battle Character Sets/Player Team Persistent Data", order = 79)]
     public class PlayerPersistentData : ScriptableObject
     {
         /// <summary>

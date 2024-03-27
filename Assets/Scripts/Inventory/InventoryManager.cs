@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Arcy.Inventory
 {
-	// [CreateAssetMenu(fileName = "Inventory", menuName = "Inventory/Inventory")]
 	public class InventoryManager : MonoBehaviour
 	{
 		[SerializeField] public int inventorySize = 16;

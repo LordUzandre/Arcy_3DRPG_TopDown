@@ -1,56 +1,35 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arcy.Quests;
 using UnityEngine;
 using UnityEngine.UI;
-// Arcy namespaces
-using Arcy.Management;
-using Arcy.Quests;
-// Other libraries
 using TMPro;
 using DG.Tweening;
+using Arcy.Management;
 
 namespace Arcy.UI
 {
 	public class QuestIngameUI : MonoBehaviour
 	{
-		[Header("TextMeshPros")]
-		// private:
-		[SerializeField] private TMP_Text _questUpdatedTMP;
+		// Private:
+		[Header("TextMeshPro-elements")]
 		[SerializeField] private TMP_Text _questNameTMP;
-		[SerializeField] private TMP_Text _pressJToLearnMoreTMP;
+		[SerializeField] private TMP_Text _questUpdateTMP;
+		[Header("RewardSlots")]
+		[SerializeField] private GameObject _rewardSlot01;
+		[SerializeField] private GameObject _rewardSlot02;
+		[SerializeField] private GameObject _rewardSlot03;
 
-		[Header("Reward Slots")]
-		[SerializeField] private Transform _inventorySlotsParent;
-		[SerializeField] private RewardSlotUi[] _rewardSlots;
+		[Header("Image-elements")]
+		[SerializeField] private Image _circleBg;
+		[SerializeField] private GameObject _separators;
 
-		Vector3 startPosition;
-
-#if UNITY_EDITOR
-		private void OnValidate()
-		{
-			// Auto-populate _rewardSlot
-			if (_rewardSlots.Length == 0 && _inventorySlotsParent != null)
-			{
-				List<RewardSlotUi> rewardSlots = new List<RewardSlotUi>();
-				foreach (Transform child in _inventorySlotsParent)
-				{
-					RewardSlotUi rewardSlot = TryGetComponent<RewardSlotUi>(out RewardSlotUi hit) ? hit : null;
-					rewardSlots.Add(rewardSlot);
-				}
-
-				_rewardSlots = rewardSlots.ToArray();
-			}
-		}
-#endif
+		Sequence fadeInSequence;
 
 		private void Start()
 		{
-			startPosition = this.transform.position;
-
-			Sequence sequence = DOTween.Sequence();
-			sequence.AppendInterval(1f) // short delay
-			.Append(transform.DOMoveX(-420, 1f, false).SetEase(Ease.OutCubic)); // move out
+			fadeInSequence = DOTween.Sequence();
 		}
 
 		private void OnEnable()
@@ -66,12 +45,24 @@ namespace Arcy.UI
 		public void QuestUpdated(Quest quest)
 		{
 			// TODO - Check wether the quest is new, updated or finished
-			_questNameTMP.text = quest.info.displayName;
+			FadeIn(quest);
 		}
 
-		private void SetupRewardSlots()
+		private void FadeIn(Quest quest)
 		{
+			// Set all necessary elements to zero
+			_separators.SetActive(true);
+			CanvasGroup separatorsCvGroup = _separators.TryGetComponent<CanvasGroup>(out CanvasGroup hit) ? hit : null;
+			separatorsCvGroup.alpha = 0;
+			CanvasGroup circleCvGroup = _circleBg.gameObject.TryGetComponent<CanvasGroup>(out CanvasGroup cvGroup) ? hit : cvGroup;
+			circleCvGroup.alpha = 0;
 
+			// Sequence
+			_separators.transform.DOScaleX(0, 0);
+			fadeInSequence.Append(circleCvGroup.DOFade(1, 0.5f));
+			fadeInSequence.PrependInterval(0.5f);
+			fadeInSequence.Append(_separators.transform.DOScaleX(1, 0.25f))
+			.Join(separatorsCvGroup.DOFade(1, 0.5f));
 		}
 	}
 }
