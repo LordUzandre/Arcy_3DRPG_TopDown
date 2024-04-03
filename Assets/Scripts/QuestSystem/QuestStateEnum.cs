@@ -9,7 +9,7 @@ namespace Arcy.Quests
 	{
 		REQUIREMENTS_NOT_MET,
 		CAN_START,
-		IN_PROGRESS,
+		STARTED,
 		CAN_FINISH,
 		FINISHED
 	}

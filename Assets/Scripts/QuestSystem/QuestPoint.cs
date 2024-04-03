@@ -41,9 +41,9 @@ namespace Arcy.Quests
 		private void QuestStateChange(Quest quest)
 		{
 			// Only update the quest state if this point has the corresponding quest
-			if (quest.info.guid.Equals(questId))
+			if (quest.infoSO.guid.Equals(questId))
 			{
-				currentQuestState = quest.state;
+				currentQuestState = quest.statusEnum;
 				Debug.Log("Quest ith id: " + questId + " updated to state: " + currentQuestState);
 			}
 		}

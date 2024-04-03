@@ -40,7 +40,7 @@ namespace Arcy.UI
 				case QuestStateEnum.CAN_START:
 					_btnTMP.color = Color.red;
 					break;
-				case QuestStateEnum.IN_PROGRESS:
+				case QuestStateEnum.STARTED:
 				case QuestStateEnum.CAN_FINISH:
 					_btnTMP.color = Color.yellow;
 					break;

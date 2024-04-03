@@ -28,17 +28,12 @@ namespace Arcy.Quests
 			_questId = questId;
 			_objectiveIndex = objectiveIndex;
 		}
-		public abstract void OnFinish();
 
-		// When this Objective is initialized
-		public void InitializeQuestObjective(string questId, int objectiveIndex)
+		public virtual void FinishQuest()
 		{
-			_questId = questId;
-			_objectiveIndex = objectiveIndex;
+
 		}
 
-		// Called by QuestPoint when the requirements are met and we press the interact-key
-		// Also called by QuestObjective during Start()
 		protected void ChangeState(string newState, string newUiStatus)
 		{
 			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newUiStatus));
