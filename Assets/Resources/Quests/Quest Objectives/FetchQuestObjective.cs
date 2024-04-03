@@ -12,10 +12,11 @@ namespace Arcy.Quests
 		/// This serves as a placeholder so that we can learn how the quest system works
 		/// </summary>
 
+		[SerializeField] private Inventory.InventoryItem _item;
+
 		private bool _thisObjectiveCanBeSkipped;
 		public override bool ThisObjectiveCanBeSkipped { get { return _thisObjectiveCanBeSkipped; } set { value = _thisObjectiveCanBeSkipped; } }
 
-		[SerializeField] private Inventory.InventoryItem _item;
 
 		private void Start()
 		{
@@ -30,7 +31,7 @@ namespace Arcy.Quests
 			ChangeState(state, status);
 		}
 
-		public override void ObjectiveActivate()
+		public override void Initialize()
 		{
 			GameEventManager.instance.inventoryEvents.onInventoryItemAdded += ItemAddedToInventory;
 		}
@@ -40,20 +41,20 @@ namespace Arcy.Quests
 			GameEventManager.instance.inventoryEvents.onInventoryItemAdded -= ItemAddedToInventory;
 		}
 
-		protected override void SetQuestObjectiveState(string state)
+		protected override void LoadFromSavaData(string state)
 		{
 			throw new NotImplementedException();
 		}
 
 		private void ItemAddedToInventory(Inventory.InventoryItem item, int amountAdded)
 		{
-			// if (item.itemName == _item.itemName)
-			// {
-			// 	Debug.Log("Quest: You found the requested item");
+			if (item.itemName == _item.itemName)
+			{
+				Debug.Log("Quest: You found the requested item");
 
-			// 	// Check amount in Inventory
-			// 	// if (amountInInventory == requested amount) => ObjectiveCompleted
-			// }
+				// Check amount in Inventory
+				// if (amountInInventory == requested amount) => ObjectiveCompleted
+			}
 
 		}
 	}

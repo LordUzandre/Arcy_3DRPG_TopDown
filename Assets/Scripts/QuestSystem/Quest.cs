@@ -11,7 +11,7 @@ namespace Arcy.Quests
         // static info
         public QuestInfoSO info;
         // state info
-        public QuestState state;
+        public QuestStateEnum state;
 
         private int _currentQuestObjectiveIndex;
         private QuestObjectiveState[] _questObjectiveStates;
@@ -22,7 +22,7 @@ namespace Arcy.Quests
         public Quest(QuestInfoSO questInfo)
         {
             this.info = questInfo;
-            this.state = QuestState.REQUIREMENTS_NOT_MET;
+            this.state = QuestStateEnum.REQUIREMENTS_NOT_MET;
             this._currentQuestObjectiveIndex = 0;
             this._questObjectiveStates = new QuestObjectiveState[info.questObjectivePrefabs.Length];
             for (int i = 0; i < _questObjectiveStates.Length; i++)
@@ -32,7 +32,7 @@ namespace Arcy.Quests
         }
 
         // A quest from save state
-        public Quest(QuestInfoSO questInfo, QuestState questState, int currentQuestObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
+        public Quest(QuestInfoSO questInfo, QuestStateEnum questState, int currentQuestObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
         {
             this.info = questInfo;
             this.state = questState;
@@ -110,11 +110,11 @@ namespace Arcy.Quests
         {
             string fullStatus = "";
 
-            if (state == QuestState.REQUIREMENTS_NOT_MET)
+            if (state == QuestStateEnum.REQUIREMENTS_NOT_MET)
             {
                 fullStatus = "Requirements are not met yet to start this quest";
             }
-            else if (state == QuestState.CAN_START)
+            else if (state == QuestStateEnum.CAN_START)
             {
                 fullStatus = "This Quest can be started";
             }
@@ -125,11 +125,11 @@ namespace Arcy.Quests
                     fullStatus += "<s>" + _questObjectiveStates[i].status + "</s>\n";
                 }
 
-                if (state == QuestState.CAN_FINISH)
+                if (state == QuestStateEnum.CAN_FINISH)
                 {
                     fullStatus += "The quest is ready to be turned in.";
                 }
-                else if (state == QuestState.FINISHED)
+                else if (state == QuestStateEnum.FINISHED)
                 {
                     fullStatus += "The quest has been completed";
                 }

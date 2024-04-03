@@ -13,6 +13,8 @@ namespace Arcy.Quests
 
 		private Dictionary<string, Quest> _questMap;
 
+		[SerializeField] private List<Quest> _ongoingQuests;
+
 		// Quest requirements:
 		// private int _currentPlayerLevel;
 
@@ -64,7 +66,7 @@ namespace Arcy.Quests
 		{
 			foreach (Quest quest in _questMap.Values)
 			{
-				if (quest.state == QuestState.IN_PROGRESS)
+				if (quest.state == QuestStateEnum.IN_PROGRESS)
 				{
 					Debug.Log($"QuestManager: {quest.info.guid} is ongoing");
 					quest.InstantiateCurrentQuestObjective(this.transform);
@@ -90,7 +92,7 @@ namespace Arcy.Quests
 			// check quest prerequisites for completion
 			foreach (QuestInfoSO prerequisiteQuestInfo in quest.info.questPrerequisites)
 			{
-				if (GetQuestByGuid(prerequisiteQuestInfo.guid).state != QuestState.FINISHED)
+				if (GetQuestByGuid(prerequisiteQuestInfo.guid).state != QuestStateEnum.FINISHED)
 				{
 					meetsRequirement = false;
 					break;
@@ -112,9 +114,9 @@ namespace Arcy.Quests
 			foreach (Quest quest in _questMap.Values)
 			{
 				// if we're now meeting the requirements, switch over to the CAN_START state
-				if (quest.state == QuestState.REQUIREMENTS_NOT_MET && CheckRequirementMet(quest))
+				if (quest.state == QuestStateEnum.REQUIREMENTS_NOT_MET && CheckRequirementMet(quest))
 				{
-					ChangeQuestState(quest.info.guid, QuestState.CAN_START);
+					ChangeQuestState(quest.info.guid, QuestStateEnum.CAN_START);
 				}
 			}
 		}
@@ -124,10 +126,10 @@ namespace Arcy.Quests
 		{
 			Quest quest = GetQuestByGuid(id);
 			quest.InstantiateCurrentQuestObjective(this.transform);
-			ChangeQuestState(quest.info.guid, QuestState.IN_PROGRESS);
+			ChangeQuestState(quest.info.guid, QuestStateEnum.IN_PROGRESS);
 		}
 
-		private void ChangeQuestState(string id, QuestState state)
+		private void ChangeQuestState(string id, QuestStateEnum state)
 		{
 			Quest quest = GetQuestByGuid(id);
 			quest.state = state;
@@ -148,7 +150,7 @@ namespace Arcy.Quests
 			}
 			else
 			{
-				ChangeQuestState(quest.info.guid, QuestState.CAN_FINISH);
+				ChangeQuestState(quest.info.guid, QuestStateEnum.CAN_FINISH);
 			}
 		}
 
@@ -156,7 +158,7 @@ namespace Arcy.Quests
 		{
 			Quest quest = GetQuestByGuid(id);
 			ClaimRewards(quest);
-			ChangeQuestState(quest.info.guid, QuestState.FINISHED);
+			ChangeQuestState(quest.info.guid, QuestStateEnum.FINISHED);
 		}
 
 		// Claim the rewards after finishing a quest.

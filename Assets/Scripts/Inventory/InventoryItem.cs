@@ -9,14 +9,14 @@ namespace Arcy.Inventory
 	[CreateAssetMenu(fileName = "New Item", menuName = "Arcy/Inventory/Item", order = 60)]
 	public class InventoryItem : ScriptableObject
 	{
-		[SerializeField] string itemName;
-		[SerializeField] string guid;
+		[SerializeField] public string itemName;
+		[SerializeField] public string guid;
 
 		[Header("Components")]
 		[SerializeField] Sprite inventoryIcon;
 		[SerializeField] GameObject prefab;
 		[Space]
-		[SerializeField] bool showInInventory = true;
+		// [SerializeField] bool showInInventory = true;
 		[SerializeField] bool stackable = false;
 		[TextArea(3, 6)]
 		[SerializeField] string description;

@@ -18,30 +18,32 @@ namespace Arcy.Quests
 		[Header("Status text for Journal UI")]
 		[TextArea(2, 6)][SerializeField] public string statusText;
 
-		public abstract bool ThisObjectiveCanBeSkipped { get; set; } // Not yet implemented
+		public abstract bool ThisObjectiveCanBeSkipped { get; set; } // TODO: Not yet implemented
 		private bool _isFinished = false;
 		private string _questId;
 		private int _objectiveIndex;
 
-		public abstract void ObjectiveActivate();
+		public virtual void Initialize(string questId, int objectiveIndex, string questObjectiveState)
+		{
+			_questId = questId;
+			_objectiveIndex = objectiveIndex;
+		}
 		public abstract void OnFinish();
 
-		// Quest Data Load upon startup
-		protected abstract void SetQuestObjectiveState(string state);
-
-		// called by Questmanager via Quest-class when this QuestObjective is instatiated (during either Start, Questpoint or QM.AdvanceQuest)
-		public void InitializeQuestObjective(string questId, int objectiveIndex, string questObjectiveState)
+		// When this Objective is initialized
+		public void InitializeQuestObjective(string questId, int objectiveIndex)
 		{
-			this._questId = questId;
-			this._objectiveIndex = objectiveIndex;
-
-			if (questObjectiveState != null && questObjectiveState != "")
-			{
-				SetQuestObjectiveState(questObjectiveState);
-			}
+			_questId = questId;
+			_objectiveIndex = objectiveIndex;
 		}
 
-		// TODO - so far this is not called
+		// Called by QuestPoint when the requirements are met and we press the interact-key
+		// Also called by QuestObjective during Start()
+		protected void ChangeState(string newState, string newUiStatus)
+		{
+			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newUiStatus));
+		}
+
 		protected void FinishObjective()
 		{
 			if (!_isFinished)
@@ -52,13 +54,6 @@ namespace Arcy.Quests
 				// Destroy the gameobject after the objective is finished(?)
 				Destroy(this.gameObject);
 			}
-		}
-
-		// Called by QuestPoint when the requirements are met and we press the interact-key
-		// Also called by QuestObjective during Start()
-		protected void ChangeState(string newState, string newStatus)
-		{
-			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newStatus));
 		}
 	}
 }

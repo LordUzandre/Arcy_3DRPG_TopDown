@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arcy.InputManagement;
 using Arcy.Management;
+using DG.Tweening;
 
 namespace Arcy.Player
 {
+    [RequireComponent(typeof(CharacterController))]
     public class PlayerLocomotion : MonoBehaviour
     {
-        PlayerManager playerManager;
+        private PlayerManager _playerManager;
+        private CharacterController _charCtrl;
 
         [SerializeField] private float _walkingSpeed = 2;
         [SerializeField] private float _runningSpeed = 5;
@@ -24,7 +27,8 @@ namespace Arcy.Player
 
         private void Start()
         {
-            playerManager = GetComponent<PlayerManager>();
+            _playerManager = GetComponent<PlayerManager>();
+            _charCtrl = GetComponent<CharacterController>();
         }
 
         private void OnEnable()
@@ -35,6 +39,16 @@ namespace Arcy.Player
         private void OnDisable()
         {
             GameEventManager.instance.inputEvents.onWASDInput -= HandleMovementInput;
+        }
+
+
+        // Called every Update from PlayerManager
+        public void HandleAllMovement(float delta)
+        {
+            Vector3 moveDirection = GetYourBearings();
+
+            HandleGroundedMovement(delta, moveDirection);
+            HandleRotation(delta, moveDirection);
         }
 
         // Decide walking direction
@@ -51,15 +65,6 @@ namespace Arcy.Player
             worldSetting.y = 0;
 
             return worldSetting;
-        }
-
-        // Called every Update from PlayerManager
-        public void HandleAllMovement(float delta)
-        {
-            Vector3 moveDirection = GetYourBearings();
-
-            HandleGroundedMovement(delta, moveDirection);
-            HandleRotation(delta, moveDirection);
         }
 
         private void HandleMovementInput(Vector2 movementInput)
@@ -93,7 +98,7 @@ namespace Arcy.Player
             _velocity = moveDirection * _movementSpeed * delta;
 
             // Apply gravity
-            if (playerManager.characterController.isGrounded)
+            if (_charCtrl.isGrounded)
             {
                 _velocity.y = 0;
             }
@@ -102,14 +107,14 @@ namespace Arcy.Player
                 _velocity.y = -_gravity;
             }
 
-            playerManager.characterController.Move(_velocity);
-            playerManager.animationHandler.locomotion = _moveAmount;
-            playerManager.animationHandler.UpdateLocomotion();
+            _charCtrl.Move(_velocity);
+            _playerManager.animationHandler.locomotion = _moveAmount;
+            _playerManager.animationHandler.UpdateLocomotion();
         }
 
         private void HandleRotation(float delta, Vector3 targetRotationDirection)
         {
-            if (!playerManager.canRotate)
+            if (!_playerManager.canRotate)
                 return;
 
             //prevent the character to rotate back to zero
@@ -122,6 +127,15 @@ namespace Arcy.Player
             Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
             Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, _rotationSpeed * delta);
             transform.rotation = targetRotation;
+        }
+
+        public void MoveToSpecificPosition(Vector3 newPos)
+        {
+            Vector3 newPosRedux = new Vector3(newPos.x, transform.position.y, newPos.z);
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(transform.DOLookAt(newPosRedux, 0.4f).SetEase(Ease.InOutSine))
+            .Append(transform.DOMove(newPosRedux, 0.8f).SetEase(Ease.InOutSine))
+            .OnComplete(() => GameEventManager.instance.playerEvents.PlayerResumeControl());
         }
     }
 }

@@ -20,19 +20,17 @@ public class PlayerManager : MonoBehaviour
     //Scripts
     [HideInInspector] public PlayerLocomotion playerLocomotion;
     [HideInInspector] public PlayerAnimationHandler animationHandler;
-    [HideInInspector] public InputManager inputManager;
+
     //Other assets
-    [HideInInspector] public CharacterController characterController;
+    // [HideInInspector] public CharacterController characterController;
     [HideInInspector] public Animator animator;
 
-    private float delta;
+    private float _delta;
     [HideInInspector] public bool canMove = true;
     [HideInInspector] public bool canRotate = true;
-    [HideInInspector] public bool isPerformingAction = false;
-    [HideInInspector] public bool applyRootMotion;
-    [HideInInspector] public bool isInteracting = false;
-
-    public static Action noObjectInFocus; //used by interactionIcon
+    [HideInInspector] public bool isPerformingActionFlag = false;
+    [HideInInspector] public bool applyRootMotion; // animation
+    [HideInInspector] public bool isInteracting = false; // interaction
 
     [HideInInspector] public FieldOfView fow;
     public InteractibleBase currentInteractible;
@@ -43,7 +41,6 @@ public class PlayerManager : MonoBehaviour
         //Movement scripts
         playerLocomotion = GetComponent<PlayerLocomotion>();
         animationHandler = GetComponent<PlayerAnimationHandler>();
-        characterController = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
 
         //Interaction
@@ -53,16 +50,20 @@ public class PlayerManager : MonoBehaviour
         if (instance == null) { instance = this; } else { Destroy(this); }
     }
 
-    #region GameState Subscription
-
     private void OnEnable()
     {
         GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
+        GameEventManager.instance.playerEvents.onPlayerResumeControl += PlayerReumeControl;
+        GameEventManager.instance.playerEvents.onPlayerLevelUp += PlayerLevelUp;
+        GameEventManager.instance.playerEvents.onPlayerMoveToPosition += PlayerMoveToPosition;
     }
 
     private void OnDisable()
     {
         GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
+        GameEventManager.instance.playerEvents.onPlayerResumeControl -= PlayerReumeControl;
+        GameEventManager.instance.playerEvents.onPlayerLevelUp -= PlayerLevelUp;
+        GameEventManager.instance.playerEvents.onPlayerMoveToPosition -= PlayerMoveToPosition;
     }
 
     private void OnGameStateChanged(GameState state)
@@ -82,14 +83,29 @@ public class PlayerManager : MonoBehaviour
                 return;
         }
     }
-    #endregion
+
+    private void PlayerReumeControl()
+    {
+        EnableMovement(true, false); // Re-enable Movement
+    }
+
+    private void PlayerLevelUp()
+    {
+
+    }
+
+    private void PlayerMoveToPosition(Vector3 newPos)
+    {
+        EnableMovement(false, true); // Disable player control and rotate towards the new target
+        playerLocomotion.MoveToSpecificPosition(newPos);
+    }
 
     private void Update() //Should be the only Update() on player's scripts
     {
-        delta = Time.deltaTime;
+        _delta = Time.deltaTime;
 
         if (canMove == true)
-            playerLocomotion.HandleAllMovement(delta);
+            playerLocomotion.HandleAllMovement(_delta);
     }
 
     #region Interaction

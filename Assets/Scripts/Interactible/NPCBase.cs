@@ -15,6 +15,9 @@ namespace Arcy.Interaction
         [SerializeField] private string _speakerID;
         public string SpeakerID { get { return _speakerID; } set { _speakerID = value; } }
 
+        [SerializeField] private DialogueBlock _dialogue;
+        public DialogueBlock Dialogue { get { return _dialogue; } set { _dialogue = value; } }
+
         [Header("Animation Handler")]
         [SerializeField] private NPCAnimationHandler _npcAnimationHandler;
         [SerializeField] public Transform eyeLevel;
@@ -23,6 +26,8 @@ namespace Arcy.Interaction
         private bool _isInteractible = true;
         [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
         [HideInInspector] public Transform ObjectTransform => transform;
+
+
         private Vector3 _ogRotation;
 
         [Header("Battle Stats")]

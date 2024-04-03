@@ -29,8 +29,6 @@ namespace Arcy.Quests
 
         [Header("Rewards")]
         [SerializeField] public Inventory.InventorySlot[] rewardItems;
-        // [SerializeField] public Inventory.InventorySlot goldReward;
-        // [SerializeField] public Inventory.InventorySlot experienceReward;
 
         // Generate a unique identifier
         [ContextMenu("Generate Unique Identifier (guid)")]

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arcy.Quests
 {
-	public enum QuestState
+	public enum QuestStateEnum
 	{
 		REQUIREMENTS_NOT_MET,
 		CAN_START,

@@ -30,6 +30,7 @@ namespace Arcy.Management
 			{
 				Debug.LogError("Found more than one Game Events Manager in the scene.");
 			}
+
 			instance = this;
 
 			//initialize all events

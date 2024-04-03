@@ -24,5 +24,14 @@ namespace Arcy.Player
 				onPlayerLevelUp.Invoke();
 			}
 		}
+
+		public event Action<Vector3> onPlayerMoveToPosition;
+		public void PlayerMoveToPosition(Vector3 newPos)
+		{
+			if (onPlayerMoveToPosition != null)
+			{
+				onPlayerMoveToPosition.Invoke(newPos);
+			}
+		}
 	}
 }

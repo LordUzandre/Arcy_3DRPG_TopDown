@@ -80,7 +80,7 @@ namespace Arcy.Interaction
 
         private void NoObjectInFocus()
         {
-            _cvGroup.alpha = 0;
+            _cvGroup.DOFade(0, 0.25f);
         }
     }
 

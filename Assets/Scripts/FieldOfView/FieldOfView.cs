@@ -114,7 +114,7 @@ namespace Arcy.Interaction
                     {
                         float dstToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
-                        //Is the object blocked by obstacleLayer? (remove and replace)
+                        //Is the object blocked by obstacleLayer? (remove and replace with different system?)
                         if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                         {
                             InteractibleBase i = interactibleBase as InteractibleBase;

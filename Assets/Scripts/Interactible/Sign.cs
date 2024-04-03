@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Arcy.Dialogue;
 using UnityEngine;
 
 namespace Arcy.Interaction
@@ -8,12 +9,15 @@ namespace Arcy.Interaction
     public class Sign : MonoBehaviour, InteractibleBase, ISpeakable
     {
         [SerializeField] private string speakerID;
-        private bool _isInteractible = true;
-        [HideInInspector] public Transform ObjectTransform => transform;
-
-        [HideInInspector] public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
-
         public string SpeakerID { get { return speakerID; } set { speakerID = value; } }
+
+        private DialogueBlock _dialogue;
+        public DialogueBlock Dialogue { get { return _dialogue; } set { _dialogue = value; } }
+
+        private bool _isInteractible = true;
+        public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }
+
+        [HideInInspector] public Transform ObjectTransform => transform;
 
         public void Interact() { }
     }

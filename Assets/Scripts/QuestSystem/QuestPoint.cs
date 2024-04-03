@@ -16,7 +16,7 @@ namespace Arcy.Quests
 		[SerializeField] private QuestInfoSO questInfoForPoint;
 		private bool _playerIsNear = false;
 		private string questId;
-		private QuestState currentQuestState;
+		private QuestStateEnum currentQuestState;
 
 		[SerializeField] private bool startPoint;
 		[SerializeField] private bool finishPoint;
@@ -40,7 +40,7 @@ namespace Arcy.Quests
 
 		private void QuestStateChange(Quest quest)
 		{
-			// Only update the quest state if tis point has the corresponding quest
+			// Only update the quest state if this point has the corresponding quest
 			if (quest.info.guid.Equals(questId))
 			{
 				currentQuestState = quest.state;
@@ -54,11 +54,11 @@ namespace Arcy.Quests
 			if (!_playerIsNear)
 				return;
 
-			if (currentQuestState.Equals(QuestState.CAN_START) && startPoint)
+			if (currentQuestState.Equals(QuestStateEnum.CAN_START) && startPoint)
 			{
 				GameEventManager.instance.questEvents.StartQuest(questId);
 			}
-			else if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)
+			else if (currentQuestState.Equals(QuestStateEnum.CAN_FINISH) && finishPoint)
 			{
 				GameEventManager.instance.questEvents.FinishQuest(questId);
 			}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -39,6 +40,11 @@ namespace Arcy.SceneManagement
 		}
 #endif
 
+		private void Start()
+		{
+			_fireVFX.Stop();
+		}
+
 		private void OnTriggerEnter(Collider other)
 		{
 			if (other.tag == "Player")
@@ -49,6 +55,11 @@ namespace Arcy.SceneManagement
 
 		private void InitializeCheckpoint()
 		{
+			if (!_fireVFX.gameObject.activeInHierarchy)
+			{
+				_fireVFX.gameObject.SetActive(true);
+			}
+
 			_fireVFX.Play();
 		}
 	}
