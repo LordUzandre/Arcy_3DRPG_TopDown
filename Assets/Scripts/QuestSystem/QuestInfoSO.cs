@@ -36,7 +36,7 @@ namespace Arcy.Quests
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            // id = this.name;
+            displayName = this.name;
             if (guid == null)
             {
                 guid = System.Guid.NewGuid().ToString();

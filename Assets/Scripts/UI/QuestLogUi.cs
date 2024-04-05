@@ -78,7 +78,7 @@ namespace Arcy.UI
 			}
 
 			// set the button color based on quest state
-			questLogBtn.SetState(quest.statusEnum);
+			questLogBtn.SetState(quest.currentStatusEnum);
 		}
 
 		#endregion

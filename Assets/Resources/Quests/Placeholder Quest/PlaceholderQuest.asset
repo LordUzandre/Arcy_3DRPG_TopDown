@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: PlaceholderQuest
   m_EditorClassIdentifier: 
   <guid>k__BackingField: b5ccb457-34a3-43bc-8eff-db4ee3a37b0b
-  displayName: Placeholder quest
+  displayName: PlaceholderQuest
   questPrerequisites: []
   dialoguePrerequisites: 
   item: []
   questObjectivePrefabs:
-  - {fileID: 3617655435119772927, guid: ee2da28d3025fb941b47b42196cf1e84, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
   rewardItems:
   - item: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
     amount: 500

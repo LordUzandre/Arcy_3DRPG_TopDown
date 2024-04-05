@@ -9,18 +9,31 @@ namespace Arcy.Quests
 	public class QuestManager : MonoBehaviour
 	{
 		[Header("Config")]
-		[SerializeField] private bool loadQuestState = true;
+		[SerializeField] private bool loadQuestState = true; // Should the quests state be loaded during startup
 
 		private Dictionary<string, Quest> _questMap;
 
-		[SerializeField] private List<Quest> _ongoingQuests;
-
 		// Quest requirements:
-		// private int _currentPlayerLevel;
+		// TODO - add the requirements
 
 		private void Awake()
 		{
 			_questMap = CreateQuestMap();
+		}
+
+		private void Start()
+		{
+			foreach (Quest quest in _questMap.Values)
+			{
+				if (quest.currentStatusEnum == QuestStateEnum.STARTED)
+				{
+					Debug.Log($"QuestManager: {quest.infoSO.guid} is ongoing");
+					quest.InstantiateCurrentQuestObjective(transform);
+				}
+
+				// broadcast the initial state of all quests on startup
+				GameEventManager.instance.questEvents.QuestStateChange(quest);
+			}
 		}
 
 		private void OnEnable()
@@ -28,8 +41,9 @@ namespace Arcy.Quests
 			GameEventManager.instance.questEvents.onStartQuest += StartQuest;
 			GameEventManager.instance.questEvents.onAdvanceQuest += AdvanceQuest;
 			GameEventManager.instance.questEvents.onFinishQuest += FinishQuest;
-
 			GameEventManager.instance.questEvents.onQuestObjectiveStateChange += QuestObjectiveStateChange;
+
+			GameEventManager.instance.dialogueEvents.onDialogueFinished += DialogueFinished;
 		}
 
 		private void OnDisable()
@@ -37,23 +51,9 @@ namespace Arcy.Quests
 			GameEventManager.instance.questEvents.onStartQuest -= StartQuest;
 			GameEventManager.instance.questEvents.onAdvanceQuest -= AdvanceQuest;
 			GameEventManager.instance.questEvents.onFinishQuest -= FinishQuest;
-
 			GameEventManager.instance.questEvents.onQuestObjectiveStateChange -= QuestObjectiveStateChange;
-		}
 
-		private void Start()
-		{
-			foreach (Quest quest in _questMap.Values)
-			{
-				if (quest.statusEnum == QuestStateEnum.STARTED)
-				{
-					Debug.Log($"QuestManager: {quest.infoSO.guid} is ongoing");
-					quest.InstantiateCurrentQuestObjective(this.transform);
-				}
-
-				// broadcast the initial state of all quests on startup
-				GameEventManager.instance.questEvents.QuestStateChange(quest);
-			}
+			GameEventManager.instance.dialogueEvents.onDialogueFinished -= DialogueFinished;
 		}
 
 		// create quest map during Awake()
@@ -80,7 +80,29 @@ namespace Arcy.Quests
 			return idToQuestMap;
 		}
 
-		// Run during update
+		#region events that affect the progress of objectives
+
+		private void DialogueFinished(string speakerID)
+		{
+			foreach (Quest quest in _questMap.Values)
+			{
+				// check non-started quests firsts
+				// if we're now meeting the requirements, switch over to the CAN_START state
+				if (quest.currentStatusEnum == QuestStateEnum.REQUIREMENTS_NOT_MET && CheckRequirementMet(quest))
+				{
+					ChangeQuestState(quest.infoSO.guid, QuestStateEnum.CAN_START);
+					return;
+				}
+
+				if (quest.currentStatusEnum == QuestStateEnum.STARTED)
+				{
+					// TODO:
+					// check whether any of the ongoing quests are currently listening for this conversation.
+				}
+			}
+		}
+		#endregion
+
 		private bool CheckRequirementMet(Quest quest)
 		{
 			// Start true and require to be set to false
@@ -89,61 +111,44 @@ namespace Arcy.Quests
 			// check quest prerequisites for completion
 			foreach (QuestInfoSO prerequisiteQuestInfo in quest.infoSO.questPrerequisites)
 			{
-				if (GetQuestByGuid(prerequisiteQuestInfo.guid).statusEnum != QuestStateEnum.FINISHED)
+				if (GetQuestByGuid(prerequisiteQuestInfo.guid).currentStatusEnum != QuestStateEnum.FINISHED)
 				{
 					meetsRequirement = false;
 					break;
 				}
 			}
 
-			// TODO - Check item in inventory requirement
-
-			// TODO - Check dialogue requirement
-
 			return meetsRequirement;
 		}
 
-		private void Update()
-		{
-			// TODO - subscribe to appropriate events rather than check every frame
-
-			// Loop Through all the quests
-			foreach (Quest quest in _questMap.Values)
-			{
-				// if we're now meeting the requirements, switch over to the CAN_START state
-				if (quest.statusEnum == QuestStateEnum.REQUIREMENTS_NOT_MET && CheckRequirementMet(quest))
-				{
-					ChangeQuestState(quest.infoSO.guid, QuestStateEnum.CAN_START);
-				}
-			}
-		}
-
 		// called from questPoint (TODO - fix!)
-		private void StartQuest(string id)
+		private void StartQuest(string questID)
 		{
-			Quest quest = GetQuestByGuid(id);
-			quest.InstantiateCurrentQuestObjective(this.transform);
+			Quest quest = GetQuestByGuid(questID);
+
+			quest.InstantiateCurrentQuestObjective(transform);
 			ChangeQuestState(quest.infoSO.guid, QuestStateEnum.STARTED);
 		}
 
-		private void ChangeQuestState(string id, QuestStateEnum state)
+		private void ChangeQuestState(string questID, QuestStateEnum state)
 		{
-			Quest quest = GetQuestByGuid(id);
-			quest.statusEnum = state;
+			Quest quest = GetQuestByGuid(questID);
+
+			quest.currentStatusEnum = state;
 			GameEventManager.instance.questEvents.QuestStateChange(quest);
 		}
 
-		private void AdvanceQuest(string id)
+		private void AdvanceQuest(string questID)
 		{
-			Quest quest = GetQuestByGuid(id);
+			Quest quest = GetQuestByGuid(questID);
 
 			// move on to the next objective
 			quest.AdvanceToNextObjective();
 
-			// if there are more objectives, instantiate the next one
-			if (quest.CurrentObjectiveExists())
+			// if there are more objectives, instantiate the next one else put the quest in CAN_FINISH-mode
+			if (quest.CurrentQuestObjectiveExists())
 			{
-				quest.InstantiateCurrentQuestObjective(this.transform);
+				quest.InstantiateCurrentQuestObjective(transform);
 			}
 			else
 			{
@@ -151,9 +156,10 @@ namespace Arcy.Quests
 			}
 		}
 
-		private void FinishQuest(string id)
+		private void FinishQuest(string questID)
 		{
-			Quest quest = GetQuestByGuid(id);
+			Quest quest = GetQuestByGuid(questID);
+
 			ClaimRewards(quest);
 			ChangeQuestState(quest.infoSO.guid, QuestStateEnum.FINISHED);
 		}
@@ -161,32 +167,31 @@ namespace Arcy.Quests
 		// Claim the rewards after finishing a quest.
 		private void ClaimRewards(Quest quest)
 		{
-			foreach (Inventory.InventorySlot item in quest.infoSO.rewardItems)
+			foreach (Inventory.InventorySlot rewardItem in quest.infoSO.rewardItems)
 			{
-				// Add items to inventory
+				// TODO - Add items to inventory
+				// Remember to alert UI
 			}
 		}
 
-		private void QuestObjectiveStateChange(string id, int objectiveIndex, QuestObjectiveState questObjectiveState)
+		private void QuestObjectiveStateChange(string questID, int objectiveIndex, QuestObjectiveState questObjectiveState)
 		{
-			Quest quest = GetQuestByGuid(id);
+			Quest quest = GetQuestByGuid(questID);
 			quest.StoreQuestObjectiveStatus(questObjectiveState, objectiveIndex);
-			ChangeQuestState(id, quest.statusEnum);
+			ChangeQuestState(questID, quest.currentStatusEnum);
 		}
 
-		#region questMap
-
-		private Quest GetQuestByGuid(string id)
+		private Quest GetQuestByGuid(string questID)
 		{
-			Quest quest = _questMap[id];
+			Quest quest = _questMap[questID];
+
 			if (quest == null)
 			{
-				Debug.LogError("ID not found in the Quest Map: " + id);
+				Debug.LogError("ID not found in the Quest Map: " + questID);
 			}
+
 			return quest;
 		}
-
-		#endregion
 
 		#region Save/Load
 
@@ -205,6 +210,7 @@ namespace Arcy.Quests
 			try
 			{
 				QuestData questData = quest.GetQuestData();
+
 				// serialize using JsonUtility, but use whatever you want here (like JSON.NET)
 				string serializedData = JsonUtility.ToJson(questData);
 				// PlayerPrefs.SetString(quest.info.guid, serializedData);

@@ -43,7 +43,7 @@ namespace Arcy.Quests
 			// Only update the quest state if this point has the corresponding quest
 			if (quest.infoSO.guid.Equals(questId))
 			{
-				currentQuestState = quest.statusEnum;
+				currentQuestState = quest.currentStatusEnum;
 				Debug.Log("Quest ith id: " + questId + " updated to state: " + currentQuestState);
 			}
 		}

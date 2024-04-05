@@ -8,23 +8,27 @@ namespace Arcy.Quests
 {
     public class Quest
     {
-        // static info
+        // scriptable object info
         public QuestInfoSO infoSO;
         // state-enum info
-        public QuestStateEnum statusEnum;
+        public QuestStateEnum currentStatusEnum;
 
         // current objective Index
         private int _currentQuestObjectiveIndex;
 
         private QuestObjectiveState[] _questObjectiveStates;
 
-        #region constructors called from QuestManager
+        #region Constructors and Load/Save-Data
+
+        /// <summary>
+        /// constructors called from QuestManager using the Load/Save System
+        /// </summary>
 
         // a new quest
         public Quest(QuestInfoSO questInfo)
         {
             infoSO = questInfo;
-            statusEnum = QuestStateEnum.REQUIREMENTS_NOT_MET;
+            currentStatusEnum = QuestStateEnum.REQUIREMENTS_NOT_MET;
             _currentQuestObjectiveIndex = 0;
             _questObjectiveStates = new QuestObjectiveState[infoSO.questObjectivePrefabs.Length];
 
@@ -38,7 +42,7 @@ namespace Arcy.Quests
         public Quest(QuestInfoSO questInfo, QuestStateEnum questState, int currentQuestObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
         {
             infoSO = questInfo;
-            statusEnum = questState;
+            currentStatusEnum = questState;
             _currentQuestObjectiveIndex = currentQuestObjectiveIndex;
             _questObjectiveStates = questObjectiveStates;
 
@@ -54,6 +58,11 @@ namespace Arcy.Quests
             }
         }
 
+        // The data of the quest that is going to get saved/loaded
+        public QuestData GetQuestData()
+        {
+            return new QuestData(currentStatusEnum, _currentQuestObjectiveIndex, _questObjectiveStates);
+        }
         #endregion
 
         public void AdvanceToNextObjective()
@@ -61,7 +70,7 @@ namespace Arcy.Quests
             _currentQuestObjectiveIndex++;
         }
 
-        public bool CurrentObjectiveExists()
+        public bool CurrentQuestObjectiveExists()
         {
             return (_currentQuestObjectiveIndex < infoSO.questObjectivePrefabs.Length);
         }
@@ -81,7 +90,7 @@ namespace Arcy.Quests
         {
             GameObject questObjectivePrefab = null;
 
-            if (CurrentObjectiveExists())
+            if (CurrentQuestObjectiveExists())
             {
                 questObjectivePrefab = infoSO.questObjectivePrefabs[_currentQuestObjectiveIndex];
             }
@@ -106,21 +115,16 @@ namespace Arcy.Quests
             }
         }
 
-        public QuestData GetQuestData()
-        {
-            return new QuestData(statusEnum, _currentQuestObjectiveIndex, _questObjectiveStates);
-        }
-
         // Only affects UI
         public string GetFullStatusText()
         {
             string fullStatus = "";
 
-            if (statusEnum == QuestStateEnum.REQUIREMENTS_NOT_MET)
+            if (currentStatusEnum == QuestStateEnum.REQUIREMENTS_NOT_MET)
             {
                 fullStatus = "Requirements are not met yet to start this quest";
             }
-            else if (statusEnum == QuestStateEnum.CAN_START)
+            else if (currentStatusEnum == QuestStateEnum.CAN_START)
             {
                 fullStatus = "This Quest can be started";
             }
@@ -131,11 +135,11 @@ namespace Arcy.Quests
                     fullStatus += "<s>" + _questObjectiveStates[i].status + "</s>\n";
                 }
 
-                if (statusEnum == QuestStateEnum.CAN_FINISH)
+                if (currentStatusEnum == QuestStateEnum.CAN_FINISH)
                 {
                     fullStatus += "The quest is ready to be turned in.";
                 }
-                else if (statusEnum == QuestStateEnum.FINISHED)
+                else if (currentStatusEnum == QuestStateEnum.FINISHED)
                 {
                     fullStatus += "The quest has been completed";
                 }

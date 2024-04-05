@@ -23,15 +23,11 @@ namespace Arcy.Quests
 		private string _questId;
 		private int _objectiveIndex;
 
+		// Initialized by Quest when the prefab is instantiated
 		public virtual void Initialize(string questId, int objectiveIndex, string questObjectiveState)
 		{
 			_questId = questId;
 			_objectiveIndex = objectiveIndex;
-		}
-
-		public virtual void FinishQuest()
-		{
-
 		}
 
 		protected void ChangeState(string newState, string newUiStatus)

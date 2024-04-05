@@ -14,6 +14,8 @@ namespace Arcy.Inventory
 			{
 				onInventoryItemAdded(item, amountAdded);
 			}
+
+			InventoryUpdated(item);
 		}
 
 		public event Action<InventoryItem> onInventoryItemUsed;
@@ -23,17 +25,28 @@ namespace Arcy.Inventory
 			{
 				onInventoryItemUsed(item);
 			}
+
+			InventoryUpdated(item);
 		}
 
 		// When an item is removed (like after a quest)
 		public event Action<InventoryItem, int> onInventoryItemRemoved;
-		public void InventoryItemRemoved(InventoryItem item, int amount = 1)
+		public void InventoryItemRemoved(InventoryItem item, int amountUsed = 1)
 		{
-			int myAmount = amount;
-
 			if (onInventoryItemRemoved != null)
 			{
-				onInventoryItemRemoved(item, myAmount);
+				onInventoryItemRemoved(item, amountUsed);
+			}
+
+			InventoryUpdated(item);
+		}
+
+		public event Action<InventoryItem> onInventoryUpdated;
+		public void InventoryUpdated(InventoryItem item)
+		{
+			if (onInventoryUpdated != null)
+			{
+				onInventoryUpdated.Invoke(item);
 			}
 		}
 	}
