@@ -19,27 +19,27 @@ namespace Arcy.Quests
 		[TextArea(2, 6)][SerializeField] public string statusText;
 
 		public abstract bool ThisObjectiveCanBeSkipped { get; set; } // TODO: Not yet implemented
-		private bool _isFinished = false;
+		public bool isFinished = false;
 		private string _questId;
 		private int _objectiveIndex;
 
 		// Initialized by Quest when the prefab is instantiated
-		public virtual void Initialize(string questId, int objectiveIndex, string questObjectiveState)
+		public virtual void InitializeObjective(string questId, int objectiveIndex)
 		{
 			_questId = questId;
 			_objectiveIndex = objectiveIndex;
 		}
 
-		protected void ChangeState(string newState, string newUiStatus)
+		protected void ChangeUiStatus(string newState, string newUiStatus)
 		{
 			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newUiStatus));
 		}
 
 		protected void FinishObjective()
 		{
-			if (!_isFinished)
+			if (!isFinished)
 			{
-				_isFinished = true;
+				isFinished = true;
 				GameEventManager.instance.questEvents.AdvanceQuest(_questId);
 
 				// Destroy the gameobject after the objective is finished(?)

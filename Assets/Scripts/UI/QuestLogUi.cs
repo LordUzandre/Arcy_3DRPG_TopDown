@@ -88,7 +88,7 @@ namespace Arcy.UI
 		private void SetQuestLogInfo(Quest quest)
 		{
 			// quest Name
-			_questDisplayName.text = quest.infoSO.displayName;
+			_questDisplayName.text = quest.questSO.displayName;
 
 			// status
 			_questStatusText.text = quest.GetFullStatusText();
@@ -97,7 +97,7 @@ namespace Arcy.UI
 			// _levelRequirementText.text = "Level " + quest.info.levelRequirement;
 			_questRequirementText.text = "";
 
-			foreach (QuestInfoSO prerequisiteQuestInfo in quest.infoSO.questPrerequisites)
+			foreach (QuestInfoSO prerequisiteQuestInfo in quest.questSO.questPrerequisites)
 			{
 				_questRequirementText.text += prerequisiteQuestInfo.displayName + "\n";
 			}

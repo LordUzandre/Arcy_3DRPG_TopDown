@@ -13,9 +13,6 @@ namespace Arcy.Quests
 
 		private Dictionary<string, Quest> _questMap;
 
-		// Quest requirements:
-		// TODO - add the requirements
-
 		private void Awake()
 		{
 			_questMap = CreateQuestMap();
@@ -27,7 +24,7 @@ namespace Arcy.Quests
 			{
 				if (quest.currentStatusEnum == QuestStateEnum.STARTED)
 				{
-					Debug.Log($"QuestManager: {quest.infoSO.guid} is ongoing");
+					Debug.Log($"QuestManager: {quest.questSO.guid} is ongoing");
 					quest.InstantiateCurrentQuestObjective(transform);
 				}
 
@@ -90,7 +87,7 @@ namespace Arcy.Quests
 				// if we're now meeting the requirements, switch over to the CAN_START state
 				if (quest.currentStatusEnum == QuestStateEnum.REQUIREMENTS_NOT_MET && CheckRequirementMet(quest))
 				{
-					ChangeQuestState(quest.infoSO.guid, QuestStateEnum.CAN_START);
+					ChangeQuestState(quest.questSO.guid, QuestStateEnum.CAN_START);
 					return;
 				}
 
@@ -109,7 +106,7 @@ namespace Arcy.Quests
 			bool meetsRequirement = true;
 
 			// check quest prerequisites for completion
-			foreach (QuestInfoSO prerequisiteQuestInfo in quest.infoSO.questPrerequisites)
+			foreach (QuestInfoSO prerequisiteQuestInfo in quest.questSO.questPrerequisites)
 			{
 				if (GetQuestByGuid(prerequisiteQuestInfo.guid).currentStatusEnum != QuestStateEnum.FINISHED)
 				{
@@ -127,7 +124,7 @@ namespace Arcy.Quests
 			Quest quest = GetQuestByGuid(questID);
 
 			quest.InstantiateCurrentQuestObjective(transform);
-			ChangeQuestState(quest.infoSO.guid, QuestStateEnum.STARTED);
+			ChangeQuestState(quest.questSO.guid, QuestStateEnum.STARTED);
 		}
 
 		private void ChangeQuestState(string questID, QuestStateEnum state)
@@ -152,7 +149,7 @@ namespace Arcy.Quests
 			}
 			else
 			{
-				ChangeQuestState(quest.infoSO.guid, QuestStateEnum.CAN_FINISH);
+				ChangeQuestState(quest.questSO.guid, QuestStateEnum.CAN_FINISH);
 			}
 		}
 
@@ -161,13 +158,13 @@ namespace Arcy.Quests
 			Quest quest = GetQuestByGuid(questID);
 
 			ClaimRewards(quest);
-			ChangeQuestState(quest.infoSO.guid, QuestStateEnum.FINISHED);
+			ChangeQuestState(quest.questSO.guid, QuestStateEnum.FINISHED);
 		}
 
 		// Claim the rewards after finishing a quest.
 		private void ClaimRewards(Quest quest)
 		{
-			foreach (Inventory.InventorySlot rewardItem in quest.infoSO.rewardItems)
+			foreach (Inventory.InventorySlot rewardItem in quest.questSO.rewardItems)
 			{
 				// TODO - Add items to inventory
 				// Remember to alert UI
@@ -219,7 +216,7 @@ namespace Arcy.Quests
 			}
 			catch (System.Exception e)
 			{
-				Debug.LogError("Failed to save quest with id " + quest.infoSO.guid + ": " + e);
+				Debug.LogError("Failed to save quest with id " + quest.questSO.guid + ": " + e);
 			}
 		}
 
@@ -244,7 +241,7 @@ namespace Arcy.Quests
 			}
 			catch (System.Exception e)
 			{
-				Debug.LogError("Failed to load quest with id " + quest.infoSO.guid + ": " + e);
+				Debug.LogError("Failed to load quest with id " + quest.questSO.guid + ": " + e);
 			}
 			return quest;
 		}

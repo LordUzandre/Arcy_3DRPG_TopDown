@@ -9,7 +9,7 @@ namespace Arcy.Quests
     public class Quest
     {
         // scriptable object info
-        public QuestInfoSO infoSO;
+        public QuestInfoSO questSO;
         // state-enum info
         public QuestStateEnum currentStatusEnum;
 
@@ -27,10 +27,10 @@ namespace Arcy.Quests
         // a new quest
         public Quest(QuestInfoSO questInfo)
         {
-            infoSO = questInfo;
+            questSO = questInfo;
             currentStatusEnum = QuestStateEnum.REQUIREMENTS_NOT_MET;
             _currentQuestObjectiveIndex = 0;
-            _questObjectiveStates = new QuestObjectiveState[infoSO.questObjectivePrefabs.Length];
+            _questObjectiveStates = new QuestObjectiveState[questSO.questObjectivePrefabs.Length];
 
             for (int i = 0; i < _questObjectiveStates.Length; i++)
             {
@@ -41,7 +41,7 @@ namespace Arcy.Quests
         // A quest from save state
         public Quest(QuestInfoSO questInfo, QuestStateEnum questState, int currentQuestObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
         {
-            infoSO = questInfo;
+            questSO = questInfo;
             currentStatusEnum = questState;
             _currentQuestObjectiveIndex = currentQuestObjectiveIndex;
             _questObjectiveStates = questObjectiveStates;
@@ -49,12 +49,12 @@ namespace Arcy.Quests
             // if the Quest objective states and prefabs are different lengths,
             // something has changed during development and the saved data is out of sync.
 
-            if (_questObjectiveStates.Length != infoSO.questObjectivePrefabs.Length)
+            if (_questObjectiveStates.Length != questSO.questObjectivePrefabs.Length)
             {
                 Debug.LogWarning($"Quest Step Prefabs and Quest Step States are "
                 + "of different lengths. This indicates that something has changed. "
                 + "with the QuestInfo and the saved data is now out of sync. "
-                + "Reset your data - as this might cause issues. Quest id: " + this.infoSO.guid);
+                + "Reset your data - as this might cause issues. Quest id: " + this.questSO.guid);
             }
         }
 
@@ -72,7 +72,7 @@ namespace Arcy.Quests
 
         public bool CurrentQuestObjectiveExists()
         {
-            return (_currentQuestObjectiveIndex < infoSO.questObjectivePrefabs.Length);
+            return (_currentQuestObjectiveIndex < questSO.questObjectivePrefabs.Length);
         }
 
         public void InstantiateCurrentQuestObjective(Transform parentTransform)
@@ -82,7 +82,7 @@ namespace Arcy.Quests
             if (questObjectivePrefab != null)
             {
                 QuestObjective objective = UnityEngine.Object.Instantiate<GameObject>(questObjectivePrefab, parentTransform).GetComponent<QuestObjective>();
-                objective.Initialize(infoSO.guid, _currentQuestObjectiveIndex, _questObjectiveStates[_currentQuestObjectiveIndex].state);
+                // objective.InitializeObjective(questSO.guid, _currentQuestObjectiveIndex, _questObjectiveStates[_currentQuestObjectiveIndex].state);
             }
         }
 
@@ -92,12 +92,12 @@ namespace Arcy.Quests
 
             if (CurrentQuestObjectiveExists())
             {
-                questObjectivePrefab = infoSO.questObjectivePrefabs[_currentQuestObjectiveIndex];
+                questObjectivePrefab = questSO.questObjectivePrefabs[_currentQuestObjectiveIndex];
             }
             else
             {
                 Debug.LogWarning("Tried to get quest step prefab, but stepIndex was out of range indicating that "
-                + "there's no current step: QuestId=" + infoSO.displayName + ", stepIndex=" + _currentQuestObjectiveIndex);
+                + "there's no current step: QuestId=" + questSO.displayName + ", stepIndex=" + _currentQuestObjectiveIndex);
             }
 
             return questObjectivePrefab;
@@ -111,7 +111,7 @@ namespace Arcy.Quests
             }
             else
             {
-                Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + infoSO.guid + ",quest index = " + stepIndex);
+                Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + questSO.guid + ",quest index = " + stepIndex);
             }
         }
 
