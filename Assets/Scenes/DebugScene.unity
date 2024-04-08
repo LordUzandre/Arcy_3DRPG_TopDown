@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028353, g: 0.22571383, b: 0.30692253, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6034,7 +6034,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.62572736, y: 0.00000015934981, z: -0.00000012782587, w: 0.7800419}
+  m_LocalRotation: {x: 0.6257274, y: -0.0000000051111715, z: 0.0000000041000345, w: 0.7800418}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6378,7 +6378,7 @@ Transform:
   m_GameObject: {fileID: 298947204}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -5.13, y: 0, z: 6.09}
+  m_LocalPosition: {x: -7.88, y: 0, z: 6.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6414,10 +6414,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speakerID: 1001
   _dialogue:
-    dialogueID: 
-    onDialogueFinish:
-      m_PersistentCalls:
-        m_Calls: []
+  - questRelated: 0
+    questGUID: 
+    questStatus: 0
+    dialogueHasBeenSpoken: 0
+    speakID: 
+  - questRelated: 0
+    questGUID: 
+    questStatus: 0
+    dialogueHasBeenSpoken: 0
+    speakID: 
   _npcAnimationHandler: {fileID: 298947207}
   eyeLevel: {fileID: 731691751}
   battleCharBaseStats: {fileID: 0}
@@ -6563,6 +6569,7 @@ RectTransform:
   - {fileID: 14705940}
   - {fileID: 1902857353}
   - {fileID: 1588117379}
+  - {fileID: 6850158152411219518}
   - {fileID: 417124363}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8997,7 +9004,7 @@ Transform:
   m_GameObject: {fileID: 417124357}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 8.564, y: 2, z: -1.657}
+  m_LocalPosition: {x: 11.814, y: 2, z: -1.407}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14514,10 +14521,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speakerID: 1001
   _dialogue:
-    dialogueID: 
-    onDialogueFinish:
-      m_PersistentCalls:
-        m_Calls: []
+  - questRelated: 0
+    questGUID: 
+    questStatus: 0
+    dialogueHasBeenSpoken: 0
+    speakID: 
+  - questRelated: 0
+    questGUID: 
+    questStatus: 0
+    dialogueHasBeenSpoken: 0
+    speakID: 
   _npcAnimationHandler: {fileID: 737674171}
   eyeLevel: {fileID: 841683208}
   battleCharBaseStats: {fileID: 0}
@@ -14571,7 +14584,7 @@ Transform:
   m_GameObject: {fileID: 737674169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -9.13, y: 0, z: 6.09}
+  m_LocalPosition: {x: -11.88, y: 0, z: 6.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19621,7 +19634,7 @@ Transform:
   m_GameObject: {fileID: 1042447448}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.25, y: 0.5, z: 0.75}
+  m_LocalPosition: {x: -11, y: 0.5, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20578,10 +20591,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speakerID: 1001
   _dialogue:
-    dialogueID: 
-    onDialogueFinish:
-      m_PersistentCalls:
-        m_Calls: []
+  - questRelated: 0
+    questGUID: 
+    questStatus: 0
+    dialogueHasBeenSpoken: 0
+    speakID: 
+  - questRelated: 0
+    questGUID: 
+    questStatus: 0
+    dialogueHasBeenSpoken: 0
+    speakID: 
   _npcAnimationHandler: {fileID: 1115710267}
   eyeLevel: {fileID: 674135155}
   battleCharBaseStats: {fileID: 0}
@@ -20635,7 +20654,7 @@ Transform:
   m_GameObject: {fileID: 1115710265}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 9.62, y: 0, z: 6.09}
+  m_LocalPosition: {x: 12.87, y: 0, z: 8.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -27386,7 +27405,7 @@ Transform:
   m_GameObject: {fileID: 1646439285}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: -13.75}
+  m_LocalPosition: {x: 0, y: 2, z: -16.25}
   m_LocalScale: {x: 10, y: 4, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36897,7 +36916,7 @@ Transform:
   m_GameObject: {fileID: 1962063891}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.38268274, z: -0, w: 0.9238798}
-  m_LocalPosition: {x: -4.75, y: 0, z: -3.75}
+  m_LocalPosition: {x: -7, y: 0, z: -6.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -38120,7 +38139,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0204609ffd5ae694385c39061f25f376,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.54
+      value: 10.79
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0204609ffd5ae694385c39061f25f376,
         type: 3}
@@ -38130,7 +38149,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0204609ffd5ae694385c39061f25f376,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.7
+      value: -2.45
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0204609ffd5ae694385c39061f25f376,
         type: 3}
@@ -44654,12 +44673,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6772281731961804072}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 34.91, y: -7.62, z: 13.5}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 38.16, y: -7.62, z: 13.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 323306830}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!4 &6855267053679028345
 Transform:
@@ -46410,7 +46429,6 @@ SceneRoots:
   - {fileID: 1646439289}
   - {fileID: 1370624106}
   - {fileID: 547604063}
-  - {fileID: 6850158152411219518}
   - {fileID: 1042447453}
   - {fileID: 1633386343}
   - {fileID: 5957103935759478305}

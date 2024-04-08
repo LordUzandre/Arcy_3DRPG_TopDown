@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arcy.Inventory;
 using UnityEngine;
 
 namespace Arcy.Quests
@@ -8,10 +9,17 @@ namespace Arcy.Quests
 	[CreateAssetMenu(fileName = "new Quest", menuName = "Arcy/Quest/new Quest")]
 	public class QuestSO : ScriptableObject
 	{
-		[SerializeField] private string _questDisplayName;
-		[SerializeField] private string _questID;
+		[field: SerializeField] public string questDisplayName;
+		[field: SerializeField] public string guid { get; private set; }
+		[field: SerializeField] private QuestManager questManager;
 
-		[SerializeField] private QuestStateEnum _currentQuestState;
+		[field: SerializeField] private QuestStateEnum _currentQuestState;
+		[Header("Requirements")]
+		[SerializeField] Quest[] requiredQuests;
+		[SerializeField] Inventory.InventoryItem[] requiredItems;
+		// [SerializeField] int requiredPlayerLvl;
+		// [SerializeField] string[] requiredDialogues;
+		// [SerializeField] Battle[] requiredBattles;
 		[Header("Objectives")]
 		[SerializeField] private GameObject[] _objectives;
 		[Header("Reward")]
@@ -37,12 +45,12 @@ namespace Arcy.Quests
 					}
 					else
 					{
-						objective.InitializeObjective(_questID, i);
+						objective.InitializeObjective(guid, i);
 
 						if (objective.ThisObjectiveCanBeSkipped)
-							continue;
+						{ continue; }
 						else
-							return;
+						{ return; }
 					}
 				}
 				else
@@ -57,6 +65,33 @@ namespace Arcy.Quests
 		{
 			// Clear the current objective and Initialize the next one
 			// if we've finished the final objective, finish the quest
+		}
+
+		private void Foo()
+		{
+			// Whenever "an event" happens, check whether we can switch the state of this quest.
+
+			// Check all requirements to start quest
+
+			// Check InventoryRequirements
+			if (_currentQuestState == QuestStateEnum.REQUIREMENTS_NOT_MET)
+			{
+				InventorySO inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<InventorySO>(); // TODO - fix a proper inventory!
+
+				if (requiredItems.Length > 0) // are there required items?
+				{
+					for (int i = 0; i < requiredItems.Length; i++)
+					{
+						foreach (InventorySlot itemSlot in inventory.itemSlots)
+						{
+							if (itemSlot.item == requiredItems[i])
+							{
+								// 
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -1,11 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#ROOTNAMESPACEBEGIN#
-public class #SCRIPTNAME# : MonoBehaviour
+namespace Arcy
 {
-	#NOTRIM#
+	#ROOTNAMESPACEBEGIN#
+	public interface #SCRIPTNAME#
+	{
+		#NOTRIM#
+	}
+	#ROOTNAMESPACEEND#
 }
-#ROOTNAMESPACEEND#

@@ -2,20 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class #SCRIPTNAME# : MonoBehaviour
+namespace Arcy
 {
-    public static #SCRIPTNAME# singletonInstance;
-
-    private void Awake()
+    public class #SCRIPTNAME# : MonoBehaviour
     {
-        if (singletonInstance == null)
+        public static #SCRIPTNAME# singletonInstance;
+
+        private void Awake()
         {
-            singletonInstance = this;
-            DontDestroyOnLoad(gameObject);
+            if (singletonInstance == null)
+            {
+                singletonInstance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        
     }
 }

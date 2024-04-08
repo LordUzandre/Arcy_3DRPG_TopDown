@@ -11,8 +11,8 @@ namespace Arcy.Interaction
         [SerializeField] private string speakerID;
         public string SpeakerID { get { return speakerID; } set { speakerID = value; } }
 
-        private DialogueBlock _dialogue;
-        public DialogueBlock Dialogue { get { return _dialogue; } set { _dialogue = value; } }
+        private DialogueBlock[] _dialogue;
+        public DialogueBlock[] Dialogue { get { return _dialogue; } set { _dialogue = value; } }
 
         private bool _isInteractible = true;
         public bool isInteractible { get { return _isInteractible; } set { _isInteractible = value; } }

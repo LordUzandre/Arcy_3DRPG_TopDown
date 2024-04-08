@@ -1,11 +1,14 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#ROOTNAMESPACEBEGIN#
-public class #SCRIPTNAME# : ScriptableObject
+namespace Arcy
 {
-	#NOTRIM#
+	#ROOTNAMESPACEBEGIN#
+	[CreateAssetMenu(fileName = "SO", menuName = "Arcy/ScriptableObjects/new Scriptable Object")]
+	public class #SCRIPTNAME# : ScriptableObject
+	{
+		#NOTRIM#
+	}
+	#ROOTNAMESPACEEND#
 }
-#ROOTNAMESPACEEND#

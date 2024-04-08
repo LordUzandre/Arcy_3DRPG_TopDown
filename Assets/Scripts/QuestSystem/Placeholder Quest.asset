@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5432b093e0c3244a18b5352583987ecb, type: 3}
   m_Name: Placeholder Quest
   m_EditorClassIdentifier: 
-  _questDisplayName: 
-  _questID: 
+  questDisplayName: 
+  <guid>k__BackingField: 
+  questManager: {fileID: 0}
   _currentQuestState: 0
-  _objectives: []
+  requiredItems: []
+  _objectives:
+  - {fileID: 0}
   _questReward:
-    coin: 0
-    exp: 0
-    items: []
+    coin: 600
+    exp: 2500
+    items:
+    - {fileID: 0}

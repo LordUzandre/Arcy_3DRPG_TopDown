@@ -15,8 +15,8 @@ namespace Arcy.Interaction
         [SerializeField] private string _speakerID;
         public string SpeakerID { get { return _speakerID; } set { _speakerID = value; } }
 
-        [SerializeField] private DialogueBlock _dialogue;
-        public DialogueBlock Dialogue { get { return _dialogue; } set { _dialogue = value; } }
+        [SerializeField] private DialogueBlock[] _dialogue;
+        public DialogueBlock[] Dialogue { get { return _dialogue; } set { _dialogue = value; } }
 
         [Header("Animation Handler")]
         [SerializeField] private NPCAnimationHandler _npcAnimationHandler;

@@ -9,18 +9,19 @@ namespace Arcy.Quests
 	public class QuestManager : MonoBehaviour
 	{
 		[Header("Config")]
-		[SerializeField] private bool loadQuestState = true; // Should the quests state be loaded during startup
+		[Tooltip("Should QuestManager load up quests from SaveData (old version)?")]
+		[SerializeField] private bool loadQuestState = true;
 
-		private Dictionary<string, Quest> _questMap;
+		public Dictionary<string, Quest> questLog; // key = string, value = Quest
 
 		private void Awake()
 		{
-			_questMap = CreateQuestMap();
+			questLog = CreateQuestLog();
 		}
 
 		private void Start()
 		{
-			foreach (Quest quest in _questMap.Values)
+			foreach (Quest quest in questLog.Values)
 			{
 				if (quest.currentStatusEnum == QuestStateEnum.STARTED)
 				{
@@ -54,15 +55,16 @@ namespace Arcy.Quests
 		}
 
 		// create quest map during Awake()
-		private Dictionary<string, Quest> CreateQuestMap()
+		private Dictionary<string, Quest> CreateQuestLog()
 		{
 			// Load all QuestInfo Scriptable Objects in the Assets/Resources/Quests folder
-			QuestInfoSO[] allQuests = Resources.LoadAll<QuestInfoSO>("Quests");
+			QuestSO[] allQuests = Resources.LoadAll<QuestSO>("Quests");
+			//QuestInfoSO[] allQuests = Resources.LoadAll<QuestInfoSO>("Quests");
 
 			// Create the quest map
 			Dictionary<string, Quest> idToQuestMap = new Dictionary<string, Quest>();
 
-			foreach (QuestInfoSO questInfo in allQuests)
+			foreach (QuestSO questInfo in allQuests)
 			{
 				if (idToQuestMap.ContainsKey(questInfo.guid))
 				{
@@ -70,7 +72,7 @@ namespace Arcy.Quests
 				}
 				else
 				{
-					idToQuestMap.Add(questInfo.guid, LoadQuest(questInfo));
+					// idToQuestMap.Add(questInfo.guid, LoadQuest(questInfo));
 				}
 			}
 
@@ -81,7 +83,7 @@ namespace Arcy.Quests
 
 		private void DialogueFinished(string speakerID)
 		{
-			foreach (Quest quest in _questMap.Values)
+			foreach (Quest quest in questLog.Values)
 			{
 				// check non-started quests firsts
 				// if we're now meeting the requirements, switch over to the CAN_START state
@@ -180,7 +182,7 @@ namespace Arcy.Quests
 
 		private Quest GetQuestByGuid(string questID)
 		{
-			Quest quest = _questMap[questID];
+			Quest quest = questLog[questID];
 
 			if (quest == null)
 			{

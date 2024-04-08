@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using Arcy.InputManagement;
 using Arcy.Management;
+using Arcy.Quests;
 using Mono.Data.Sqlite;
 using TMPro;
 using UnityEngine;
@@ -76,6 +77,30 @@ namespace Arcy.Dialogue
         #endregion
 
         #region Input from InputManager
+
+        public string RetrieveSpeakerID(Interaction.DialogueBlock[] dialogueArray)
+        {
+            string nonQuestRelatedDialogue = "1001";
+            string mostRecentQuestDialogue = "1002";
+            QuestManager questManager = transform.Find("QuestManager").GetComponent<QuestManager>();
+
+            foreach (Interaction.DialogueBlock dialogue in dialogueArray)
+            {
+                if (!dialogue.questRelated)
+                {
+                    nonQuestRelatedDialogue = dialogue.speakID;
+                    break;
+                }
+
+                // Search through Quest-Log to see most recent quest.
+                foreach (Quest quest in questManager.questLog.Values)
+                {
+                    return mostRecentQuestDialogue;
+                }
+            }
+
+            return nonQuestRelatedDialogue;
+        }
 
         // Input started by PlayerManager when an interactible has dialogue
         public void RunDialogue(string speakerID)

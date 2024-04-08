@@ -16,30 +16,37 @@ namespace Arcy.Quests
 		}
 
 		[SerializeField] private InventoryItem _item;
-		// [SerializeField] private int requestedAmount = 1;
+		[SerializeField] private int requestedAmount = 1;
 
 		public override void InitializeObjective(string questId, int objectiveIndex)
 		{
 			base.InitializeObjective(questId, objectiveIndex);
 
-			InventoryUpdated(_item);
+			InventoryUpdated();
 
 			Management.GameEventManager.instance.inventoryEvents.onInventoryUpdated += InventoryUpdated;
 		}
 
-		private void InventoryUpdated(Inventory.InventoryItem item)
+		private void InventoryUpdated()
 		{
-			if (item != _item)
+			InventorySlot[] inventorySlots = gameObject.transform.Find("InventoryManager").GetComponent<InventoryManager>().slots;
+
+			foreach (InventorySlot slot in inventorySlots)
 			{
-				return;
+				if (slot.item != _item)
+				{
+					if (slot.amount >= requestedAmount)
+					{
+						// Finish Quest
+
+						Debug.Log("PlaceholderQuest, FetchObjective: You now have the correct amount of required items to ");
+
+						Management.GameEventManager.instance.inventoryEvents.onInventoryUpdated -= InventoryUpdated;
+						FinishObjective();
+					}
+				}
 			}
-
-			// if numberInInventory >= requestedAmount
-
-			Management.GameEventManager.instance.inventoryEvents.onInventoryUpdated -= InventoryUpdated;
-			FinishObjective();
 		}
-
 
 	}
 }

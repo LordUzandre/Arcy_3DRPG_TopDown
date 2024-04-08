@@ -122,14 +122,14 @@ public class PlayerManager : MonoBehaviour
 
     public void InteractionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
     {
-        if (currentInteractible is ISpeakable speakableObject && speakableObject.SpeakerID != null)
+        if (currentInteractible is ISpeakable speakableObject) // && speakableObject.SpeakerID != null)
         {
             if (!isInteracting)
             {
                 GameEventManager.instance.gameStateManager.SetState(GameState.Dialogue);
             }
 
-            DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);
+            // DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);
         }
 
         currentInteractible.Interact();

@@ -1,26 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arcy.Management;
 using UnityEngine;
 
 namespace Arcy.Inventory
 {
 	public class InventoryManager : MonoBehaviour
 	{
+		[Header("Config")]
+		[SerializeField] bool loadInventoryFromSaveData;
+
+		[Space]
+		// Use for save-data
+		public InventorySO inventory;
+
+		// Set the size of the inventory
 		[SerializeField] public int inventorySize = 16;
-
 		// STATE
-		InventorySlot[] slots;
-
-		public struct InventorySlot
-		{
-			public InventoryItem item;
-			public int number;
-		}
+		[SerializeField] public InventorySlot[] slots;
 
 		// Public:
-		public event Action inventoryUpdated;
-
 		public static InventoryManager GetPlayerInventory()
 		{
 			return null;
@@ -43,30 +43,30 @@ namespace Arcy.Inventory
 		/// Attempt to add the items to the first available slot.
 		/// </summary>
 		/// <param name="item">The item to add.</param>
-		/// <param name="number">The number to add.</param>
+		/// <param name="amount">The number to add.</param>
 		/// <returns>Whether or not the item could be added.</returns>
-		public bool AddToFirstEmptySlot(InventoryItem item, int number)
+		public bool AddToFirstEmptySlot(InventoryItem item, int amount)
 		{
 			int i = FindSlot(item);
 
 			if (i < 0)
 			{
+				Debug.Log("Unable to find free ");
 				return false;
 			}
 
 			slots[i].item = item;
-			slots[i].number += number;
-			if (inventoryUpdated != null)
-			{
-				inventoryUpdated();
-			}
+			slots[i].amount += amount;
+
+			GameEventManager.instance.inventoryEvents.InventoryUpdated();
+
 			return true;
 		}
 
 		/// <summary>
 		/// Is there an instance of the item in the inventory?
 		/// </summary>
-		public bool HasItem(InventoryItem item)
+		public bool InventoryHoldsItem(InventoryItem item)
 		{
 			for (int i = 0; i < slots.Length; i++)
 			{
@@ -75,6 +75,7 @@ namespace Arcy.Inventory
 					return true;
 				}
 			}
+
 			return false;
 		}
 
@@ -89,27 +90,25 @@ namespace Arcy.Inventory
 		/// <summary>
 		/// Get the number of items in the given slot.
 		/// </summary>
-		public int GetNumberInSlot(int slot)
+		public int GetAmountInSlot(int slot)
 		{
-			return slots[slot].number;
+			return slots[slot].amount;
 		}
 
 		/// <summary>
 		/// Remove a number of items from the given slot. Will never remove more
 		/// that there are.
 		/// </summary>
-		public void RemoveFromSlot(int slot, int number)
+		public void RemoveFromSlot(int slot, int amount)
 		{
-			slots[slot].number -= number;
-			if (slots[slot].number <= 0)
+			slots[slot].amount -= amount;
+			if (slots[slot].amount <= 0)
 			{
-				slots[slot].number = 0;
+				slots[slot].amount = 0;
 				slots[slot].item = null;
 			}
-			if (inventoryUpdated != null)
-			{
-				inventoryUpdated.Invoke();
-			}
+
+			GameEventManager.instance.inventoryEvents.InventoryUpdated();
 		}
 
 		/// <summary>
@@ -119,27 +118,26 @@ namespace Arcy.Inventory
 		/// </summary>
 		/// <param name="slot">The slot to attempt to add to.</param>
 		/// <param name="item">The item type to add.</param>
-		/// <param name="number">The number of items to add.</param>
+		/// <param name="amount">The number of items to add.</param>
 		/// <returns>True if the item was added anywhere in the inventory.</returns>
-		public bool AddItemToSlot(int slot, InventoryItem item, int number)
+		public bool AddItemToSlot(int slot, InventoryItem item, int amount)
 		{
 			if (slots[slot].item != null)
 			{
-				return AddToFirstEmptySlot(item, number); ;
+				return AddToFirstEmptySlot(item, amount); ;
 			}
 
-			var i = FindStack(item);
+			int i = FindStack(item);
 			if (i >= 0)
 			{
 				slot = i;
 			}
 
 			slots[slot].item = item;
-			slots[slot].number += number;
-			if (inventoryUpdated != null)
-			{
-				inventoryUpdated();
-			}
+			slots[slot].amount += amount;
+
+			GameEventManager.instance.inventoryEvents.InventoryUpdated();
+
 			return true;
 		}
 
@@ -149,6 +147,14 @@ namespace Arcy.Inventory
 		private void Awake()
 		{
 			slots = new InventorySlot[inventorySize];
+
+#if UNITY_EDITOR
+			if (loadInventoryFromSaveData)
+			{
+				// Load Inventory From Save Data
+			}
+#endif
+
 		}
 
 		/// <summary>
@@ -199,10 +205,12 @@ namespace Arcy.Inventory
 					return i;
 				}
 			}
+
 			return -1;
 		}
 
-		[System.Serializable]
+		// Struct to be used by save-system
+		[Serializable]
 		private struct InventorySlotRecord
 		{
 			public string itemID;
@@ -231,10 +239,8 @@ namespace Arcy.Inventory
 		// 		slots[i].item = InventoryItem.GetFromID(slotStrings[i].itemID);
 		// 		slots[i].number = slotStrings[i].number;
 		// 	}
-		// 	if (inventoryUpdated != null)
-		// 	{
-		// 		inventoryUpdated();
-		// 	}
+
+		// 	GameEventManager.instance.inventoryEvents.InventoryUpdated();
 		// }
 	}
 }
