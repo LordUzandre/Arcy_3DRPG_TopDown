@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028353, g: 0.22571383, b: 0.30692253, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6140,7 +6140,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.62572736, y: 0.0000001593498, z: -0.00000012782586, w: 0.7800419}
+  m_LocalRotation: {x: 0.6257274, y: -0.0000000051111506, z: 0.0000000041000003, w: 0.7800418}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6484,7 +6484,7 @@ Transform:
   m_GameObject: {fileID: 298947204}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -10.88, y: 0, z: 6.34}
+  m_LocalPosition: {x: -11, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6519,21 +6519,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogue:
-  - questRelated: 0
+  - questRelated: 1
     questGUID: 
-    questStatus: 0
+    questStatus: 1
     singleUseDialogue: 0
-    speakID: 
-  - questRelated: 0
+    dialogueID: 
+  - questRelated: 1
     questGUID: 
-    questStatus: 0
+    questStatus: 2
     singleUseDialogue: 0
-    speakID: 
-  - questRelated: 0
+    dialogueID: 
+  - questRelated: 1
     questGUID: 
-    questStatus: 0
+    questStatus: 4
     singleUseDialogue: 0
-    speakID: 
+    dialogueID: 
   _npcAnimationHandler: {fileID: 298947207}
   eyeLevel: {fileID: 731691751}
   battleCharBaseStats: {fileID: 0}
@@ -10385,8 +10385,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 486491291}
+  - component: {fileID: 486491292}
   m_Layer: 0
-  m_Name: PickupSpawner
+  m_Name: SingleTimePickupSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10405,12 +10406,25 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1738376779}
   - {fileID: 904953046}
   - {fileID: 1619504113}
   - {fileID: 1528966496}
   - {fileID: 1310957250}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &486491292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486491289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dd8c175f959335419d2fc65cac15afe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &486821410
 GameObject:
   m_ObjectHideFlags: 0
@@ -14669,21 +14683,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogue:
-  - questRelated: 0
+  - questRelated: 1
     questGUID: 
-    questStatus: 0
+    questStatus: 1
     singleUseDialogue: 0
-    speakID: 
-  - questRelated: 0
+    dialogueID: 
+  - questRelated: 1
     questGUID: 
-    questStatus: 0
+    questStatus: 2
     singleUseDialogue: 0
-    speakID: 
-  - questRelated: 0
+    dialogueID: 
+  - questRelated: 1
     questGUID: 
-    questStatus: 0
+    questStatus: 3
+    singleUseDialogue: 1
+    dialogueID: 
+  - questRelated: 1
+    questGUID: 
+    questStatus: 4
     singleUseDialogue: 0
-    speakID: 
+    dialogueID: 
   _npcAnimationHandler: {fileID: 737674171}
   eyeLevel: {fileID: 841683208}
   battleCharBaseStats: {fileID: 0}
@@ -14737,7 +14756,7 @@ Transform:
   m_GameObject: {fileID: 737674169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -7.88, y: 0, z: 6.34}
+  m_LocalPosition: {x: -7, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20199,9 +20218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a6e709887db5f34383a8afd803aefac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadInventoryFromSaveData: 0
-  loadFromTempInventory: 0
-  inventory: {fileID: 0}
+  loadFromTempInventory: 1
+  tempInventory: {fileID: 11400000, guid: 59b78ac134b9be948b6539d1fd8fe5ec, type: 2}
   inventorySize: 16
   slots: []
 --- !u!1 &1065765422
@@ -20790,7 +20808,7 @@ MonoBehaviour:
     questGUID: 
     questStatus: 0
     singleUseDialogue: 0
-    speakID: 
+    dialogueID: 
   _npcAnimationHandler: {fileID: 1115710267}
   eyeLevel: {fileID: 674135155}
   battleCharBaseStats: {fileID: 0}
@@ -23402,6 +23420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 9628b1a07e0e00143af4d8d973a68a53, type: 2}
+  collected: 0
 --- !u!1 &1315310070
 GameObject:
   m_ObjectHideFlags: 0
@@ -25959,6 +25978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 9628b1a07e0e00143af4d8d973a68a53, type: 2}
+  collected: 0
 --- !u!1 &1529408143
 GameObject:
   m_ObjectHideFlags: 0
@@ -27256,6 +27276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 9628b1a07e0e00143af4d8d973a68a53, type: 2}
+  collected: 1
 --- !u!1 &1619561395
 GameObject:
   m_ObjectHideFlags: 0
@@ -34148,6 +34169,7 @@ GameObject:
   - component: {fileID: 1738376778}
   - component: {fileID: 1738376777}
   - component: {fileID: 1738376780}
+  - component: {fileID: 1738376781}
   m_Layer: 0
   m_Name: BrassCoin
   m_TagString: Untagged
@@ -34211,13 +34233,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1738376776}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 3.25, y: 0.5, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1916638791}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 486491291}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &1738376780
 MonoBehaviour:
@@ -34232,6 +34254,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
+  collected: 0
+--- !u!135 &1738376781
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738376776}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.7
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1747115386
 GameObject:
   m_ObjectHideFlags: 3
@@ -46710,7 +46754,6 @@ SceneRoots:
   - {fileID: 1042447453}
   - {fileID: 1633386343}
   - {fileID: 486491291}
-  - {fileID: 1738376779}
   - {fileID: 118869398}
   - {fileID: 1080871289}
   - {fileID: 1962063894}

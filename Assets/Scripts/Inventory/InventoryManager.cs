@@ -9,16 +9,13 @@ namespace Arcy.Inventory
 	public class InventoryManager : MonoBehaviour
 	{
 		[Header("Config")]
-		[SerializeField] bool loadInventoryFromSaveData;
 		[SerializeField] bool loadFromTempInventory;
+		[SerializeField] InventorySO tempInventory;
 
 		[Space]
 		// Use for save-data
-		public InventorySO inventory;
 
-		// Set the size of the inventory
 		[SerializeField] public int inventorySize = 16;
-		// STATE
 		[SerializeField] public InventorySlot[] slots;
 
 		// Public:
@@ -147,19 +144,60 @@ namespace Arcy.Inventory
 
 		private void Awake()
 		{
-			slots = new InventorySlot[inventorySize];
-
 #if UNITY_EDITOR
-			if (loadInventoryFromSaveData)
+			if (loadFromTempInventory)
 			{
-				// Load Inventory From Save Data
-			}
-			else if (loadFromTempInventory)
-			{
+				slots = new InventorySlot[tempInventory.inventorySize];
 
+				for (int i = 0; i < slots.Length; i++)
+				{
+					if (tempInventory.itemSlots[i].Item == null || tempInventory.itemSlots[i].Amount < 1)
+					{
+						// We've reached the end of the items
+						break;
+					}
+					else
+					{
+						AddItemToSlot(i, tempInventory.itemSlots[i].Item, tempInventory.itemSlots[i].Amount);
+					}
+				}
 			}
+#else
+			// Load from SaveData
+			slots = new InventorySlot[inventorySize];
 #endif
 
+		}
+
+		private void OnEnable()
+		{
+			GameEventManager.instance.inventoryEvents.onInventoryItemAdded += AddPickup;
+		}
+
+		private void OnDisable()
+		{
+			GameEventManager.instance.inventoryEvents.onInventoryItemAdded += AddPickup;
+		}
+
+		private void AddPickup(InventoryItem item, int amount)
+		{
+			foreach (InventorySlot slot in slots)
+			{
+				if (slot.Item != null)
+				{
+					if (slot.Item == item)
+					{
+						AddItemToSlot(FindSlot(item), item, amount);
+					}
+				}
+				else
+				{
+					continue;
+				}
+
+			}
+
+			AddToFirstEmptySlot(item, amount);
 		}
 
 		/// <summary>

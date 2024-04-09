@@ -127,6 +127,7 @@ public class PlayerManager : MonoBehaviour
             if (!isInteracting)
             {
                 GameEventManager.instance.gameStateManager.SetState(GameState.Dialogue);
+                DialogueManager.Instance.GetAppropriateDialogueString(speakableObject.Dialogue);
             }
 
             // DialogueManager.Instance.RunDialogue(speakableObject.SpeakerID);

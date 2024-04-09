@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Arcy.InputManagement;
+using Arcy.Interaction;
 using Arcy.Management;
 using Arcy.Quests;
 using Mono.Data.Sqlite;
@@ -78,7 +79,7 @@ namespace Arcy.Dialogue
 
         #region Input from InputManager
 
-        public string RetrieveSpeakerID(Interaction.DialogueBlock[] dialogueArray)
+        public string GetAppropriateDialogueString(Interaction.DialogueBlock[] dialogueArray)
         {
             string nonQuestRelatedDialogue = "1001";
             string mostRecentQuestDialogue = "1002";
@@ -86,16 +87,26 @@ namespace Arcy.Dialogue
 
             foreach (Interaction.DialogueBlock dialogue in dialogueArray)
             {
-                if (!dialogue.questRelated)
+                if (!dialogue.questRelated && nonQuestRelatedDialogue == "1001")
                 {
-                    nonQuestRelatedDialogue = dialogue.speakID;
+                    nonQuestRelatedDialogue = dialogue.dialogueID;
                     break;
                 }
 
                 // Search through Quest-Log to see most recent quest.
                 foreach (Quest quest in questManager.questLog.Values)
                 {
-                    return mostRecentQuestDialogue;
+                    Quest thisQuest = questManager.GetQuestByGuid(dialogue.questGUID);
+
+                    if (thisQuest != null)
+                    {
+                        if (quest.currentStatusEnum == dialogue.questStatus)
+                        {
+                            mostRecentQuestDialogue = dialogue.dialogueID;
+                        }
+
+                        return mostRecentQuestDialogue;
+                    }
                 }
             }
 

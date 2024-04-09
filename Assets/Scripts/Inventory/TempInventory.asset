@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd60bfe8692114e46ade6a5b1e96ec24, type: 3}
+  m_Name: TempInventory
+  m_EditorClassIdentifier: 
+  inventorySize: 16
+  itemSlots:
+  - _item: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
+    _amount: 600
+  - _item: {fileID: 11400000, guid: 70b74864747cf4c46a91a701f8bc2ce7, type: 2}
+    _amount: 7200
+  - _item: {fileID: 11400000, guid: c45f0b6e5ca5222408c9f04428b82016, type: 2}
+    _amount: 4
+  - _item: {fileID: 11400000, guid: 9628b1a07e0e00143af4d8d973a68a53, type: 2}
+    _amount: 2
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0
+  - _item: {fileID: 0}
+    _amount: 0

@@ -57,9 +57,9 @@ namespace Arcy.Interaction
         {
             foreach (DialogueBlock dialogueBlock in _dialogue)
             {
-                if (dialogueBlock.speakID != null)
+                if (dialogueBlock.dialogueID != null)
                 {
-                    return dialogueBlock.speakID;
+                    return dialogueBlock.dialogueID;
                 }
             }
 

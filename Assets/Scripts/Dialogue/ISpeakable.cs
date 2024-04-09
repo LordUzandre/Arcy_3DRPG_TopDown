@@ -20,11 +20,11 @@ namespace Arcy.Interaction
         public Quests.QuestStateEnum questStatus;
         [Header("Then speak")]
         public bool singleUseDialogue = false;
-        public string speakID;
+        public string dialogueID;
 
-        public string GetSpeakerID()
+        public string GetDialogueID()
         {
-            return speakID;
+            return dialogueID;
         }
     }
 }

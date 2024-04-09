@@ -9,14 +9,25 @@ namespace Arcy.Inventory
 	public class Pickup : MonoBehaviour
 	{
 		[SerializeField] InventoryItem item;
+		[SerializeField] public bool collected;
+
+		// TODO - implement save/load
+		private void Awake()
+		{
+			CheckCollected();
+		}
+
+		private void CheckCollected()
+		{
+
+		}
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other.tag == "Player")
+			if (other.tag == "Player" && item != null)
 			{
-				if (item != null)
-					GameEventManager.instance.inventoryEvents.InventoryItemAdded(item);
-
+				collected = true;
+				GameEventManager.instance.inventoryEvents.InventoryItemAdded(item);
 				Destroy(gameObject);
 			}
 		}

@@ -14,6 +14,18 @@ namespace Arcy.Quests
 
 		public Dictionary<string, Quest> questLog; // key = string, value = Quest
 
+		public Quest GetQuestByGuid(string questID)
+		{
+			Quest quest = questLog[questID];
+
+			if (quest == null)
+			{
+				Debug.LogError("ID not found in the Quest Map: " + questID);
+			}
+
+			return quest;
+		}
+
 		private void Awake()
 		{
 			questLog = CreateQuestLog();
@@ -178,18 +190,6 @@ namespace Arcy.Quests
 			Quest quest = GetQuestByGuid(questID);
 			quest.StoreQuestObjectiveStatus(questObjectiveState, objectiveIndex);
 			ChangeQuestState(questID, quest.currentStatusEnum);
-		}
-
-		private Quest GetQuestByGuid(string questID)
-		{
-			Quest quest = questLog[questID];
-
-			if (quest == null)
-			{
-				Debug.LogError("ID not found in the Quest Map: " + questID);
-			}
-
-			return quest;
 		}
 
 		#region Save/Load
