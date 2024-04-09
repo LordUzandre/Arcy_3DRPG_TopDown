@@ -7,7 +7,7 @@ namespace Arcy.Interaction
 {
     public interface ISpeakable
     {
-        //string SpeakerID { get; set; }
+        string SpeakerName { get; set; }
         DialogueBlock[] Dialogue { get; set; }
     }
 
@@ -19,7 +19,7 @@ namespace Arcy.Interaction
         public string questGUID;
         public Quests.QuestStateEnum questStatus;
         [Header("Then speak")]
-        public bool dialogueHasBeenSpoken = false;
+        public bool singleUseDialogue = false;
         public string speakID;
 
         public string GetSpeakerID()

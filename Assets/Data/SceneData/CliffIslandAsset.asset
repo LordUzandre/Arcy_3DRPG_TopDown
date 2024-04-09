@@ -17,8 +17,6 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
     - {fileID: 11400000, guid: 26c0d310cfb907046bfd4ddad6e597ba, type: 2}
     - {fileID: 11400000, guid: 737c0de64ac8fad429bf1ffc178e3d59, type: 2}
     - {fileID: 11400000, guid: 56e0c48ceaab4494ba11c44973f110fd, type: 2}
@@ -3201,7 +3199,7 @@ MonoBehaviour:
       Data: false
     - Name: paintActive
       Entry: 5
-      Data: true
+      Data: false
     - Name: paintBrushSize
       Entry: 3
       Data: 0
@@ -6299,8 +6297,8 @@ MonoBehaviour:
       Entry: 10
       Data: 0
     - Name: paintPreviewTexture
-      Entry: 10
-      Data: 1
+      Entry: 6
+      Data: 
     - Name: registeredToSceneView
       Entry: 5
       Data: true
@@ -12579,8 +12577,8 @@ MonoBehaviour:
       Entry: 10
       Data: 0
     - Name: paintPreviewTexture
-      Entry: 10
-      Data: 2
+      Entry: 6
+      Data: 
     - Name: registeredToSceneView
       Entry: 5
       Data: true
@@ -31981,7 +31979,7 @@ MonoBehaviour:
       Data: 
     - Name: preset
       Entry: 10
-      Data: 3
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -31999,7 +31997,7 @@ MonoBehaviour:
       Data: 
     - Name: preset
       Entry: 10
-      Data: 4
+      Data: 2
     - Name: 
       Entry: 8
       Data: 
@@ -32153,7 +32151,7 @@ MonoBehaviour:
       Data: 
     - Name: preset
       Entry: 10
-      Data: 3
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -32171,7 +32169,7 @@ MonoBehaviour:
       Data: 
     - Name: preset
       Entry: 10
-      Data: 4
+      Data: 2
     - Name: 
       Entry: 8
       Data: 
@@ -32325,7 +32323,7 @@ MonoBehaviour:
       Data: 
     - Name: preset
       Entry: 10
-      Data: 5
+      Data: 3
     - Name: 
       Entry: 8
       Data: 
@@ -32472,7 +32470,7 @@ MonoBehaviour:
       Data: false
     - Name: prefab
       Entry: 10
-      Data: 6
+      Data: 4
     - Name: instantiateChilds
       Entry: 5
       Data: false
@@ -32481,7 +32479,7 @@ MonoBehaviour:
       Data: false
     - Name: childPrefab
       Entry: 10
-      Data: 7
+      Data: 5
     - Name: randomChildPrefabs
       Entry: 6
       Data: 
@@ -32755,7 +32753,7 @@ MonoBehaviour:
       Data: 
     - Name: preset
       Entry: 10
-      Data: 8
+      Data: 6
     - Name: 
       Entry: 8
       Data: 
@@ -32902,7 +32900,7 @@ MonoBehaviour:
       Data: false
     - Name: prefab
       Entry: 10
-      Data: 9
+      Data: 7
     - Name: instantiateChilds
       Entry: 5
       Data: true
@@ -32911,7 +32909,7 @@ MonoBehaviour:
       Data: false
     - Name: childPrefab
       Entry: 10
-      Data: 9
+      Data: 7
     - Name: randomChildPrefabs
       Entry: 6
       Data: 
@@ -33191,7 +33189,7 @@ MonoBehaviour:
       Data: 
     - Name: preset
       Entry: 10
-      Data: 10
+      Data: 8
     - Name: 
       Entry: 8
       Data: 

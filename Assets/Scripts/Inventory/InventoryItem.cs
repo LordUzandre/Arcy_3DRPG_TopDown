@@ -13,8 +13,8 @@ namespace Arcy.Inventory
 		[SerializeField] public string guid;
 
 		[Header("Components")]
+		[SerializeField] public GameObject prefab;
 		[SerializeField] Sprite inventoryIcon;
-		[SerializeField] GameObject prefab;
 		[Space]
 		// [SerializeField] bool showInInventory = true;
 		[SerializeField] bool stackable = false;

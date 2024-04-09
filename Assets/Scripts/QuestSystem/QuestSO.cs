@@ -84,7 +84,7 @@ namespace Arcy.Quests
 					{
 						foreach (InventorySlot itemSlot in inventory.itemSlots)
 						{
-							if (itemSlot.item == requiredItems[i])
+							if (itemSlot.Item == requiredItems[i])
 							{
 								// 
 							}

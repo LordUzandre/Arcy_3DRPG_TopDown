@@ -11,9 +11,13 @@ namespace Arcy.Interaction
 {
     public class NPCBase : MonoBehaviour, InteractibleBase, ISpeakable
     {
+
+        [SerializeField] string speakerName { get; set; }
+        public string SpeakerName { get { return speakerName; } set { speakerName = value; } }
+
         [Header("Dialogue")]
-        [SerializeField] private string _speakerID;
-        public string SpeakerID { get { return _speakerID; } set { _speakerID = value; } }
+        // [SerializeField] private string _speakerID;
+        // public string SpeakerID { get { return _speakerID; } set { _speakerID = value; } }
 
         [SerializeField] private DialogueBlock[] _dialogue;
         public DialogueBlock[] Dialogue { get { return _dialogue; } set { _dialogue = value; } }
@@ -49,9 +53,22 @@ namespace Arcy.Interaction
             _npcAnimationHandler ??= TryGetComponent<NPCAnimationHandler>(out NPCAnimationHandler npcAnim) ? npcAnim : null;
         }
 
+        private string GetDialogueString()
+        {
+            foreach (DialogueBlock dialogueBlock in _dialogue)
+            {
+                if (dialogueBlock.speakID != null)
+                {
+                    return dialogueBlock.speakID;
+                }
+            }
+
+            return null;
+        }
+
         public void Interact()
         {
-            if (_speakerID != null)
+            if (GetDialogueString() != null)
             {
                 _ogRotation = transform.rotation.eulerAngles;
                 RoateTowardsPlayer(true);

@@ -33,9 +33,9 @@ namespace Arcy.Quests
 
 			foreach (InventorySlot slot in inventorySlots)
 			{
-				if (slot.item != _item)
+				if (slot.Item != _item)
 				{
-					if (slot.amount >= requestedAmount)
+					if (slot.Amount >= requestedAmount)
 					{
 						// Finish Quest
 

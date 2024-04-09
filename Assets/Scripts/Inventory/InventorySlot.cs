@@ -7,8 +7,10 @@ namespace Arcy.Inventory
 	[System.Serializable]
 	public struct InventorySlot
 	{
-		[SerializeField] public InventoryItem item;
-		[SerializeField] public int amount;
-		[SerializeField] public GameObject prefab;
+		[SerializeField] private InventoryItem _item;
+		public InventoryItem Item { get { return _item; } set { _item = value; } }
+
+		[SerializeField] private int _amount;
+		public int Amount { get { return _amount; } set { _amount = value; } }
 	}
 }

@@ -8,6 +8,8 @@ namespace Arcy.Interaction
     [RequireComponent(typeof(BoxCollider))]
     public class Sign : MonoBehaviour, InteractibleBase, ISpeakable
     {
+        public string SpeakerName { get; set; }
+
         [SerializeField] private string speakerID;
         public string SpeakerID { get { return speakerID; } set { speakerID = value; } }
 

@@ -10,6 +10,7 @@ namespace Arcy.Inventory
 	{
 		[Header("Config")]
 		[SerializeField] bool loadInventoryFromSaveData;
+		[SerializeField] bool loadFromTempInventory;
 
 		[Space]
 		// Use for save-data
@@ -55,8 +56,8 @@ namespace Arcy.Inventory
 				return false;
 			}
 
-			slots[i].item = item;
-			slots[i].amount += amount;
+			slots[i].Item = item;
+			slots[i].Amount += amount;
 
 			GameEventManager.instance.inventoryEvents.InventoryUpdated();
 
@@ -70,7 +71,7 @@ namespace Arcy.Inventory
 		{
 			for (int i = 0; i < slots.Length; i++)
 			{
-				if (object.ReferenceEquals(slots[i].item, item))
+				if (object.ReferenceEquals(slots[i].Item, item))
 				{
 					return true;
 				}
@@ -84,7 +85,7 @@ namespace Arcy.Inventory
 		/// </summary>
 		public InventoryItem GetItemInSlot(int slot)
 		{
-			return slots[slot].item;
+			return slots[slot].Item;
 		}
 
 		/// <summary>
@@ -92,7 +93,7 @@ namespace Arcy.Inventory
 		/// </summary>
 		public int GetAmountInSlot(int slot)
 		{
-			return slots[slot].amount;
+			return slots[slot].Amount;
 		}
 
 		/// <summary>
@@ -101,11 +102,11 @@ namespace Arcy.Inventory
 		/// </summary>
 		public void RemoveFromSlot(int slot, int amount)
 		{
-			slots[slot].amount -= amount;
-			if (slots[slot].amount <= 0)
+			slots[slot].Amount -= amount;
+			if (slots[slot].Amount <= 0)
 			{
-				slots[slot].amount = 0;
-				slots[slot].item = null;
+				slots[slot].Amount = 0;
+				slots[slot].Item = null;
 			}
 
 			GameEventManager.instance.inventoryEvents.InventoryUpdated();
@@ -122,7 +123,7 @@ namespace Arcy.Inventory
 		/// <returns>True if the item was added anywhere in the inventory.</returns>
 		public bool AddItemToSlot(int slot, InventoryItem item, int amount)
 		{
-			if (slots[slot].item != null)
+			if (slots[slot].Item != null)
 			{
 				return AddToFirstEmptySlot(item, amount); ;
 			}
@@ -133,8 +134,8 @@ namespace Arcy.Inventory
 				slot = i;
 			}
 
-			slots[slot].item = item;
-			slots[slot].amount += amount;
+			slots[slot].Item = item;
+			slots[slot].Amount += amount;
 
 			GameEventManager.instance.inventoryEvents.InventoryUpdated();
 
@@ -153,6 +154,10 @@ namespace Arcy.Inventory
 			{
 				// Load Inventory From Save Data
 			}
+			else if (loadFromTempInventory)
+			{
+
+			}
 #endif
 
 		}
@@ -165,7 +170,7 @@ namespace Arcy.Inventory
 		{
 			for (int i = 0; i < slots.Length; i++)
 			{
-				if (slots[i].item == null)
+				if (slots[i].Item == null)
 				{
 					return i;
 				}
@@ -200,7 +205,7 @@ namespace Arcy.Inventory
 
 			for (int i = 0; i < slots.Length; i++)
 			{
-				if (object.ReferenceEquals(slots[i].item, item))
+				if (object.ReferenceEquals(slots[i].Item, item))
 				{
 					return i;
 				}
@@ -214,9 +219,10 @@ namespace Arcy.Inventory
 		private struct InventorySlotRecord
 		{
 			public string itemID;
-			public int number;
+			public int amount;
 		}
 
+		#region Save/Load
 		// object ISaveable.CaptureState()
 		// {
 		// 	var slotStrings = new InventorySlotRecord[inventorySize];
@@ -224,8 +230,8 @@ namespace Arcy.Inventory
 		// 	{
 		// 		if (slots[i].item != null)
 		// 		{
-		// 			slotStrings[i].itemID = slots[i].item.GetItemID();
-		// 			slotStrings[i].number = slots[i].number;
+		// 			slotStrings[i].itemID = slots[i].item.GetGuid();
+		// 			slotStrings[i].amount = slots[i].amount;
 		// 		}
 		// 	}
 		// 	return slotStrings;
@@ -237,10 +243,11 @@ namespace Arcy.Inventory
 		// 	for (int i = 0; i < inventorySize; i++)
 		// 	{
 		// 		slots[i].item = InventoryItem.GetFromID(slotStrings[i].itemID);
-		// 		slots[i].number = slotStrings[i].number;
+		// 		slots[i].amount = slotStrings[i].amount;
 		// 	}
 
 		// 	GameEventManager.instance.inventoryEvents.InventoryUpdated();
 		// }
+		#endregion
 	}
 }
