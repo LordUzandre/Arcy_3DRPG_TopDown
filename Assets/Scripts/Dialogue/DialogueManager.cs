@@ -166,7 +166,7 @@ namespace Arcy.Dialogue
 
                 _canExitBool = false;
 
-                GameEventManager.instance.dialogueEvents.DialogueFinished(_speakerID);
+                GameManager.instance.gameEventManager.dialogueEvents.DialogueFinished(_speakerID);
 
                 // Reset all components
                 _dialogueBlock.Clear();
@@ -178,7 +178,7 @@ namespace Arcy.Dialogue
                 _dialogueIndex = 0;
                 _currentlyInDialogueBool = false;
                 _newDialogueStarted = false;
-                GameEventManager.instance.gameStateManager.SetState(GameState.Freeroam);
+                GameManager.instance.gameStateManager.SetState(GameState.Freeroam);
                 return;
             }
             else if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)

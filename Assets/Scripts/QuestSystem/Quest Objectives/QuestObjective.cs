@@ -32,7 +32,7 @@ namespace Arcy.Quests
 
 		protected void ChangeUiStatus(string newState, string newUiStatus)
 		{
-			GameEventManager.instance.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newUiStatus));
+			GameManager.instance.gameEventManager.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newUiStatus));
 		}
 
 		protected void FinishObjective()
@@ -40,7 +40,7 @@ namespace Arcy.Quests
 			if (!isFinished)
 			{
 				isFinished = true;
-				GameEventManager.instance.questEvents.AdvanceQuest(_questId);
+				GameManager.instance.gameEventManager.questEvents.AdvanceQuest(_questId);
 
 				// Destroy the gameobject after the objective is finished(?)
 				Destroy(this.gameObject);

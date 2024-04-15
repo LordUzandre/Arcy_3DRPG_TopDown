@@ -51,12 +51,12 @@ namespace Arcy.Camera
 
         private void OnEnable()
         {
-            GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
+            GameManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
         }
 
         private void OnDisable()
         {
-            GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
+            GameManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
         }
 
         private void OnGameStateChanged(GameState newGameState)
@@ -96,7 +96,7 @@ namespace Arcy.Camera
 
             yield return delay;
 
-            if (GameEventManager.instance.gameStateManager.CurrentGameState == GameState.Freeroam)
+            if (GameManager.instance.gameStateManager.CurrentGameState == GameState.Freeroam)
             {
                 _isFreeroam = true;
             }
@@ -150,7 +150,7 @@ namespace Arcy.Camera
         {
             yield return null;
 
-            if (GameEventManager.instance.gameStateManager.CurrentGameState == GameState.Dialogue)
+            if (GameManager.instance.gameStateManager.CurrentGameState == GameState.Dialogue)
             {
                 targetGroup.m_Targets[1].target = DialogueManager.Instance.otherSpeakerTransform;
             }

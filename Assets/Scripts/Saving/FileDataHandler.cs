@@ -14,6 +14,8 @@ namespace Arcy.Saving
 
 		private string _dataDirPath = "";
 		private string _dataFileName = "";
+
+		// Encryption
 		private bool _useEncryption = false;
 		private readonly string _encryptionKey = "word"; // This is a password used for the encryption
 
@@ -24,16 +26,19 @@ namespace Arcy.Saving
 			_useEncryption = useEncryption;
 		}
 
-		public GameData Load()
+		public SaveData Load()
 		{
 			// use Path.Combine to account for different OS's having different path separators.
+			// Windows: Application.persistentDataPath points to C:\Users\<user>\AppData\LocalLow\<company name>.
+			// MAC OS: ~/Library/Application Support/company name/product name (originally hidden)
 			string fullPath = System.IO.Path.Combine(_dataDirPath, _dataFileName);
-			GameData loadedData = null;
+			SaveData loadedData = null;
 			if (File.Exists(fullPath))
 			{
 				try
 				{
 					string dataToLoad = "";
+
 					using (FileStream stream = new FileStream(fullPath, FileMode.Open))
 					{
 						using (StreamReader reader = new StreamReader(stream))
@@ -49,7 +54,7 @@ namespace Arcy.Saving
 					}
 
 					// Deserialize the data from Json back into the C# object
-					loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
+					loadedData = JsonUtility.FromJson<SaveData>(dataToLoad);
 				}
 				catch (Exception e)
 				{
@@ -59,7 +64,7 @@ namespace Arcy.Saving
 			return loadedData;
 		}
 
-		public void Save(GameData data)
+		public void Save(SaveData data)
 		{
 			// use Path.Combine to account for different OS's having different path separators.
 			string fullPath = System.IO.Path.Combine(_dataDirPath, _dataFileName);
@@ -92,6 +97,8 @@ namespace Arcy.Saving
 				Debug.LogError("Error occured when trying to save data to file: " + fullPath + "\n" + e);
 			}
 		}
+
+		// PRIVATE:
 
 		// The below is a simple implementation of XOR encryption
 		private string EncryptDecrypt(string data)

@@ -41,12 +41,12 @@ namespace Arcy.Interaction
 
         private void OnEnable()
         {
-            GameEventManager.instance.playerEvents.onPlayerResumeControl += MakeDoorInteractibleAgain;
+            GameManager.instance.gameEventManager.playerEvents.onPlayerResumeControl += MakeDoorInteractibleAgain;
         }
 
         private void OnDisable()
         {
-            GameEventManager.instance.playerEvents.onPlayerResumeControl += MakeDoorInteractibleAgain;
+            GameManager.instance.gameEventManager.playerEvents.onPlayerResumeControl += MakeDoorInteractibleAgain;
         }
 
         public void Interact()
@@ -69,7 +69,7 @@ namespace Arcy.Interaction
                 .Append(_doorPivot.transform.DORotate(_ogRotation, 0.7f));
             }
 
-            GameEventManager.instance.playerEvents.PlayerMoveToPosition(newPos());
+            GameManager.instance.gameEventManager.playerEvents.PlayerMoveToPosition(newPos());
         }
 
         private void MakeDoorInteractibleAgain()

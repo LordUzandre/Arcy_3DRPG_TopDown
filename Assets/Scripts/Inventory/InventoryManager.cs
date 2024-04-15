@@ -56,7 +56,7 @@ namespace Arcy.Inventory
 			slots[i].Item = item;
 			slots[i].Amount += amount;
 
-			GameEventManager.instance.inventoryEvents.InventoryUpdated();
+			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
 			return true;
 		}
@@ -106,7 +106,7 @@ namespace Arcy.Inventory
 				slots[slot].Item = null;
 			}
 
-			GameEventManager.instance.inventoryEvents.InventoryUpdated();
+			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 		}
 
 		/// <summary>
@@ -134,7 +134,7 @@ namespace Arcy.Inventory
 			slots[slot].Item = item;
 			slots[slot].Amount += amount;
 
-			GameEventManager.instance.inventoryEvents.InventoryUpdated();
+			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
 			return true;
 		}
@@ -171,12 +171,12 @@ namespace Arcy.Inventory
 
 		private void OnEnable()
 		{
-			GameEventManager.instance.inventoryEvents.onInventoryItemAdded += AddPickup;
+			GameManager.instance.gameEventManager.inventoryEvents.onInventoryItemAdded += AddPickup;
 		}
 
 		private void OnDisable()
 		{
-			GameEventManager.instance.inventoryEvents.onInventoryItemAdded += AddPickup;
+			GameManager.instance.gameEventManager.inventoryEvents.onInventoryItemAdded += AddPickup;
 		}
 
 		private void AddPickup(InventoryItem item, int amount)
@@ -284,7 +284,7 @@ namespace Arcy.Inventory
 		// 		slots[i].amount = slotStrings[i].amount;
 		// 	}
 
-		// 	GameEventManager.instance.inventoryEvents.InventoryUpdated();
+		// 	GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 		// }
 		#endregion
 	}

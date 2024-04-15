@@ -24,7 +24,7 @@ namespace Arcy.Quests
 
 			InventoryUpdated();
 
-			Management.GameEventManager.instance.inventoryEvents.onInventoryUpdated += InventoryUpdated;
+			Management.GameManager.instance.gameEventManager.inventoryEvents.onInventoryUpdated += InventoryUpdated;
 		}
 
 		private void InventoryUpdated()
@@ -41,7 +41,7 @@ namespace Arcy.Quests
 
 						Debug.Log("PlaceholderQuest, FetchObjective: You now have the correct amount of required items to ");
 
-						Management.GameEventManager.instance.inventoryEvents.onInventoryUpdated -= InventoryUpdated;
+						Management.GameManager.instance.gameEventManager.inventoryEvents.onInventoryUpdated -= InventoryUpdated;
 						FinishObjective();
 					}
 				}

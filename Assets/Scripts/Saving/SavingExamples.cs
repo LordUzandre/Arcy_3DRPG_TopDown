@@ -5,19 +5,19 @@ using UnityEngine;
 
 namespace Arcy.Saving
 {
-	public class SavingExamples : MonoBehaviour, ISaveable
+	public class SavingExamples : MonoBehaviour, ISaveableEntity
 	{
-		// Below is only an example of the methods a class need to implement in order to use the saving system
-		[SerializeField] private int _deathCount = 3;
+		[SerializeField] string _mostRecentCheckPoint;
 
-		public void LoadData(GameData data)
+		public void LoadData(SaveData saveData)
 		{
-			_deathCount = data.deathCount;
+			_mostRecentCheckPoint = saveData.mostRecentCheckpoint;
+
 		}
 
-		public void SaveData(GameData data)
+		public void SaveData(SaveData saveData)
 		{
-			data.deathCount = _deathCount;
+			saveData.mostRecentCheckpoint = _mostRecentCheckPoint;
 		}
 	}
 }

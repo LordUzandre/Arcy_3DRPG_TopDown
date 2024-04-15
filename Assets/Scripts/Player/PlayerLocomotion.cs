@@ -33,12 +33,12 @@ namespace Arcy.Player
 
         private void OnEnable()
         {
-            GameEventManager.instance.inputEvents.onWASDInput += HandleMovementInput;
+            GameManager.instance.gameEventManager.inputEvents.onWASDInput += HandleMovementInput;
         }
 
         private void OnDisable()
         {
-            GameEventManager.instance.inputEvents.onWASDInput -= HandleMovementInput;
+            GameManager.instance.gameEventManager.inputEvents.onWASDInput -= HandleMovementInput;
         }
 
 
@@ -135,7 +135,7 @@ namespace Arcy.Player
             Sequence sequence = DOTween.Sequence();
             sequence.Append(transform.DOLookAt(newPosRedux, 0.4f).SetEase(Ease.InOutSine))
             .Append(transform.DOMove(newPosRedux, 0.8f).SetEase(Ease.InOutSine))
-            .OnComplete(() => GameEventManager.instance.playerEvents.PlayerResumeControl());
+            .OnComplete(() => GameManager.instance.gameEventManager.playerEvents.PlayerResumeControl());
         }
     }
 }

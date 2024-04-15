@@ -16,12 +16,12 @@ namespace Arcy.UI
 
 		private void OnEnable()
 		{
-			GameEventManager.instance.inventoryEvents.onInventoryItemAdded += ItemsAdded;
+			GameManager.instance.gameEventManager.inventoryEvents.onInventoryItemAdded += ItemsAdded;
 		}
 
 		private void OnDisable()
 		{
-			GameEventManager.instance.inventoryEvents.onInventoryItemAdded -= ItemsAdded;
+			GameManager.instance.gameEventManager.inventoryEvents.onInventoryItemAdded -= ItemsAdded;
 		}
 
 		public void ItemsAdded(InventoryItem item, int amountAdded)

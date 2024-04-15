@@ -65,7 +65,7 @@ namespace Arcy.UI
 		{
 			_pauseMenuIsActive = _uiParentObject.activeInHierarchy;
 
-			GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
+			GameManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
 			StartCoroutine(PopulateAlllistsCoroutine());
 
 			IEnumerator PopulateAlllistsCoroutine()
@@ -77,7 +77,7 @@ namespace Arcy.UI
 
 		private void OnDisable()
 		{
-			GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
+			GameManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
 		}
 
 		private void OnGameStateChanged(GameState newGameState)
@@ -214,18 +214,18 @@ namespace Arcy.UI
 		private void SubscribeToInputManager()
 		{
 			// TODO: Set up a list of subscriptions to inputmanager
-			GameEventManager.instance.inputEvents.onInteractionInputPressed += OnInteractBtnClicked;
-			GameEventManager.instance.inputEvents.onCancelInputPressed += OnBackBtnClicked;
-			GameEventManager.instance.inputEvents.onWASDInput += InputVector;
-			GameEventManager.instance.inputEvents.onPauseInputPressed += OnEscapeBtnClicked;
+			GameManager.instance.gameEventManager.inputEvents.onInteractionInputPressed += OnInteractBtnClicked;
+			GameManager.instance.gameEventManager.inputEvents.onCancelInputPressed += OnBackBtnClicked;
+			GameManager.instance.gameEventManager.inputEvents.onWASDInput += InputVector;
+			GameManager.instance.gameEventManager.inputEvents.onPauseInputPressed += OnEscapeBtnClicked;
 		}
 
 		private void UnSubscribeFromInputManager()
 		{
-			GameEventManager.instance.inputEvents.onInteractionInputPressed -= OnInteractBtnClicked;
-			GameEventManager.instance.inputEvents.onCancelInputPressed -= OnBackBtnClicked;
-			GameEventManager.instance.inputEvents.onWASDInput -= InputVector;
-			GameEventManager.instance.inputEvents.onPauseInputPressed -= OnEscapeBtnClicked;
+			GameManager.instance.gameEventManager.inputEvents.onInteractionInputPressed -= OnInteractBtnClicked;
+			GameManager.instance.gameEventManager.inputEvents.onCancelInputPressed -= OnBackBtnClicked;
+			GameManager.instance.gameEventManager.inputEvents.onWASDInput -= InputVector;
+			GameManager.instance.gameEventManager.inputEvents.onPauseInputPressed -= OnEscapeBtnClicked;
 		}
 
 		#endregion
@@ -273,9 +273,9 @@ namespace Arcy.UI
 
 		private void OnEscapeBtnClicked()
 		{
-			if (GameEventManager.instance.gameStateManager.CurrentGameState == GameState.Pause)
+			if (GameManager.instance.gameStateManager.CurrentGameState == GameState.Pause)
 			{
-				GameEventManager.instance.gameStateManager.SetState(GameState.Freeroam);
+				GameManager.instance.gameStateManager.SetState(GameState.Freeroam);
 				CloseDownPauseMenu();
 			}
 		}

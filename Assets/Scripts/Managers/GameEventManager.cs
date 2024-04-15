@@ -7,39 +7,31 @@ using Arcy.Inventory;
 using Arcy.Quests;
 using Arcy.Player;
 using UnityEngine;
+using Arcy.Saving;
 
 namespace Arcy.Management
 {
 	public class GameEventManager : MonoBehaviour
 	{
-		public static GameEventManager instance { get; private set; }
+		// public static GameEventManager instance { get; private set; }
 
-		// input 
 		public InputEvents inputEvents;
-		// gamestate-manager
-		public GameStateManager gameStateManager;
 
 		public PlayerEvents playerEvents;
 		public QuestEvents questEvents;
 		public InventoryEvents inventoryEvents;
 		public DialogueEvents dialogueEvents;
+		public CheckpointEvents checkpointEvents;
 
-		public void Awake()
+		public void Initialize()
 		{
-			if (instance != null)
-			{
-				Debug.LogError("Found more than one Game Events Manager in the scene.");
-			}
-
-			instance = this;
-
 			//initialize all events
 			inputEvents = new InputEvents();
-			gameStateManager = new GameStateManager();
 			playerEvents = new PlayerEvents();
 			questEvents = new QuestEvents();
 			inventoryEvents = new InventoryEvents();
 			dialogueEvents = new DialogueEvents();
+			checkpointEvents = new CheckpointEvents();
 		}
 	}
 }

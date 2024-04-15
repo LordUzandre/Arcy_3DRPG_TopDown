@@ -28,14 +28,14 @@ namespace Arcy.Quests
 
 		private void OnEnable()
 		{
-			GameEventManager.instance.questEvents.onQuestStateChange += QuestStateChange;
-			GameEventManager.instance.inputEvents.onInteractionInputPressed += SubmitPressed;
+			GameManager.instance.gameEventManager.questEvents.onQuestStateChange += QuestStateChange;
+			GameManager.instance.gameEventManager.inputEvents.onInteractionInputPressed += SubmitPressed;
 		}
 
 		private void OnDisable()
 		{
-			GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;
-			GameEventManager.instance.inputEvents.onInteractionInputPressed -= SubmitPressed;
+			GameManager.instance.gameEventManager.questEvents.onQuestStateChange -= QuestStateChange;
+			GameManager.instance.gameEventManager.inputEvents.onInteractionInputPressed -= SubmitPressed;
 		}
 
 		private void QuestStateChange(Quest quest)
@@ -56,11 +56,11 @@ namespace Arcy.Quests
 
 			if (currentQuestState.Equals(QuestStateEnum.CAN_START) && startPoint)
 			{
-				GameEventManager.instance.questEvents.StartQuest(questId);
+				GameManager.instance.gameEventManager.questEvents.StartQuest(questId);
 			}
 			else if (currentQuestState.Equals(QuestStateEnum.CAN_FINISH) && finishPoint)
 			{
-				GameEventManager.instance.questEvents.FinishQuest(questId);
+				GameManager.instance.gameEventManager.questEvents.FinishQuest(questId);
 			}
 
 		}

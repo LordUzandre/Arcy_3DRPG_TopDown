@@ -17,22 +17,24 @@ namespace Arcy.InputManagement
         /// </summary>
 
         private GameState _currentGameState;
-        private bool _inputEnabled = true;
+        [SerializeField] private bool _inputEnabled = true;
 
         private void OnEnable()
         {
-            GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
+            GameManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
         }
 
         private void OnDisable()
         {
-            GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
+            GameManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
         }
 
         private void OnGameStateChanged(GameState newGameState)
         {
             _currentGameState = newGameState;
         }
+
+        // MARK: Input-events
 
         // WASD pressed
         public void OnMove(InputValue inputValue)
@@ -42,10 +44,10 @@ namespace Arcy.InputManagement
             switch (_currentGameState)
             {
                 case GameState.Freeroam:
-                    GameEventManager.instance.inputEvents.WASDPressed(vector2);
+                    GameManager.instance.gameEventManager.inputEvents.WASDPressed(vector2);
                     return;
                 case GameState.Pause:
-                    GameEventManager.instance.inputEvents.WASDPressed(vector2);
+                    GameManager.instance.gameEventManager.inputEvents.WASDPressed(vector2);
                     return;
             }
         }
@@ -55,7 +57,7 @@ namespace Arcy.InputManagement
         {
             if (_inputEnabled)
             {
-                GameEventManager.instance.inputEvents.InteractKeyPressed();
+                GameManager.instance.gameEventManager.inputEvents.InteractKeyPressed();
             }
         }
 
@@ -64,7 +66,7 @@ namespace Arcy.InputManagement
         {
             if (_inputEnabled)
             {
-                GameEventManager.instance.inputEvents.CancelKeyPressed();
+                GameManager.instance.gameEventManager.inputEvents.CancelKeyPressed();
             }
         }
 
@@ -73,7 +75,7 @@ namespace Arcy.InputManagement
         {
             if (_inputEnabled)
             {
-                GameEventManager.instance.inputEvents.OnRunKeyHeld();
+                GameManager.instance.gameEventManager.inputEvents.OnRunKeyHeld();
             }
         }
 
@@ -82,7 +84,7 @@ namespace Arcy.InputManagement
         {
             if (_inputEnabled)
             {
-                GameEventManager.instance.inputEvents.PauseKeyPressed();
+                GameManager.instance.gameEventManager.inputEvents.PauseKeyPressed();
             }
         }
 
@@ -91,7 +93,7 @@ namespace Arcy.InputManagement
         {
             if (_inputEnabled)
             {
-                GameEventManager.instance.inputEvents.JournalKeyPressed();
+                GameManager.instance.gameEventManager.inputEvents.JournalKeyPressed();
             }
         }
     }

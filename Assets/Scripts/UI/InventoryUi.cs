@@ -19,12 +19,12 @@ namespace Arcy.UI
 
 		private void OnEnable()
 		{
-			GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
+			GameManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
 		}
 
 		private void OnDisable()
 		{
-			GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
+			GameManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
 		}
 
 		private void OnGameStateChanged(GameState state)

@@ -1,6 +1,7 @@
-using System;
+//using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arcy.Saving;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -9,6 +10,9 @@ namespace Arcy.SceneManagement
 {
 	public class CheckPoint : MonoBehaviour
 	{
+		[Header("CheckPoint GUID")]
+		[SerializeField] private string _checkpointGUID;
+
 		[Header("Collider")]
 		[SerializeField] private CapsuleCollider _collider;
 
@@ -17,7 +21,7 @@ namespace Arcy.SceneManagement
 		[SerializeField] public Transform endPoint;
 
 		[Header("Torch Light VFX")]
-		[SerializeField] private UnityEngine.VFX.VisualEffect _fireVFX;
+		[SerializeField] private VisualEffect _fireVFX;
 
 #if UNITY_EDITOR
 		private void OnValidate()
@@ -37,6 +41,11 @@ namespace Arcy.SceneManagement
 					_fireVFX = TryGetComponent<VisualEffect>(out VisualEffect hit) ? hit : null;
 					break;
 				}
+
+			if (_checkpointGUID == null)
+			{
+				_checkpointGUID = System.Guid.NewGuid().ToString();
+			}
 		}
 #endif
 

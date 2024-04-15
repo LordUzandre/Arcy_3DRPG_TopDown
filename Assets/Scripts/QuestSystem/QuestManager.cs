@@ -42,28 +42,28 @@ namespace Arcy.Quests
 				}
 
 				// broadcast the initial state of all quests on startup
-				GameEventManager.instance.questEvents.QuestStateChange(quest);
+				GameManager.instance.gameEventManager.questEvents.QuestStateChange(quest);
 			}
 		}
 
 		private void OnEnable()
 		{
-			GameEventManager.instance.questEvents.onStartQuest += StartQuest;
-			GameEventManager.instance.questEvents.onAdvanceQuest += AdvanceQuest;
-			GameEventManager.instance.questEvents.onFinishQuest += FinishQuest;
-			GameEventManager.instance.questEvents.onQuestObjectiveStateChange += QuestObjectiveStateChange;
+			GameManager.instance.gameEventManager.questEvents.onStartQuest += StartQuest;
+			GameManager.instance.gameEventManager.questEvents.onAdvanceQuest += AdvanceQuest;
+			GameManager.instance.gameEventManager.questEvents.onFinishQuest += FinishQuest;
+			GameManager.instance.gameEventManager.questEvents.onQuestObjectiveStateChange += QuestObjectiveStateChange;
 
-			GameEventManager.instance.dialogueEvents.onDialogueFinished += DialogueFinished;
+			GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished += DialogueFinished;
 		}
 
 		private void OnDisable()
 		{
-			GameEventManager.instance.questEvents.onStartQuest -= StartQuest;
-			GameEventManager.instance.questEvents.onAdvanceQuest -= AdvanceQuest;
-			GameEventManager.instance.questEvents.onFinishQuest -= FinishQuest;
-			GameEventManager.instance.questEvents.onQuestObjectiveStateChange -= QuestObjectiveStateChange;
+			GameManager.instance.gameEventManager.questEvents.onStartQuest -= StartQuest;
+			GameManager.instance.gameEventManager.questEvents.onAdvanceQuest -= AdvanceQuest;
+			GameManager.instance.gameEventManager.questEvents.onFinishQuest -= FinishQuest;
+			GameManager.instance.gameEventManager.questEvents.onQuestObjectiveStateChange -= QuestObjectiveStateChange;
 
-			GameEventManager.instance.dialogueEvents.onDialogueFinished -= DialogueFinished;
+			GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished -= DialogueFinished;
 		}
 
 		// create quest map during Awake()
@@ -146,7 +146,7 @@ namespace Arcy.Quests
 			Quest quest = GetQuestByGuid(questID);
 
 			quest.currentStatusEnum = state;
-			GameEventManager.instance.questEvents.QuestStateChange(quest);
+			GameManager.instance.gameEventManager.questEvents.QuestStateChange(quest);
 		}
 
 		private void AdvanceQuest(string questID)

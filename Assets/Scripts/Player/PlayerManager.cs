@@ -52,18 +52,20 @@ public class PlayerManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEventManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
-        GameEventManager.instance.playerEvents.onPlayerResumeControl += PlayerReumeControl;
-        GameEventManager.instance.playerEvents.onPlayerLevelUp += PlayerLevelUp;
-        GameEventManager.instance.playerEvents.onPlayerMoveToPosition += PlayerMoveToPosition;
+        GameManager.instance.gameStateManager.OnGameStateChanged += OnGameStateChanged;
+
+        GameManager.instance.gameEventManager.playerEvents.onPlayerResumeControl += PlayerReumeControl;
+        GameManager.instance.gameEventManager.playerEvents.onPlayerLevelUp += PlayerLevelUp;
+        GameManager.instance.gameEventManager.playerEvents.onPlayerMoveToPosition += PlayerMoveToPosition;
     }
 
     private void OnDisable()
     {
-        GameEventManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
-        GameEventManager.instance.playerEvents.onPlayerResumeControl -= PlayerReumeControl;
-        GameEventManager.instance.playerEvents.onPlayerLevelUp -= PlayerLevelUp;
-        GameEventManager.instance.playerEvents.onPlayerMoveToPosition -= PlayerMoveToPosition;
+        GameManager.instance.gameStateManager.OnGameStateChanged -= OnGameStateChanged;
+
+        GameManager.instance.gameEventManager.playerEvents.onPlayerResumeControl -= PlayerReumeControl;
+        GameManager.instance.gameEventManager.playerEvents.onPlayerLevelUp -= PlayerLevelUp;
+        GameManager.instance.gameEventManager.playerEvents.onPlayerMoveToPosition -= PlayerMoveToPosition;
     }
 
     private void OnGameStateChanged(GameState state)
@@ -112,12 +114,12 @@ public class PlayerManager : MonoBehaviour
 
     public void InteractibleNotNull() //Subscribe to inputManager, triggered by fow
     {
-        GameEventManager.instance.inputEvents.onInteractionInputPressed += InteractionKeyPressed;
+        GameManager.instance.gameEventManager.inputEvents.onInteractionInputPressed += InteractionKeyPressed;
     }
 
     public void UnSubscribeFromInteractible() // UnSubscribe form inputManager, triggered by fow
     {
-        GameEventManager.instance.inputEvents.onInteractionInputPressed -= InteractionKeyPressed;
+        GameManager.instance.gameEventManager.inputEvents.onInteractionInputPressed -= InteractionKeyPressed;
     }
 
     public void InteractionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
@@ -126,7 +128,7 @@ public class PlayerManager : MonoBehaviour
         {
             if (!isInteracting)
             {
-                GameEventManager.instance.gameStateManager.SetState(GameState.Dialogue);
+                GameManager.instance.gameStateManager.SetState(GameState.Dialogue);
                 DialogueManager.Instance.GetAppropriateDialogueString(speakableObject.Dialogue);
             }
 

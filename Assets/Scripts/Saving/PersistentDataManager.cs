@@ -1,8 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Linq;
+using Arcy.Management;
 
 namespace Arcy.Saving
 {
@@ -13,53 +15,44 @@ namespace Arcy.Saving
 		/// </summary>
 
 		[Header("File Storage Config")]
-		[SerializeField] private string fileName;
-		[SerializeField] private bool _useEncryption;
+		[SerializeField] private bool _initializeDataIfNull = false;
+		[Space]
+		[SerializeField] public string fileName;
+		[SerializeField] public bool useEncryption;
 
-		public static PersistentDataManager instance { get; private set; }
+		private SaveData _saveData;
+		private List<ISaveableEntity> _persistentDataObjects;
+		public FileDataHandler saveDataHandler;
 
-		private GameData _gameData;
-		private List<ISaveable> _persistentDataObjects;
-		private FileDataHandler _dataHandler;
-
-		private void Awake()
-		{
-			if (instance != null)
-			{
-				Debug.LogError("Found more than one Persistent Data Manager in the scene");
-			}
-
-			instance = this;
-		}
-
-		private void Start()
-		{
-			_dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, _useEncryption);
-			_persistentDataObjects = FindAllPersistentDataObjects();
-			LoadGame();
-		}
+		// MARK: PUBLIC:
 
 		public void NewGame()
 		{
-			_gameData = new GameData();
+			_saveData = new SaveData();
 		}
 
 		public void LoadGame()
 		{
 			// Load any saved data from a file using the data Handler
-			_gameData = _dataHandler.Load();
+			_saveData = saveDataHandler.Load();
 
-			// if no data can be loaded, initialize to a new game.
-			if (_gameData == null)
+			// start a new game if the data is null and we're configured to initialize data for debugging purposes
+			if (_saveData == null && _initializeDataIfNull)
 			{
-				Debug.LogError("No data was found. Initializing data defaults.");
 				NewGame();
 			}
 
-			// push the loaded data to all other scripts that need it.
-			foreach (ISaveable persistantDataObj in _persistentDataObjects)
+			// if no data can be loaded, don't continue.
+			if (_saveData == null)
 			{
-				persistantDataObj.LoadData(_gameData);
+				Debug.LogError("No data was found. A new game needs to be started before data can be loaded.");
+				return;
+			}
+
+			// push the loaded data to all other scripts that need it.
+			foreach (ISaveableEntity persistantDataObj in _persistentDataObjects)
+			{
+				persistantDataObj.LoadData(_saveData);
 			}
 
 			Debug.Log("PersistentDataManager: Loaded Data");
@@ -67,14 +60,55 @@ namespace Arcy.Saving
 
 		public void SaveGame()
 		{
-			// Save that data to a file using the data handler.
-			foreach (ISaveable persistantDataObj in _persistentDataObjects)
+			if (_saveData == null)
 			{
-				persistantDataObj.SaveData(_gameData);
+				Debug.LogWarning("No data was found. A new game needs to be started before data can be saved");
+				return;
+			}
+
+			// Save that data to a file using the data handler.
+			foreach (ISaveableEntity persistantDataObj in _persistentDataObjects)
+			{
+				persistantDataObj.SaveData(_saveData);
 			}
 
 			// save data to a file using the data handler.
-			_dataHandler.Save(_gameData);
+			saveDataHandler.Save(_saveData);
+		}
+
+		public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+		{
+			_persistentDataObjects = FindAllPersistentDataObjects();
+			LoadGame();
+		}
+
+		public void OnSceneUnloaded(Scene scene)
+		{
+			SaveGame();
+		}
+
+		public bool HasGameData()
+		{
+			return _saveData != null;
+		}
+
+		//MARK: PRIVATE:
+
+		private void Awake()
+		{
+			saveDataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
+		}
+
+		private void OnEnable()
+		{
+			UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+			UnityEngine.SceneManagement.SceneManager.sceneUnloaded += OnSceneUnloaded;
+		}
+
+		private void OnDisable()
+		{
+			UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+			UnityEngine.SceneManagement.SceneManager.sceneUnloaded -= OnSceneUnloaded;
 		}
 
 		private void OnApplicationQuit()
@@ -82,11 +116,12 @@ namespace Arcy.Saving
 			SaveGame();
 		}
 
-		private List<ISaveable> FindAllPersistentDataObjects()
+		private List<ISaveableEntity> FindAllPersistentDataObjects()
 		{
-			IEnumerable<ISaveable> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>();
+			// Use LINQ to find all scripts that are using ISaveableEntity.
+			IEnumerable<ISaveableEntity> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveableEntity>();
 
-			return new List<ISaveable>(dataPersistenceObjects);
+			return new List<ISaveableEntity>(dataPersistenceObjects);
 		}
 	}
 
@@ -96,17 +131,62 @@ namespace Arcy.Saving
 
 		public void OnNewGameClicked()
 		{
-			PersistentDataManager.instance.NewGame();
+			GameManager.instance.persistentDataManager.NewGame();
 		}
 
 		public void OnLoadGameClicked()
 		{
-			PersistentDataManager.instance.LoadGame();
+			GameManager.instance.persistentDataManager.LoadGame();
 		}
 
-		public void OnSaveGameCLicked()
+		public void OnSaveGameClicked()
 		{
-			PersistentDataManager.instance.SaveGame();
+			GameManager.instance.persistentDataManager.SaveGame();
+		}
+	}
+
+	public class MainMenu
+	{
+		/// <summary>
+		/// This class is to be used any parent object which hold the buttons in the main menu
+		/// </summary>
+
+		private Button _newGameBtn;
+		private Button _continueBtn;
+
+		private void Start()
+		{
+			if (!GameManager.instance.persistentDataManager.HasGameData())
+			{
+				_continueBtn.interactable = false;
+			}
+		}
+
+		public void OnNewGameBtnClicked()
+		{
+			DisableMenuBtns();
+
+			// create a new game - which will initialize out game data
+			GameManager.instance.persistentDataManager.NewGame();
+
+			// Load gameplay scene - which will in turn save our game
+			// because of OnSceneLoaded() in the PersistentDataManager.
+			UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("SampleScene");
+		}
+
+		public void OnContinueBtnClicked()
+		{
+			DisableMenuBtns();
+
+			// Load the next scene - which will in turn load our game
+			// because of OnSceneLoaded() in the PersistentDataManager
+			UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("SampleScene");
+		}
+
+		private void DisableMenuBtns()
+		{
+			_newGameBtn.interactable = false;
+			_continueBtn.interactable = false;
 		}
 	}
 }
