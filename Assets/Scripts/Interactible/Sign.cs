@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Arcy.Interaction
 {
     [RequireComponent(typeof(BoxCollider))]
-    public class Sign : MonoBehaviour, InteractibleBase, ISpeakable
+    public class Sign : MonoBehaviour, IInteractibleBase, ISpeakable
     {
         public string SpeakerName { get; set; }
 

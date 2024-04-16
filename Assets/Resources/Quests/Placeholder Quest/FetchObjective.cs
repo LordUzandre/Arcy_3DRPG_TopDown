@@ -18,7 +18,7 @@ namespace Arcy.Quests
 		[SerializeField] private InventoryItem _item;
 		[SerializeField] private int requestedAmount = 1;
 
-		public override void InitializeObjective(string questId, int objectiveIndex)
+		public override void InitializeObjective(int questId, int objectiveIndex)
 		{
 			base.InitializeObjective(questId, objectiveIndex);
 

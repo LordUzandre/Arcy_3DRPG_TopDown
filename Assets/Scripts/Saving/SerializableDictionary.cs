@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arcy.Saving
+namespace Arcy.Utils
 {
 	[System.Serializable]
 	public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
@@ -26,7 +26,7 @@ namespace Arcy.Saving
 		// load the dictionary from lists
 		public void OnAfterDeserialize()
 		{
-			this.Clear();
+			Clear();
 
 			if (keys.Count != values.Count)
 			{
@@ -37,7 +37,7 @@ namespace Arcy.Saving
 
 			for (int i = 0; i < keys.Count; i++)
 			{
-				this.Add(keys[i], values[i]);
+				Add(keys[i], values[i]);
 			}
 		}
 

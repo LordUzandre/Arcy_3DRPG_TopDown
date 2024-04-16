@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Arcy.Saving
 {
-	public class FileDataHandler
+	public class JsonFileDataHandler
 	{
 		/// <summary>
 		/// This class is used by PersistentDataManager to save/load and encrypt/decrypt data for the saving System.
@@ -19,7 +19,9 @@ namespace Arcy.Saving
 		private bool _useEncryption = false;
 		private readonly string _encryptionKey = "word"; // This is a password used for the encryption
 
-		public FileDataHandler(string dataDirPath, string dataFileName, bool useEncryption)
+		// MARK: PUBLIC:
+
+		public JsonFileDataHandler(string dataDirPath, string dataFileName, bool useEncryption)
 		{
 			_dataDirPath = dataDirPath;
 			_dataFileName = dataFileName;
@@ -88,7 +90,7 @@ namespace Arcy.Saving
 					using (StreamWriter writer = new StreamWriter(stream))
 					{
 						writer.Write(dataToStore);
-						Debug.Log("Saved Succesfully");
+						// Debug.Log("PersistentDataManager: Saved Data");
 					}
 				}
 			}
@@ -98,7 +100,7 @@ namespace Arcy.Saving
 			}
 		}
 
-		// PRIVATE:
+		// MARK: PRIVATE:
 
 		// The below is a simple implementation of XOR encryption
 		private string EncryptDecrypt(string data)

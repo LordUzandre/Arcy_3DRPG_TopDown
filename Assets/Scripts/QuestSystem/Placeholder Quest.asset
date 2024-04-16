@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5432b093e0c3244a18b5352583987ecb, type: 3}
   m_Name: Placeholder Quest
   m_EditorClassIdentifier: 
-  questDisplayName: 
-  <guid>k__BackingField: 
+  questDisplayName: Placeholder Quest
+  guid: 1377934591
   questManager: {fileID: 0}
   _currentQuestState: 0
   requiredItems: []

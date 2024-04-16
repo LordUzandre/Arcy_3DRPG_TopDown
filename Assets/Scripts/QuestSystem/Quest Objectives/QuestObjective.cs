@@ -20,11 +20,11 @@ namespace Arcy.Quests
 
 		public abstract bool ThisObjectiveCanBeSkipped { get; set; } // TODO: Not yet implemented
 		public bool isFinished = false;
-		private string _questId;
+		private int _questId;
 		private int _objectiveIndex;
 
 		// Initialized by Quest when the prefab is instantiated
-		public virtual void InitializeObjective(string questId, int objectiveIndex)
+		public virtual void InitializeObjective(int questId, int objectiveIndex)
 		{
 			_questId = questId;
 			_objectiveIndex = objectiveIndex;

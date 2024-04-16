@@ -16,7 +16,7 @@ namespace Arcy.Interaction
     {
         [Header("If")]
         public bool questRelated;
-        public string questGUID;
+        public int questGUID;
         public Quests.QuestStateEnum questStatus;
         [Header("Then speak")]
         public bool singleUseDialogue = false;

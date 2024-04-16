@@ -15,5 +15,14 @@ namespace Arcy.Dialogue
 				onDialogueFinished(speakerID);
 			}
 		}
+
+		public event Action onSkipTyping;
+		public void SkipTyping()
+		{
+			if (onSkipTyping != null)
+			{
+				onSkipTyping.Invoke();
+			}
+		}
 	}
 }

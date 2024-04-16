@@ -10,7 +10,7 @@ namespace Arcy.Quests
 	public class QuestSO : ScriptableObject
 	{
 		[field: SerializeField] public string questDisplayName;
-		[field: SerializeField] public string guid { get; private set; }
+		[SerializeField] public int guid;
 		[field: SerializeField] private QuestManager questManager;
 
 		[field: SerializeField] private QuestStateEnum _currentQuestState;
@@ -32,6 +32,21 @@ namespace Arcy.Quests
 			[SerializeField] public int exp;
 			[SerializeField] public GameObject[] items;
 		}
+
+#if UNITY_EDITOR
+		private void OnValidate()
+		{
+			if (questDisplayName != name)
+			{
+				questDisplayName = name;
+			}
+
+			if (guid == 0)
+			{
+				guid = Utils.GuidGenerator.guid();
+			}
+		}
+#endif
 
 		public void QuestStarted()
 		{
@@ -93,5 +108,6 @@ namespace Arcy.Quests
 				}
 			}
 		}
+
 	}
 }

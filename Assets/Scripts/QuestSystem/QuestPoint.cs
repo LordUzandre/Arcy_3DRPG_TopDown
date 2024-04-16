@@ -15,7 +15,7 @@ namespace Arcy.Quests
 		[Header("Quest")]
 		[SerializeField] private QuestInfoSO questInfoForPoint;
 		private bool _playerIsNear = false;
-		private string questId;
+		private int questId;
 		private QuestStateEnum currentQuestState;
 
 		[SerializeField] private bool startPoint;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Object = UnityEngine.Object;
+using Arcy.Management;
 
 namespace Arcy.Dialogue
 {
@@ -51,20 +52,14 @@ namespace Arcy.Dialogue
 			_textBoxFullEventDelay = new WaitForSeconds(_sendDoneDelay);
 			_textBox.maxVisibleCharacters = 0;
 
-			StartCoroutine(ShortDelay());
-
-			IEnumerator ShortDelay()
-			{
-				yield return null;
-				TMPro_EventManager.TEXT_CHANGED_EVENT.Add(PrepareForNewText); // Detects changes in ANY TMP-object in the scene
-				DialogueManager.Instance.Skip += Skip;
-			}
+			TMPro_EventManager.TEXT_CHANGED_EVENT.Add(PrepareForNewText); // Detects changes in ANY TMP-object in the scene
+			GameManager.instance.gameEventManager.dialogueEvents.onSkipTyping += Skip;
 		}
 
 		private void OnDisable()
 		{
 			TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(PrepareForNewText);
-			DialogueManager.Instance.Skip -= Skip;
+			GameManager.instance.gameEventManager.dialogueEvents.onSkipTyping -= Skip;
 		}
 
 		// When the text in _textbox is changed by another script, this types it out.

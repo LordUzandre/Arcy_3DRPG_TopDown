@@ -9,13 +9,16 @@ namespace Arcy.Inventory
 	public class Pickup : MonoBehaviour
 	{
 		[SerializeField] InventoryItem item;
-		[Header("SaveData")]
-		[SerializeField] public string guid;
-		[SerializeField] public bool collected;
+		[Header("SaveData (for pickup-spawner, not inventory)")]
+		[SerializeField] public int guid = 0;
+		[SerializeField] public bool collected = false;
 
 		private void OnValidate()
 		{
-			guid ??= System.Guid.NewGuid().ToString();
+			if (guid == 0)
+			{
+				guid = Utils.GuidGenerator.guid();
+			}
 		}
 
 		private void OnTriggerEnter(Collider other)
@@ -23,8 +26,8 @@ namespace Arcy.Inventory
 			if (other.tag == "Player" && item != null)
 			{
 				collected = true;
+				gameObject.SetActive(false);
 				GameManager.instance.gameEventManager.inventoryEvents.InventoryItemAdded(item);
-				Destroy(gameObject);
 			}
 		}
 	}

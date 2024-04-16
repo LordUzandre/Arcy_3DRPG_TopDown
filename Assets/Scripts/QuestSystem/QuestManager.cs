@@ -12,9 +12,9 @@ namespace Arcy.Quests
 		[Tooltip("Should QuestManager load up quests from SaveData (old version)?")]
 		[SerializeField] private bool loadQuestState = true;
 
-		public Dictionary<string, Quest> questLog; // key = string, value = Quest
+		public Dictionary<int, Quest> questLog; // key = string, value = Quest
 
-		public Quest GetQuestByGuid(string questID)
+		public Quest GetQuestByGuid(int questID)
 		{
 			Quest quest = questLog[questID];
 
@@ -67,14 +67,14 @@ namespace Arcy.Quests
 		}
 
 		// create quest map during Awake()
-		private Dictionary<string, Quest> CreateQuestLog()
+		private Dictionary<int, Quest> CreateQuestLog()
 		{
 			// Load all QuestInfo Scriptable Objects in the Assets/Resources/Quests folder
 			QuestSO[] allQuests = Resources.LoadAll<QuestSO>("Quests");
 			//QuestInfoSO[] allQuests = Resources.LoadAll<QuestInfoSO>("Quests");
 
 			// Create the quest map
-			Dictionary<string, Quest> idToQuestMap = new Dictionary<string, Quest>();
+			Dictionary<int, Quest> idToQuestMap = new Dictionary<int, Quest>();
 
 			foreach (QuestSO questInfo in allQuests)
 			{
@@ -133,7 +133,7 @@ namespace Arcy.Quests
 		}
 
 		// called from questPoint (TODO - fix!)
-		private void StartQuest(string questID)
+		private void StartQuest(int questID)
 		{
 			Quest quest = GetQuestByGuid(questID);
 
@@ -141,7 +141,7 @@ namespace Arcy.Quests
 			ChangeQuestState(quest.questSO.guid, QuestStateEnum.STARTED);
 		}
 
-		private void ChangeQuestState(string questID, QuestStateEnum state)
+		private void ChangeQuestState(int questID, QuestStateEnum state)
 		{
 			Quest quest = GetQuestByGuid(questID);
 
@@ -149,7 +149,7 @@ namespace Arcy.Quests
 			GameManager.instance.gameEventManager.questEvents.QuestStateChange(quest);
 		}
 
-		private void AdvanceQuest(string questID)
+		private void AdvanceQuest(int questID)
 		{
 			Quest quest = GetQuestByGuid(questID);
 
@@ -167,7 +167,7 @@ namespace Arcy.Quests
 			}
 		}
 
-		private void FinishQuest(string questID)
+		private void FinishQuest(int questID)
 		{
 			Quest quest = GetQuestByGuid(questID);
 
@@ -185,7 +185,7 @@ namespace Arcy.Quests
 			}
 		}
 
-		private void QuestObjectiveStateChange(string questID, int objectiveIndex, QuestObjectiveState questObjectiveState)
+		private void QuestObjectiveStateChange(int questID, int objectiveIndex, QuestObjectiveState questObjectiveState)
 		{
 			Quest quest = GetQuestByGuid(questID);
 			quest.StoreQuestObjectiveStatus(questObjectiveState, objectiveIndex);
@@ -229,9 +229,9 @@ namespace Arcy.Quests
 			try
 			{
 				// load quest from saved data
-				if (PlayerPrefs.HasKey(questInfo.guid) && loadQuestState)
+				if (PlayerPrefs.HasKey(questInfo.guid.ToString()) && loadQuestState)
 				{
-					string serializedData = PlayerPrefs.GetString(questInfo.guid);
+					string serializedData = PlayerPrefs.GetString(questInfo.guid.ToString());
 					QuestData questData = JsonUtility.FromJson<QuestData>(serializedData);
 					quest = new Quest(questInfo, questData.state, questData.questObjectiveIndex, questData.questObjectiveStates);
 				}

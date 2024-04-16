@@ -7,30 +7,30 @@ namespace Arcy.Quests
 {
 	public class QuestEvents
 	{
-		public event Action<string> onStartQuest;
-		public void StartQuest(string id)
+		public event Action<int> onStartQuest;
+		public void StartQuest(int questId)
 		{
 			if (onStartQuest != null)
 			{
-				onStartQuest(id);
+				onStartQuest(questId);
 			}
 		}
 
-		public event Action<string> onAdvanceQuest;
-		public void AdvanceQuest(string id)
+		public event Action<int> onAdvanceQuest;
+		public void AdvanceQuest(int questId)
 		{
 			if (onAdvanceQuest != null)
 			{
-				onAdvanceQuest(id);
+				onAdvanceQuest(questId);
 			}
 		}
 
-		public event Action<string> onFinishQuest;
-		public void FinishQuest(string id)
+		public event Action<int> onFinishQuest;
+		public void FinishQuest(int questId)
 		{
 			if (onFinishQuest != null)
 			{
-				onFinishQuest(id);
+				onFinishQuest(questId);
 			}
 		}
 
@@ -43,12 +43,12 @@ namespace Arcy.Quests
 			}
 		}
 
-		public event Action<string, int, QuestObjectiveState> onQuestObjectiveStateChange;
-		public void QuestObjectiveStateChange(string id, int stepIndex, QuestObjectiveState questStepState)
+		public event Action<int, int, QuestObjectiveState> onQuestObjectiveStateChange;
+		public void QuestObjectiveStateChange(int questId, int stepIndex, QuestObjectiveState questStepState)
 		{
 			if (onQuestObjectiveStateChange != null)
 			{
-				onQuestObjectiveStateChange(id, stepIndex, questStepState);
+				onQuestObjectiveStateChange(questId, stepIndex, questStepState);
 			}
 		}
 	}

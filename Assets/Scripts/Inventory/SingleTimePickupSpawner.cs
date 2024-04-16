@@ -1,46 +1,73 @@
 using System.Collections;
 using System.Collections.Generic;
+using Arcy.Interaction;
 using Arcy.Saving;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 namespace Arcy.Inventory
 {
 	public class SingleTimePickupSpawner : MonoBehaviour, ISaveableEntity
 	{
-		public void LoadData(SaveData data)
+		public void LoadData(SaveData loadData)
 		{
 			foreach (Transform child in transform)
 			{
 				if (child.TryGetComponent<Pickup>(out Pickup pickup))
 				{
-					data.coinsCollected.TryGetValue(pickup.guid, out pickup.collected);
+					loadData.pickupsCollected.TryGetValue(pickup.guid, out pickup.collected);
 
 					if (pickup.collected)
 					{
 						Destroy(child.gameObject);
 					}
+
+					continue;
+				}
+				if (child.TryGetComponent<Chest>(out Chest chest))
+				{
+					loadData.pickupsCollected.TryGetValue(chest.guid, out bool isOpened);
+
+					// If TryGetValue succeeds:
+					if (isOpened)
+						chest.isInteractible = false;
+					else
+						chest.isInteractible = true;
+
+					chest.SetStartState(isOpened);
+
+					continue;
 				}
 			}
 		}
 
-		public void SaveData(SaveData data)
+		public void SaveData(SaveData saveData)
 		{
 			foreach (Transform child in transform)
 			{
 				if (child.TryGetComponent<Pickup>(out Pickup pickup) && pickup.collected)
 				{
-					if (data.coinsCollected.ContainsKey(pickup.guid))
+					if (saveData.pickupsCollected.ContainsKey(pickup.guid))
 					{
-						data.coinsCollected.Remove(pickup.guid);
+						saveData.pickupsCollected.Remove(pickup.guid);
 					}
 
-					data.coinsCollected.Add(pickup.guid, pickup.collected);
+					saveData.pickupsCollected.Add(pickup.guid, pickup.collected);
+
+					continue;
+				}
+
+				if (child.TryGetComponent<Chest>(out Chest chest))
+				{
+					if (saveData.pickupsCollected.ContainsKey(chest.guid))
+					{
+						saveData.pickupsCollected.Remove(chest.guid);
+					}
+
+					saveData.pickupsCollected.Add(chest.guid, !chest.isInteractible);
+
+					continue;
 				}
 			}
-
-			SerializableDictionary<string, bool> serializedDictionary = new SerializableDictionary<string, bool>();
 		}
 	}
 }

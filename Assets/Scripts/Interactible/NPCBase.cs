@@ -9,7 +9,7 @@ using DG.Tweening;
 
 namespace Arcy.Interaction
 {
-    public class NPCBase : MonoBehaviour, InteractibleBase, ISpeakable
+    public class NPCBase : MonoBehaviour, IInteractibleBase, ISpeakable
     {
 
         [SerializeField] string speakerName { get; set; }

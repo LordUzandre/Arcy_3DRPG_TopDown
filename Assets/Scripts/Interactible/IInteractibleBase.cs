@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Arcy.Interaction
 {
-    public interface InteractibleBase
+    public interface IInteractibleBase
     {
-        public Transform ObjectTransform { get; }
+        public Transform ObjectTransform { get; } // Used by InteractionIcon
 
         public abstract bool isInteractible { get; set; }
 

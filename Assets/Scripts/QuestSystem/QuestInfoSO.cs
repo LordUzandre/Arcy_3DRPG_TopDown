@@ -13,7 +13,7 @@ namespace Arcy.Quests
         /// These hold the requirements, the rewards and acts as a container for all the objectives.
         /// </summary>
 
-        [field: SerializeField] public string guid { get; private set; }
+        [SerializeField] public int guid;
 
         [Header("General")]
         [SerializeField] public string displayName;
@@ -30,16 +30,20 @@ namespace Arcy.Quests
         [SerializeField] public Inventory.InventorySlot[] rewardItems;
 
         // Generate a unique identifier
-        [ContextMenu("Generate Unique Identifier (guid)")]
-        private void GenerateGuid() { guid = System.Guid.NewGuid().ToString(); }
+        // [ContextMenu("Generate Unique Identifier (guid)")]
+        // private void GenerateGuid() { guid = System.Guid.NewGuid().ToString(); }
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            displayName = this.name;
-            if (guid == null)
+            if (displayName != name)
             {
-                guid = System.Guid.NewGuid().ToString();
+                displayName = name;
+            }
+
+            if (guid == 0)
+            {
+                guid = Utils.GuidGenerator.guid();
             }
 
             UnityEditor.EditorUtility.SetDirty(this);

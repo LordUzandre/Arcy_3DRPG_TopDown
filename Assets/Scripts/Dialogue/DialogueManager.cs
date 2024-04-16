@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using Arcy.InputManagement;
-using Arcy.Interaction;
 using Arcy.Management;
 using Arcy.Quests;
 using Mono.Data.Sqlite;
@@ -16,8 +14,8 @@ namespace Arcy.Dialogue
     public class DialogueManager : MonoBehaviour
     {
         //singleton
-        private static DialogueManager instance;
-        public static DialogueManager Instance { get; private set; }
+        // private static DialogueManager instance;
+        // public static DialogueManager Instance { get; private set; }
 
         public event Action Skip;
 
@@ -51,11 +49,11 @@ namespace Arcy.Dialogue
         [Header("Other Speaker")]
         [SerializeField] public Transform otherSpeakerTransform; // TODO: Should be other object's eyes, not just their transform.
 
-        #region Check Components
+        //MARK: Check Components
 
         private void Start()
         {
-            Instance ??= this;
+            // Instance ??= this;
 
             // Set up AnswerBtns
             _dialogueUI.answrBtns[0].GetComponent<Button>().onClick.AddListener(YesButtonPressed);
@@ -75,14 +73,13 @@ namespace Arcy.Dialogue
             TypewriterEffect.FinishTyping -= FinishTyping;
         }
 
-        #endregion
-
-        #region Input from InputManager
+        // MARK: Input from InputManager
 
         public string GetAppropriateDialogueString(Interaction.DialogueBlock[] dialogueArray)
         {
             string nonQuestRelatedDialogue = "1001";
             string mostRecentQuestDialogue = "1002";
+
             QuestManager questManager = transform.Find("QuestManager").GetComponent<QuestManager>();
 
             foreach (Interaction.DialogueBlock dialogue in dialogueArray)
@@ -187,9 +184,8 @@ namespace Arcy.Dialogue
                 return;
             }
         }
-        #endregion
 
-        #region SQL-query
+        // MARK: SQL-query
         List<string> RetrieveDataFromDB(string speakerID)
         {
             string dbConnectionPath = $"URI=file:{Application.dataPath}/Data/Dialogue/DB_Debug-scene.db";
@@ -246,7 +242,6 @@ namespace Arcy.Dialogue
 
             return dialogueList;
         }
-        #endregion
 
         // Triggered when TypeWriterEffect finishes typing out text
         public void FinishTyping()

@@ -152,7 +152,7 @@ namespace Arcy.Camera
 
             if (GameManager.instance.gameStateManager.CurrentGameState == GameState.Dialogue)
             {
-                targetGroup.m_Targets[1].target = DialogueManager.Instance.otherSpeakerTransform;
+                targetGroup.m_Targets[1].target = GameManager.instance.dialogueManager.otherSpeakerTransform;
             }
             else
             {

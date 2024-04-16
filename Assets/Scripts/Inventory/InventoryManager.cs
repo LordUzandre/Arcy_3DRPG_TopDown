@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Arcy.Management;
+using Arcy.Saving;
+using Arcy.Utils;
 using UnityEngine;
 
 namespace Arcy.Inventory
 {
-	public class InventoryManager : MonoBehaviour
+	public class InventoryManager : MonoBehaviour, ISaveableEntity
 	{
 		[Header("Config")]
 		[SerializeField] bool loadFromTempInventory;
@@ -17,8 +19,9 @@ namespace Arcy.Inventory
 
 		[SerializeField] public int inventorySize = 16;
 		[SerializeField] public InventorySlot[] slots;
+		[SerializeField] public SerializableDictionary<InventoryItem, int> mySerializableDictionary = new SerializableDictionary<InventoryItem, int>();
 
-		// Public:
+		// MARK: Public:
 		public static InventoryManager GetPlayerInventory()
 		{
 			return null;
@@ -140,7 +143,7 @@ namespace Arcy.Inventory
 		}
 
 
-		// PRIVATE
+		// MARK: PRIVATE
 
 		private void Awake()
 		{
@@ -260,32 +263,37 @@ namespace Arcy.Inventory
 			public int amount;
 		}
 
-		#region Save/Load
+		// MARK: Save/Load
 		// object ISaveable.CaptureState()
-		// {
-		// 	var slotStrings = new InventorySlotRecord[inventorySize];
-		// 	for (int i = 0; i < inventorySize; i++)
-		// 	{
-		// 		if (slots[i].item != null)
-		// 		{
-		// 			slotStrings[i].itemID = slots[i].item.GetGuid();
-		// 			slotStrings[i].amount = slots[i].amount;
-		// 		}
-		// 	}
-		// 	return slotStrings;
-		// }
+		public void SaveData(SaveData data)
+		{
+			data.inventory.Clear();
+
+			foreach (InventorySlot slot in slots)
+			{
+				if (slot.Item != null && slot.Amount < 0)
+				{
+					if (data.inventory.ContainsKey(slot.Item.guid))
+					{
+						data.inventory.Remove(slot.Item.guid);
+					}
+
+					data.inventory.Add(slot.Item.guid, slot.Amount);
+				}
+			}
+		}
 
 		// void ISaveable.RestoreState(object state)
-		// {
-		// 	var slotStrings = (InventorySlotRecord[])state;
-		// 	for (int i = 0; i < inventorySize; i++)
-		// 	{
-		// 		slots[i].item = InventoryItem.GetFromID(slotStrings[i].itemID);
-		// 		slots[i].amount = slotStrings[i].amount;
-		// 	}
+		public void LoadData(SaveData data)
+		{
+			// var slotStrings = (InventorySlotRecord[])state;
+			for (int i = 0; i < inventorySize; i++)
+			{
+				// slots[i].item = InventoryItem.GetFromID(slotStrings[i].itemID);
+				// slots[i].amount = slotStrings[i].amount;
+			}
 
-		// 	GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
-		// }
-		#endregion
+			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
+		}
 	}
 }

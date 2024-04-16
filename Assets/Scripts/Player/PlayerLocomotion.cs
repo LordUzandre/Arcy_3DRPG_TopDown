@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Arcy.InputManagement;
 using Arcy.Management;
 using DG.Tweening;
 
@@ -21,6 +20,9 @@ namespace Arcy.Player
         private float _inputY = 0;
         [SerializeField] private float _moveAmount = 0;
         [SerializeField] private float _movementSpeed = 0;
+        [Space]
+        [Header("VFX")]
+        [SerializeField] private ParticleSystem walkingParticles;
 
         private float _gravity = 9.8f;
         private Vector3 _velocity;
@@ -132,6 +134,7 @@ namespace Arcy.Player
         public void MoveToSpecificPosition(Vector3 newPos)
         {
             Vector3 newPosRedux = new Vector3(newPos.x, transform.position.y, newPos.z);
+
             Sequence sequence = DOTween.Sequence();
             sequence.Append(transform.DOLookAt(newPosRedux, 0.4f).SetEase(Ease.InOutSine))
             .Append(transform.DOMove(newPosRedux, 0.8f).SetEase(Ease.InOutSine))

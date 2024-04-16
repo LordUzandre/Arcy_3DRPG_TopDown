@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
 using Arcy.Management;
+using System.Data.Common;
 
 namespace Arcy.Saving
 {
@@ -15,14 +16,15 @@ namespace Arcy.Saving
 		/// </summary>
 
 		[Header("File Storage Config")]
-		[SerializeField] private bool _initializeDataIfNull = false;
+		[SerializeField] private bool _createSaveDataIfNull = true;
+		[SerializeField] private bool _saveOnApplicationQuit = true;
 		[Space]
-		[SerializeField] public string fileName;
-		[SerializeField] public bool useEncryption;
+		[SerializeField] private string _saveDataFileName = "game.save";
+		[SerializeField] private bool _useEncryption = false;
 
 		private SaveData _saveData;
 		private List<ISaveableEntity> _persistentDataObjects;
-		public FileDataHandler saveDataHandler;
+		public JsonFileDataHandler saveDataHandler;
 
 		// MARK: PUBLIC:
 
@@ -37,15 +39,16 @@ namespace Arcy.Saving
 			_saveData = saveDataHandler.Load();
 
 			// start a new game if the data is null and we're configured to initialize data for debugging purposes
-			if (_saveData == null && _initializeDataIfNull)
+			if (_saveData == null && _createSaveDataIfNull)
 			{
 				NewGame();
+				Debug.Log("New Save-file created");
 			}
 
 			// if no data can be loaded, don't continue.
 			if (_saveData == null)
 			{
-				Debug.LogError("No data was found. A new game needs to be started before data can be loaded.");
+				// Debug.LogError("No data was found. A new game needs to be started before data can be loaded.");
 				return;
 			}
 
@@ -55,7 +58,7 @@ namespace Arcy.Saving
 				persistantDataObj.LoadData(_saveData);
 			}
 
-			Debug.Log("PersistentDataManager: Loaded Data");
+			// Debug.Log("PersistentDataManager: Loaded Data");
 		}
 
 		public void SaveGame()
@@ -96,7 +99,7 @@ namespace Arcy.Saving
 
 		private void Awake()
 		{
-			saveDataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
+			saveDataHandler = new JsonFileDataHandler(Application.persistentDataPath, _saveDataFileName, _useEncryption);
 		}
 
 		private void OnEnable()
@@ -113,7 +116,10 @@ namespace Arcy.Saving
 
 		private void OnApplicationQuit()
 		{
-			SaveGame();
+			if (_saveOnApplicationQuit)
+			{
+				SaveGame();
+			}
 		}
 
 		private List<ISaveableEntity> FindAllPersistentDataObjects()

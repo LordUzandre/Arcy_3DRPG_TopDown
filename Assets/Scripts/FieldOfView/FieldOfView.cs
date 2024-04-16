@@ -17,9 +17,9 @@ namespace Arcy.Interaction
         public LayerMask obstacleMask;
 
         [HideInInspector]
-        public List<InteractibleBase> visibleTargetsList = new List<InteractibleBase>();
+        public List<IInteractibleBase> visibleTargetsList = new List<IInteractibleBase>();
         [HideInInspector]
-        public InteractibleBase currentInteractible;
+        public IInteractibleBase currentInteractible;
 
         public static Action<Vector3> moveInteractionIconHere; //used by interactionIcon
         public static Action noObjectInFocus; //used by interactionIcon, also used in PlayerManager
@@ -29,7 +29,7 @@ namespace Arcy.Interaction
 
         //private:
         private PlayerManager _playerManager;
-        private InteractibleBase _previousInteractible;
+        private IInteractibleBase _previousInteractible;
         private float _previousInteractibleDistance;
 
         void OnEnable()
@@ -110,14 +110,14 @@ namespace Arcy.Interaction
                 if (angleToTarget < (viewAngle * .5f))
                 {
                     //is the target an interactible
-                    if (collider.TryGetComponent(typeof(InteractibleBase), out Component interactibleBase))
+                    if (collider.TryGetComponent(typeof(IInteractibleBase), out Component interactibleBase))
                     {
                         float dstToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
                         //Is the object blocked by obstacleLayer? (remove and replace with different system?)
                         if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                         {
-                            InteractibleBase i = interactibleBase as InteractibleBase;
+                            IInteractibleBase i = interactibleBase as IInteractibleBase;
                             visibleTargetsList.Add(i);
 
                             switch (visibleTargetsList.Count)

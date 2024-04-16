@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Gem
   m_EditorClassIdentifier: 
   itemName: Gem
-  guid: f319902e-cd51-473e-8b06-9a2f5b10c433
+  guid: 0
+  prefab: {fileID: 0}
   inventoryIcon: {fileID: -2120673137, guid: a372901b217a84c4e8837da48499823b, type: 3}
-  showInInventory: 1
+  stackable: 1
+  description: 

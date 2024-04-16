@@ -17,7 +17,7 @@ namespace Arcy.UI
 		[Header("Quest Btn Prefab")]
 		[SerializeField] private GameObject _questLogBtnPrefab;
 
-		private Dictionary<string, QuestLogBtn> _idToBtnMap = new Dictionary<string, QuestLogBtn>();
+		private Dictionary<int, QuestLogBtn> _idToBtnMap = new Dictionary<int, QuestLogBtn>();
 
 		public QuestLogBtn CreateBtnIfNotExists(Quest quest, UnityAction selectAction)
 		{

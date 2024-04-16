@@ -12,7 +12,7 @@ namespace Arcy.Saving
 		/// Remember that a corresponding variable need to exist in SaveData
 		/// </summary>
 
-		void LoadData(SaveData data);
-		void SaveData(SaveData data);
+		void LoadData(SaveData loadData);
+		void SaveData(SaveData saveData);
 	}
 }

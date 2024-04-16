@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +8,8 @@ namespace Arcy.Inventory
 	[CreateAssetMenu(fileName = "New Item", menuName = "Arcy/Inventory/Item", order = 60)]
 	public class InventoryItem : ScriptableObject
 	{
-		[SerializeField] public string itemName;
-		[SerializeField] public string guid;
+		[SerializeField] public string itemName = "";
+		[SerializeField] public int guid = 0;
 
 		[Header("Components")]
 		[SerializeField] public GameObject prefab;
@@ -22,19 +21,19 @@ namespace Arcy.Inventory
 		[SerializeField] string description;
 
 		// static so that there is only one cache, and not one for every item
-		static Dictionary<string, InventoryItem> itemLookupCache;
+		static Dictionary<int, InventoryItem> itemLookupCache;
 
 		// PUBLIC:
 
-		/// Get the inventory item instance from its UUID.
-		/// String UUID that persists between game instances.
+		/// Get the inventory item instance from its GUID.
+		/// Int GUID that persists between game instances.
 		/// Inventory item instance corresponding to the ID.
-		public static InventoryItem GetFromID(string itemID)
+		public static InventoryItem GetFromID(int itemID)
 		{
 			// during first run:
 			if (itemLookupCache == null)
 			{
-				itemLookupCache = new Dictionary<string, InventoryItem>();
+				itemLookupCache = new Dictionary<int, InventoryItem>();
 
 				// Load all iventory items
 				var itemList = Resources.LoadAll<InventoryItem>("");
@@ -52,7 +51,7 @@ namespace Arcy.Inventory
 			}
 
 			// failsafe
-			if (itemID == null || !itemLookupCache.ContainsKey(itemID)) return null;
+			if (itemID == 0 || !itemLookupCache.ContainsKey(itemID)) return null;
 
 			return itemLookupCache[itemID];
 		}
@@ -69,7 +68,7 @@ namespace Arcy.Inventory
 			return inventoryIcon;
 		}
 
-		public string GetGuid()
+		public int GetGuid()
 		{
 			return guid;
 		}
@@ -92,13 +91,17 @@ namespace Arcy.Inventory
 		// Private:
 #if UNITY_EDITOR
 		// Generate a unique identifier
-		[ContextMenu("Generate Unique Identifier (guid)")]
-		private void GenerateGuid() { guid = System.Guid.NewGuid().ToString(); }
-
 		private void OnValidate()
 		{
-			if (guid == null)
-				GenerateGuid();
+			if (itemName != name)
+			{
+				itemName = name;
+			}
+
+			if (guid == 0)
+			{
+				guid = Mathf.Abs(System.Guid.NewGuid().GetHashCode());
+			}
 		}
 #endif
 	}

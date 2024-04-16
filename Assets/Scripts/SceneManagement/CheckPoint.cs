@@ -1,75 +1,30 @@
-//using System;
 using System.Collections;
 using System.Collections.Generic;
-using Arcy.Saving;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.VFX;
+using Arcy.Management;
+using System;
 
-namespace Arcy.SceneManagement
+namespace Arcy.Scenes
 {
-	public class CheckPoint : MonoBehaviour
+	public abstract class Checkpoint : MonoBehaviour
 	{
 		[Header("CheckPoint GUID")]
-		[SerializeField] private string _checkpointGUID;
-
-		[Header("Collider")]
-		[SerializeField] private CapsuleCollider _collider;
+		[SerializeField] public int guid;
 
 		[Header("Spawn Points")]
 		[SerializeField] public Transform spawnPoint;
 		[SerializeField] public Transform endPoint;
 
-		[Header("Torch Light VFX")]
-		[SerializeField] private VisualEffect _fireVFX;
-
-#if UNITY_EDITOR
-		private void OnValidate()
+		private void OnEnable()
 		{
-			if (_collider == null)
-				_collider = TryGetComponent<CapsuleCollider>(out CapsuleCollider hit) ? hit : null;
-
-			if (spawnPoint == null)
-				spawnPoint = transform.Find("SpawnPoint").transform;
-
-			if (endPoint == null)
-				endPoint = transform.Find("TargetPoint").transform;
-
-			if (_fireVFX == null)
-				foreach (Transform child in transform)
-				{
-					_fireVFX = TryGetComponent<VisualEffect>(out VisualEffect hit) ? hit : null;
-					break;
-				}
-
-			if (_checkpointGUID == null)
-			{
-				_checkpointGUID = System.Guid.NewGuid().ToString();
-			}
-		}
-#endif
-
-		private void Start()
-		{
-			_fireVFX.Stop();
+			GameManager.instance.gameEventManager.checkpointEvents.onNewCheckPoint += CheckpointUpdated;
 		}
 
-		private void OnTriggerEnter(Collider other)
+		private void OnDisable()
 		{
-			if (other.tag == "Player")
-			{
-				InitializeCheckpoint();
-			}
+			GameManager.instance.gameEventManager.checkpointEvents.onNewCheckPoint -= CheckpointUpdated;
 		}
 
-		private void InitializeCheckpoint()
-		{
-			if (!_fireVFX.gameObject.activeInHierarchy)
-			{
-				_fireVFX.gameObject.SetActive(true);
-			}
-
-			_fireVFX.Play();
-		}
+		public abstract void CheckpointUpdated(int guid);
 	}
 }

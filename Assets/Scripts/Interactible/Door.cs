@@ -8,7 +8,7 @@ using Arcy.Inventory;
 
 namespace Arcy.Interaction
 {
-    public class Door : MonoBehaviour, InteractibleBase
+    public class Door : MonoBehaviour, IInteractibleBase
     {
         [HideInInspector] public Transform ObjectTransform => transform;
 
