@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Arcy.Inventory;
-using Arcy.Quests;
 using Arcy.Utils;
-using UnityEngine;
 
 namespace Arcy.Saving
 {
@@ -17,6 +14,7 @@ namespace Arcy.Saving
 
 		public int mostRecentCheckpoint;
 		public SerializableDictionary<int, bool> pickupsCollected; // pickupsGuid + ifCollected
+		public int inventorySize;
 		public SerializableDictionary<int, int> inventory; // itemGuid + amount
 														   // public Quest[] questProgress;
 
@@ -25,6 +23,7 @@ namespace Arcy.Saving
 		{
 			mostRecentCheckpoint = 0;
 			pickupsCollected = new SerializableDictionary<int, bool>();
+			inventorySize = 0;
 			inventory = new SerializableDictionary<int, int>();
 		}
 	}

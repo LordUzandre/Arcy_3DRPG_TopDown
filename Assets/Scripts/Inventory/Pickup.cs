@@ -13,6 +13,27 @@ namespace Arcy.Inventory
 		[SerializeField] public int guid = 0;
 		[SerializeField] public bool collected = false;
 
+		// Cached reference
+		InventoryManager inventory;
+
+		// MARK: PUBLIC:
+
+		public void PickupItem()
+		{
+			bool foundSlot = inventory.AddToFirstEmptySlot(item, 1);
+			if (foundSlot)
+			{
+				Destroy(gameObject);
+			}
+		}
+
+		public bool CanBePickedUp()
+		{
+			return inventory.HasSpaceFor(item);
+		}
+
+		// MARK: PRIVATE:
+
 		private void OnValidate()
 		{
 			if (guid == 0)

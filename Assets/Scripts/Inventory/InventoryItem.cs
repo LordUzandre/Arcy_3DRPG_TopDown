@@ -8,17 +8,17 @@ namespace Arcy.Inventory
 	[CreateAssetMenu(fileName = "New Item", menuName = "Arcy/Inventory/Item", order = 60)]
 	public class InventoryItem : ScriptableObject
 	{
-		[SerializeField] public string itemName = "";
+		[SerializeField] private string itemName = "";
 		[SerializeField] public int guid = 0;
 
-		[Header("Components")]
-		[SerializeField] public GameObject prefab;
-		[SerializeField] Sprite inventoryIcon;
+		[Header("UI")]
+		// [SerializeField] private GameObject prefab;
+		[SerializeField] private Sprite inventoryIcon;
 		[Space]
-		// [SerializeField] bool showInInventory = true;
+		// [SerializeField] bool showInInventory = true; // Used by UI
 		[SerializeField] bool stackable = false;
 		[TextArea(3, 6)]
-		[SerializeField] string description;
+		[SerializeField] private string description;
 
 		// static so that there is only one cache, and not one for every item
 		static Dictionary<int, InventoryItem> itemLookupCache;
@@ -26,8 +26,6 @@ namespace Arcy.Inventory
 		// PUBLIC:
 
 		/// Get the inventory item instance from its GUID.
-		/// Int GUID that persists between game instances.
-		/// Inventory item instance corresponding to the ID.
 		public static InventoryItem GetFromID(int itemID)
 		{
 			// during first run:
@@ -36,13 +34,13 @@ namespace Arcy.Inventory
 				itemLookupCache = new Dictionary<int, InventoryItem>();
 
 				// Load all iventory items
-				var itemList = Resources.LoadAll<InventoryItem>("");
+				IEnumerable itemList = Resources.LoadAll<InventoryItem>("");
 
 				foreach (InventoryItem item in itemList)
 				{
 					if (itemLookupCache.ContainsKey(item.guid))
 					{
-						Debug.LogError("Looks like there's a duplicate GameDevTV.UI.InventorySystem ID for objects: " + itemLookupCache[item.guid] + " and " + item);
+						Debug.LogError("Looks like there's a duplicate InventoryItemID for objects: " + itemLookupCache[item.guid] + " and " + item);
 						continue;
 					}
 
@@ -100,7 +98,7 @@ namespace Arcy.Inventory
 
 			if (guid == 0)
 			{
-				guid = Mathf.Abs(System.Guid.NewGuid().GetHashCode());
+				guid = Utils.GuidGenerator.guid();
 			}
 		}
 #endif
