@@ -2,22 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arcy.Animation
+namespace Arcy.Player
 {
     public class PlayerAnimationHandler : MonoBehaviour
     {
         [HideInInspector] public PlayerManager playerManager;
-        [HideInInspector] public float locomotion;
+        // [HideInInspector] public float locomotion;
         [SerializeField] public Transform playerEyeLevel;
+        private string locomotionBlend = "LocomotionBlend";
 
         private void Start()
         {
             playerManager = GetComponent<PlayerManager>();
         }
 
-        public void UpdateLocomotion()
+        public void UpdateLocomotion(float moveAmount)
         {
-            playerManager.animator.SetFloat("LocomotionBlend", locomotion, .1f, Time.deltaTime);
+            playerManager.animator.SetFloat(locomotionBlend, moveAmount, .2f, Time.deltaTime);
         }
 
         public void PlayTargetActionAnimation(string targetAnimation, bool isPerformingAction, bool applyRootMotion = true, bool canRotate = false, bool canMove = false)

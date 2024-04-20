@@ -133,7 +133,7 @@ namespace Arcy.Dialogue
                 if (_dialogueUI.cvGroup.alpha != 1 || _newDialogueStarted)
                     _dialogueUI.FadeDialogueUI(true, .25f, .025f); // Fade in UI
 
-                otherSpeakerTransform = PlayerManager.instance.currentInteractible.ObjectTransform;
+                otherSpeakerTransform = Player.PlayerManager.instance.currentInteractible.ObjectTransform;
 
                 StartCoroutine(ShortDelay());
 

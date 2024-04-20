@@ -39,7 +39,7 @@ namespace Arcy.Animation
             IEnumerator ShortDelay() // Wait one frame to allow for the playerManager to be instanced
             {
                 yield return null;
-                _aimTarget ??= PlayerManager.instance.animationHandler.playerEyeLevel;
+                _aimTarget ??= Player.PlayerManager.instance.animationHandler.playerEyeLevel;
                 _aimTarget ??= GameObject.FindGameObjectWithTag("Player").transform;
                 StartCoroutine(FowRoutine());
             }

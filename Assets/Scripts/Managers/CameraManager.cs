@@ -73,7 +73,7 @@ namespace Arcy.Camera
                 case GameState.Dialogue:
                     _isFreeroam = false;
                     // Don't change camera if the ISpeakable is a sign
-                    if (PlayerManager.instance.currentInteractible is Sign)
+                    if (Player.PlayerManager.instance.currentInteractible is Sign)
                         break;
 
                     ChangeCamera(2);

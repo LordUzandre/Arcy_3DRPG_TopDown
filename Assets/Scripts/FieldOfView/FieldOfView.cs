@@ -1,8 +1,9 @@
-using System;
+// using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Android;
+using Arcy.Player;
+using Arcy.Management;
 
 namespace Arcy.Interaction
 {
@@ -20,9 +21,6 @@ namespace Arcy.Interaction
         public List<IInteractibleBase> visibleTargetsList = new List<IInteractibleBase>();
         [HideInInspector]
         public IInteractibleBase currentInteractible;
-
-        public static Action<Vector3> moveInteractionIconHere; //used by interactionIcon
-        public static Action noObjectInFocus; //used by interactionIcon, also used in PlayerManager
 
         [HideInInspector]
         public bool multipleTargetsInView; //used by FieldOfViewEditor
@@ -52,10 +50,10 @@ namespace Arcy.Interaction
                 {
                     _previousInteractible = currentInteractible;
 
-                    if (moveInteractionIconHere != null && currentInteractible.isInteractible)
+                    if (currentInteractible.isInteractible)
                     {
                         //calcuate interactionIcons new position
-                        moveInteractionIconHere(currentInteractible.ObjectTransform.position);
+                        GameManager.instance.gameEventManager.interactionEvents.onMoveInteractionIconHere(currentInteractible.ObjectTransform.position);
                     }
 
                     if (_playerManager != null)
@@ -80,7 +78,7 @@ namespace Arcy.Interaction
 
         public void RemoveIcon()
         {
-            noObjectInFocus?.Invoke();
+            GameManager.instance.gameEventManager.interactionEvents.noObjectInFocus();
         }
 
         /// <summary> 

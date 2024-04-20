@@ -11,7 +11,7 @@ namespace Arcy.Quests
         // scriptable object info
         public QuestInfoSO questSO;
         // state-enum info
-        public QuestStateEnum currentStatusEnum;
+        public QuestObjectiveEnum currentStatusEnum;
 
         // current objective Index
         private int _currentQuestObjectiveIndex;
@@ -28,7 +28,7 @@ namespace Arcy.Quests
         public Quest(QuestInfoSO questInfo)
         {
             questSO = questInfo;
-            currentStatusEnum = QuestStateEnum.REQUIREMENTS_NOT_MET;
+            currentStatusEnum = QuestObjectiveEnum.REQUIREMENTS_NOT_MET;
             _currentQuestObjectiveIndex = 0;
             _questObjectiveStates = new QuestObjectiveState[questSO.questObjectivePrefabs.Length];
 
@@ -39,7 +39,7 @@ namespace Arcy.Quests
         }
 
         // A quest from save state
-        public Quest(QuestInfoSO questInfo, QuestStateEnum questState, int currentQuestObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
+        public Quest(QuestInfoSO questInfo, QuestObjectiveEnum questState, int currentQuestObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
         {
             questSO = questInfo;
             currentStatusEnum = questState;
@@ -59,9 +59,9 @@ namespace Arcy.Quests
         }
 
         // The data of the quest that is going to get saved/loaded
-        public QuestData GetQuestData()
+        public QuestSaveData GetQuestData()
         {
-            return new QuestData(currentStatusEnum, _currentQuestObjectiveIndex, _questObjectiveStates);
+            return new QuestSaveData(currentStatusEnum, _currentQuestObjectiveIndex, _questObjectiveStates);
         }
         #endregion
 
@@ -120,11 +120,11 @@ namespace Arcy.Quests
         {
             string fullStatus = "";
 
-            if (currentStatusEnum == QuestStateEnum.REQUIREMENTS_NOT_MET)
+            if (currentStatusEnum == QuestObjectiveEnum.REQUIREMENTS_NOT_MET)
             {
                 fullStatus = "Requirements are not met yet to start this quest";
             }
-            else if (currentStatusEnum == QuestStateEnum.CAN_START)
+            else if (currentStatusEnum == QuestObjectiveEnum.CAN_START)
             {
                 fullStatus = "This Quest can be started";
             }
@@ -135,11 +135,11 @@ namespace Arcy.Quests
                     fullStatus += "<s>" + _questObjectiveStates[i].status + "</s>\n";
                 }
 
-                if (currentStatusEnum == QuestStateEnum.CAN_FINISH)
+                if (currentStatusEnum == QuestObjectiveEnum.CAN_FINISH)
                 {
                     fullStatus += "The quest is ready to be turned in.";
                 }
-                else if (currentStatusEnum == QuestStateEnum.FINISHED)
+                else if (currentStatusEnum == QuestObjectiveEnum.FINISHED)
                 {
                     fullStatus += "The quest has been completed";
                 }

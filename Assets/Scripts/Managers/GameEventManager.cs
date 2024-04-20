@@ -17,21 +17,25 @@ namespace Arcy.Management
 
 		public InputEvents inputEvents;
 
+		public CheckpointEvents checkpointEvents;
+		public DialogueEvents dialogueEvents;
+		public InteractionEvents interactionEvents;
+		public InventoryEvents inventoryEvents;
 		public PlayerEvents playerEvents;
 		public QuestEvents questEvents;
-		public InventoryEvents inventoryEvents;
-		public DialogueEvents dialogueEvents;
-		public CheckpointEvents checkpointEvents;
 
 		public void Initialize()
 		{
 			//initialize all events
 			inputEvents = new InputEvents();
+
+			checkpointEvents = new CheckpointEvents();
+			dialogueEvents = new DialogueEvents();
+			interactionEvents = new InteractionEvents();
+			inventoryEvents = new InventoryEvents();
 			playerEvents = new PlayerEvents();
 			questEvents = new QuestEvents();
-			inventoryEvents = new InventoryEvents();
-			dialogueEvents = new DialogueEvents();
-			checkpointEvents = new CheckpointEvents();
 		}
+
 	}
 }

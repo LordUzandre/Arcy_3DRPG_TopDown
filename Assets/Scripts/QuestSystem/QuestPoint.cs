@@ -16,7 +16,7 @@ namespace Arcy.Quests
 		[SerializeField] private QuestInfoSO questInfoForPoint;
 		private bool _playerIsNear = false;
 		private int questId;
-		private QuestStateEnum currentQuestState;
+		private QuestObjectiveEnum currentQuestState;
 
 		[SerializeField] private bool startPoint;
 		[SerializeField] private bool finishPoint;
@@ -28,13 +28,13 @@ namespace Arcy.Quests
 
 		private void OnEnable()
 		{
-			GameManager.instance.gameEventManager.questEvents.onQuestStateChange += QuestStateChange;
+			// GameManager.instance.gameEventManager.questEvents.onQuestStateChange += QuestStateChange;
 			GameManager.instance.gameEventManager.inputEvents.onInteractionInputPressed += SubmitPressed;
 		}
 
 		private void OnDisable()
 		{
-			GameManager.instance.gameEventManager.questEvents.onQuestStateChange -= QuestStateChange;
+			// GameManager.instance.gameEventManager.questEvents.onQuestStateChange -= QuestStateChange;
 			GameManager.instance.gameEventManager.inputEvents.onInteractionInputPressed -= SubmitPressed;
 		}
 
@@ -54,11 +54,11 @@ namespace Arcy.Quests
 			if (!_playerIsNear)
 				return;
 
-			if (currentQuestState.Equals(QuestStateEnum.CAN_START) && startPoint)
+			if (currentQuestState.Equals(QuestObjectiveEnum.CAN_START) && startPoint)
 			{
 				GameManager.instance.gameEventManager.questEvents.StartQuest(questId);
 			}
-			else if (currentQuestState.Equals(QuestStateEnum.CAN_FINISH) && finishPoint)
+			else if (currentQuestState.Equals(QuestObjectiveEnum.CAN_FINISH) && finishPoint)
 			{
 				GameManager.instance.gameEventManager.questEvents.FinishQuest(questId);
 			}

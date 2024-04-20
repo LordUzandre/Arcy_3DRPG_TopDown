@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
-using Arcy.Camera;
+using Arcy.Management;
 
 namespace Arcy.Interaction
 {
@@ -52,16 +52,16 @@ namespace Arcy.Interaction
         private void OnEnable()
         {
             //subscribe to events
-            FieldOfView.moveInteractionIconHere += NewInteractibleInFocus;
-            FieldOfView.noObjectInFocus += NoObjectInFocus;
+            GameManager.instance.gameEventManager.interactionEvents.onMoveInteractionIconHere += NewInteractibleInFocus;
+            GameManager.instance.gameEventManager.interactionEvents.onNoObjectInFocus += NoObjectInFocus;
 
         }
 
         private void OnDisable()
         {
             //de-subscribe from events
-            FieldOfView.moveInteractionIconHere -= NewInteractibleInFocus;
-            FieldOfView.noObjectInFocus -= NoObjectInFocus;
+            GameManager.instance.gameEventManager.interactionEvents.onMoveInteractionIconHere -= NewInteractibleInFocus;
+            GameManager.instance.gameEventManager.interactionEvents.onNoObjectInFocus -= NoObjectInFocus;
         }
 
         private void Update()

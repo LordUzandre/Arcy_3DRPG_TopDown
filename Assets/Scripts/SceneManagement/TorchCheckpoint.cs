@@ -44,6 +44,8 @@ namespace Arcy.Scenes
 
 		private void Start()
 		{
+			_fireVFX.gameObject.SetActive(true);
+
 			if (GameManager.instance.checkpointManager.mostRecentCheckpointGUID != guid)
 			{
 				_fireVFX.Stop();

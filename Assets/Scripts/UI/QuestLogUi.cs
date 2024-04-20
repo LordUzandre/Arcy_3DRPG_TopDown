@@ -25,12 +25,12 @@ namespace Arcy.UI
 
 		private void OnEnable()
 		{
-			GameManager.instance.gameEventManager.questEvents.onQuestStateChange += QuestStateChange;
+			// GameManager.instance.gameEventManager.questEvents.onQuestStateChange += QuestStateChange;
 		}
 
 		private void OnDisable()
 		{
-			GameManager.instance.gameEventManager.questEvents.onQuestStateChange -= QuestStateChange;
+			// GameManager.instance.gameEventManager.questEvents.onQuestStateChange -= QuestStateChange;
 		}
 
 		#region FadeUI. TODO - replace with own pause Menu system

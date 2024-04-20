@@ -34,22 +34,29 @@ namespace Arcy.Quests
 			}
 		}
 
-		public event Action<Quest> onQuestStateChange;
-		public void QuestStateChange(Quest quest)
+		// public event Action<Quest> onQuestStateChange;
+		// public void QuestStateChange(Quest quest)
+		// {
+		// 	if (onQuestStateChange != null)
+		// 	{
+		// 		onQuestStateChange(quest);
+		// 	}
+		// }
+
+		// public event Action<int, int, QuestObjectiveState> onQuestObjectiveStateChange;
+		// public void QuestObjectiveStateChange(int questId, int stepIndex, QuestObjectiveState questStepState)
+		// {
+		// 	if (onQuestObjectiveStateChange != null)
+		// 	{
+		// 		onQuestObjectiveStateChange(questId, stepIndex, questStepState);
+		// 	}
+		// }
+
+		public event Action<int> OnObjectiveFinished;
+		public void ObjectiveFinished(int questID)
 		{
-			if (onQuestStateChange != null)
-			{
-				onQuestStateChange(quest);
-			}
+			OnObjectiveFinished?.Invoke(questID);
 		}
 
-		public event Action<int, int, QuestObjectiveState> onQuestObjectiveStateChange;
-		public void QuestObjectiveStateChange(int questId, int stepIndex, QuestObjectiveState questStepState)
-		{
-			if (onQuestObjectiveStateChange != null)
-			{
-				onQuestObjectiveStateChange(questId, stepIndex, questStepState);
-			}
-		}
 	}
 }

@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace Arcy.Quests
 {
-	public abstract class QuestObjective : MonoBehaviour
+	// [CreateAssetMenu(fileName = "new Objective", menuName = "Arcy/Quests/Objectives")]
+	public abstract class QuestObjective : ScriptableObject
 	{
 		/// <summary>
 		/// This class acts as a parent class for quest objectives.
@@ -16,35 +17,11 @@ namespace Arcy.Quests
 		/// </summary>
 
 		[Header("Status text for Journal UI")]
-		[TextArea(2, 6)][SerializeField] public string statusText;
+		[TextArea(2, 6)][SerializeField] public string uiStatusText;
 
-		public abstract bool ThisObjectiveCanBeSkipped { get; set; } // TODO: Not yet implemented
-		public bool isFinished = false;
-		private int _questId;
-		private int _objectiveIndex;
+		public abstract bool objectiveCanBeSkipped { get; set; }
 
-		// Initialized by Quest when the prefab is instantiated
-		public virtual void InitializeObjective(int questId, int objectiveIndex)
-		{
-			_questId = questId;
-			_objectiveIndex = objectiveIndex;
-		}
-
-		protected void ChangeUiStatus(string newState, string newUiStatus)
-		{
-			GameManager.instance.gameEventManager.questEvents.QuestObjectiveStateChange(_questId, _objectiveIndex, new QuestObjectiveState(newState, newUiStatus));
-		}
-
-		protected void FinishObjective()
-		{
-			if (!isFinished)
-			{
-				isFinished = true;
-				GameManager.instance.gameEventManager.questEvents.AdvanceQuest(_questId);
-
-				// Destroy the gameobject after the objective is finished(?)
-				Destroy(this.gameObject);
-			}
-		}
+		public abstract void InitializeObjective();
+		public abstract void FinishObjective();
 	}
 }

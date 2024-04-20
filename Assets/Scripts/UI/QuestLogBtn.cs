@@ -32,19 +32,19 @@ namespace Arcy.UI
 			_onSelectAction();
 		}
 
-		public void SetState(QuestStateEnum state)
+		public void SetState(QuestObjectiveEnum state)
 		{
 			switch (state)
 			{
-				case QuestStateEnum.REQUIREMENTS_NOT_MET:
-				case QuestStateEnum.CAN_START:
+				case QuestObjectiveEnum.REQUIREMENTS_NOT_MET:
+				case QuestObjectiveEnum.CAN_START:
 					_btnTMP.color = Color.red;
 					break;
-				case QuestStateEnum.STARTED:
-				case QuestStateEnum.CAN_FINISH:
+				case QuestObjectiveEnum.STARTED:
+				case QuestObjectiveEnum.CAN_FINISH:
 					_btnTMP.color = Color.yellow;
 					break;
-				case QuestStateEnum.FINISHED:
+				case QuestObjectiveEnum.FINISHED:
 					_btnTMP.color = Color.green;
 					break;
 				default:

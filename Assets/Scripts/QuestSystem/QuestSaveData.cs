@@ -6,22 +6,24 @@ using UnityEngine;
 namespace Arcy.Quests
 {
 	[System.Serializable]
-	public class QuestData
+	public class QuestSaveData
 	{
 		/// <summary>
 		/// This is the data that gets saved/loaded by QuestManager in the "original" saving system.
 		/// </summary>
 
-		public QuestStateEnum state;
-		public int questObjectiveIndex;
+		public QuestObjectiveEnum state;
 		public QuestObjectiveState[] questObjectiveStates;
+		public int questObjectiveIndex;
 
 		// Constructor
-		public QuestData(QuestStateEnum state, int questObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
+		public QuestSaveData(QuestObjectiveEnum state, int questObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
 		{
 			this.state = state;
-			this.questObjectiveIndex = questObjectiveIndex;
 			this.questObjectiveStates = questObjectiveStates;
+			this.questObjectiveIndex = questObjectiveIndex;
 		}
 	}
+
+
 }

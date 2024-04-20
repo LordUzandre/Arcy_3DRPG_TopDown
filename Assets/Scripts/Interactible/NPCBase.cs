@@ -83,7 +83,7 @@ namespace Arcy.Interaction
         {
             if (shouldTurn)
             {
-                transform.DOLookAt(PlayerManager.instance.gameObject.transform.position, 1f);
+                transform.DOLookAt(Player.PlayerManager.instance.gameObject.transform.position, 1f);
             }
             else
             {

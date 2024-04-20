@@ -87,7 +87,7 @@ namespace Arcy.Interaction
 
         Vector3 newPos()
         {
-            Transform playerTransform = PlayerManager.instance.transform;
+            Transform playerTransform = Player.PlayerManager.instance.transform;
             Vector3 newPosition = new Vector3();
 
             // Calculate distances

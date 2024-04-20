@@ -34,12 +34,12 @@ namespace Arcy.UI
 
 		private void OnEnable()
 		{
-			GameManager.instance.gameEventManager.questEvents.onQuestStateChange += QuestUpdated;
+			// GameManager.instance.gameEventManager.questEvents.onQuestStateChange += QuestUpdated;
 		}
 
 		private void OnDisable()
 		{
-			GameManager.instance.gameEventManager.questEvents.onQuestStateChange -= QuestUpdated;
+			// GameManager.instance.gameEventManager.questEvents.onQuestStateChange -= QuestUpdated;
 		}
 
 		public void QuestUpdated(Quest quest)

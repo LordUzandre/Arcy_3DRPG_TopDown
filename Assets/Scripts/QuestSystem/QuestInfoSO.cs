@@ -29,10 +29,6 @@ namespace Arcy.Quests
         [Header("Rewards")]
         [SerializeField] public Inventory.InventorySlot[] rewardItems;
 
-        // Generate a unique identifier
-        // [ContextMenu("Generate Unique Identifier (guid)")]
-        // private void GenerateGuid() { guid = System.Guid.NewGuid().ToString(); }
-
 #if UNITY_EDITOR
         private void OnValidate()
         {

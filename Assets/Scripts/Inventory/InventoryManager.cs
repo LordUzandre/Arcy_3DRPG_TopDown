@@ -17,9 +17,9 @@ namespace Arcy.Inventory
 
 		[Space]
 		[SerializeField] public int inventorySize = 16;
-		[SerializeField] public static InventorySlot[] slots;
+		[SerializeField] public InventorySlot[] slots;
 
-		// MARK: PUBLIC:
+		// MARK: PUBLIC
 
 		// Single item
 		public bool HasSpaceFor(InventoryItem item)
@@ -273,8 +273,9 @@ namespace Arcy.Inventory
 				return;
 			}
 
-			List<InventorySlot> inventoryToBeAdded = new List<InventorySlot>();
+			// Load from LoadData
 			int count = 0;
+			List<InventorySlot> inventoryToBeAdded = new List<InventorySlot>();
 
 			foreach (int itemID in loadData.inventory.Keys)
 			{
@@ -286,7 +287,7 @@ namespace Arcy.Inventory
 				InventorySlot newSlot = new InventorySlot();
 
 				newSlot.Item = InventoryItem.GetFromID(itemID);
-				// Debug.Log(newSlot.Item.GetDisplayName() + " added to inventory");
+				Debug.Log(newSlot.Item.GetDisplayName() + " added to inventory");
 
 				if (newSlot.Item != null)
 				{
@@ -299,11 +300,9 @@ namespace Arcy.Inventory
 				}
 
 				count++;
-
 			}
 
 			slots = inventoryToBeAdded.ToArray();
-			// GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 		}
 	}
 }
