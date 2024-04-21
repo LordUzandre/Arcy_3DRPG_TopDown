@@ -202,6 +202,10 @@ namespace Arcy.Quests
 
 		public void SaveData(SaveData saveData)
 		{
+			foreach (SerializableQuest quest in _questLog.Values)
+			{
+
+			}
 		}
 
 		// TODO - Change so that the changes saves at convenient intervals, rather than when quitting the game

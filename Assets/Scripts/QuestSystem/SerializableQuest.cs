@@ -9,24 +9,26 @@ namespace Arcy.Quests
 	{
 		[SerializeField] int questGUID = 0;
 		[Header("UI")]
-		[SerializeField] string QuestName;
-		[SerializeField] string questGiver;
+		[SerializeField] public string QuestName;
+		[SerializeField] public string questGiver;
 		[Header("Objectives")]
-		[SerializeField] QuestObjectiveEnum questState;
-		[SerializeField] QuestObjective[] objectives;
-		[SerializeField] int objectiveIndex = 0;
+		[SerializeField] public bool questStarted;
+		[SerializeField] public bool questFinished;
+		[SerializeField] public QuestObjectiveEnum questState;
+		[SerializeField] public QuestObjective[] objectives;
+		[SerializeField] public int objectiveIndex = 0;
 		[Header("Requirements")]
-		[SerializeField] Utils.SerializableDictionary<string, int> requirements = new Utils.SerializableDictionary<string, int>();
+		[SerializeField] public Utils.SerializableDictionary<string, int> requirements = new Utils.SerializableDictionary<string, int>();
 		[Space]
-		[SerializeField] string requiredTeamMember = "";
-		[SerializeField] int requiredPlayerLvl = 0;
-		[SerializeField] int requiredPreviousQuestID = 0;
-		[SerializeField] int requiredItemID = 0;
-		[SerializeField] int requiredPreviousDialogueID = 0;
-		[SerializeField] int initialDialogueID = 0;
-		[SerializeField] int requiredBattleID = 0;
+		[SerializeField] public string requiredTeamMember = "";
+		[SerializeField] public int requiredPlayerLvl = 0;
+		[SerializeField] public int requiredPreviousQuestID = 0;
+		[SerializeField] public int requiredItemID = 0;
+		[SerializeField] public int requiredPreviousDialogueID = 0;
+		[SerializeField] public int initialDialogueID = 0;
+		[SerializeField] public int requiredBattleID = 0;
 		[Header("Rewards")]
-		Inventory.InventorySlot[] rewards;
+		[SerializeField] public Inventory.InventorySlot[] questRewards;
 
 		private void Reset()
 		{
