@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using Arcy.Player;
 using Arcy.Management;
 
@@ -153,4 +154,42 @@ namespace Arcy.Interaction
             return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
         }
     }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(FieldOfView))]
+    public class FieldOfViewEditor : Editor
+    {
+        private void OnSceneGUI()
+        {
+            FieldOfView fow = (FieldOfView)target;
+            Vector3 pos = new Vector3(fow.transform.position.x, fow.transform.position.y + 1, fow.transform.position.z);
+
+            //Draw view cone
+            Handles.color = Color.white;
+
+            Vector3 viewAngleA = fow.DirFromAngle(-fow.viewAngle * .5f, false);
+            Handles.DrawLine(pos, pos + viewAngleA * fow.viewRadius);
+            Vector3 viewAngleB = fow.DirFromAngle(fow.viewAngle * .5f, false);
+            Handles.DrawLine(pos, pos + viewAngleB * fow.viewRadius);
+
+            Handles.DrawWireArc(pos, Vector3.up, viewAngleA, fow.viewAngle, fow.viewRadius);
+            //Draw line to current interactible
+            if (fow.multipleTargetsInView)
+            {
+                foreach (IInteractibleBase i in fow.visibleTargetsList)
+                {
+                    if (i == fow.currentInteractible) Handles.color = Color.red;
+                    else Handles.color = Color.white;
+
+                    Handles.DrawLine(fow.transform.position, fow.currentInteractible.ObjectTransform.position);
+                }
+            }
+            else if (fow.currentInteractible != null)
+            {
+                Handles.color = Color.red;
+                Handles.DrawLine(fow.transform.position, fow.currentInteractible.ObjectTransform.position);
+            }
+        }
+    }
+#endif
 }

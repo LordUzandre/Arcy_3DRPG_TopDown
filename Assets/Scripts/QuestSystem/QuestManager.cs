@@ -11,13 +11,13 @@ namespace Arcy.Quests
 	{
 		[Header("Config")]
 		[Tooltip("Should QuestManager load up quests from SaveData (old version)?")]
-		[SerializeField] private bool loadQuestState = true;
+		// [SerializeField] private bool loadQuestState = true;
 
 		public Dictionary<int, Quest> questLog; // Key = string, Value = Quest
 
-		[SerializeField] private SerializableQuest[] quests;
+		[SerializeField] private QuestSO[] quests;
 
-		[SerializeField] private Dictionary<int, SerializableQuest> _questLog;
+		[SerializeField] private Dictionary<int, QuestSO> _questLog;
 
 		// MARK: PUBLIC:
 
@@ -202,7 +202,7 @@ namespace Arcy.Quests
 
 		public void SaveData(SaveData saveData)
 		{
-			foreach (SerializableQuest quest in _questLog.Values)
+			foreach (QuestSO quest in _questLog.Values)
 			{
 
 			}

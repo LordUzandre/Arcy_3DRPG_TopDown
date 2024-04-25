@@ -6066,7 +6066,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.62572736, y: 0.00000015934981, z: -0.00000012782587, w: 0.7800419}
+  m_LocalRotation: {x: 0.6257274, y: -0.0000000051111506, z: 0.0000000041000003, w: 0.7800418}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -19988,19 +19988,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadQuestState: 0
   quests:
-  - questGUID: 0
-    QuestName: 
-    questState: 0
-    objectives:
-    - {fileID: 0}
-    - {fileID: 0}
-    objectiveIndex: 0
-    requiredPlayerLvl: 0
-    requiredPreviousQuestID: 0
-    requiredItemID: 0
-    requiredPreviousDialogueID: 0
-    requiredDialogueID: 0
-    requiredBattleID: 0
+  - {fileID: 0}
 --- !u!4 &1046625785 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1974469421575533030, guid: 61d468a2f1c51574f8882294089b6f10,
