@@ -14,7 +14,7 @@ namespace Arcy.Quests
 		[SerializeField] public string questGiver;
 		// Requirements
 		[Space]
-		[SerializeField] UI.InEditorEnum[] requirementsToStartQuest;
+		[SerializeField] UI.QuestRequirement[] requirementsToStartQuest;
 		[Header("Objectives")]
 		[SerializeField] public QuestObjectiveEnum questState;
 		[SerializeField] public bool questStarted;

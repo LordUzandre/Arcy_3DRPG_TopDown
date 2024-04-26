@@ -6066,7 +6066,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6257274, y: -0.0000000051111506, z: 0.0000000041000003, w: 0.7800418}
+  m_LocalRotation: {x: 0.6257274, y: -0.0000000051111715, z: 0.0000000041000345, w: 0.7800418}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6445,21 +6445,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogue:
-  - questRelated: 1
-    questGUID: 0
-    questStatus: 1
-    singleUseDialogue: 0
-    dialogueID: 
-  - questRelated: 1
-    questGUID: 0
-    questStatus: 2
-    singleUseDialogue: 0
-    dialogueID: 
-  - questRelated: 1
-    questGUID: 0
-    questStatus: 4
-    singleUseDialogue: 0
-    dialogueID: 
+  - dialogueID: 1002
+    questRelated: 0
+    questGUID: 3855
+    questStatus: 0
+  - dialogueID: 1003
+    questRelated: 0
+    questGUID: 5
+    questStatus: 0
+  - dialogueID: 1004
+    questRelated: 0
+    questGUID: 24552262
+    questStatus: 0
+  - dialogueID: 1005
+    questRelated: 0
+    questGUID: 11456789
+    questStatus: 0
   _npcAnimationHandler: {fileID: 298947207}
   eyeLevel: {fileID: 731691751}
   battleCharBaseStats: {fileID: 0}
@@ -14923,26 +14924,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogue:
-  - questRelated: 1
+  - dialogueID: 
+    questRelated: 1
     questGUID: 0
     questStatus: 1
-    singleUseDialogue: 0
-    dialogueID: 
-  - questRelated: 1
+  - dialogueID: 
+    questRelated: 1
     questGUID: 0
     questStatus: 2
-    singleUseDialogue: 0
-    dialogueID: 
-  - questRelated: 1
+  - dialogueID: 
+    questRelated: 1
     questGUID: 0
     questStatus: 3
-    singleUseDialogue: 1
-    dialogueID: 
-  - questRelated: 1
+  - dialogueID: 
+    questRelated: 1
     questGUID: 0
     questStatus: 4
-    singleUseDialogue: 0
-    dialogueID: 
   _npcAnimationHandler: {fileID: 737674171}
   eyeLevel: {fileID: 841683208}
   battleCharBaseStats: {fileID: 0}
@@ -19986,7 +19983,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f5b21c361d90b4ea1975b7996d2472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadQuestState: 0
   quests:
   - {fileID: 0}
 --- !u!4 &1046625785 stripped
@@ -20974,11 +20970,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogue:
-  - questRelated: 0
+  - dialogueID: 
+    questRelated: 0
     questGUID: 0
     questStatus: 0
-    singleUseDialogue: 0
-    dialogueID: 
   _npcAnimationHandler: {fileID: 1115710267}
   eyeLevel: {fileID: 674135155}
   battleCharBaseStats: {fileID: 0}

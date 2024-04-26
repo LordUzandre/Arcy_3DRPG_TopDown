@@ -13,8 +13,17 @@ MonoBehaviour:
   m_Name: Placeholder Quest
   m_EditorClassIdentifier: 
   questGUID: 1831556963
-  QuestName: 
-  questGiver: 
+  questName: Placeholder Quest
+  questGiver: Red Jammo
+  requirementsToStartQuest:
+  - requirements: 4
+    requiredLvl: 0
+    requiredTeamMember: 
+    requiredPreviousQuestID: 0
+    itemID: 0
+    requiredDialogueID: 1001
+    battleID: 0
+    requirementIsMet: 0
   questState: 0
   questStarted: 0
   questFinished: 0
@@ -23,10 +32,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   objectiveIndex: 0
-  requirements:
-  - _requirements: 0
-    _requiredLvl: 0
-    _teamMember: 
   questRewards:
   - _item: {fileID: 0}
     _amount: 0

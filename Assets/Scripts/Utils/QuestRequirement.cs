@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System;
 
 namespace Arcy.UI
 {
 	[System.Serializable]
-	public class InEditorEnum
+	public class QuestRequirement
 	{
 		public Requirement requirements;
 		public int requiredLvl = 0;
@@ -30,7 +29,7 @@ namespace Arcy.UI
 	}
 
 #if UNITY_EDITOR
-	[CustomPropertyDrawer(typeof(InEditorEnum))]
+	[CustomPropertyDrawer(typeof(QuestRequirement))]
 	public class GUIEditor : PropertyDrawer
 	{
 		private SerializedProperty _requirement; // enum
@@ -65,27 +64,27 @@ namespace Arcy.UI
 			{
 				case 0:
 					_requiredPlayerLvl = property.FindPropertyRelative("requiredLvl");
-					DrawPlayerLvlProperty(position, _requiredPlayerLvl, "Required Player Lvl", _requirementIsMet);
+					DrawIntProperty(position, _requiredPlayerLvl, "Required Player Lvl", _requirementIsMet);
 					break;
 				case 1:
 					_requiredTeamMember = property.FindPropertyRelative("requiredTeamMember");
-					DrawPlayerLvlProperty(position, _requiredTeamMember, "Required Character in your Party", _requirementIsMet);
+					DrawIntProperty(position, _requiredTeamMember, "Required Character in your Party", _requirementIsMet);
 					break;
 				case 2:
 					_requiredPreviousQuestID = property.FindPropertyRelative("requiredPreviousQuestID");
-					DrawPlayerLvlProperty(position, _requiredPreviousQuestID, "Required Previous Quest", _requirementIsMet);
+					DrawIntProperty(position, _requiredPreviousQuestID, "Required Previous Quest", _requirementIsMet);
 					break;
 				case 3:
 					_itemID = property.FindPropertyRelative("itemID");
-					DrawPlayerLvlProperty(position, _itemID, "Required Item ID", _requirementIsMet);
+					DrawIntProperty(position, _itemID, "Required Item ID", _requirementIsMet);
 					break;
 				case 4:
 					_dialogueID = property.FindPropertyRelative("requiredDialogueID");
-					DrawPlayerLvlProperty(position, _dialogueID, "Required Dialogue ID", _requirementIsMet);
+					DrawIntProperty(position, _dialogueID, "Required Dialogue ID", _requirementIsMet);
 					break;
 				case 5:
 					_battleID = property.FindPropertyRelative("battleID");
-					DrawPlayerLvlProperty(position, _battleID, "Required Item ID", _requirementIsMet);
+					DrawIntProperty(position, _battleID, "Required Item ID", _requirementIsMet);
 					break;
 				default:
 					break;
@@ -102,7 +101,7 @@ namespace Arcy.UI
 			return (EditorGUIUtility.singleLineHeight * totalLines) + 4;
 		}
 
-		private void DrawPlayerLvlProperty(Rect position, SerializedProperty property, string title, SerializedProperty requirementFullfilled)
+		private void DrawIntProperty(Rect position, SerializedProperty property, string title, SerializedProperty requirementFullfilled)
 		{
 			EditorGUIUtility.labelWidth = 0; // 0 = standard width
 			EditorGUI.PropertyField(indentRect(position, 1), property, new GUIContent(title));
