@@ -45,7 +45,7 @@ namespace Arcy.Quests
 
 		private bool ItemIsInInventory()
 		{
-			foreach (InventorySlot slot in GameManager.instance.inventoryManager.slots)
+			foreach (InventorySlot slot in GameManager.instance.inventoryManager.consumableSlots)
 			{
 				if (slot.Item == item)
 				{

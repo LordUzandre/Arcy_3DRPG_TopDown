@@ -54,7 +54,7 @@ namespace Arcy.Scenes
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other.tag == "Player")
+			if (other == Player.PlayerManager.player)
 			{
 				if (GameManager.instance.checkpointManager.mostRecentCheckpointGUID == guid)
 				{

@@ -1,12 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Arcy.Management;
 using Arcy.Saving;
-using Arcy.Utils;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Arcy.Inventory
 {
@@ -17,7 +13,8 @@ namespace Arcy.Inventory
 
 		[Space]
 		[SerializeField] public int inventorySize = 16;
-		[SerializeField] public InventorySlot[] slots;
+		[SerializeField] public InventorySlot[] equipmentSlots;
+		[SerializeField] public InventorySlot[] consumableSlots;
 
 		// MARK: PUBLIC
 
@@ -57,7 +54,7 @@ namespace Arcy.Inventory
 		public int AvailableSlots()
 		{
 			int count = 0;
-			foreach (InventorySlot slot in slots)
+			foreach (InventorySlot slot in consumableSlots)
 			{
 				if (slot.Amount < 1)
 				{
@@ -69,7 +66,7 @@ namespace Arcy.Inventory
 
 		public int GetInventorySize()
 		{
-			return slots.Length;
+			return consumableSlots.Length;
 		}
 
 		/// <summary>
@@ -77,9 +74,9 @@ namespace Arcy.Inventory
 		/// </summary>
 		public bool HasItem(InventoryItem item)
 		{
-			for (int i = 0; i < slots.Length; i++)
+			for (int i = 0; i < consumableSlots.Length; i++)
 			{
-				if (object.ReferenceEquals(slots[i].Item, item))
+				if (object.ReferenceEquals(consumableSlots[i].Item, item))
 				{
 					return true;
 				}
@@ -93,12 +90,11 @@ namespace Arcy.Inventory
 
 			if (i < 0)
 			{
-				Debug.Log("Unable to find free ");
 				return false;
 			}
 
-			slots[i].Item = item;
-			slots[i].Amount += amount;
+			consumableSlots[i].Item = item;
+			consumableSlots[i].Amount += amount;
 
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
@@ -110,9 +106,9 @@ namespace Arcy.Inventory
 		/// </summary>
 		public bool InventoryHoldsItem(InventoryItem item)
 		{
-			for (int i = 0; i < slots.Length; i++)
+			for (int i = 0; i < consumableSlots.Length; i++)
 			{
-				if (object.ReferenceEquals(slots[i].Item, item))
+				if (object.ReferenceEquals(consumableSlots[i].Item, item))
 				{
 					return true;
 				}
@@ -123,40 +119,31 @@ namespace Arcy.Inventory
 
 		public InventoryItem GetItemInSlot(int slot)
 		{
-			return slots[slot].Item;
+			return consumableSlots[slot].Item;
 		}
 
 		public int GetAmountInSlot(int slot)
 		{
-			return slots[slot].Amount;
+			return consumableSlots[slot].Amount;
 		}
 
 		public void RemoveFromSlot(int slot, int amount)
 		{
-			slots[slot].Amount -= amount;
-			if (slots[slot].Amount <= 0)
+			consumableSlots[slot].Amount -= amount;
+			if (consumableSlots[slot].Amount <= 0)
 			{
-				slots[slot].Amount = 0;
-				slots[slot].Item = null;
+				consumableSlots[slot].Amount = 0;
+				consumableSlots[slot].Item = null;
 			}
 
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 		}
 
-		/// <summary>
-		/// Will add an item to the given slot if possible. If there is already
-		/// a stack of this type, it will add to the existing stack. Otherwise,
-		/// it will be added to the first empty slot.
-		/// </summary>
-		/// <param name="slot">The slot to attempt to add to.</param>
-		/// <param name="item">The item type to add.</param>
-		/// <param name="amount">The number of items to add.</param>
-		/// <returns>True if the item was added anywhere in the inventory.</returns>
 		public bool AddItemToSlot(int slot, InventoryItem item, int amount)
 		{
-			if (slots[slot].Item != null)
+			if (consumableSlots[slot].Item != item)
 			{
-				return AddToFirstEmptySlot(item, amount); ;
+				return AddToFirstEmptySlot(item, amount);
 			}
 
 			int i = FindStack(item);
@@ -165,14 +152,13 @@ namespace Arcy.Inventory
 				slot = i;
 			}
 
-			slots[slot].Item = item;
-			slots[slot].Amount += amount;
+			consumableSlots[slot].Item = item;
+			consumableSlots[slot].Amount += amount;
 
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
 			return true;
 		}
-
 
 		// MARK: PRIVATE
 
@@ -201,9 +187,9 @@ namespace Arcy.Inventory
 		/// </summary>
 		private int FindEmptySlot()
 		{
-			for (int i = 0; i < slots.Length; i++)
+			for (int i = 0; i < consumableSlots.Length; i++)
 			{
-				if (slots[i].Item == null)
+				if (consumableSlots[i].Item == null)
 				{
 					return i;
 				}
@@ -220,6 +206,7 @@ namespace Arcy.Inventory
 			if (i < 0)
 			{
 				i = FindEmptySlot();
+				Debug.Log("First Empty Slot Found: " + i);
 			}
 			return i;
 		}
@@ -234,9 +221,9 @@ namespace Arcy.Inventory
 				return -1;
 			}
 
-			for (int i = 0; i < slots.Length; i++)
+			for (int i = 0; i < consumableSlots.Length; i++)
 			{
-				if (object.ReferenceEquals(slots[i].Item, item))
+				if (object.ReferenceEquals(consumableSlots[i].Item, item))
 				{
 					return i;
 				}
@@ -251,7 +238,7 @@ namespace Arcy.Inventory
 			saveData.inventorySize = inventorySize;
 			// saveData.inventory.Clear();
 
-			foreach (InventorySlot slot in slots)
+			foreach (InventorySlot slot in consumableSlots)
 			{
 				if (slot.Item != null && slot.Amount > 0)
 				{
@@ -269,40 +256,41 @@ namespace Arcy.Inventory
 		{
 			if (loadData.inventory.Count < 1)
 			{
-				slots = LoadFromStarterInventory();
+				consumableSlots = LoadFromStarterInventory();
 				return;
 			}
 
 			// Load from LoadData
-			int count = 0;
-			List<InventorySlot> inventoryToBeAdded = new List<InventorySlot>();
+			List<InventorySlot> consumablesToBeAdded = new List<InventorySlot>();
 
-			foreach (int itemID in loadData.inventory.Keys)
+			foreach (KeyValuePair<int, int> itemID in loadData.inventory)
 			{
-				if (itemID == 0 || loadData.inventorySize < count)
+				if (itemID.Key == 0 || itemID.Value <= 0)
 				{
-					break;
+					continue;
 				}
 
-				InventorySlot newSlot = new InventorySlot();
+				InventorySlot newSlot = new InventorySlot(InventoryItem.GetFromID(itemID.Key), itemID.Value);
 
-				newSlot.Item = InventoryItem.GetFromID(itemID);
-				Debug.Log(newSlot.Item.GetDisplayName() + " added to inventory");
-
-				if (newSlot.Item != null)
+				if (newSlot.Item == null)
 				{
-					newSlot.Amount = loadData.inventory[itemID];
+					Debug.LogError("Unable to access item: " + itemID.Key);
+					continue;
 				}
 
-				if (newSlot.Item != null && newSlot.Amount > 0)
-				{
-					inventoryToBeAdded.Add(newSlot);
-				}
-
-				count++;
+				consumablesToBeAdded.Add(newSlot);
 			}
 
-			slots = inventoryToBeAdded.ToArray();
+			if (consumablesToBeAdded.Count < inventorySize)
+			{
+				int remainingSlots = inventorySize - consumablesToBeAdded.Count;
+				for (int i = 0; i < remainingSlots; i++)
+				{
+					consumablesToBeAdded.Add(null);
+				}
+			}
+
+			consumableSlots = consumablesToBeAdded.ToArray();
 		}
 	}
 }

@@ -6066,7 +6066,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6257274, y: -0.0000000051111715, z: 0.0000000041000345, w: 0.7800418}
+  m_LocalRotation: {x: 0.62572736, y: 0.0000001593498, z: -0.00000012782586, w: 0.7800419}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6456,10 +6456,6 @@ MonoBehaviour:
   - dialogueID: 1004
     questRelated: 0
     questGUID: 24552262
-    questStatus: 0
-  - dialogueID: 1005
-    questRelated: 0
-    questGUID: 11456789
     questStatus: 0
   _npcAnimationHandler: {fileID: 298947207}
   eyeLevel: {fileID: 731691751}
@@ -19955,7 +19951,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1041419797
 Transform:
   m_ObjectHideFlags: 0
@@ -20387,7 +20383,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   starterInventory: {fileID: 11400000, guid: 59b78ac134b9be948b6539d1fd8fe5ec, type: 2}
   inventorySize: 16
-  slots: []
+  equipmentSlots: []
+  consumableSlots: []
 --- !u!1 &1065765422
 GameObject:
   m_ObjectHideFlags: 0
@@ -34422,7 +34419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f7c424f4fd6ca48b9148daa6b95d7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
+  item: {fileID: 11400000, guid: c45f0b6e5ca5222408c9f04428b82016, type: 2}
   guid: 1859241773
   collected: 0
 --- !u!135 &1738376781

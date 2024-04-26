@@ -75,14 +75,14 @@ namespace Arcy.Dialogue
 
         // MARK: Input from InputManager
 
-        public string GetAppropriateDialogueString(Interaction.DialogueBlock[] dialogueArray)
+        public string GetAppropriateDialogueString(DialogueBlock[] dialogueArray)
         {
             string nonQuestRelatedDialogue = "1001";
             string mostRecentQuestDialogue = "1002";
 
             QuestManager questManager = transform.Find("QuestManager").GetComponent<QuestManager>();
 
-            foreach (Interaction.DialogueBlock dialogue in dialogueArray)
+            foreach (DialogueBlock dialogue in dialogueArray)
             {
                 if (!dialogue.questRelated && nonQuestRelatedDialogue == "1001")
                 {

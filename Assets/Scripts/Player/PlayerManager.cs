@@ -14,6 +14,7 @@ namespace Arcy.Player
     {
         //Singleton
         public static PlayerManager instance;
+        public static Collider player;
 
         // MARK: Variables
         [HideInInspector] public PlayerLocomotion playerLocomotion;
@@ -27,7 +28,6 @@ namespace Arcy.Player
         [HideInInspector] public bool isInteracting = false; // interaction
         [HideInInspector] public FieldOfView fow;
         public IInteractibleBase currentInteractible;
-        private float _delta;
 
         // MARK: PUBLIC:
 
@@ -43,7 +43,7 @@ namespace Arcy.Player
 
         public void InteractionKeyPressed() //triggered by inputManager in Freeroam, when there's an interactible
         {
-            if (currentInteractible is ISpeakable speakableObject)
+            if (currentInteractible is Dialogue.ISpeakable speakableObject)
             {
                 if (!isInteracting)
                 {
@@ -89,6 +89,7 @@ namespace Arcy.Player
 
             //Singleton
             if (instance == null) { instance = this; } else { Destroy(this); }
+            player = GetComponent<CharacterController>();
         }
 
         private void OnEnable()

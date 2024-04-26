@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 namespace Arcy.Inventory
 {
 	[CreateAssetMenu(fileName = "New Item", menuName = "Arcy/Inventory/Item", order = 60)]
 	public class InventoryItem : ScriptableObject
 	{
-		[SerializeField] private string itemName = "";
-		[SerializeField] public int guid = 0;
+		[HideInInspector] public string itemName = "";
+		[HideInInspector] public int guid;
+		[SerializeField] public bool showInInventory = true; // Used by UI
 
 		[Header("UI")]
-		// [SerializeField] private GameObject prefab;
 		[SerializeField] private Sprite inventoryIcon;
 		[Space]
-		// [SerializeField] bool showInInventory = true; // Used by UI
-		[SerializeField] bool stackable = false;
+		[SerializeField] private bool stackable = false;
 		[TextArea(3, 6)]
 		[SerializeField] private string description;
 
@@ -98,9 +98,29 @@ namespace Arcy.Inventory
 
 			if (guid == 0)
 			{
-				guid = Utils.GuidGenerator.guid();
+				guid = Utils.GuidGenerator.guid(this);
 			}
 		}
 #endif
 	}
+
+#if UNITY_EDITOR
+	[CustomEditor(typeof(InventoryItem))]
+	public class ItemEditor : Editor
+	{
+		public override void OnInspectorGUI()
+		{
+			InventoryItem item = (InventoryItem)target;
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("Item Name", item.itemName.ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("Guid", item.guid.ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.EndHorizontal();
+
+			base.DrawDefaultInspector();
+		}
+	}
+#endif
 }

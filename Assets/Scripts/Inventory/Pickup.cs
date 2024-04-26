@@ -44,7 +44,7 @@ namespace Arcy.Inventory
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other.tag == "Player" && item != null)
+			if (other == Player.PlayerManager.player && item != null)
 			{
 				collected = true;
 				gameObject.SetActive(false);

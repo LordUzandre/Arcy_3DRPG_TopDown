@@ -39,85 +39,61 @@ namespace Arcy.UI
 		private SerializedProperty _itemID; // int
 		private SerializedProperty _dialogueID;
 		private SerializedProperty _battleID; // int
-		private SerializedProperty _requirementIsMet; // bool
+		private SerializedProperty _requirementIsFullfilled; // bool
 
 		// How to draw on the inspector window
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			EditorGUI.BeginProperty(position, label, property);
-
-			// Rect foldOutBox = new Rect(position.min.x, position.min.y, position.size.x, EditorGUIUtility.singleLineHeight);
-			// property.isExpanded = EditorGUI.Foldout(foldOutBox, property.isExpanded, label);
-
-			EditorGUIUtility.labelWidth = 0;
-			float xStartPos = position.min.x;
-			float yStartPos = position.min.y;
-			float width = position.size.x * 0.99f;
-			Rect drawArea = new Rect(xStartPos, yStartPos, width, EditorGUIUtility.singleLineHeight);
-
 			_requirement = property.FindPropertyRelative("requirements");
-			_requirementIsMet = property.FindPropertyRelative("requirementIsMet");
+			_requirementIsFullfilled = property.FindPropertyRelative("requirementIsMet");
 
-			EditorGUI.PropertyField(drawArea, _requirement, new GUIContent("Requirement type"));
+			EditorGUILayout.PropertyField(_requirement);
+			EditorGUI.indentLevel = 1;
 
 			switch (_requirement.intValue)
 			{
 				case 0:
 					_requiredPlayerLvl = property.FindPropertyRelative("requiredLvl");
-					DrawIntProperty(position, _requiredPlayerLvl, "Required Player Lvl", _requirementIsMet);
+					DrawIntProperty(_requiredPlayerLvl, _requirementIsFullfilled);
 					break;
 				case 1:
 					_requiredTeamMember = property.FindPropertyRelative("requiredTeamMember");
-					DrawIntProperty(position, _requiredTeamMember, "Required Character in your Party", _requirementIsMet);
+					DrawIntProperty(_requiredTeamMember, _requirementIsFullfilled);
 					break;
 				case 2:
 					_requiredPreviousQuestID = property.FindPropertyRelative("requiredPreviousQuestID");
-					DrawIntProperty(position, _requiredPreviousQuestID, "Required Previous Quest", _requirementIsMet);
+					DrawIntProperty(_requiredPreviousQuestID, _requirementIsFullfilled);
 					break;
 				case 3:
 					_itemID = property.FindPropertyRelative("itemID");
-					DrawIntProperty(position, _itemID, "Required Item ID", _requirementIsMet);
+					DrawIntProperty(_itemID, _requirementIsFullfilled);
 					break;
 				case 4:
 					_dialogueID = property.FindPropertyRelative("requiredDialogueID");
-					DrawIntProperty(position, _dialogueID, "Required Dialogue ID", _requirementIsMet);
+					DrawIntProperty(_dialogueID, _requirementIsFullfilled);
 					break;
 				case 5:
 					_battleID = property.FindPropertyRelative("battleID");
-					DrawIntProperty(position, _battleID, "Required Item ID", _requirementIsMet);
+					DrawIntProperty(_battleID, _requirementIsFullfilled);
 					break;
 				default:
 					break;
 			}
 
-			EditorGUI.EndProperty();
+			EditorGUI.indentLevel = 0;
 		}
 
-		// request Vertical space, return it
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+		// public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+		// {
+		// 	return 0;
+		// }
+
+		private void DrawIntProperty(SerializedProperty property, SerializedProperty requirementFullfilled)
 		{
-			int totalLines = 3;
-
-			return (EditorGUIUtility.singleLineHeight * totalLines) + 4;
+			EditorGUILayout.PropertyField(property);
+			EditorGUILayout.PropertyField(requirementFullfilled);
 		}
 
-		private void DrawIntProperty(Rect position, SerializedProperty property, string title, SerializedProperty requirementFullfilled)
-		{
-			EditorGUIUtility.labelWidth = 0; // 0 = standard width
-			EditorGUI.PropertyField(indentRect(position, 1), property, new GUIContent(title));
-			EditorGUI.PropertyField(indentRect(position, 2), requirementFullfilled, new GUIContent("Requirement is fullfilled"));
-		}
-
-		private Rect indentRect(Rect pos, int numberInList)
-		{
-			float xStartPos = pos.min.x + 20;
-			float yStartPos = pos.min.y + (EditorGUIUtility.singleLineHeight * numberInList) + (2 * numberInList);
-			float width = pos.size.x * 0.99f - 20;
-			float height = EditorGUIUtility.singleLineHeight;
-
-			Rect drawArea = new Rect(xStartPos, yStartPos, width, height);
-			return drawArea;
-		}
 	}
 #endif
 
