@@ -13,10 +13,6 @@ namespace Arcy.Dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
-        //singleton
-        // private static DialogueManager instance;
-        // public static DialogueManager Instance { get; private set; }
-
         public event Action Skip;
 
         /// <summary>
@@ -26,14 +22,14 @@ namespace Arcy.Dialogue
 
         [Header("Dialogue UI")]
         [SerializeField] private DialogueUI _dialogueUI;
-        [SerializeField] private TMP_Text _tmpText;
+        [SerializeField] private TMP_Text _dialogueTMP;
 
         // public:
+        public LanguageEnum language = LanguageEnum.english; // Remember: Set up language handler
         public int _dialogueIndex = 0;
-        [SerializeField] private string _speakerID;
-        public string language = "english"; // Remember: Set up language handler
 
         // private:
+        [SerializeField] private string _speakerID;
         [SerializeField] private List<string> _dialogueBlock;
         [SerializeField] private List<string> _choices;
         [SerializeField] private List<string> _moods;
@@ -47,31 +43,7 @@ namespace Arcy.Dialogue
         private WaitForSeconds _delayBeforeDialogue;
 
         [Header("Other Speaker")]
-        [SerializeField] public Transform otherSpeakerTransform; // TODO: Should be other object's eyes, not just their transform.
-
-        //MARK: Check Components
-
-        private void Start()
-        {
-            // Instance ??= this;
-
-            // Set up AnswerBtns
-            _dialogueUI.answrBtns[0].GetComponent<Button>().onClick.AddListener(YesButtonPressed);
-            _dialogueUI.answrBtns[1].GetComponent<Button>().onClick.AddListener(NoButtonPressed);
-        }
-
-        private void OnEnable()
-        {
-            TypewriterEffect.FinishTyping += FinishTyping;
-
-            //_shortDelay = new WaitForSeconds(0.05f);
-            _delayBeforeDialogue = new WaitForSeconds(0.5f);
-        }
-
-        private void OnDisable()
-        {
-            TypewriterEffect.FinishTyping -= FinishTyping;
-        }
+        [SerializeField] public Transform otherSpeakerTransform;
 
         // MARK: Input from InputManager
 
@@ -113,7 +85,7 @@ namespace Arcy.Dialogue
         // Input started by PlayerManager when an interactible has dialogue
         public void RunDialogue(string speakerID)
         {
-            _tmpText.maxVisibleCharacters = 0;
+            _dialogueTMP.maxVisibleCharacters = 0;
             _dialogueUI.EnableDialogueBtns(false, true); // Hide all dialogue Btns
 
             // Choice is handled by AnswrBtnPressed
@@ -144,7 +116,7 @@ namespace Arcy.Dialogue
                     else
                         yield return null;
 
-                    _tmpText.text = _dialogueBlock[0]; // Write out text.
+                    _dialogueTMP.text = _dialogueBlock[0]; // Write out text.
                 }
 
                 return;
@@ -152,7 +124,7 @@ namespace Arcy.Dialogue
             else if (_nextDialogueBool) // Happens once we finish typing out the sentence
             {
                 _nextDialogueBool = false;
-                _tmpText.text = _dialogueBlock[_dialogueIndex];
+                _dialogueTMP.text = _dialogueBlock[_dialogueIndex];
 
                 return;
             }
@@ -171,22 +143,72 @@ namespace Arcy.Dialogue
                 _moods.Clear();
                 _speakerID = null;
                 otherSpeakerTransform = null;
-                _tmpText.text = null;
+                _dialogueTMP.text = null;
                 _dialogueIndex = 0;
                 _currentlyInDialogueBool = false;
                 _newDialogueStarted = false;
                 GameManager.instance.gameStateManager.SetState(GameState.Freeroam);
                 return;
             }
-            else if (_tmpText.maxVisibleCharacters != _tmpText.textInfo.characterCount - 1)
+            else if (_dialogueTMP.maxVisibleCharacters != _dialogueTMP.textInfo.characterCount - 1)
             {
                 Skip?.Invoke();
                 return;
             }
         }
 
+        // Triggered when TypeWriterEffect finishes typing out text
+        public void FinishTyping()
+        {
+            if (_currentlyInDialogueBool)
+            {
+                // Check whether there is a question being asked
+                if (_choices[_dialogueIndex] != "null")
+                {
+                    _choiceBool = true;
+                    _dialogueUI?.EnableDialogueBtns(true);
+                    return;
+                }
+
+                if (_dialogueIndex < _dialogueBlock.Count - 1)
+                {
+                    _dialogueIndex++;
+                    _nextDialogueBool = true;
+                    _dialogueUI?.EnableDialogueBtns(false, false); // Only Show _nxtBtn
+                }
+                else
+                {
+                    _choiceBool = false;
+                    _nextDialogueBool = false;
+                    _canExitBool = true;
+                    _dialogueUI?.EnableDialogueBtns(false, false); // Hide all dialogueBtns
+                }
+            }
+        }
+
+        // MARK: PRIVATE
+
+        private void Start()
+        {
+            // Set up AnswerBtns
+            _dialogueUI.answrBtns[0].GetComponent<Button>().onClick.AddListener(YesButtonPressed);
+            _dialogueUI.answrBtns[1].GetComponent<Button>().onClick.AddListener(NoButtonPressed);
+        }
+
+        private void OnEnable()
+        {
+            TypewriterEffect.FinishTyping += FinishTyping;
+
+            _delayBeforeDialogue = new WaitForSeconds(0.5f);
+        }
+
+        private void OnDisable()
+        {
+            TypewriterEffect.FinishTyping -= FinishTyping;
+        }
+
         // MARK: SQL-query
-        List<string> RetrieveDataFromDB(string speakerID)
+        private List<string> RetrieveDataFromDB(string speakerID)
         {
             string dbConnectionPath = $"URI=file:{Application.dataPath}/Data/Dialogue/DB_Debug-scene.db";
 
@@ -241,35 +263,6 @@ namespace Arcy.Dialogue
             _choices = choices;
 
             return dialogueList;
-        }
-
-        // Triggered when TypeWriterEffect finishes typing out text
-        public void FinishTyping()
-        {
-            if (_currentlyInDialogueBool)
-            {
-                // Check whether there is a question being asked
-                if (_choices[_dialogueIndex] != "null")
-                {
-                    _choiceBool = true;
-                    _dialogueUI?.EnableDialogueBtns(true);
-                    return;
-                }
-
-                if (_dialogueIndex < _dialogueBlock.Count - 1)
-                {
-                    _dialogueIndex++;
-                    _nextDialogueBool = true;
-                    _dialogueUI?.EnableDialogueBtns(false, false); // Only Show _nxtBtn
-                }
-                else
-                {
-                    _choiceBool = false;
-                    _nextDialogueBool = false;
-                    _canExitBool = true;
-                    _dialogueUI?.EnableDialogueBtns(false, false); // Hide all dialogueBtns
-                }
-            }
         }
 
         // When we push one of the AnswrBtns

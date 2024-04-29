@@ -16,7 +16,7 @@ namespace Arcy.Inventory
 		[Header("UI")]
 		[SerializeField] private Sprite inventoryIcon;
 		[Space]
-		[SerializeField] private bool stackable = false;
+		[SerializeField] public bool stackable = false;
 		[TextArea(3, 6)]
 		[SerializeField] private string description;
 
@@ -92,14 +92,10 @@ namespace Arcy.Inventory
 		private void OnValidate()
 		{
 			if (itemName != name)
-			{
 				itemName = name;
-			}
 
 			if (guid == 0)
-			{
 				guid = Utils.GuidGenerator.guid(this);
-			}
 		}
 #endif
 	}

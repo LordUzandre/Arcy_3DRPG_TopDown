@@ -33,6 +33,7 @@ namespace Arcy.Dialogue
         private SerializedProperty _dialogueID; // string
         private SerializedProperty _questRelated; // bool
         private SerializedProperty _questID; // string
+        private SerializedProperty _label;
 
         private string _dialoguePreview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 
@@ -40,16 +41,17 @@ namespace Arcy.Dialogue
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            //int rowNumber = 0;
-            EditorGUI.BeginProperty(position, label, property);
-
             _dialogueID = property.FindPropertyRelative("dialogueID");
             _questRelated = property.FindPropertyRelative("questRelated");
             _questID = property.FindPropertyRelative("questGUID");
 
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUI.LabelField(new Rect(), "DialogueBlock");
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.BeginProperty(position, label, property);
             EditorGUILayout.PropertyField(_dialogueID); // int
             EditorGUILayout.PropertyField(_questRelated); // bool
-
             EditorGUI.indentLevel = 1;
 
             if (_questRelated.boolValue == true)
@@ -66,17 +68,7 @@ namespace Arcy.Dialogue
             EditorGUI.EndProperty();
         }
 
-        // PRIVATE:
-
-        private Rect drawRect(Rect position, int numberInList)
-        {
-            float xStartPos = position.min.x + 18;
-            float yStartPos = position.min.y + (EditorGUIUtility.singleLineHeight * numberInList) + (2 * numberInList);
-            float width = position.size.x - 18;
-            float height = EditorGUIUtility.singleLineHeight * 2;
-            Rect rect = new Rect(xStartPos, yStartPos, width, height);
-            return rect;
-        }
     }
 #endif
+
 }

@@ -18,6 +18,7 @@ namespace Arcy.Saving
 		[Header("File Storage Config")]
 		[SerializeField] private bool _createSaveDataIfNull = true;
 		[SerializeField] private bool _saveOnApplicationQuit = true;
+		[SerializeField] private bool _debugging = false;
 		[Space]
 		[SerializeField] private string _saveDataFileName = "game.save";
 		[SerializeField] private bool _useEncryption = false;
@@ -42,13 +43,13 @@ namespace Arcy.Saving
 			if (_saveData == null && _createSaveDataIfNull)
 			{
 				NewGame();
-				Debug.Log("New Save-file created");
+				if (_debugging) Debug.Log("New Save-file created");
 			}
 
 			// if no data can be loaded, don't continue.
 			if (_saveData == null)
 			{
-				// Debug.LogError("No data was found. A new game needs to be started before data can be loaded.");
+				Debug.LogError("No data was found. A new game needs to be started before data can be loaded.");
 				return;
 			}
 
@@ -58,7 +59,7 @@ namespace Arcy.Saving
 				persistantDataObj.LoadData(_saveData);
 			}
 
-			// Debug.Log("PersistentDataManager: Loaded Data");
+			if (_debugging) Debug.Log("PersistentDataManager: Loaded Data");
 		}
 
 		public void SaveGame()

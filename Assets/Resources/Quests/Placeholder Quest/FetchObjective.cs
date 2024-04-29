@@ -47,9 +47,9 @@ namespace Arcy.Quests
 		{
 			foreach (InventorySlot slot in GameManager.instance.inventoryManager.consumableSlots)
 			{
-				if (slot.Item == item)
+				if (slot.GetItem() == item)
 				{
-					if (slot.Amount >= amount)
+					if (slot.GetAmount() >= amount)
 					{
 						FinishObjective();
 						return true;

@@ -9,7 +9,8 @@ namespace Arcy.Inventory
 	public class InventoryManager : MonoBehaviour, ISaveableEntity
 	{
 		[Header("Config")]
-		[SerializeField] InventorySO starterInventory;
+		[SerializeField] private StarterInventory _starterInventoryPrefab;
+		[SerializeField] private bool _debugging;
 
 		[Space]
 		[SerializeField] public int inventorySize = 16;
@@ -56,7 +57,7 @@ namespace Arcy.Inventory
 			int count = 0;
 			foreach (InventorySlot slot in consumableSlots)
 			{
-				if (slot.Amount < 1)
+				if (slot.GetAmount() < 1)
 				{
 					count++;
 				}
@@ -76,7 +77,7 @@ namespace Arcy.Inventory
 		{
 			for (int i = 0; i < consumableSlots.Length; i++)
 			{
-				if (object.ReferenceEquals(consumableSlots[i].Item, item))
+				if (object.ReferenceEquals(consumableSlots[i].GetItem(), item))
 				{
 					return true;
 				}
@@ -93,8 +94,8 @@ namespace Arcy.Inventory
 				return false;
 			}
 
-			consumableSlots[i].Item = item;
-			consumableSlots[i].Amount += amount;
+			consumableSlots[i].SetItem(item);
+			consumableSlots[i].AddtoAmount(amount);
 
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
@@ -108,7 +109,7 @@ namespace Arcy.Inventory
 		{
 			for (int i = 0; i < consumableSlots.Length; i++)
 			{
-				if (object.ReferenceEquals(consumableSlots[i].Item, item))
+				if (object.ReferenceEquals(consumableSlots[i].GetItem(), item))
 				{
 					return true;
 				}
@@ -119,21 +120,21 @@ namespace Arcy.Inventory
 
 		public InventoryItem GetItemInSlot(int slot)
 		{
-			return consumableSlots[slot].Item;
+			return consumableSlots[slot].GetItem();
 		}
 
 		public int GetAmountInSlot(int slot)
 		{
-			return consumableSlots[slot].Amount;
+			return consumableSlots[slot].GetAmount();
 		}
 
 		public void RemoveFromSlot(int slot, int amount)
 		{
-			consumableSlots[slot].Amount -= amount;
-			if (consumableSlots[slot].Amount <= 0)
+			consumableSlots[slot].SubstractFromSlot(amount);
+			if (consumableSlots[slot].GetAmount() <= 0)
 			{
-				consumableSlots[slot].Amount = 0;
-				consumableSlots[slot].Item = null;
+				consumableSlots[slot].SetAmount(0);
+				consumableSlots[slot].SetItem(null);
 			}
 
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
@@ -141,7 +142,7 @@ namespace Arcy.Inventory
 
 		public bool AddItemToSlot(int slot, InventoryItem item, int amount)
 		{
-			if (consumableSlots[slot].Item != item)
+			if (consumableSlots[slot].GetItem() != item)
 			{
 				return AddToFirstEmptySlot(item, amount);
 			}
@@ -152,8 +153,8 @@ namespace Arcy.Inventory
 				slot = i;
 			}
 
-			consumableSlots[slot].Item = item;
-			consumableSlots[slot].Amount += amount;
+			consumableSlots[slot].SetItem(item);
+			consumableSlots[slot].AddtoAmount(amount);
 
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
@@ -164,7 +165,28 @@ namespace Arcy.Inventory
 
 		private InventorySlot[] LoadFromStarterInventory()
 		{
-			return starterInventory.itemSlots;
+			if (_starterInventoryPrefab != null)
+			{
+				// Get the original array
+				InventorySlot[] originalArray = _starterInventoryPrefab.LoadStarterInventory();
+				InventorySlot[] clonedArray = new InventorySlot[originalArray.Length];
+
+				for (int i = 0; i < inventorySize; i++)
+				{
+					InventoryItem newItem = originalArray[i].GetItem();
+					// Create a new InventorySlot instance with the cloned InventoryItem and amount
+					clonedArray[i] = new InventorySlot(newItem, originalArray[i].GetAmount());
+				}
+
+				if (_debugging) Debug.Log("Loaded from Starter Inventory");
+
+				return clonedArray;
+			}
+			else
+			{
+				Debug.LogError("Inventory Manager was unable to acquire items from starterInventory");
+				return null;
+			}
 		}
 
 		private void OnEnable()
@@ -189,7 +211,7 @@ namespace Arcy.Inventory
 		{
 			for (int i = 0; i < consumableSlots.Length; i++)
 			{
-				if (consumableSlots[i].Item == null)
+				if (consumableSlots[i].GetItem() == null)
 				{
 					return i;
 				}
@@ -223,7 +245,7 @@ namespace Arcy.Inventory
 
 			for (int i = 0; i < consumableSlots.Length; i++)
 			{
-				if (object.ReferenceEquals(consumableSlots[i].Item, item))
+				if (object.ReferenceEquals(consumableSlots[i].GetItem(), item))
 				{
 					return i;
 				}
@@ -235,19 +257,19 @@ namespace Arcy.Inventory
 		// MARK: Save/Load
 		public void SaveData(SaveData saveData)
 		{
+			saveData.inventory.Clear();
 			saveData.inventorySize = inventorySize;
-			// saveData.inventory.Clear();
 
 			foreach (InventorySlot slot in consumableSlots)
 			{
-				if (slot.Item != null && slot.Amount > 0)
+				if (slot.GetItem() != null && slot.GetAmount() > 0)
 				{
-					if (saveData.inventory.ContainsKey(slot.Item.guid))
+					if (saveData.inventory.ContainsKey(slot.GetItem().guid))
 					{
-						saveData.inventory.Remove(slot.Item.guid);
+						saveData.inventory.Remove(slot.GetItem().guid);
 					}
 
-					saveData.inventory.Add(slot.Item.guid, slot.Amount);
+					saveData.inventory.Add(slot.GetItem().guid, slot.GetAmount());
 				}
 			}
 		}
@@ -256,6 +278,7 @@ namespace Arcy.Inventory
 		{
 			if (loadData.inventory.Count < 1)
 			{
+				// consumableSlots = new InventorySlot[inventorySize];
 				consumableSlots = LoadFromStarterInventory();
 				return;
 			}
@@ -272,7 +295,7 @@ namespace Arcy.Inventory
 
 				InventorySlot newSlot = new InventorySlot(InventoryItem.GetFromID(itemID.Key), itemID.Value);
 
-				if (newSlot.Item == null)
+				if (newSlot.GetItem() == null)
 				{
 					Debug.LogError("Unable to access item: " + itemID.Key);
 					continue;

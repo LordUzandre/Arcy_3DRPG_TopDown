@@ -35,9 +35,9 @@ namespace Arcy.Interaction
 
                 foreach (Inventory.InventorySlot slot in loot)
                 {
-                    if (slot.Item != null && slot.Amount > 0)
+                    if (slot.GetItem() != null && slot.GetAmount() > 0)
                     {
-                        // TODO - Spawn the loot
+                        // TODO - Spawn the loot & Add To Inventory
                     }
                 }
             }

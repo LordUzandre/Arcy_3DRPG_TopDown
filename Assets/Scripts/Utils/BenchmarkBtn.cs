@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using Unity.VisualScripting;
 using System;
-using System.Diagnostics;
-using Debug = UnityEngine.Debug;
+using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace Arcy.Utils
 {
@@ -17,28 +16,24 @@ namespace Arcy.Utils
 
 		public IEnumerable<BenchmarkData> RunBenchmark(int iterations)
 		{
-			if (Benchmarks == null)
-			{
-				Debug.LogError("No benchmarks found");
-			}
-
 			foreach (var benchmark in Benchmarks)
 			{
 				yield return Run(benchmark);
 			}
 
-			BenchmarkData Run(BenchmarkData data)
+			BenchmarkData Run(BenchmarkData benchmarkData)
 			{
 				Stopwatch watch = Stopwatch.StartNew();
 
 				for (var i = 0; i < iterations; i++)
 				{
-					data.Action();
+					benchmarkData.Action();
 				}
 
 				watch.Stop();
-				data.Result = watch.ElapsedMilliseconds;
-				return data;
+				benchmarkData.Result = watch.ElapsedMilliseconds;
+				Debug.Log(benchmarkData.Result);
+				return benchmarkData;
 			}
 		}
 	}
@@ -52,15 +47,20 @@ namespace Arcy.Utils
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
+			GUILayout.Space(20);
 
 			BenchmarkBtn myThingue = (BenchmarkBtn)target;
 
-			iterations = EditorGUILayout.IntSlider(iterations, 1, 100);
+			iterations = EditorGUILayout.IntSlider("Iterations", iterations, 1, 1000);
 
-			if (GUILayout.Button("In Editor Btn"))
+			GUILayout.BeginHorizontal();
+			GUILayout.FlexibleSpace();
+			if (GUILayout.Button("In Editor Btn", GUILayout.MinWidth(240), GUILayout.MinHeight(80)))
 			{
-				myThingue.RunBenchmark(iterations);
+				// myThingue.RunBenchmark(iterations);
 			}
+			GUILayout.FlexibleSpace();
+			GUILayout.EndHorizontal();
 		}
 	}
 
