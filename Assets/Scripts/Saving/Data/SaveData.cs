@@ -13,18 +13,30 @@ namespace Arcy.Saving
 		/// </summary>
 
 		public int mostRecentCheckpoint;
-		public SerializableDictionary<int, bool> pickupsCollected; // pickupsGuid + ifCollected
+		// Inventory:
 		public int inventorySize;
+		public SerializableDictionary<int, bool> pickupsCollected; // pickupsGuid + ifCollected
 		public SerializableDictionary<int, int> inventory; // itemGuid + amount
-														   // public Quest[] questProgress;
+
+		// Quests
+		public List<int> nonStartedQuests; // GUID
+		public SerializableDictionary<int, int> startedQuests; // GUID + objectiveIndex
+		public List<int> finishedQuests; // GUID
 
 		// The values in his constructor will be our default values that the game starts with when there's no data to load.
 		public SaveData()
 		{
 			mostRecentCheckpoint = 0;
-			pickupsCollected = new SerializableDictionary<int, bool>();
+
+			// Inventory:
 			inventorySize = 0;
+			pickupsCollected = new SerializableDictionary<int, bool>();
 			inventory = new SerializableDictionary<int, int>();
+
+			// Quests:
+			nonStartedQuests = new List<int>();
+			startedQuests = new SerializableDictionary<int, int>();
+			finishedQuests = new List<int>();
 		}
 	}
 }

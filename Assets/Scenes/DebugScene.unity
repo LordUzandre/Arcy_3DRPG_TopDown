@@ -6210,7 +6210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6257274, y: -0.0000000051111715, z: 0.0000000041000345, w: 0.7800418}
+  m_LocalRotation: {x: 0.62572736, y: 0.0000001593498, z: -0.00000012782586, w: 0.7800419}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6589,17 +6589,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogue:
-  - dialogueID: 1002
+  - dialogueID: 1001
     questRelated: 0
-    questGUID: 3855
-    questStatus: 0
-  - dialogueID: 1003
-    questRelated: 0
-    questGUID: 5
-    questStatus: 0
-  - dialogueID: 1004
-    questRelated: 0
-    questGUID: 24552262
+    questGUID: 0
     questStatus: 0
   _npcAnimationHandler: {fileID: 298947207}
   eyeLevel: {fileID: 731691751}
@@ -15068,22 +15060,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogue:
-  - dialogueID: 
-    questRelated: 1
+  - dialogueID: 1001
+    questRelated: 0
     questGUID: 0
-    questStatus: 1
-  - dialogueID: 
-    questRelated: 1
-    questGUID: 0
-    questStatus: 2
-  - dialogueID: 
-    questRelated: 1
-    questGUID: 0
-    questStatus: 3
-  - dialogueID: 
-    questRelated: 1
-    questGUID: 0
-    questStatus: 4
+    questStatus: 0
   _npcAnimationHandler: {fileID: 737674171}
   eyeLevel: {fileID: 841683208}
   battleCharBaseStats: {fileID: 0}
@@ -15099,7 +15079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cef6563725224f608cea882f738c380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 841683271}
+  animator: {fileID: 1599682890}
   _aimController: {fileID: 214296736}
   _multiAim: {fileID: 1095988367}
 --- !u!143 &737674172
@@ -18065,12 +18045,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 841683207}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &841683271 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 61d468a2f1c51574f8882294089b6f10,
-    type: 3}
-  m_PrefabInstance: {fileID: 841683207}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &841683272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20207,6 +20181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f5b21c361d90b4ea1975b7996d2472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugging: 0
   quests:
   - {fileID: 0}
 --- !u!4 &1046625785 stripped
@@ -21196,7 +21171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogue:
-  - dialogueID: 
+  - dialogueID: 1001
     questRelated: 0
     questGUID: 0
     questStatus: 0
@@ -27596,6 +27571,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 197480774764728802, guid: 61d468a2f1c51574f8882294089b6f10,
     type: 3}
   m_PrefabInstance: {fileID: 808412157}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1599682890 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 61d468a2f1c51574f8882294089b6f10,
+    type: 3}
+  m_PrefabInstance: {fileID: 841683207}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &1600367363 stripped
 RectTransform:
@@ -35471,7 +35452,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1767956530
 Transform:
   m_ObjectHideFlags: 0
@@ -35499,15 +35480,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a3928b32281e043925fdba616b2229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugging: 1
   _dialogueUI: {fileID: 1053396818}
   _dialogueTMP: {fileID: 0}
   language: 0
   _dialogueIndex: 0
-  _speakerID: 
+  otherSpeakerTransform: {fileID: 0}
+  _speakerID: 0
   _dialogueBlock: []
   _choices: []
   _moods: []
-  otherSpeakerTransform: {fileID: 0}
 --- !u!1001 &1773142124
 PrefabInstance:
   m_ObjectHideFlags: 0

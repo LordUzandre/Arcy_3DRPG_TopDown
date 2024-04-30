@@ -53,22 +53,22 @@ namespace Arcy.Interaction
             _npcAnimationHandler ??= TryGetComponent<NPCAnimationHandler>(out NPCAnimationHandler npcAnim) ? npcAnim : null;
         }
 
-        private string GetDialogueString()
+        private int GetDialogueString()
         {
             foreach (DialogueBlock dialogueBlock in _dialogue)
             {
-                if (dialogueBlock.dialogueID != null)
+                if (dialogueBlock.dialogueID != 0)
                 {
                     return dialogueBlock.dialogueID;
                 }
             }
 
-            return null;
+            return 0;
         }
 
         public void Interact()
         {
-            if (GetDialogueString() != null)
+            if (GetDialogueString() != 0)
             {
                 _ogRotation = transform.rotation.eulerAngles;
                 RoateTowardsPlayer(true);

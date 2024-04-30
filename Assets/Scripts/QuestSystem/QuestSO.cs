@@ -8,7 +8,7 @@ namespace Arcy.Quests
 	[CreateAssetMenu(fileName = "new Quest", menuName = "Arcy/Quest/new QuestSO")]
 	public class QuestSO : ScriptableObject
 	{
-		[SerializeField] int questGUID = 0;
+		[SerializeField] public int questGUID = 0;
 		[Header("UI")]
 		[SerializeField] public string questName;
 		[SerializeField] public string questGiver;

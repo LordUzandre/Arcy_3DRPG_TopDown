@@ -48,7 +48,7 @@ namespace Arcy.Player
                 if (!isInteracting)
                 {
                     GameManager.instance.gameStateManager.SetState(GameState.Dialogue);
-                    GameManager.instance.dialogueManager.GetAppropriateDialogueString(speakableObject.Dialogue);
+                    // GameManager.instance.dialogueManager.RunDialogue(speakableObject.Dialogue);
                 }
             }
 

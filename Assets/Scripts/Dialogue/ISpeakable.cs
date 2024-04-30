@@ -15,14 +15,15 @@ namespace Arcy.Dialogue
     [System.Serializable]
     public class DialogueBlock
     {
-        public string dialogueID;
+        // public string dialogueID = "1001";
+        public int dialogueID = 1001;
         public bool questRelated = false;
         public int questGUID;
         public Quests.QuestObjectiveEnum questStatus;
 
         public string GetDialogueID()
         {
-            return dialogueID;
+            return dialogueID.ToString();
         }
     }
 

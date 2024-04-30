@@ -7,8 +7,8 @@ namespace Arcy.Dialogue
 {
 	public class DialogueEvents
 	{
-		public event Action<string> onDialogueFinished;
-		public void DialogueFinished(string speakerID)
+		public event Action<int> onDialogueFinished;
+		public void DialogueFinished(int speakerID)
 		{
 			if (onDialogueFinished != null)
 			{

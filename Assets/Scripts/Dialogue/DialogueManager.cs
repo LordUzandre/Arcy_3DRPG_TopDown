@@ -20,16 +20,21 @@ namespace Arcy.Dialogue
         /// But shuld be able to finish alone, without the support of DialogueUI. 
         /// </summary>
 
+        [Header("Config")]
+        [SerializeField] private bool _debugging = false;
+
         [Header("Dialogue UI")]
         [SerializeField] private DialogueUI _dialogueUI;
         [SerializeField] private TMP_Text _dialogueTMP;
 
         // public:
-        public LanguageEnum language = LanguageEnum.english; // Remember: Set up language handler
-        public int _dialogueIndex = 0;
+        [SerializeField] public LanguageEnum language = LanguageEnum.english; // Remember: Set up language handler
+        [SerializeField] private int _dialogueIndex = 0;
+        [Header("Other Speaker")]
+        [SerializeField] public Transform otherSpeakerTransform;
 
         // private:
-        [SerializeField] private string _speakerID;
+        [SerializeField] private int _speakerID = 1001;
         [SerializeField] private List<string> _dialogueBlock;
         [SerializeField] private List<string> _choices;
         [SerializeField] private List<string> _moods;
@@ -42,48 +47,8 @@ namespace Arcy.Dialogue
 
         private WaitForSeconds _delayBeforeDialogue;
 
-        [Header("Other Speaker")]
-        [SerializeField] public Transform otherSpeakerTransform;
-
-        // MARK: Input from InputManager
-
-        public string GetAppropriateDialogueString(DialogueBlock[] dialogueArray)
-        {
-            string nonQuestRelatedDialogue = "1001";
-            string mostRecentQuestDialogue = "1002";
-
-            QuestManager questManager = transform.Find("QuestManager").GetComponent<QuestManager>();
-
-            foreach (DialogueBlock dialogue in dialogueArray)
-            {
-                if (!dialogue.questRelated && nonQuestRelatedDialogue == "1001")
-                {
-                    nonQuestRelatedDialogue = dialogue.dialogueID;
-                    break;
-                }
-
-                // Search through Quest-Log to see most recent quest.
-                foreach (Quest quest in questManager.questLog.Values)
-                {
-                    Quest thisQuest = questManager.GetQuestByGuid(dialogue.questGUID);
-
-                    if (thisQuest != null)
-                    {
-                        if (quest.currentStatusEnum == dialogue.questStatus)
-                        {
-                            mostRecentQuestDialogue = dialogue.dialogueID;
-                        }
-
-                        return mostRecentQuestDialogue;
-                    }
-                }
-            }
-
-            return nonQuestRelatedDialogue;
-        }
-
         // Input started by PlayerManager when an interactible has dialogue
-        public void RunDialogue(string speakerID)
+        public void RunDialogue(int speakerID)
         {
             _dialogueTMP.maxVisibleCharacters = 0;
             _dialogueUI.EnableDialogueBtns(false, true); // Hide all dialogue Btns
@@ -141,7 +106,7 @@ namespace Arcy.Dialogue
                 _dialogueBlock.Clear();
                 _choices.Clear();
                 _moods.Clear();
-                _speakerID = null;
+                _speakerID = 0;
                 otherSpeakerTransform = null;
                 _dialogueTMP.text = null;
                 _dialogueIndex = 0;
@@ -188,18 +153,18 @@ namespace Arcy.Dialogue
 
         // MARK: PRIVATE
 
-        private void Start()
+        private void Awake()
         {
             // Set up AnswerBtns
             _dialogueUI.answrBtns[0].GetComponent<Button>().onClick.AddListener(YesButtonPressed);
             _dialogueUI.answrBtns[1].GetComponent<Button>().onClick.AddListener(NoButtonPressed);
+
+            _delayBeforeDialogue = new WaitForSeconds(0.5f);
         }
 
         private void OnEnable()
         {
             TypewriterEffect.FinishTyping += FinishTyping;
-
-            _delayBeforeDialogue = new WaitForSeconds(0.5f);
         }
 
         private void OnDisable()
@@ -208,61 +173,74 @@ namespace Arcy.Dialogue
         }
 
         // MARK: SQL-query
-        private List<string> RetrieveDataFromDB(string speakerID)
+        private List<string> RetrieveDataFromDB(int speakerID)
         {
             string dbConnectionPath = $"URI=file:{Application.dataPath}/Data/Dialogue/DB_Debug-scene.db";
 
             // Connect to the SQLite database
-            IDbConnection dbDialogue = new SqliteConnection(dbConnectionPath);
-
-            // Open the database connection and create a command to execute SQL queries
-            dbDialogue.Open();
-            IDbCommand dbCommand = dbDialogue.CreateCommand();
-
-            //Change the table based on which Scene/Scenario is active;
-            string chooseTable = "dialogue01";
-
-            // Select all data from row specified by {keyvalue}
-            dbCommand.CommandText = $"SELECT DISTINCT choices, mood, {language} FROM {chooseTable} WHERE speakID LIKE '{speakerID}%'";
-
-            // Execute the query and retrieve the result
-            IDataReader reader = dbCommand.ExecuteReader();
-
-            List<string> dialogueList = new List<string>();
-            List<string> moods = new List<string>();
-            List<string> choices = new List<string>();
-
-            // Check if there are rows in the result
-            while (reader.Read())
+            using (IDbConnection dbConnection = new SqliteConnection(dbConnectionPath))
             {
-                string choiceColumn = reader["choices"].ToString();
-                string dialogue = reader["english"].ToString();
-                string moodColumn = reader["mood"].ToString();
+                try
+                {
+                    dbConnection.Open();
 
-                dialogueList.Add(dialogue);
+                    // Open the database connection and create a command to execute SQL queries
+                    using (IDbCommand dbCommand = dbConnection.CreateCommand())
+                    {
+                        //Change the table based on which Scene/Scenario is active;
+                        string dialogueTable = "dialogue01";
 
-                // Check choices
-                if (!string.IsNullOrEmpty(moodColumn))
-                    moods.Add(moodColumn);
-                else
-                    moods.Add("null");
+                        // Select all data from row specified by {keyvalue}
+                        dbCommand.CommandText = $"SELECT DISTINCT choices, mood, {language} FROM {dialogueTable} WHERE speakID LIKE '{speakerID}%'";
 
-                // Check moods
-                if (!string.IsNullOrEmpty(choiceColumn))
-                    choices.Add(choiceColumn);
-                else
-                    choices.Add("null");
+                        // Execute the query and retrieve the result
+                        IDataReader reader = dbCommand.ExecuteReader();
+
+                        // Reset all the lists
+                        List<string> dialogueList = new List<string>();
+                        List<string> moods = new List<string>();
+                        List<string> choices = new List<string>();
+
+                        // Check if there are rows in the result
+                        while (reader.Read())
+                        {
+                            string choiceColumn = reader["choices"].ToString();
+                            string dialogue = reader["english"].ToString();
+                            string moodColumn = reader["mood"].ToString();
+
+                            dialogueList.Add(dialogue);
+
+                            // Check choices
+                            if (!string.IsNullOrEmpty(moodColumn))
+                                moods.Add(moodColumn);
+                            else
+                                moods.Add(null);
+
+                            // Check moods
+                            if (!string.IsNullOrEmpty(choiceColumn))
+                                choices.Add(choiceColumn);
+                            else
+                                choices.Add(null);
+                        }
+
+                        // Close the connections
+                        reader.Close();
+                        dbCommand.Dispose();
+
+                        _moods = moods;
+                        _choices = choices;
+
+                        if (_debugging) Debug.Log(dialogueList[0] + " retrieved from DB.");
+
+                        return dialogueList;
+                    }
+                }
+                catch
+                {
+                    Debug.LogError("Unable to load a dialogueID from DB.");
+                    return null;
+                }
             }
-
-            // Close the connections
-            reader.Close();
-            dbCommand.Dispose();
-            dbDialogue.Close();
-
-            _moods = moods;
-            _choices = choices;
-
-            return dialogueList;
         }
 
         // When we push one of the AnswrBtns
@@ -272,40 +250,12 @@ namespace Arcy.Dialogue
 
             IEnumerator ShortDelayBeforeExecution()
             {
-                if (yesBtn) // Yes-btn pressed
-                    _speakerID = GetNewSpeakerId(_speakerID, 1);
-                else // No-btn pressed
-                    _speakerID = GetNewSpeakerId(_speakerID, 2);
-
-                // Create a new string based on which AnswrBtn is pressed
-                string GetNewSpeakerId(string ogString, int addValue)
-                {
-                    string numericPart = "";
-                    string updatedString = "";
-
-                    // Extract numeric part from the string
-                    foreach (char charLetter in ogString)
-                    {
-                        if (char.IsDigit(charLetter))
-                            numericPart += charLetter;
-                        else
-                            break; // Stop when a non-digit character is encountered
-                    }
-
-                    // Convert numeric part to an integer
-                    if (int.TryParse(numericPart, out int numericValue))
-                    {
-                        // Perform the desired operation on the numeric value
-                        numericValue += addValue;
-
-                        // Convert the updated numeric value back to string and append the non-numeric part
-                        updatedString = numericValue.ToString() + ogString.Substring(numericPart.Length);
-                    }
-
-                    return updatedString;
-                }
-
                 yield return null;
+
+                if (yesBtn) // Yes-btn pressed
+                    _speakerID = _speakerID + 1;
+                else // No-btn pressed
+                    _speakerID = _speakerID + 2;
 
                 _choiceBool = false;
                 _currentlyInDialogueBool = false;
