@@ -19,6 +19,7 @@ namespace Arcy.Saving
 		[SerializeField] private bool _createSaveDataIfNull = true;
 		[SerializeField] private bool _saveOnApplicationQuit = true;
 		[SerializeField] private bool _debugging = false;
+		[SerializeField] public bool globalOverrideSaveData = false;
 		[Space]
 		[SerializeField] private string _saveDataFileName = "game.save";
 		[SerializeField] private bool _useEncryption = false;
@@ -82,7 +83,7 @@ namespace Arcy.Saving
 
 		public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 		{
-			_persistentDataObjects = FindAllPersistentDataObjects();
+			_persistentDataObjects = FindAllSaveDataObjects();
 			LoadGame();
 		}
 
@@ -123,13 +124,14 @@ namespace Arcy.Saving
 			}
 		}
 
-		private List<ISaveableEntity> FindAllPersistentDataObjects()
+		private List<ISaveableEntity> FindAllSaveDataObjects()
 		{
 			// Use LINQ to find all scripts that are using ISaveableEntity.
 			IEnumerable<ISaveableEntity> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveableEntity>();
 
 			return new List<ISaveableEntity>(dataPersistenceObjects);
 		}
+
 	}
 
 	public class Placeholder

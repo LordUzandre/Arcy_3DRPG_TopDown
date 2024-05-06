@@ -13,38 +13,29 @@ namespace Arcy.Quests
         /// These hold the requirements, the rewards and acts as a container for all the objectives.
         /// </summary>
 
-        [SerializeField] public int guid;
+        [field: SerializeField] public int guid { get; private set; }
 
         [Header("General")]
-        [SerializeField] public string displayName;
+        public string displayName;
 
         [Header("Requirements")]
-        [SerializeField] public QuestInfoSO[] questPrerequisites; // Other finished quests required
-        [SerializeField] public int[] dialoguePrerequisites; // Dialogue prerequirement
-        [SerializeField] public Inventory.InventoryItem[] item; // Inventory item
+        public int levelRequirement;
+        public QuestInfoSO[] questPrerequisites;
 
         [Header("Objectives")]
-        [SerializeField] public GameObject[] questObjectivePrefabs;
+        public GameObject[] questObjectivePrefabs;
 
         [Header("Rewards")]
-        [SerializeField] public Inventory.InventorySlot[] rewardItems;
+        public Inventory.InventorySlot[] rewardItems;
 
-#if UNITY_EDITOR
+        // ensure the id is always the name of the Scriptable Object asset
         private void OnValidate()
         {
-            if (displayName != name)
-            {
-                displayName = name;
-            }
-
-            if (guid == 0)
-            {
-                guid = Utils.GuidGenerator.guid();
-            }
-
+#if UNITY_EDITOR
+            if (guid == 0) guid = Utils.GuidGenerator.guid(this);
             UnityEditor.EditorUtility.SetDirty(this);
-        }
 #endif
+        }
 
     }
 }

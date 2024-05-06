@@ -10,6 +10,8 @@ namespace Arcy.Scenes
 {
 	public class CheckpointManager : MonoBehaviour, ISaveableEntity
 	{
+		[Header("Config")]
+		[SerializeField] private bool _useSaveData;
 		[Header("Most recent checkpoints")]
 		[SerializeField] public int mostRecentCheckpointGUID;
 		[Header("Scene-related")]

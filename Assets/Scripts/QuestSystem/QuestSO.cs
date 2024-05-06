@@ -8,63 +8,59 @@ namespace Arcy.Quests
 	[CreateAssetMenu(fileName = "new Quest", menuName = "Arcy/Quest/new QuestSO")]
 	public class QuestSO : ScriptableObject
 	{
-		[SerializeField] public int questGUID = 0;
+		[HideInInspector] public string questName;
+		[HideInInspector] public int questGuid = 0;
 		[Header("UI")]
-		[SerializeField] public string questName;
 		[SerializeField] public string questGiver;
+
 		// Requirements
 		[Space]
-		[SerializeField] UI.QuestRequirement[] requirementsToStartQuest;
+		[SerializeField] public QuestRequirement[] requirementsToStartQuest;
+		[Space]
 		[Header("Objectives")]
 		[SerializeField] public QuestObjectiveEnum questState;
 		[SerializeField] public bool questStarted;
 		[SerializeField] public bool questFinished;
 		[SerializeField] public QuestObjective[] objectives;
 		[SerializeField] public int objectiveIndex = 0;
+		[Space]
 		[Header("Rewards")]
-		[SerializeField] public Inventory.InventorySlot[] questRewards;
+		[SerializeField] public int goldReward;
+		[SerializeField] public int experienceReward;
+		[field: SerializeField] public Inventory.InventorySlot[] questRewards;
 
 #if UNITY_EDITOR
 		private void OnValidate()
 		{
-			if (questGUID == 0) questGUID = Utils.GuidGenerator.guid();
+			if (questGuid == 0) questGuid = Utils.GuidGenerator.guid(this);
 			if (questName != name) questName = name;
 		}
 #endif
 
-		// MARK: PUBLIC: 
-
-		public bool CheckRequirementsMet(int providedID)
-		{
-			return providedID == questGUID;
-		}
-
-		public void BeginQuest()
-		{
-			objectiveIndex = 1;
-			objectives[objectiveIndex].InitializeObjective();
-		}
-
-		public void AdvanceToNextObjective()
-		{
-			// When we have finished the last objective
-			if (objectiveIndex > objectives.Length)
-			{
-				FinishQuest();
-				return;
-			}
-
-			objectives[objectiveIndex].FinishObjective();
-			objectiveIndex++;
-			objectives[objectiveIndex].InitializeObjective();
-		}
-
-		public void FinishQuest()
-		{
-		}
-
-		// MARK: PRIVATE:
-
 	}
+
+#if UNITY_EDITOR
+	[CustomEditor(typeof(QuestSO))]
+	public class mypublicEditor : Editor
+	{
+		public override void OnInspectorGUI()
+		{
+			QuestSO quest = (QuestSO)target;
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("Item Name", quest.questName.ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("Guid", quest.questGuid.ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.EndHorizontal();
+
+			base.DrawDefaultInspector();
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.HelpBox("These ScriptableObjects should contain the 'read-only'-information of any quest.", MessageType.Info);
+			EditorGUILayout.EndHorizontal();
+		}
+	}
+#endif
 
 }

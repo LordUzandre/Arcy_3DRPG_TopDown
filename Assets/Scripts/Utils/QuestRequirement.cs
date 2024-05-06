@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace Arcy.UI
+namespace Arcy.Quests
 {
 	[System.Serializable]
 	public class QuestRequirement

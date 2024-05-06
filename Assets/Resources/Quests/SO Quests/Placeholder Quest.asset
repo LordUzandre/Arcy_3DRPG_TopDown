@@ -16,20 +16,12 @@ MonoBehaviour:
   questName: Placeholder Quest
   questGiver: Red Jammo
   requirementsToStartQuest:
-  - requirements: 2
+  - requirements: 4
     requiredLvl: 0
     requiredTeamMember: 
     requiredPreviousQuestID: 0
     itemID: 0
-    requiredDialogueID: 1001
-    battleID: 0
-    requirementIsMet: 0
-  - requirements: 2
-    requiredLvl: 0
-    requiredTeamMember: 
-    requiredPreviousQuestID: 0
-    itemID: 0
-    requiredDialogueID: 1001
+    requiredDialogueID: 1005
     battleID: 0
     requirementIsMet: 0
   questState: 0

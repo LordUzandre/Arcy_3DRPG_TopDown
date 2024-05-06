@@ -23,13 +23,13 @@ namespace Arcy.UI
 		{
 			QuestLogBtn questLogBtn = null;
 
-			if (!_idToBtnMap.ContainsKey(quest.questSO.guid))
+			if (!_idToBtnMap.ContainsKey(quest.QuestObject.questGuid))
 			{
 				questLogBtn = InstantiateLogBtn(quest, selectAction);
 			}
 			else
 			{
-				questLogBtn = _idToBtnMap[quest.questSO.guid];
+				questLogBtn = _idToBtnMap[quest.QuestObject.questGuid];
 			}
 
 			return questLogBtn;
@@ -41,18 +41,18 @@ namespace Arcy.UI
 			QuestLogBtn questLogBtn = Instantiate(_questLogBtnPrefab, _contentParent.transform).GetComponent<QuestLogBtn>();
 
 			// Game object name in the hierarchy
-			questLogBtn.gameObject.name = quest.questSO.guid + "_button";
+			questLogBtn.gameObject.name = quest.QuestObject.questGuid + "_button";
 
 			// Initialize and set up function for when the button is selected
 			RectTransform btnRectTransform = questLogBtn.GetComponent<RectTransform>();
-			questLogBtn.Initialize(quest.questSO.displayName, () =>
+			questLogBtn.Initialize(quest.QuestObject.questName, () =>
 			{
 				selectAction();
 				UpdateScrolling(btnRectTransform);
 			});
 
 			// add to map to keep track of the new button
-			_idToBtnMap[quest.questSO.guid] = questLogBtn;
+			_idToBtnMap[quest.QuestObject.questGuid] = questLogBtn;
 
 			return questLogBtn;
 		}

@@ -8,8 +8,18 @@ namespace Arcy.Inventory
 {
 	public class SingleTimePickupSpawner : MonoBehaviour, ISaveableEntity
 	{
+		[SerializeField] private bool _useSaveData = true;
+
 		public void LoadData(SaveData loadData)
 		{
+
+#if UNITY_EDITOR
+			if (!_useSaveData)
+			{
+				return;
+			}
+#endif
+
 			foreach (Transform child in transform)
 			{
 				if (child.TryGetComponent<Pickup>(out Pickup pickup))
@@ -42,6 +52,14 @@ namespace Arcy.Inventory
 
 		public void SaveData(SaveData saveData)
 		{
+
+#if UNITY_EDITOR
+			if (!_useSaveData)
+			{
+				return;
+			}
+#endif
+
 			foreach (Transform child in transform)
 			{
 				if (child.TryGetComponent<Pickup>(out Pickup pickup) && pickup.collected)
@@ -69,5 +87,6 @@ namespace Arcy.Inventory
 				}
 			}
 		}
+
 	}
 }

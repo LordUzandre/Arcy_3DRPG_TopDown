@@ -11,11 +11,13 @@ namespace Arcy.Inventory
 		[Header("Config")]
 		[SerializeField] private StarterInventory _starterInventoryPrefab;
 		[SerializeField] private bool _debugging;
+		[SerializeField] private bool _useSaveData = true;
 
 		[Space]
 		[SerializeField] public int inventorySize = 16;
 		[SerializeField] public InventorySlot[] equipmentSlots;
 		[SerializeField] public InventorySlot[] consumableSlots;
+
 
 		// MARK: PUBLIC
 
@@ -257,6 +259,13 @@ namespace Arcy.Inventory
 		// MARK: Save/Load
 		public void SaveData(SaveData saveData)
 		{
+#if UNITY_EDITOR
+			if (!_useSaveData)
+			{
+				return;
+			}
+#endif
+
 			saveData.inventory.Clear();
 			saveData.inventorySize = inventorySize;
 
@@ -272,16 +281,23 @@ namespace Arcy.Inventory
 					saveData.inventory.Add(slot.GetItem().guid, slot.GetAmount());
 				}
 			}
+
 		}
 
 		public void LoadData(SaveData loadData)
 		{
 			if (loadData.inventory.Count < 1)
 			{
-				// consumableSlots = new InventorySlot[inventorySize];
 				consumableSlots = LoadFromStarterInventory();
 				return;
 			}
+
+#if UNITY_EDITOR
+			if (!_useSaveData)
+			{
+				return;
+			}
+#endif
 
 			// Load from LoadData
 			List<InventorySlot> consumablesToBeAdded = new List<InventorySlot>();
@@ -314,6 +330,7 @@ namespace Arcy.Inventory
 			}
 
 			consumableSlots = consumablesToBeAdded.ToArray();
+
 		}
 	}
 }

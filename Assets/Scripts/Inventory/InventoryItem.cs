@@ -86,18 +86,14 @@ namespace Arcy.Inventory
 			return description;
 		}
 
-		// Private:
 #if UNITY_EDITOR
-		// Generate a unique identifier
 		private void OnValidate()
 		{
-			if (itemName != name)
-				itemName = name;
-
-			if (guid == 0)
-				guid = Utils.GuidGenerator.guid(this);
+			if (guid == 0) guid = Utils.GuidGenerator.guid(this);
+			if (itemName != name) itemName = name;
 		}
 #endif
+
 	}
 
 #if UNITY_EDITOR

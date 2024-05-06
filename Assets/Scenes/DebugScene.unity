@@ -6210,7 +6210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.62572736, y: 0.0000001593498, z: -0.00000012782586, w: 0.7800419}
+  m_LocalRotation: {x: 0.62572736, y: 0.00000015934981, z: -0.00000012782587, w: 0.7800419}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10522,6 +10522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd8c175f959335419d2fc65cac15afe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _useSaveData: 1
 --- !u!1 &486821410
 GameObject:
   m_ObjectHideFlags: 0
@@ -19428,7 +19429,7 @@ GameObject:
   - component: {fileID: 1005867923}
   - component: {fileID: 1005867924}
   m_Layer: 0
-  m_Name: PersistentDataManager
+  m_Name: SaveDataManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19464,6 +19465,7 @@ MonoBehaviour:
   _createSaveDataIfNull: 1
   _saveOnApplicationQuit: 1
   _debugging: 0
+  globalOverrideSaveData: 0
   _saveDataFileName: save.game
   _useEncryption: 0
 --- !u!224 &1007766289 stripped
@@ -20153,7 +20155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1041419797
 Transform:
   m_ObjectHideFlags: 0
@@ -20181,9 +20183,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f5b21c361d90b4ea1975b7996d2472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugging: 0
-  quests:
-  - {fileID: 0}
+  _debugging: 1
+  _useSaveData: 0
 --- !u!4 &1046625785 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1974469421575533030, guid: 61d468a2f1c51574f8882294089b6f10,
@@ -20584,8 +20585,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a6e709887db5f34383a8afd803aefac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _starterInventoryPrefab: {fileID: 0}
+  _starterInventoryPrefab: {fileID: -3691963542309689016, guid: 0f4969c29b9bbc643928bfc05542dac9,
+    type: 3}
   _debugging: 0
+  _useSaveData: 1
   inventorySize: 16
   equipmentSlots: []
   consumableSlots: []
@@ -24646,37 +24649,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367906088}
   m_CullTransparentMesh: 1
---- !u!1 &1370624105
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1370624106}
-  m_Layer: 0
-  m_Name: ---------  GAMEPLAY --------------
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1370624106
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1370624105}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1377518138
 GameObject:
   m_ObjectHideFlags: 0
@@ -37570,6 +37542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec085a0a6cfbf345b283e6fcd1e8353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _useSaveData: 0
   mostRecentCheckpointGUID: 0
   sceneData: {fileID: 0}
   allCheckpointsInScene: []
@@ -47635,7 +47608,6 @@ SceneRoots:
   - {fileID: 1701392789}
   - {fileID: 1870462159}
   - {fileID: 1646439289}
-  - {fileID: 1370624106}
   - {fileID: 1633386343}
   - {fileID: 486491291}
   - {fileID: 118869398}

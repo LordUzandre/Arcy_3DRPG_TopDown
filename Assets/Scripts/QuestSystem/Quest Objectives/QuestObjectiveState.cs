@@ -8,19 +8,19 @@ namespace Arcy.Quests
 	[System.Serializable]
 	public class QuestObjectiveState
 	{
-		public string state;
-		public string status;
+		public string State;
+		public string Status;
 
 		public QuestObjectiveState(string state, string status)
 		{
-			this.state = state;
-			this.status = status;
+			State = state;
+			Status = status;
 		}
 
 		public QuestObjectiveState()
 		{
-			this.state = "";
-			this.status = "";
+			State = "";
+			Status = "";
 		}
 	}
 }

@@ -9,61 +9,16 @@ namespace Arcy.Quests
     public class Quest
     {
         // scriptable object info
-        public QuestInfoSO questSO;
+        // public QuestInfoSO QuestInfo;
+        public QuestSO QuestObject;
+
         // state-enum info
-        public QuestObjectiveEnum currentStatusEnum;
+        public QuestObjectiveEnum CurrentStatusEnum;
 
         // current objective Index
         private int _currentQuestObjectiveIndex;
 
         private QuestObjectiveState[] _questObjectiveStates;
-
-        #region Constructors and Load/Save-Data
-
-        /// <summary>
-        /// constructors called from QuestManager using the Load/Save System
-        /// </summary>
-
-        // a new quest
-        public Quest(QuestInfoSO questInfo)
-        {
-            questSO = questInfo;
-            currentStatusEnum = QuestObjectiveEnum.REQUIREMENTS_NOT_MET;
-            _currentQuestObjectiveIndex = 0;
-            _questObjectiveStates = new QuestObjectiveState[questSO.questObjectivePrefabs.Length];
-
-            for (int i = 0; i < _questObjectiveStates.Length; i++)
-            {
-                _questObjectiveStates[i] = new QuestObjectiveState();
-            }
-        }
-
-        // A quest from save state
-        public Quest(QuestInfoSO questInfo, QuestObjectiveEnum questState, int currentQuestObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
-        {
-            questSO = questInfo;
-            currentStatusEnum = questState;
-            _currentQuestObjectiveIndex = currentQuestObjectiveIndex;
-            _questObjectiveStates = questObjectiveStates;
-
-            // if the Quest objective states and prefabs are different lengths,
-            // something has changed during development and the saved data is out of sync.
-
-            if (_questObjectiveStates.Length != questSO.questObjectivePrefabs.Length)
-            {
-                Debug.LogWarning($"Quest Step Prefabs and Quest Step States are "
-                + "of different lengths. This indicates that something has changed. "
-                + "with the QuestInfo and the saved data is now out of sync. "
-                + "Reset your data - as this might cause issues. Quest id: " + this.questSO.guid);
-            }
-        }
-
-        // The data of the quest that is going to get saved/loaded
-        public QuestSaveData GetQuestData()
-        {
-            return new QuestSaveData(currentStatusEnum, _currentQuestObjectiveIndex, _questObjectiveStates);
-        }
-        #endregion
 
         public void AdvanceToNextObjective()
         {
@@ -72,7 +27,7 @@ namespace Arcy.Quests
 
         public bool CurrentQuestObjectiveExists()
         {
-            return (_currentQuestObjectiveIndex < questSO.questObjectivePrefabs.Length);
+            return _currentQuestObjectiveIndex < QuestObject.objectives.Length;
         }
 
         public void InstantiateCurrentQuestObjective(Transform parentTransform)
@@ -92,26 +47,27 @@ namespace Arcy.Quests
 
             if (CurrentQuestObjectiveExists())
             {
-                questObjectivePrefab = questSO.questObjectivePrefabs[_currentQuestObjectiveIndex];
+                // TODO: Initialize the next objective
+                // questObjectivePrefab = QuestObject.objectives[_currentQuestObjectiveIndex];
             }
             else
             {
                 Debug.LogWarning("Tried to get quest step prefab, but stepIndex was out of range indicating that "
-                + "there's no current step: QuestId=" + questSO.displayName + ", stepIndex=" + _currentQuestObjectiveIndex);
+                + "there's no current step: QuestId=" + QuestObject.questName + ", stepIndex=" + _currentQuestObjectiveIndex);
             }
 
             return questObjectivePrefab;
         }
 
-        public void StoreQuestObjectiveStatus(QuestObjectiveState questObjectiveState, int stepIndex)
+        public void StoreQuestObjectiveStatus(QuestObjectiveState questObjectiveState, int objectiveIndex)
         {
-            if (stepIndex < _questObjectiveStates.Length)
+            if (objectiveIndex < _questObjectiveStates.Length)
             {
-                _questObjectiveStates[stepIndex].state = questObjectiveState.state;
+                _questObjectiveStates[objectiveIndex].State = questObjectiveState.State;
             }
             else
             {
-                Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + questSO.guid + ",quest index = " + stepIndex);
+                Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + QuestObject.questGuid + ",quest index = " + objectiveIndex);
             }
         }
 
@@ -120,11 +76,11 @@ namespace Arcy.Quests
         {
             string fullStatus = "";
 
-            if (currentStatusEnum == QuestObjectiveEnum.REQUIREMENTS_NOT_MET)
+            if (CurrentStatusEnum == QuestObjectiveEnum.REQUIREMENTS_NOT_MET)
             {
                 fullStatus = "Requirements are not met yet to start this quest";
             }
-            else if (currentStatusEnum == QuestObjectiveEnum.CAN_START)
+            else if (CurrentStatusEnum == QuestObjectiveEnum.CAN_START)
             {
                 fullStatus = "This Quest can be started";
             }
@@ -132,19 +88,66 @@ namespace Arcy.Quests
             {
                 for (int i = 0; i < _currentQuestObjectiveIndex; i++)
                 {
-                    fullStatus += "<s>" + _questObjectiveStates[i].status + "</s>\n";
+                    fullStatus += "<s>" + _questObjectiveStates[i].Status + "</s>\n";
                 }
 
-                if (currentStatusEnum == QuestObjectiveEnum.CAN_FINISH)
+                if (CurrentStatusEnum == QuestObjectiveEnum.CAN_FINISH)
                 {
                     fullStatus += "The quest is ready to be turned in.";
                 }
-                else if (currentStatusEnum == QuestObjectiveEnum.FINISHED)
+                else if (CurrentStatusEnum == QuestObjectiveEnum.FINISHED)
                 {
                     fullStatus += "The quest has been completed";
                 }
             }
             return fullStatus;
         }
+
+        // MARK: SAVE/LOAD:
+
+        /// <summary>
+        /// constructors called from QuestManager using the Load/Save System
+        /// </summary>
+
+        // a new quest
+        public Quest(QuestSO questInfo)
+        {
+            this.QuestObject = questInfo;
+            CurrentStatusEnum = QuestObjectiveEnum.REQUIREMENTS_NOT_MET;
+            _currentQuestObjectiveIndex = 0;
+            _questObjectiveStates = new QuestObjectiveState[this.QuestObject.objectives.Length];
+
+            for (int i = 0; i < _questObjectiveStates.Length; i++)
+            {
+                _questObjectiveStates[i] = new QuestObjectiveState();
+            }
+        }
+
+        // A quest from save state
+        public Quest(QuestSO questInfo, QuestObjectiveEnum questState, int currentQuestObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
+        {
+            this.QuestObject = questInfo;
+            CurrentStatusEnum = questState;
+            _currentQuestObjectiveIndex = currentQuestObjectiveIndex;
+            _questObjectiveStates = questObjectiveStates;
+
+            // if the Quest objective states and prefabs are different lengths,
+            // something has changed during development and the saved data is out of sync.
+
+            if (_questObjectiveStates.Length != this.QuestObject.objectives.Length)
+            {
+                Debug.LogWarning($"Quest Step Prefabs and Quest Step States are "
+                + "of different lengths. This indicates that something has changed. "
+                + "with the QuestSO and the saved data is now out of sync. "
+                + "Reset your data - as this might cause issues. Quest id: " + this.QuestObject.questGuid);
+            }
+        }
+
+        // The data of the quest that is going to get saved/loaded
+        public QuestSaveData GetQuestData()
+        {
+            return new QuestSaveData(CurrentStatusEnum, _currentQuestObjectiveIndex, _questObjectiveStates);
+        }
+
     }
 }

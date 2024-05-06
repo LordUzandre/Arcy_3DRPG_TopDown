@@ -78,7 +78,7 @@ namespace Arcy.UI
 			}
 
 			// set the button color based on quest state
-			questLogBtn.SetState(quest.currentStatusEnum);
+			questLogBtn.SetState(quest.CurrentStatusEnum);
 		}
 
 		#endregion
@@ -88,7 +88,7 @@ namespace Arcy.UI
 		private void SetQuestLogInfo(Quest quest)
 		{
 			// quest Name
-			_questDisplayName.text = quest.questSO.displayName;
+			_questDisplayName.text = quest.QuestObject.questName;
 
 			// status
 			_questStatusText.text = quest.GetFullStatusText();
@@ -97,10 +97,10 @@ namespace Arcy.UI
 			// _levelRequirementText.text = "Level " + quest.info.levelRequirement;
 			_questRequirementText.text = "";
 
-			foreach (QuestInfoSO prerequisiteQuestInfo in quest.questSO.questPrerequisites)
-			{
-				_questRequirementText.text += prerequisiteQuestInfo.displayName + "\n";
-			}
+			// foreach (QuestInfoSO prerequisiteQuestInfo in quest.QuestInfo.questPrerequisites)
+			// {
+			// 	_questRequirementText.text += prerequisiteQuestInfo.displayName + "\n";
+			// }
 
 			// rewards
 			// _goldRewardsText.text = quest.info.goldReward + " Gold";
