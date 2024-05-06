@@ -41,5 +41,5 @@ MonoBehaviour:
   - {fileID: 0}
   objectiveIndex: 0
   questRewards:
-  - _item: {fileID: 0}
-    _amount: 0
+  - _item: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
+    _amount: 500

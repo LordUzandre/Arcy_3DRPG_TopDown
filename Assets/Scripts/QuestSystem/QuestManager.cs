@@ -41,6 +41,8 @@ namespace Arcy.Quests
 
 					idToQuestMap.Add(questSO.questGUID, LoadQuest(questSO));
 				}
+
+				if (_debugging) Debug.Log("Quest Log created");
 			}
 
 			Quest quest = questCache[questID];
@@ -90,31 +92,6 @@ namespace Arcy.Quests
 
 			GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished -= DialogueFinished;
 		}
-
-		// create quest map during Awake()
-		// private static Dictionary<int, Quest> CreateQuestLog()
-		// {
-		// 	// Load all Quest Scriptable Objects in the Assets/Resources/Quests folder
-		// 	QuestSO[] allQuests = Resources.LoadAll<QuestSO>("Quests");
-		// 	// QuestInfoSO[] allQuests = Resources.LoadAll<QuestInfoSO>("Quests");
-
-		// 	// Create the quest map
-		// 	Dictionary<int, Quest> idToQuestMap = new Dictionary<int, Quest>();
-
-		// 	foreach (QuestSO questSO in allQuests)
-		// 	{
-		// 		if (idToQuestMap.ContainsKey(questSO.questGUID))
-		// 		{
-		// 			Debug.LogWarning("Duplicate ID found when creating quest map: " + questSO.questGUID);
-		// 		}
-		// 		else
-		// 		{
-		// 			// idToQuestMap.Add(questSO.questGUID, LoadQuest(questSO));
-		// 		}
-		// 	}
-
-		// 	return idToQuestMap;
-		// }
 
 		private void DialogueFinished(int speakerID)
 		{

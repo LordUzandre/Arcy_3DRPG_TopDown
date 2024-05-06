@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 1903983873
   displayName: PlaceholderQuest
-  questPrerequisites: []
+  questPrerequisites:
+  - {fileID: 0}
+  - {fileID: 0}
   dialoguePrerequisites: 
   item: []
   questObjectivePrefabs:
