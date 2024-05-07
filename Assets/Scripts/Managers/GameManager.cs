@@ -26,7 +26,7 @@ namespace Arcy.Management
 		[SerializeField] public GameEventManager gameEventManager;
 		[SerializeField] public InputManager inputManager;
 		[SerializeField] public InventoryManager inventoryManager;
-		[SerializeField] public PersistentDataManager persistentDataManager;
+		[SerializeField] public SaveDataManager persistentDataManager;
 		[SerializeField] public QuestManager questManager;
 		[Space]
 		[Header("Initial Game State")]
@@ -48,7 +48,7 @@ namespace Arcy.Management
 			gameEventManager ??= GetComponentInChildren<GameEventManager>();
 			inputManager ??= GetComponentInChildren<InputManager>();
 			inventoryManager ??= GetComponentInChildren<InventoryManager>();
-			persistentDataManager ??= GetComponentInChildren<PersistentDataManager>();
+			persistentDataManager ??= GetComponentInChildren<SaveDataManager>();
 			questManager ??= GetComponentInChildren<QuestManager>();
 		}
 

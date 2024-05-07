@@ -8,16 +8,10 @@ namespace Arcy.Quests
 {
     public class Quest
     {
-        // scriptable object info
-        // public QuestInfoSO QuestInfo;
-        public QuestSO QuestObject;
+        public QuestSO QuestObject; // scriptable object info
+        public QuestObjectiveEnum CurrentStatusEnum; // state-enum info
 
-        // state-enum info
-        public QuestObjectiveEnum CurrentStatusEnum;
-
-        // current objective Index
-        private int _currentQuestObjectiveIndex;
-
+        private int _currentQuestObjectiveIndex; // current objective Index
         private QuestObjectiveState[] _questObjectiveStates;
 
         public void AdvanceToNextObjective()
@@ -57,18 +51,6 @@ namespace Arcy.Quests
             }
 
             return questObjectivePrefab;
-        }
-
-        public void StoreQuestObjectiveStatus(QuestObjectiveState questObjectiveState, int objectiveIndex)
-        {
-            if (objectiveIndex < _questObjectiveStates.Length)
-            {
-                _questObjectiveStates[objectiveIndex].State = questObjectiveState.State;
-            }
-            else
-            {
-                Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + QuestObject.questGuid + ",quest index = " + objectiveIndex);
-            }
         }
 
         // Only affects UI
@@ -140,6 +122,18 @@ namespace Arcy.Quests
                 + "of different lengths. This indicates that something has changed. "
                 + "with the QuestSO and the saved data is now out of sync. "
                 + "Reset your data - as this might cause issues. Quest id: " + this.QuestObject.questGuid);
+            }
+        }
+
+        public void StoreQuestObjectiveStatus(QuestObjectiveState questObjectiveState, int objectiveIndex)
+        {
+            if (objectiveIndex < _questObjectiveStates.Length)
+            {
+                _questObjectiveStates[objectiveIndex].State = questObjectiveState.State;
+            }
+            else
+            {
+                Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + QuestObject.questGuid + ",quest index = " + objectiveIndex);
             }
         }
 

@@ -14,7 +14,7 @@ namespace Arcy.Inventory
 		{
 
 #if UNITY_EDITOR
-			if (!_useSaveData)
+			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
 			{
 				return;
 			}
@@ -54,7 +54,7 @@ namespace Arcy.Inventory
 		{
 
 #if UNITY_EDITOR
-			if (!_useSaveData)
+			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
 			{
 				return;
 			}

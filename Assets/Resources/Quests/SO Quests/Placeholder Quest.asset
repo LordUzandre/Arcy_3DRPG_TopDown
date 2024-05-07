@@ -12,26 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c252ecc1cbb034fbc4621307b87bba, type: 3}
   m_Name: Placeholder Quest
   m_EditorClassIdentifier: 
-  questGUID: 1831556963
   questName: Placeholder Quest
-  questGiver: Red Jammo
+  questGuid: 295701672
+  questGiver: 
   requirementsToStartQuest:
-  - requirements: 4
+  - requirementType: 3
     requiredLvl: 0
     requiredTeamMember: 
+    quest: {fileID: 0}
     requiredPreviousQuestID: 0
+    requiredItem: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
     itemID: 0
-    requiredDialogueID: 1005
+    requiredItemAmount: 1
+    requiredDialogueID: 0
     battleID: 0
-    requirementIsMet: 0
-  questState: 0
-  questStarted: 0
-  questFinished: 0
   objectives:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  objectiveIndex: 0
+  - {fileID: 11400000, guid: 11fb0513a9ceb7648bffc819583cc427, type: 2}
+  goldReward: 250
+  experienceReward: 750
   questRewards:
-  - _item: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
-    _amount: 500
+  - _item: {fileID: 11400000, guid: 940bf73893ecd5e4686d6f4fc1415645, type: 2}
+    _amount: 0

@@ -9,8 +9,8 @@ namespace Arcy.UI
 {
 	public class InventoryUi : MonoBehaviour
 	{
-		[Header("Inventory")]
-		[SerializeField] private InventoryManager _inventory;
+		// [Header("Inventory")]
+		// [SerializeField] private InventoryManager _inventory;
 		[Header("Consumables-components")]
 		[SerializeField] private Transform _gridParent;
 		[SerializeField] private GameObject _itemSlotPrefab;
@@ -51,7 +51,7 @@ namespace Arcy.UI
 			btnList.Clear();
 			btnList.RemoveRange(0, btnList.Count);
 
-			for (int i = 0; i < _inventory.inventorySize; i++)
+			for (int i = 0; i < InventoryManager.inventorySize; i++)
 			{
 				GameObject gmObject = Instantiate(_itemSlotPrefab, _gridParent);
 				InventoryUiBtn ivBtn = gmObject.GetComponent<InventoryUiBtn>();

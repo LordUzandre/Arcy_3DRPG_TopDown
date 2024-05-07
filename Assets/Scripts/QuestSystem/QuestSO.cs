@@ -17,12 +17,7 @@ namespace Arcy.Quests
 		[Space]
 		[SerializeField] public QuestRequirement[] requirementsToStartQuest;
 		[Space]
-		[Header("Objectives")]
-		[SerializeField] public QuestObjectiveEnum questState;
-		[SerializeField] public bool questStarted;
-		[SerializeField] public bool questFinished;
 		[SerializeField] public QuestObjective[] objectives;
-		[SerializeField] public int objectiveIndex = 0;
 		[Space]
 		[Header("Rewards")]
 		[SerializeField] public int goldReward;
@@ -48,10 +43,10 @@ namespace Arcy.Quests
 			QuestSO quest = (QuestSO)target;
 
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Item Name", quest.questName.ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.LabelField("Item Name", quest.questName.ToString()); //, EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Guid", quest.questGuid.ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.LabelField("Guid", quest.questGuid.ToString()); //, EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
 			EditorGUILayout.EndHorizontal();
 
 			base.DrawDefaultInspector();

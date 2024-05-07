@@ -12,18 +12,19 @@ namespace Arcy.Quests
 		/// TODO: This needs to be replaced with the interacto system instead.
 		/// </summary>
 
-		[Header("Quest")]
-		[SerializeField] private QuestInfoSO questInfoForPoint;
-		private bool _playerIsNear = false;
-		private int questId;
-		private QuestObjectiveEnum currentQuestState;
+		[Header("Config")]
+		[SerializeField] private bool _startPoint;
+		[SerializeField] private bool _finishPoint;
 
-		[SerializeField] private bool startPoint;
-		[SerializeField] private bool finishPoint;
+		[Header("Quest")]
+		[SerializeField] private QuestSO _questInfoForPoint;
+		private bool _playerIsNear = false;
+		private int _questId;
+		private QuestObjectiveEnum _currentQuestState;
 
 		private void Awake()
 		{
-			questId = questInfoForPoint.guid;
+			_questId = _questInfoForPoint.questGuid;
 		}
 
 		private void OnEnable()
@@ -41,10 +42,10 @@ namespace Arcy.Quests
 		private void QuestStateChange(Quest quest)
 		{
 			// Only update the quest state if this point has the corresponding quest
-			if (quest.QuestObject.questGuid.Equals(questId))
+			if (quest.QuestObject.questGuid.Equals(_questId))
 			{
-				currentQuestState = quest.CurrentStatusEnum;
-				Debug.Log("Quest ith id: " + questId + " updated to state: " + currentQuestState);
+				_currentQuestState = quest.CurrentStatusEnum;
+				Debug.Log("Quest ith id: " + _questId + " updated to state: " + _currentQuestState);
 			}
 		}
 
@@ -54,13 +55,14 @@ namespace Arcy.Quests
 			if (!_playerIsNear)
 				return;
 
-			if (currentQuestState.Equals(QuestObjectiveEnum.CAN_START) && startPoint)
+			// Start or finish a quest
+			if (_currentQuestState.Equals(QuestObjectiveEnum.CAN_START) && _startPoint)
 			{
-				GameManager.instance.gameEventManager.questEvents.StartQuest(questId);
+				GameManager.instance.gameEventManager.questEvents.StartQuest(_questId);
 			}
-			else if (currentQuestState.Equals(QuestObjectiveEnum.CAN_FINISH) && finishPoint)
+			else if (_currentQuestState.Equals(QuestObjectiveEnum.CAN_FINISH) && _finishPoint)
 			{
-				GameManager.instance.gameEventManager.questEvents.FinishQuest(questId);
+				GameManager.instance.gameEventManager.questEvents.FinishQuest(_questId);
 			}
 
 		}

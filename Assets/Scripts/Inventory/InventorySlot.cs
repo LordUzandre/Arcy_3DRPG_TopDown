@@ -94,7 +94,6 @@ namespace Arcy.Inventory
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
 			return EditorGUIUtility.singleLineHeight;
-			// return EditorGUIUtility.singleLineHeight * 0.125f;
 		}
 	}
 #endif

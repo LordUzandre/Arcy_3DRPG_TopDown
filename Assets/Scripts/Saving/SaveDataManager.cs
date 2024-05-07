@@ -9,28 +9,30 @@ using System.Data.Common;
 
 namespace Arcy.Saving
 {
-	public class PersistentDataManager : MonoBehaviour
+	public class SaveDataManager : MonoBehaviour
 	{
 		/// <summary>
 		/// This class manages all the saving in the saving-system.
 		/// </summary>
 
 		[Header("File Storage Config")]
+		[SerializeField] private bool _globalOverrideSaveData = false;
+		public static bool GlobalOverrideSaveData = false;
+		[Space]
 		[SerializeField] private bool _createSaveDataIfNull = true;
 		[SerializeField] private bool _saveOnApplicationQuit = true;
 		[SerializeField] private bool _debugging = false;
-		[SerializeField] public bool globalOverrideSaveData = false;
 		[Space]
 		[SerializeField] private string _saveDataFileName = "game.save";
 		[SerializeField] private bool _useEncryption = false;
 
 		private SaveData _saveData;
 		private List<ISaveableEntity> _persistentDataObjects;
-		public JsonFileDataHandler saveDataHandler;
+		private JsonFileDataHandler _saveDataHandler;
 
 		// MARK: PUBLIC:
 
-		public void NewGame()
+		public void CreateNewSaveFile()
 		{
 			_saveData = new SaveData();
 		}
@@ -38,19 +40,19 @@ namespace Arcy.Saving
 		public void LoadGame()
 		{
 			// Load any saved data from a file using the data Handler
-			_saveData = saveDataHandler.Load();
+			_saveData = _saveDataHandler.Load();
 
 			// start a new game if the data is null and we're configured to initialize data for debugging purposes
 			if (_saveData == null && _createSaveDataIfNull)
 			{
-				NewGame();
+				CreateNewSaveFile();
 				if (_debugging) Debug.Log("New Save-file created");
 			}
 
 			// if no data can be loaded, don't continue.
 			if (_saveData == null)
 			{
-				Debug.LogError("No data was found. A new game needs to be started before data can be loaded.");
+				Debug.LogError("No data was found (and createSaveDataIfNull is turned off). \n A new game needs to be started before data can be loaded.");
 				return;
 			}
 
@@ -71,23 +73,23 @@ namespace Arcy.Saving
 				return;
 			}
 
-			// Save that data to a file using the data handler.
+			// Change all the save-data in the json-file
 			foreach (ISaveableEntity persistantDataObj in _persistentDataObjects)
 			{
 				persistantDataObj.SaveData(_saveData);
 			}
 
-			// save data to a file using the data handler.
-			saveDataHandler.Save(_saveData);
+			// write all the changes to the json-file
+			_saveDataHandler.Save(_saveData);
 		}
 
-		public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+		private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 		{
 			_persistentDataObjects = FindAllSaveDataObjects();
 			LoadGame();
 		}
 
-		public void OnSceneUnloaded(Scene scene)
+		private void OnSceneUnloaded(Scene scene)
 		{
 			SaveGame();
 		}
@@ -101,7 +103,8 @@ namespace Arcy.Saving
 
 		private void Awake()
 		{
-			saveDataHandler = new JsonFileDataHandler(Application.persistentDataPath, _saveDataFileName, _useEncryption);
+			GlobalOverrideSaveData = _globalOverrideSaveData;
+			_saveDataHandler = new JsonFileDataHandler(Application.persistentDataPath, _saveDataFileName, _useEncryption);
 		}
 
 		private void OnEnable()
@@ -128,7 +131,6 @@ namespace Arcy.Saving
 		{
 			// Use LINQ to find all scripts that are using ISaveableEntity.
 			IEnumerable<ISaveableEntity> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveableEntity>();
-
 			return new List<ISaveableEntity>(dataPersistenceObjects);
 		}
 
@@ -137,10 +139,9 @@ namespace Arcy.Saving
 	public class Placeholder
 	{
 		// Import the following methods when you want to Open/Load game data.
-
 		public void OnNewGameClicked()
 		{
-			GameManager.instance.persistentDataManager.NewGame();
+			GameManager.instance.persistentDataManager.CreateNewSaveFile();
 		}
 
 		public void OnLoadGameClicked()
@@ -176,7 +177,7 @@ namespace Arcy.Saving
 			DisableMenuBtns();
 
 			// create a new game - which will initialize out game data
-			GameManager.instance.persistentDataManager.NewGame();
+			GameManager.instance.persistentDataManager.CreateNewSaveFile();
 
 			// Load gameplay scene - which will in turn save our game
 			// because of OnSceneLoaded() in the PersistentDataManager.

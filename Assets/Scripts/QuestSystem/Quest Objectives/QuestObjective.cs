@@ -19,7 +19,7 @@ namespace Arcy.Quests
 		[Header("Status text for Journal UI")]
 		[TextArea(2, 6)][SerializeField] public string uiStatusText;
 
-		public abstract bool objectiveCanBeSkipped { get; set; }
+		public abstract bool ObjectiveCanBeSkipped { get; }
 
 		public abstract void InitializeObjective();
 		public abstract void FinishObjective();

@@ -36,7 +36,9 @@ namespace Arcy.Dialogue
         private SerializedProperty _questID; // string
         private SerializedProperty _label;
 
-        private string _dialoguePreview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+        private string _dialoguePreview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+        + "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+        + "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 
         // PUBLIC:
 

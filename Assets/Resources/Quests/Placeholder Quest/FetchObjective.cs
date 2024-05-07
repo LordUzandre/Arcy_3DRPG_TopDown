@@ -10,12 +10,13 @@ namespace Arcy.Quests
 	[CreateAssetMenu(fileName = "new Fetch Objective", menuName = "Arcy/Quests/Objectives/Fetch Objective")]
 	public class FetchObjective : QuestObjective
 	{
-		private bool _objectiveCanBeSkipped = true;
-		[SerializeField] public override bool objectiveCanBeSkipped { get { return _objectiveCanBeSkipped; } set { _objectiveCanBeSkipped = value; } }
+		[Space]
+		[SerializeField] private bool _objectiveCanBeSkipped = true;
+		public override bool ObjectiveCanBeSkipped { get { return _objectiveCanBeSkipped; } }
 
 		[Space]
-		[SerializeField] InventoryItem item;
-		[SerializeField] int amount;
+		[SerializeField] public InventoryItem Item;
+		[SerializeField] public int Amount;
 
 		// MARK: PUBLIC:
 
@@ -45,11 +46,11 @@ namespace Arcy.Quests
 
 		private bool ItemIsInInventory()
 		{
-			foreach (InventorySlot slot in GameManager.instance.inventoryManager.consumableSlots)
+			foreach (InventorySlot slot in InventoryManager.consumableSlots)
 			{
-				if (slot.GetItem() == item)
+				if (slot.GetItem() == Item)
 				{
-					if (slot.GetAmount() >= amount)
+					if (slot.GetAmount() >= Amount)
 					{
 						FinishObjective();
 						return true;

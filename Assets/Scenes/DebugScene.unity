@@ -6210,7 +6210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.62572736, y: 0.00000015934981, z: -0.00000012782587, w: 0.7800419}
+  m_LocalRotation: {x: 0.62572736, y: 0.0000001593498, z: -0.00000012782586, w: 0.7800419}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -19462,10 +19462,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a773a3fa1371f9a4984d93b706333004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _globalOverrideSaveData: 0
   _createSaveDataIfNull: 1
   _saveOnApplicationQuit: 1
   _debugging: 0
-  globalOverrideSaveData: 0
   _saveDataFileName: save.game
   _useEncryption: 0
 --- !u!224 &1007766289 stripped
@@ -20155,7 +20155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1041419797
 Transform:
   m_ObjectHideFlags: 0
@@ -20585,13 +20585,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a6e709887db5f34383a8afd803aefac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugging: 1
+  _useSaveData: 1
   _starterInventoryPrefab: {fileID: -3691963542309689016, guid: 0f4969c29b9bbc643928bfc05542dac9,
     type: 3}
-  _debugging: 0
-  _useSaveData: 1
-  inventorySize: 16
-  equipmentSlots: []
-  consumableSlots: []
+  _inEditorSlots: []
+  _inEditorEquipment: []
 --- !u!1 &1065765422
 GameObject:
   m_ObjectHideFlags: 0
@@ -27058,7 +27057,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3ec1c768007ba44891dd851887ca891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inventory: {fileID: 0}
   _gridParent: {fileID: 1686142113}
   _itemSlotPrefab: {fileID: 6318653707811759221, guid: 92d0d38b30954034dbd7dbb4532619f2,
     type: 3}
@@ -39865,6 +39863,7 @@ GameObject:
   - component: {fileID: 2042650175}
   - component: {fileID: 2042650174}
   - component: {fileID: 2042650173}
+  - component: {fileID: 2042650176}
   m_Layer: 5
   m_Name: InGameCanvas
   m_TagString: Untagged
@@ -39958,6 +39957,20 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 8
   m_TargetDisplay: 0
+--- !u!114 &2042650176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042650171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 756ae5c158f5ec148b040e34fdc4a060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _goldCoinTMP: {fileID: 419010437}
+  _goldCoinItem: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
 --- !u!1001 &2043144201
 PrefabInstance:
   m_ObjectHideFlags: 0

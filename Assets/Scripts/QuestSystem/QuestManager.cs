@@ -15,7 +15,6 @@ namespace Arcy.Quests
 
 		private static Dictionary<int, Quest> _questCache; // Key = string, Value = Quest
 
-
 		// MARK: PUBLIC:
 
 		public Quest GetQuestByGuid(int questID)
@@ -63,9 +62,6 @@ namespace Arcy.Quests
 					Debug.Log($"QuestManager: {quest.QuestObject.questGuid} is ongoing");
 					quest.InstantiateCurrentQuestObjective(transform);
 				}
-
-				// broadcast the initial state of all quests on startup
-				//GameManager.instance.gameEventManager.questEvents.StartQuest();
 			}
 		}
 
@@ -77,6 +73,7 @@ namespace Arcy.Quests
 			// GameManager.instance.gameEventManager.questEvents.onQuestObjectiveStateChange += QuestObjectiveStateChange;
 
 			GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished += DialogueFinished;
+			GameManager.instance.gameEventManager.inventoryEvents.onInventoryUpdated += InventoryUpdated;
 		}
 
 		private void OnDisable()
@@ -87,6 +84,7 @@ namespace Arcy.Quests
 			// GameManager.instance.gameEventManager.questEvents.onQuestObjectiveStateChange -= QuestObjectiveStateChange;
 
 			GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished -= DialogueFinished;
+			GameManager.instance.gameEventManager.inventoryEvents.onInventoryUpdated -= InventoryUpdated;
 		}
 
 		private void DialogueFinished(int speakerID)
@@ -109,18 +107,50 @@ namespace Arcy.Quests
 			}
 		}
 
+		private void InventoryUpdated()
+		{
+			Debug.Log("QuestManager is registering that you have picked up a new item.");
+		}
+
 		private bool CheckRequirementMet(Quest quest)
 		{
 			// Start true and require to be set to false
 			bool meetsRequirement = true;
 
 			// check quest prerequisites for completion
-			foreach (QuestRequirement requiredFinishedQuest in quest.QuestObject.requirementsToStartQuest)
+			foreach (QuestRequirement requirement in quest.QuestObject.requirementsToStartQuest)
 			{
-				// if (GetQuestByGuid(requiredFinishedQuest.questGuid).CurrentStatusEnum != QuestObjectiveEnum.FINISHED)
-				// {
-				// 	return false;
-				// }
+				switch (requirement.requirementType)
+				{
+					case (RequirementEnum.ItemID): // Look through inventory to see if we have all that's needed.
+						foreach (Inventory.InventorySlot slot in Inventory.InventoryManager.consumableSlots)
+						{
+							if (slot.GetItem().GetGuid() == requirement.itemID)
+							{
+								if (slot.GetAmount() >= requirement.requiredItemAmount)
+								{
+									return true;
+								}
+							}
+						}
+						break;
+
+					case (RequirementEnum.DialogueID): // See if we have talked to the character
+						break;
+
+					case (RequirementEnum.BattleID): // Check battlelog to see if we have fought the required character
+						break;
+
+					case (RequirementEnum.PlayerLevel): // Check to see if the player is at the required level
+						break;
+
+					case (RequirementEnum.TeamMember): // Check the battle party to see if we have the required party member
+						break;
+
+					case (RequirementEnum.PreviousQuestID): // Check the questLog to see if we have finished the required quests
+						if (GetQuestByGuid(requirement.requiredPreviousQuestID).CurrentStatusEnum != QuestObjectiveEnum.FINISHED) return false;
+						break;
+				}
 			}
 
 			return meetsRequirement;
@@ -188,7 +218,7 @@ namespace Arcy.Quests
 		{
 
 #if UNITY_EDITOR
-			if (!_useSaveData)
+			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
 			{
 				return;
 			}
@@ -202,7 +232,7 @@ namespace Arcy.Quests
 		{
 
 #if UNITY_EDITOR
-			if (!_useSaveData)
+			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
 			{
 				return;
 			}

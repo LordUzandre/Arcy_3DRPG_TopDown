@@ -3,21 +3,38 @@ using System.Collections.Generic;
 using Arcy.Management;
 using Arcy.Saving;
 using UnityEngine;
+using UnityEditor;
 
 namespace Arcy.Inventory
 {
 	public class InventoryManager : MonoBehaviour, ISaveableEntity
 	{
 		[Header("Config")]
-		[SerializeField] private StarterInventory _starterInventoryPrefab;
 		[SerializeField] private bool _debugging;
 		[SerializeField] private bool _useSaveData = true;
+		[SerializeField] private StarterInventory _starterInventoryPrefab;
 
 		[Space]
-		[SerializeField] public int inventorySize = 16;
-		[SerializeField] public InventorySlot[] equipmentSlots;
-		[SerializeField] public InventorySlot[] consumableSlots;
+		[SerializeField] public static int inventorySize = 16;
+		[SerializeField] public static int goldCoins = 0;
+		[SerializeField] public static int experience = 0;
+		[SerializeField] public static InventorySlot[] equipmentSlots;
+		[SerializeField] public static InventorySlot[] consumableSlots;
+#if UNITY_EDITOR
+		[Space]
+		[SerializeField] private int _goldCoins = 0;
+		[SerializeField] private int _experience = 0;
+		[SerializeField] private InventorySlot[] _inEditorSlots; // For use in Editor.
+		[SerializeField] private InventorySlot[] _inEditorEquipment; // For use in Editor.
 
+		private void Update()
+		{
+			_goldCoins = goldCoins;
+			_experience = experience;
+			_inEditorEquipment = equipmentSlots;
+			_inEditorSlots = consumableSlots;
+		}
+#endif
 
 		// MARK: PUBLIC
 
@@ -139,6 +156,7 @@ namespace Arcy.Inventory
 				consumableSlots[slot].SetItem(null);
 			}
 
+			if (_debugging) Debug.Log(amount + " " + consumableSlots[slot].GetItem().name + " removed from inventory.");
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 		}
 
@@ -158,6 +176,7 @@ namespace Arcy.Inventory
 			consumableSlots[slot].SetItem(item);
 			consumableSlots[slot].AddtoAmount(amount);
 
+			if (_debugging) Debug.Log(amount + " " + item.name + " added to inventory-slot number: " + slot);
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
 			return true;
@@ -260,7 +279,7 @@ namespace Arcy.Inventory
 		public void SaveData(SaveData saveData)
 		{
 #if UNITY_EDITOR
-			if (!_useSaveData)
+			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
 			{
 				return;
 			}
@@ -293,7 +312,7 @@ namespace Arcy.Inventory
 			}
 
 #if UNITY_EDITOR
-			if (!_useSaveData)
+			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
 			{
 				return;
 			}
@@ -333,4 +352,15 @@ namespace Arcy.Inventory
 
 		}
 	}
+
+#if UNITY_EDITOR
+	[CustomEditor(typeof(InventoryManager))]
+	public class InventoryEditor : Editor
+	{
+		public override void OnInspectorGUI()
+		{
+			base.DrawDefaultInspector();
+		}
+	}
+#endif
 }
