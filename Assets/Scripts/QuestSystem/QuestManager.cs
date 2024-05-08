@@ -12,39 +12,22 @@ namespace Arcy.Quests
 		[Header("Config")]
 		[SerializeField] private bool _debugging = false;
 		[SerializeField] private bool _useSaveData;
+		[SerializeField] List<string> allQuests = new List<string>();
 
-		private static Dictionary<int, Quest> _questCache; // Key = string, Value = Quest
+		private static Dictionary<int, Quest> _questCache; // int = Key, Quest = Value
 
 		// MARK: PUBLIC:
 
 		public Quest GetQuestByGuid(int questID)
 		{
-			if (_questCache == null)
-			{
-				// Create the quest map
-				Dictionary<int, Quest> idToQuestMap = new Dictionary<int, Quest>();
-
-				// Load all Quest Scriptable Objects in the Assets/Resources/Quests folder
-				IEnumerable allQuests = Resources.LoadAll<QuestSO>("Quests");
-
-				foreach (QuestSO questSO in allQuests)
-				{
-					if (idToQuestMap.ContainsKey(questSO.questGuid))
-					{
-						Debug.LogWarning("Duplicate ID found when creating quest map: " + questSO.questGuid);
-					}
-
-					idToQuestMap.Add(questSO.questGuid, LoadQuest(questSO));
-				}
-
-				if (_debugging) Debug.Log("Quest Log created");
-			}
+			// Create the quest map
+			_questCache ??= CreateQuestLog();
 
 			Quest quest = _questCache[questID];
 
 			if (quest == null || !_questCache.ContainsKey(questID))
 			{
-				Debug.LogError("ID not found in the Quest Map: " + questID);
+				Debug.LogError("QuestManager: ID not found in the Quest Map: " + questID);
 				return null;
 			}
 
@@ -53,15 +36,32 @@ namespace Arcy.Quests
 
 		//MARK: PRIVATE:
 
+		private void Awake()
+		{
+			_questCache ??= CreateQuestLog();
+		}
+
 		private void Start()
 		{
-			foreach (Quest quest in _questCache.Values)
+			StartCoroutine(GoThroughAllQuests());
+		}
+
+		IEnumerator GoThroughAllQuests()
+		{
+			yield return null;
+
+			foreach (int questID in _questCache.Keys)
 			{
-				if (quest.CurrentStatusEnum == QuestObjectiveEnum.STARTED)
-				{
-					Debug.Log($"QuestManager: {quest.QuestObject.questGuid} is ongoing");
-					quest.InstantiateCurrentQuestObjective(transform);
-				}
+				if (_debugging) Debug.Log("Quest: '" + _questCache[questID] + "' added to quest log and is '"); // + _questCache[questID].CurrentStatusEnum + "'");
+
+				// allQuests.Add(_questCache[questID].QuestObject.questName.ToString());
+
+				// if (quest.CurrentStatusEnum == QuestObjectiveEnum.STARTED)
+				// {
+				// 	if (_debugging) Debug.Log($"QuestManager: " + quest.QuestObject.questGuid + " is ongoing");
+				// 	quest.InstantiateCurrentQuestObjective(transform);
+				// }
+				yield return null;
 			}
 		}
 
@@ -85,6 +85,26 @@ namespace Arcy.Quests
 
 			GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished -= DialogueFinished;
 			GameManager.instance.gameEventManager.inventoryEvents.onInventoryUpdated -= InventoryUpdated;
+		}
+
+		private Dictionary<int, Quest> CreateQuestLog()
+		{
+			Dictionary<int, Quest> idToQuestMap = new Dictionary<int, Quest>();
+			IEnumerable allQuests = Resources.LoadAll<QuestSO>("Quests");
+
+			foreach (QuestSO questSO in allQuests)
+			{
+				if (idToQuestMap.ContainsKey(questSO.questGuid))
+				{
+					Debug.LogWarning("Duplicate ID found when creating quest map: " + questSO.questGuid);
+				}
+
+				idToQuestMap.Add(questSO.questGuid, LoadQuest(questSO));
+			}
+
+			if (_debugging) Debug.Log("QuestManager: Quest Log created");
+
+			return idToQuestMap;
 		}
 
 		private void DialogueFinished(int speakerID)
@@ -123,7 +143,7 @@ namespace Arcy.Quests
 				switch (requirement.requirementType)
 				{
 					case (RequirementEnum.ItemID): // Look through inventory to see if we have all that's needed.
-						foreach (Inventory.InventorySlot slot in Inventory.InventoryManager.consumableSlots)
+						foreach (Inventory.InventorySlot slot in Inventory.InventoryManager.ConsumableSlots)
 						{
 							if (slot.GetItem().GetGuid() == requirement.itemID)
 							{
@@ -217,12 +237,12 @@ namespace Arcy.Quests
 		public void LoadData(SaveData loadData)
 		{
 
-#if UNITY_EDITOR
-			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
-			{
-				return;
-			}
-#endif
+			// #if UNITY_EDITOR
+			// 			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
+			// 			{
+			// 				return;
+			// 			}
+			// #endif
 
 			// TODO: Fill out the rest.
 
@@ -231,17 +251,17 @@ namespace Arcy.Quests
 		public void SaveData(SaveData saveData)
 		{
 
-#if UNITY_EDITOR
-			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
-			{
-				return;
-			}
-#endif
+			// #if UNITY_EDITOR
+			// 			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
+			// 			{
+			// 				return;
+			// 			}
+			// #endif
 
-			foreach (Quest quest in _questCache.Values)
-			{
-				SaveQuestProgress(quest);
-			}
+			// 			foreach (Quest quest in _questCache.Values)
+			// 			{
+			// 				SaveQuestProgress(quest);
+			// 			}
 		}
 
 		// Convert the questData into Json
@@ -255,7 +275,7 @@ namespace Arcy.Quests
 
 				// TODO: Add questStatus to SaveData.
 
-				Debug.Log(serializedData);
+				if (_debugging) Debug.Log("QuestManager: " + serializedData);
 			}
 			catch (System.Exception e)
 			{

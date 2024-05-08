@@ -22,7 +22,7 @@ namespace Arcy.Quests
 		[Header("Rewards")]
 		[SerializeField] public int goldReward;
 		[SerializeField] public int experienceReward;
-		[field: SerializeField] public Inventory.InventorySlot[] questRewards;
+		[field: SerializeField] public Inventory.InventorySlot[] itemRewards;
 
 #if UNITY_EDITOR
 		private void OnValidate()
@@ -36,7 +36,7 @@ namespace Arcy.Quests
 
 #if UNITY_EDITOR
 	[CustomEditor(typeof(QuestSO))]
-	public class mypublicEditor : Editor
+	public class QuestSOEditor : Editor
 	{
 		public override void OnInspectorGUI()
 		{
@@ -48,9 +48,11 @@ namespace Arcy.Quests
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField("Guid", quest.questGuid.ToString()); //, EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
 			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.Space();
 
 			base.DrawDefaultInspector();
 
+			EditorGUILayout.Space();
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.HelpBox("These ScriptableObjects should contain the 'read-only'-information of any quest.", MessageType.Info);
 			EditorGUILayout.EndHorizontal();

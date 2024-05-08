@@ -9,8 +9,8 @@ namespace Arcy.Inventory
 	[CreateAssetMenu(fileName = "New Item", menuName = "Arcy/Inventory/Item", order = 60)]
 	public class InventoryItem : ScriptableObject
 	{
-		[HideInInspector] public string itemName = "";
-		[HideInInspector] public int guid;
+		[HideInInspector] private string itemName = "";
+		[HideInInspector] private int guid;
 		[SerializeField] public bool showInInventory = true; // Used by UI
 
 		[Header("UI")]
@@ -105,10 +105,10 @@ namespace Arcy.Inventory
 			InventoryItem item = (InventoryItem)target;
 
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Item Name", item.itemName.ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.LabelField("Item Name", item.GetDisplayName().ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Guid", item.guid.ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.LabelField("Guid", item.GetGuid().ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
 			EditorGUILayout.EndHorizontal();
 
 			base.DrawDefaultInspector();

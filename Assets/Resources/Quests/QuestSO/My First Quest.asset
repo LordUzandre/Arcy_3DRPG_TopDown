@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41c252ecc1cbb034fbc4621307b87bba, type: 3}
-  m_Name: Placeholder Quest
+  m_Name: My First Quest
   m_EditorClassIdentifier: 
-  questName: Placeholder Quest
+  questName: My First Quest
   questGuid: 295701672
   questGiver: 
   requirementsToStartQuest:
@@ -21,15 +21,14 @@ MonoBehaviour:
     requiredTeamMember: 
     quest: {fileID: 0}
     requiredPreviousQuestID: 0
-    requiredItem: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
+    requiredItem: {fileID: 11400000, guid: 9628b1a07e0e00143af4d8d973a68a53, type: 2}
     itemID: 0
     requiredItemAmount: 1
     requiredDialogueID: 0
     battleID: 0
   objectives:
-  - {fileID: 11400000, guid: 11fb0513a9ceb7648bffc819583cc427, type: 2}
+  - {fileID: -631167579793016589, guid: af7cdd9eef1b23e4995669680f348f16, type: 3}
+  - {fileID: -2905014971866791469, guid: 7e53f5e511132ce469af5ae17ed9dcea, type: 3}
   goldReward: 250
   experienceReward: 750
-  questRewards:
-  - _item: {fileID: 11400000, guid: 940bf73893ecd5e4686d6f4fc1415645, type: 2}
-    _amount: 0
+  itemRewards: []

@@ -12,6 +12,7 @@ namespace Arcy.Inventory
 	[CreateAssetMenu(menuName = ("Arcy/Inventory/Equipable Item"))]
 	public class EquipableItem : InventoryItem
 	{
+		[Space]
 		[SerializeField] EquipLocation allowedEquipLocation = EquipLocation.RightHand;
 
 		// Public:

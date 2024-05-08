@@ -78,19 +78,11 @@ MonoBehaviour:
   - _item: {fileID: 0}
     _amount: 0
   _starterEquipmentSlots:
-  - _item: {fileID: 0}
-    _amount: 0
-  - _item: {fileID: 0}
-    _amount: 0
-  - _item: {fileID: 0}
-    _amount: 0
-  - _item: {fileID: 0}
-    _amount: 0
-  - _item: {fileID: 0}
-    _amount: 0
-  - _item: {fileID: 0}
-    _amount: 0
-  - _item: {fileID: 0}
-    _amount: 0
-  - _item: {fileID: 0}
-    _amount: 0
+  - EquipmentLocation: 2
+    Item: {fileID: 11400000, guid: 940bf73893ecd5e4686d6f4fc1415645, type: 2}
+  - EquipmentLocation: 3
+    Item: {fileID: 0}
+  - EquipmentLocation: 1
+    Item: {fileID: 0}
+  - EquipmentLocation: 0
+    Item: {fileID: 0}

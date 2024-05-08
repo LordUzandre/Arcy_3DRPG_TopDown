@@ -8,11 +8,11 @@ using UnityEngine;
 namespace Arcy.Quests
 {
 	// [CreateAssetMenu(fileName = "new Objective", menuName = "Arcy/Quests/Objectives")]
-	public abstract class QuestObjective : ScriptableObject
+	public abstract class QuestObjective : MonoBehaviour
 	{
 		/// <summary>
 		/// This class acts as a parent class for quest objectives.
-		/// Child scripts should be attached to gameobjects and attached as prefabs on the questInfoSO.
+		/// Child scripts should be attached to gameobjects and attached as prefabs on the questSO.
 		/// The prefabs will be spawned into the scene by QuestManager and destroyed upon completion.
 		/// </summary>
 

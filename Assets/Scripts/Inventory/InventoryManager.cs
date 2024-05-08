@@ -15,24 +15,25 @@ namespace Arcy.Inventory
 		[SerializeField] private StarterInventory _starterInventoryPrefab;
 
 		[Space]
-		[SerializeField] public static int inventorySize = 16;
-		[SerializeField] public static int goldCoins = 0;
-		[SerializeField] public static int experience = 0;
-		[SerializeField] public static InventorySlot[] equipmentSlots;
-		[SerializeField] public static InventorySlot[] consumableSlots;
+		[SerializeField] public static int InventorySize = 16;
+		[SerializeField] public static int GoldCoins = 0;
+		[SerializeField] public static int Experience = 0;
+		[SerializeField] public static InventorySlot[] EquipmentSlots;
+		[SerializeField] public static InventorySlot[] ConsumableSlots;
+
+		// For use in Editor.
 #if UNITY_EDITOR
-		[Space]
-		[SerializeField] private int _goldCoins = 0;
-		[SerializeField] private int _experience = 0;
-		[SerializeField] private InventorySlot[] _inEditorSlots; // For use in Editor.
-		[SerializeField] private InventorySlot[] _inEditorEquipment; // For use in Editor.
+		[HideInInspector] public int InEditorGoldCoins = 0;
+		[HideInInspector] public int InEditorExpPoints = 0;
+		[HideInInspector] public InventorySlot[] InEditorSlots;
+		[HideInInspector] public InventorySlot[] InEditorEquipment;
 
 		private void Update()
 		{
-			_goldCoins = goldCoins;
-			_experience = experience;
-			_inEditorEquipment = equipmentSlots;
-			_inEditorSlots = consumableSlots;
+			InEditorGoldCoins = GoldCoins;
+			InEditorExpPoints = Experience;
+			InEditorEquipment = EquipmentSlots;
+			InEditorSlots = ConsumableSlots;
 		}
 #endif
 
@@ -74,7 +75,7 @@ namespace Arcy.Inventory
 		public int AvailableSlots()
 		{
 			int count = 0;
-			foreach (InventorySlot slot in consumableSlots)
+			foreach (InventorySlot slot in ConsumableSlots)
 			{
 				if (slot.GetAmount() < 1)
 				{
@@ -86,7 +87,7 @@ namespace Arcy.Inventory
 
 		public int GetInventorySize()
 		{
-			return consumableSlots.Length;
+			return ConsumableSlots.Length;
 		}
 
 		/// <summary>
@@ -94,9 +95,9 @@ namespace Arcy.Inventory
 		/// </summary>
 		public bool HasItem(InventoryItem item)
 		{
-			for (int i = 0; i < consumableSlots.Length; i++)
+			for (int i = 0; i < ConsumableSlots.Length; i++)
 			{
-				if (object.ReferenceEquals(consumableSlots[i].GetItem(), item))
+				if (object.ReferenceEquals(ConsumableSlots[i].GetItem(), item))
 				{
 					return true;
 				}
@@ -113,8 +114,8 @@ namespace Arcy.Inventory
 				return false;
 			}
 
-			consumableSlots[i].SetItem(item);
-			consumableSlots[i].AddtoAmount(amount);
+			ConsumableSlots[i].SetItem(item);
+			ConsumableSlots[i].AddtoAmount(amount);
 
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
@@ -126,9 +127,9 @@ namespace Arcy.Inventory
 		/// </summary>
 		public bool InventoryHoldsItem(InventoryItem item)
 		{
-			for (int i = 0; i < consumableSlots.Length; i++)
+			for (int i = 0; i < ConsumableSlots.Length; i++)
 			{
-				if (object.ReferenceEquals(consumableSlots[i].GetItem(), item))
+				if (object.ReferenceEquals(ConsumableSlots[i].GetItem(), item))
 				{
 					return true;
 				}
@@ -139,30 +140,30 @@ namespace Arcy.Inventory
 
 		public InventoryItem GetItemInSlot(int slot)
 		{
-			return consumableSlots[slot].GetItem();
+			return ConsumableSlots[slot].GetItem();
 		}
 
 		public int GetAmountInSlot(int slot)
 		{
-			return consumableSlots[slot].GetAmount();
+			return ConsumableSlots[slot].GetAmount();
 		}
 
 		public void RemoveFromSlot(int slot, int amount)
 		{
-			consumableSlots[slot].SubstractFromSlot(amount);
-			if (consumableSlots[slot].GetAmount() <= 0)
+			ConsumableSlots[slot].SubstractFromSlot(amount);
+			if (ConsumableSlots[slot].GetAmount() <= 0)
 			{
-				consumableSlots[slot].SetAmount(0);
-				consumableSlots[slot].SetItem(null);
+				ConsumableSlots[slot].SetAmount(0);
+				ConsumableSlots[slot].SetItem(null);
 			}
 
-			if (_debugging) Debug.Log(amount + " " + consumableSlots[slot].GetItem().name + " removed from inventory.");
+			if (_debugging) Debug.Log("InventoryManager: " + amount + " " + ConsumableSlots[slot].GetItem().name + " removed from inventory.");
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 		}
 
 		public bool AddItemToSlot(int slot, InventoryItem item, int amount)
 		{
-			if (consumableSlots[slot].GetItem() != item)
+			if (ConsumableSlots[slot].GetItem() != item)
 			{
 				return AddToFirstEmptySlot(item, amount);
 			}
@@ -173,10 +174,10 @@ namespace Arcy.Inventory
 				slot = i;
 			}
 
-			consumableSlots[slot].SetItem(item);
-			consumableSlots[slot].AddtoAmount(amount);
+			ConsumableSlots[slot].SetItem(item);
+			ConsumableSlots[slot].AddtoAmount(amount);
 
-			if (_debugging) Debug.Log(amount + " " + item.name + " added to inventory-slot number: " + slot);
+			if (_debugging) Debug.Log("InventoryManager: " + amount + " " + item.name + " added to inventory-slot number: " + slot);
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
 			return true;
@@ -192,20 +193,20 @@ namespace Arcy.Inventory
 				InventorySlot[] originalArray = _starterInventoryPrefab.LoadStarterInventory();
 				InventorySlot[] clonedArray = new InventorySlot[originalArray.Length];
 
-				for (int i = 0; i < inventorySize; i++)
+				for (int i = 0; i < InventorySize; i++)
 				{
 					InventoryItem newItem = originalArray[i].GetItem();
 					// Create a new InventorySlot instance with the cloned InventoryItem and amount
 					clonedArray[i] = new InventorySlot(newItem, originalArray[i].GetAmount());
 				}
 
-				if (_debugging) Debug.Log("Loaded from Starter Inventory");
+				if (_debugging) Debug.Log("InventoryManager: Loaded from Starter Inventory");
 
 				return clonedArray;
 			}
 			else
 			{
-				Debug.LogError("Inventory Manager was unable to acquire items from starterInventory");
+				Debug.LogError("InventoryManager: unable to acquire items from starterInventory");
 				return null;
 			}
 		}
@@ -230,9 +231,9 @@ namespace Arcy.Inventory
 		/// </summary>
 		private int FindEmptySlot()
 		{
-			for (int i = 0; i < consumableSlots.Length; i++)
+			for (int i = 0; i < ConsumableSlots.Length; i++)
 			{
-				if (consumableSlots[i].GetItem() == null)
+				if (ConsumableSlots[i].GetItem() == null)
 				{
 					return i;
 				}
@@ -249,7 +250,7 @@ namespace Arcy.Inventory
 			if (i < 0)
 			{
 				i = FindEmptySlot();
-				Debug.Log("First Empty Slot Found: " + i);
+				if (_debugging) Debug.Log("First Empty Slot Found: " + i);
 			}
 			return i;
 		}
@@ -264,9 +265,9 @@ namespace Arcy.Inventory
 				return -1;
 			}
 
-			for (int i = 0; i < consumableSlots.Length; i++)
+			for (int i = 0; i < ConsumableSlots.Length; i++)
 			{
-				if (object.ReferenceEquals(consumableSlots[i].GetItem(), item))
+				if (object.ReferenceEquals(ConsumableSlots[i].GetItem(), item))
 				{
 					return i;
 				}
@@ -286,28 +287,30 @@ namespace Arcy.Inventory
 #endif
 
 			saveData.inventory.Clear();
-			saveData.inventorySize = inventorySize;
+			saveData.inventorySize = InventorySize;
+			// string saveDataString = "";
 
-			foreach (InventorySlot slot in consumableSlots)
+			foreach (InventorySlot slot in ConsumableSlots)
 			{
 				if (slot.GetItem() != null && slot.GetAmount() > 0)
 				{
-					if (saveData.inventory.ContainsKey(slot.GetItem().guid))
+					if (saveData.inventory.ContainsKey(slot.GetItem().GetGuid()))
 					{
-						saveData.inventory.Remove(slot.GetItem().guid);
+						saveData.inventory.Remove(slot.GetItem().GetGuid());
 					}
 
-					saveData.inventory.Add(slot.GetItem().guid, slot.GetAmount());
+					saveData.inventory.Add(slot.GetItem().GetGuid(), slot.GetAmount());
 				}
+				// if (_debugging) saveDataString += slot.GetAmount() + " " + slot.GetItem().GetDisplayName() + ", ";
 			}
-
+			// if (_debugging) Debug.Log(saveDataString + "are saved");
 		}
 
 		public void LoadData(SaveData loadData)
 		{
 			if (loadData.inventory.Count < 1)
 			{
-				consumableSlots = LoadFromStarterInventory();
+				ConsumableSlots = LoadFromStarterInventory();
 				return;
 			}
 
@@ -332,23 +335,23 @@ namespace Arcy.Inventory
 
 				if (newSlot.GetItem() == null)
 				{
-					Debug.LogError("Unable to access item: " + itemID.Key);
+					if (_debugging) Debug.LogError("Unable to access item: " + itemID.Key);
 					continue;
 				}
 
 				consumablesToBeAdded.Add(newSlot);
 			}
 
-			if (consumablesToBeAdded.Count < inventorySize)
+			if (consumablesToBeAdded.Count < InventorySize)
 			{
-				int remainingSlots = inventorySize - consumablesToBeAdded.Count;
+				int remainingSlots = InventorySize - consumablesToBeAdded.Count;
 				for (int i = 0; i < remainingSlots; i++)
 				{
 					consumablesToBeAdded.Add(null);
 				}
 			}
 
-			consumableSlots = consumablesToBeAdded.ToArray();
+			ConsumableSlots = consumablesToBeAdded.ToArray();
 
 		}
 	}
@@ -357,10 +360,47 @@ namespace Arcy.Inventory
 	[CustomEditor(typeof(InventoryManager))]
 	public class InventoryEditor : Editor
 	{
+		private SerializedProperty myArray;
+
 		public override void OnInspectorGUI()
 		{
-			base.DrawDefaultInspector();
+			InventoryManager myTarget = (InventoryManager)target;
+
+			base.OnInspectorGUI();
+
+			if (myTarget.InEditorSlots.Length > 0)
+			{
+				EditorGUILayout.Space();
+				EditorGUI.indentLevel += 4;
+				foreach (InventorySlot slot in myTarget.InEditorSlots)
+				{
+					if (slot.GetAmount() <= 0) return;
+
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.LabelField(slot.GetAmount().ToString());
+					EditorGUILayout.LabelField(slot.GetItem().GetDisplayName());
+					EditorGUILayout.EndHorizontal();
+				}
+				EditorGUI.indentLevel -= 4;
+			}
+
+			if (myTarget.InEditorSlots.Length > 0)
+			{
+				EditorGUILayout.Space();
+				EditorGUI.indentLevel += 4;
+				foreach (InventorySlot slot in myTarget.InEditorSlots)
+				{
+					if (slot.GetAmount() <= 0) return;
+
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.LabelField(slot.GetAmount().ToString());
+					EditorGUILayout.LabelField(slot.GetItem().GetDisplayName());
+					EditorGUILayout.EndHorizontal();
+				}
+				EditorGUI.indentLevel -= 4;
+			}
 		}
 	}
 #endif
+
 }

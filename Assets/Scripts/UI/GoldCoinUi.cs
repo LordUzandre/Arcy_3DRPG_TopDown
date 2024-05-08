@@ -32,7 +32,7 @@ namespace Arcy.UI
 		private void OnEnable()
 		{
 			CheckComponents();
-			_coinTotal = InventoryManager.goldCoins;
+			_coinTotal = InventoryManager.GoldCoins;
 			_goldCoinGuid = _goldCoinItem.GetGuid();
 			_goldCoinTMP.text = _coinTotal.ToString();
 

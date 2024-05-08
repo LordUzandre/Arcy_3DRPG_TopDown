@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Arcy.Quests
 {
-	[CreateAssetMenu(fileName = "new Fetch Objective", menuName = "Arcy/Quests/Objectives/Fetch Objective")]
+	// [CreateAssetMenu(fileName = "new Fetch Objective", menuName = "Arcy/Quests/Objectives/Fetch Objective")]
 	public class FetchObjective : QuestObjective
 	{
 		[Space]
@@ -46,9 +46,9 @@ namespace Arcy.Quests
 
 		private bool ItemIsInInventory()
 		{
-			foreach (InventorySlot slot in InventoryManager.consumableSlots)
+			foreach (InventorySlot slot in InventoryManager.ConsumableSlots)
 			{
-				if (slot.GetItem() == Item)
+				if (slot.GetItem().Equals(Item))
 				{
 					if (slot.GetAmount() >= Amount)
 					{

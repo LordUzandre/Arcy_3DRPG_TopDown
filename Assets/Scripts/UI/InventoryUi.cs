@@ -51,7 +51,7 @@ namespace Arcy.UI
 			btnList.Clear();
 			btnList.RemoveRange(0, btnList.Count);
 
-			for (int i = 0; i < InventoryManager.inventorySize; i++)
+			for (int i = 0; i < InventoryManager.InventorySize; i++)
 			{
 				GameObject gmObject = Instantiate(_itemSlotPrefab, _gridParent);
 				InventoryUiBtn ivBtn = gmObject.GetComponent<InventoryUiBtn>();

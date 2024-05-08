@@ -8,7 +8,7 @@ namespace Arcy.Inventory
 	public class Equipment : MonoBehaviour
 	{
 		// STATE
-		Dictionary<EquipLocation, EquipableItem> equippedItems = new Dictionary<EquipLocation, EquipableItem>();
+		private static Dictionary<EquipLocation, EquipableItem> equippedItems = new Dictionary<EquipLocation, EquipableItem>();
 
 		// PUBLIC
 
