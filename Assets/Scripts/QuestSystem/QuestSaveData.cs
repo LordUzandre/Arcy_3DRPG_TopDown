@@ -12,16 +12,16 @@ namespace Arcy.Quests
 		/// This is the data that gets saved/loaded by QuestManager in the "original" saving system.
 		/// </summary>
 
-		public QuestObjectiveEnum State;
-		public QuestObjectiveState[] QuestObjectiveStates;
-		public int QuestObjectiveIndex;
+		public QuestObjectiveEnum State; // enum
+		public int QuestObjectiveIndex; // int
+										// public QuestObjectiveState[] QuestObjectiveStates; // 
 
 		// Constructor
-		public QuestSaveData(QuestObjectiveEnum state, int questObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
+		public QuestSaveData(QuestObjectiveEnum state, int questObjectiveIndex) //, QuestObjectiveState[] questObjectiveStates)
 		{
 			State = state;
-			QuestObjectiveStates = questObjectiveStates;
 			QuestObjectiveIndex = questObjectiveIndex;
+			// QuestObjectiveStates = questObjectiveStates;
 		}
 	}
 

@@ -12,7 +12,7 @@ namespace Arcy.Quests
 		[Header("Config")]
 		[SerializeField] private bool _debugging = false;
 		[SerializeField] private bool _useSaveData;
-		[SerializeField] List<string> allQuests = new List<string>();
+		[SerializeField] private List<string> _allQuests = new List<string>(); // Used only in the editor
 
 		private static Dictionary<int, Quest> _questCache; // int = Key, Quest = Value
 
@@ -21,7 +21,7 @@ namespace Arcy.Quests
 		public Quest GetQuestByGuid(int questID)
 		{
 			// Create the quest map
-			_questCache ??= CreateQuestLog();
+			_questCache ??= CreateQuestCache();
 
 			Quest quest = _questCache[questID];
 
@@ -36,58 +36,7 @@ namespace Arcy.Quests
 
 		//MARK: PRIVATE:
 
-		private void Awake()
-		{
-			_questCache ??= CreateQuestLog();
-		}
-
-		private void Start()
-		{
-			StartCoroutine(GoThroughAllQuests());
-		}
-
-		IEnumerator GoThroughAllQuests()
-		{
-			yield return null;
-
-			foreach (int questID in _questCache.Keys)
-			{
-				if (_debugging) Debug.Log("Quest: '" + _questCache[questID] + "' added to quest log and is '"); // + _questCache[questID].CurrentStatusEnum + "'");
-
-				// allQuests.Add(_questCache[questID].QuestObject.questName.ToString());
-
-				// if (quest.CurrentStatusEnum == QuestObjectiveEnum.STARTED)
-				// {
-				// 	if (_debugging) Debug.Log($"QuestManager: " + quest.QuestObject.questGuid + " is ongoing");
-				// 	quest.InstantiateCurrentQuestObjective(transform);
-				// }
-				yield return null;
-			}
-		}
-
-		private void OnEnable()
-		{
-			GameManager.instance.gameEventManager.questEvents.onStartQuest += StartQuest;
-			GameManager.instance.gameEventManager.questEvents.onAdvanceQuest += AdvanceQuest;
-			GameManager.instance.gameEventManager.questEvents.onFinishQuest += FinishQuest;
-			// GameManager.instance.gameEventManager.questEvents.onQuestObjectiveStateChange += QuestObjectiveStateChange;
-
-			GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished += DialogueFinished;
-			GameManager.instance.gameEventManager.inventoryEvents.onInventoryUpdated += InventoryUpdated;
-		}
-
-		private void OnDisable()
-		{
-			GameManager.instance.gameEventManager.questEvents.onStartQuest -= StartQuest;
-			GameManager.instance.gameEventManager.questEvents.onAdvanceQuest -= AdvanceQuest;
-			GameManager.instance.gameEventManager.questEvents.onFinishQuest -= FinishQuest;
-			// GameManager.instance.gameEventManager.questEvents.onQuestObjectiveStateChange -= QuestObjectiveStateChange;
-
-			GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished -= DialogueFinished;
-			GameManager.instance.gameEventManager.inventoryEvents.onInventoryUpdated -= InventoryUpdated;
-		}
-
-		private Dictionary<int, Quest> CreateQuestLog()
+		private Dictionary<int, Quest> CreateQuestCache()
 		{
 			Dictionary<int, Quest> idToQuestMap = new Dictionary<int, Quest>();
 			IEnumerable allQuests = Resources.LoadAll<QuestSO>("Quests");
@@ -99,7 +48,7 @@ namespace Arcy.Quests
 					Debug.LogWarning("Duplicate ID found when creating quest map: " + questSO.questGuid);
 				}
 
-				idToQuestMap.Add(questSO.questGuid, LoadQuest(questSO));
+				idToQuestMap.Add(questSO.questGuid, SetupQuest(questSO));
 			}
 
 			if (_debugging) Debug.Log("QuestManager: Quest Log created");
@@ -107,30 +56,96 @@ namespace Arcy.Quests
 			return idToQuestMap;
 		}
 
-		private void DialogueFinished(int speakerID)
+		private void SetupQuestLog(SaveData loadData) // called by LoadData()
 		{
 			foreach (Quest quest in _questCache.Values)
 			{
-				// check non-started quests firsts
-				// if we're now meeting the requirements, switch over to the CAN_START state
-				if (quest.CurrentStatusEnum == QuestObjectiveEnum.REQUIREMENTS_NOT_MET && CheckRequirementMet(quest))
-				{
-					ChangeQuestState(quest.QuestObject.questGuid, QuestObjectiveEnum.CAN_START);
-					return;
-				}
+				if (_debugging) Debug.Log("Quest: '" + quest.QuestObject.questName + "' added to quest log and is '" + quest.CurrentStatusEnum + "'");
 
-				if (quest.CurrentStatusEnum == QuestObjectiveEnum.STARTED)
-				{
-					// TODO:
-					// check whether any of the ongoing quests are currently listening for this conversation.
-				}
+				// _allQuests.Add(quest.QuestObject.questName.ToString() + " = " + quest.CurrentStatusEnum);
+
+				// if (quest.CurrentStatusEnum == QuestObjectiveEnum.STARTED)
+				// {
+				// 	if (_debugging) Debug.Log($"QuestManager: " + quest.QuestObject.questGuid + " is ongoing");
+
+				// 	quest.InstantiateCurrentQuestObjective(transform);
+				// }
 			}
 		}
 
-		private void InventoryUpdated()
+		private Quest SetupQuest(QuestSO questSO) // used by CreateQuestCache()
 		{
-			Debug.Log("QuestManager is registering that you have picked up a new item.");
+			Quest quest = null;
+
+			try
+			{
+				// load quest from saved data
+				if (saveData.questLog.ContainsKey(questSO.questGuid) && _useSaveData)
+				{
+					string serializedData = saveData.questLog[questSO.questGuid].ToString();
+					QuestSaveData savedQuestData = JsonUtility.FromJson<QuestSaveData>(serializedData);
+					quest = new Quest(questSO, savedQuestData.State, savedQuestData.QuestObjectiveIndex); //, questData.QuestObjectiveStates);
+				}
+				// otherwise, initialize a new quest
+				else
+				{
+					quest = new Quest(questSO);
+				}
+			}
+			catch (System.Exception e)
+			{
+				Debug.LogError("Failed to load quest with id " + quest.QuestObject.questGuid + ": " + e);
+			}
+
+			return quest;
 		}
+
+		private void OnEnable()
+		{
+			GameManager.instance.gameEventManager.questEvents.onStartQuest += StartQuest;
+			GameManager.instance.gameEventManager.questEvents.onAdvanceQuest += AdvanceQuest;
+			GameManager.instance.gameEventManager.questEvents.onFinishQuest += FinishQuest;
+
+			// GameManager.instance.gameEventManager.questEvents.onQuestObjectiveStateChange += QuestObjectiveStateChange;
+			// GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished += DialogueFinished;
+			// GameManager.instance.gameEventManager.inventoryEvents.onInventoryUpdated += InventoryUpdated;
+		}
+
+		private void OnDisable()
+		{
+			GameManager.instance.gameEventManager.questEvents.onStartQuest -= StartQuest;
+			GameManager.instance.gameEventManager.questEvents.onAdvanceQuest -= AdvanceQuest;
+			GameManager.instance.gameEventManager.questEvents.onFinishQuest -= FinishQuest;
+
+			// GameManager.instance.gameEventManager.questEvents.onQuestObjectiveStateChange -= QuestObjectiveStateChange;
+			// GameManager.instance.gameEventManager.dialogueEvents.onDialogueFinished -= DialogueFinished;
+			// GameManager.instance.gameEventManager.inventoryEvents.onInventoryUpdated -= InventoryUpdated;
+		}
+
+		// private void DialogueFinished(int speakerID)
+		// {
+		// 	foreach (Quest quest in _questCache.Values)
+		// 	{
+		// 		// check non-started quests firsts
+		// 		// if we're now meeting the requirements, switch over to the CAN_START state
+		// 		if (quest.CurrentStatusEnum == QuestObjectiveEnum.REQUIREMENTS_NOT_MET && CheckRequirementMet(quest))
+		// 		{
+		// 			ChangeQuestState(quest.QuestObject.questGuid, QuestObjectiveEnum.CAN_START);
+		// 			return;
+		// 		}
+
+		// 		if (quest.CurrentStatusEnum == QuestObjectiveEnum.STARTED)
+		// 		{
+		// 			// TODO:
+		// 			// check whether any of the ongoing quests are currently listening for this conversation.
+		// 		}
+		// 	}
+		// }
+
+		// private void InventoryUpdated()
+		// {
+		// 	Debug.Log("QuestManager is registering that you have picked up a new item.");
+		// }
 
 		private bool CheckRequirementMet(Quest quest)
 		{
@@ -147,9 +162,9 @@ namespace Arcy.Quests
 						{
 							if (slot.GetItem().GetGuid() == requirement.itemID)
 							{
-								if (slot.GetAmount() >= requirement.requiredItemAmount)
+								if (slot.GetAmount() <= requirement.requiredItemAmount)
 								{
-									return true;
+									meetsRequirement = false;
 								}
 							}
 						}
@@ -225,10 +240,10 @@ namespace Arcy.Quests
 			// Remember to alert UI
 		}
 
-		private void QuestObjectiveStateChange(int questID, int objectiveIndex, QuestObjectiveState questObjectiveState)
+		private void QuestObjectiveStateChange(int questID, int objectiveIndex) //, QuestObjectiveState questObjectiveState)
 		{
 			Quest quest = GetQuestByGuid(questID);
-			quest.StoreQuestObjectiveStatus(questObjectiveState, objectiveIndex);
+			// quest.StoreQuestObjectiveStatus(questObjectiveState, objectiveIndex);
 			ChangeQuestState(questID, quest.CurrentStatusEnum);
 		}
 
@@ -238,21 +253,26 @@ namespace Arcy.Quests
 		{
 
 			// #if UNITY_EDITOR
-			// 			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
+			// 			if (!SaveDataManager.GlobalOverrideSaveData)
 			// 			{
-			// 				return;
+			// 				if (!_useSaveData)
+			// 				{
+			// 					return;
+			// 				}
 			// 			}
 			// #endif
 
-			// TODO: Fill out the rest.
-
+			if (loadData.questLog.Count > 0)
+			{
+				SetupQuestLog(loadData);
+			}
 		}
 
 		public void SaveData(SaveData saveData)
 		{
 
 			// #if UNITY_EDITOR
-			// 			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
+			// 			if (!_useSaveData || !SaveDataManager.GlobalOverrideSaveData)
 			// 			{
 			// 				return;
 			// 			}
@@ -265,32 +285,23 @@ namespace Arcy.Quests
 		}
 
 		// Convert the questData into Json
-		private void SaveQuestProgress(Quest quest)
-		{
-			try
-			{
-				QuestSaveData questData = quest.GetQuestData();
-
-				string serializedData = JsonUtility.ToJson(questData);
-
-				// TODO: Add questStatus to SaveData.
-
-				if (_debugging) Debug.Log("QuestManager: " + serializedData);
-			}
-			catch (System.Exception e)
-			{
-				Debug.LogError("Failed to save quest with id " + quest.QuestObject.questGuid + ": " + e);
-			}
-
-		}
-
-		// TODO - Change so that the changes saves at convenient intervals, rather than when quitting the game
-		// private void OnApplicationQuit()
+		// private void SaveQuestProgress(Quest quest)
 		// {
-		// 	foreach (Quest quest in _questMap.Values)
+		// 	try
 		// 	{
-		// 		SaveQuest(quest);
+		// 		QuestSaveData questData = quest.GetQuestData();
+
+		// 		string serializedData = JsonUtility.ToJson(questData);
+
+		// 		// TODO: Add questStatus to SaveData.
+
+		// 		if (_debugging) Debug.Log("QuestManager: " + serializedData);
 		// 	}
+		// 	catch (System.Exception e)
+		// 	{
+		// 		Debug.LogError("Failed to save quest with id " + quest.QuestObject.questGuid + ": " + e);
+		// 	}
+
 		// }
 
 		// TODO - Switch to the implemented saving system
@@ -311,36 +322,5 @@ namespace Arcy.Quests
 		// 		Debug.LogError("Failed to save quest with id " + quest.questSO.guid + ": " + e);
 		// 	}
 		// }
-
-		// // TODO - Switch to the implemented saving system
-		// private Quest LoadQuest(QuestInfoSO questInfo)
-		// {
-		// 	Quest quest = null;
-		// 	try
-		// 	{
-		// 		// load quest from saved data
-		// 		if (PlayerPrefs.HasKey(questInfo.guid.ToString()) && loadQuestState)
-		// 		{
-		// 			string serializedData = PlayerPrefs.GetString(questInfo.guid.ToString());
-		// 			QuestSaveData questData = JsonUtility.FromJson<QuestSaveData>(serializedData);
-		// 			quest = new Quest(questInfo, questData.state, questData.questObjectiveIndex, questData.questObjectiveStates);
-		// 		}
-		// 		// otherwise, initialize a new quest
-		// 		else
-		// 		{
-		// 			quest = new Quest(questInfo);
-		// 		}
-		// 	}
-		// 	catch (System.Exception e)
-		// 	{
-		// 		Debug.LogError("Failed to load quest with id " + quest.questSO.guid + ": " + e);
-		// 	}
-		// 	return quest;
-		// }
-
-		private Quest LoadQuest(QuestSO questSO)
-		{
-			return null;
-		}
 	}
 }

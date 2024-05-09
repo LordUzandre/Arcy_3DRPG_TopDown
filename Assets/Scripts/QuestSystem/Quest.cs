@@ -12,7 +12,7 @@ namespace Arcy.Quests
         public QuestObjectiveEnum CurrentStatusEnum; // state-enum info
 
         private int _currentQuestObjectiveIndex; // current objective Index
-        private QuestObjectiveState[] _questObjectiveStates;
+        // private QuestObjectiveState[] _questObjectiveStates;
 
         public void AdvanceToNextObjective()
         {
@@ -41,7 +41,7 @@ namespace Arcy.Quests
 
             if (CurrentQuestObjectiveExists())
             {
-                // TODO: Initialize the next objective
+                // TODO: Initialize the next objective in the QuestSO
                 // questObjectivePrefab = QuestObject.objectives[_currentQuestObjectiveIndex];
             }
             else
@@ -57,31 +57,30 @@ namespace Arcy.Quests
         public string GetFullStatusText()
         {
             string fullStatus = "";
+            // if (CurrentStatusEnum == QuestObjectiveEnum.REQUIREMENTS_NOT_MET)
+            // {
+            //     fullStatus = "Requirements are not met yet to start this quest";
+            // }
+            // else if (CurrentStatusEnum == QuestObjectiveEnum.CAN_START)
+            // {
+            //     fullStatus = "This Quest can be started";
+            // }
+            // else
+            // {
+            //     for (int i = 0; i < _currentQuestObjectiveIndex; i++)
+            //     {
+            //         fullStatus += "<s>" + _questObjectiveStates[i].Status + "</s>\n";
+            //     }
 
-            if (CurrentStatusEnum == QuestObjectiveEnum.REQUIREMENTS_NOT_MET)
-            {
-                fullStatus = "Requirements are not met yet to start this quest";
-            }
-            else if (CurrentStatusEnum == QuestObjectiveEnum.CAN_START)
-            {
-                fullStatus = "This Quest can be started";
-            }
-            else
-            {
-                for (int i = 0; i < _currentQuestObjectiveIndex; i++)
-                {
-                    fullStatus += "<s>" + _questObjectiveStates[i].Status + "</s>\n";
-                }
-
-                if (CurrentStatusEnum == QuestObjectiveEnum.CAN_FINISH)
-                {
-                    fullStatus += "The quest is ready to be turned in.";
-                }
-                else if (CurrentStatusEnum == QuestObjectiveEnum.FINISHED)
-                {
-                    fullStatus += "The quest has been completed";
-                }
-            }
+            //     if (CurrentStatusEnum == QuestObjectiveEnum.CAN_FINISH)
+            //     {
+            //         fullStatus += "The quest is ready to be turned in.";
+            //     }
+            //     else if (CurrentStatusEnum == QuestObjectiveEnum.FINISHED)
+            //     {
+            //         fullStatus += "The quest has been completed";
+            //     }
+            // }
             return fullStatus;
         }
 
@@ -97,50 +96,50 @@ namespace Arcy.Quests
             this.QuestObject = questInfo;
             CurrentStatusEnum = QuestObjectiveEnum.REQUIREMENTS_NOT_MET;
             _currentQuestObjectiveIndex = 0;
-            _questObjectiveStates = new QuestObjectiveState[this.QuestObject.objectives.Length];
+            // _questObjectiveStates = new QuestObjectiveState[this.QuestObject.objectives.Length];
 
-            for (int i = 0; i < _questObjectiveStates.Length; i++)
-            {
-                _questObjectiveStates[i] = new QuestObjectiveState();
-            }
+            // for (int i = 0; i < _questObjectiveStates.Length; i++)
+            // {
+            //     _questObjectiveStates[i] = new QuestObjectiveState();
+            // }
         }
 
         // A quest from save state
-        public Quest(QuestSO questInfo, QuestObjectiveEnum questState, int currentQuestObjectiveIndex, QuestObjectiveState[] questObjectiveStates)
+        public Quest(QuestSO questInfo, QuestObjectiveEnum questState, int currentQuestObjectiveIndex) //, QuestObjectiveState[] questObjectiveStates)
         {
             this.QuestObject = questInfo;
             CurrentStatusEnum = questState;
             _currentQuestObjectiveIndex = currentQuestObjectiveIndex;
-            _questObjectiveStates = questObjectiveStates;
+            // _questObjectiveStates = questObjectiveStates;
 
             // if the Quest objective states and prefabs are different lengths,
             // something has changed during development and the saved data is out of sync.
 
-            if (_questObjectiveStates.Length != this.QuestObject.objectives.Length)
-            {
-                Debug.LogWarning($"Quest Step Prefabs and Quest Step States are "
-                + "of different lengths. This indicates that something has changed. "
-                + "with the QuestSO and the saved data is now out of sync. "
-                + "Reset your data - as this might cause issues. Quest id: " + this.QuestObject.questGuid);
-            }
+            // if (_questObjectiveStates.Length != this.QuestObject.objectives.Length)
+            // {
+            //     Debug.LogWarning($"Quest Step Prefabs and Quest Step States are "
+            //     + "of different lengths. This indicates that something has changed. "
+            //     + "with the QuestSO and the saved data is now out of sync. "
+            //     + "Reset your data - as this might cause issues. Quest id: " + this.QuestObject.questGuid);
+            // }
         }
 
         public void StoreQuestObjectiveStatus(QuestObjectiveState questObjectiveState, int objectiveIndex)
         {
-            if (objectiveIndex < _questObjectiveStates.Length)
-            {
-                _questObjectiveStates[objectiveIndex].State = questObjectiveState.State;
-            }
-            else
-            {
-                Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + QuestObject.questGuid + ",quest index = " + objectiveIndex);
-            }
+            // if (objectiveIndex < _questObjectiveStates.Length)
+            // {
+            //     _questObjectiveStates[objectiveIndex].State = questObjectiveState.State;
+            // }
+            // else
+            // {
+            //     Debug.LogWarning("Tried to access quest objective data, but index was out of range: \n Quest id: " + QuestObject.questGuid + ",quest index = " + objectiveIndex);
+            // }
         }
 
         // The data of the quest that is going to get saved/loaded
         public QuestSaveData GetQuestData()
         {
-            return new QuestSaveData(CurrentStatusEnum, _currentQuestObjectiveIndex, _questObjectiveStates);
+            return new QuestSaveData(CurrentStatusEnum, _currentQuestObjectiveIndex); //, _questObjectiveStates);
         }
 
     }

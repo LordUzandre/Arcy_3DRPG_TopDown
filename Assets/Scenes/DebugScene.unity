@@ -6210,7 +6210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274151283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.62572736, y: 0.00000015934981, z: -0.00000012782587, w: 0.7800419}
+  m_LocalRotation: {x: 0.62572736, y: 0.0000001593498, z: -0.00000012782586, w: 0.7800419}
   m_LocalPosition: {x: 0, y: 0.27000046, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -20183,9 +20183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f5b21c361d90b4ea1975b7996d2472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugging: 1
+  _debugging: 0
   _useSaveData: 0
-  allQuests: []
+  _allQuests: []
 --- !u!4 &1046625785 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1974469421575533030, guid: 61d468a2f1c51574f8882294089b6f10,

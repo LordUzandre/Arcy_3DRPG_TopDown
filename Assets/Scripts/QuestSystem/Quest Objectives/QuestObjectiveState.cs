@@ -9,18 +9,18 @@ namespace Arcy.Quests
 	public class QuestObjectiveState
 	{
 		public string State;
-		public string Status;
+		// public string Status;
 
 		public QuestObjectiveState(string state, string status)
 		{
 			State = state;
-			Status = status;
+			// Status = status;
 		}
 
 		public QuestObjectiveState()
 		{
 			State = "";
-			Status = "";
+			// Status = "";
 		}
 	}
 }

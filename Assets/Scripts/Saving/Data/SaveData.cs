@@ -19,9 +19,7 @@ namespace Arcy.Saving
 		public SerializableDictionary<int, int> inventory; // itemGuid + amount
 
 		// Quests
-		public List<int> nonStartedQuests; // GUID
-		public SerializableDictionary<int, int> startedQuests; // GUID + objectiveIndex
-		public List<int> finishedQuests; // GUID
+		public SerializableDictionary<int, Quests.QuestSaveData> questLog;
 
 		// The values in his constructor will be our default values that the game starts with when there's no data to load.
 		public SaveData()
@@ -34,9 +32,7 @@ namespace Arcy.Saving
 			inventory = new SerializableDictionary<int, int>();
 
 			// Quests:
-			nonStartedQuests = new List<int>();
-			startedQuests = new SerializableDictionary<int, int>();
-			finishedQuests = new List<int>();
+			questLog = new SerializableDictionary<int, Quests.QuestSaveData>();
 		}
 	}
 }
