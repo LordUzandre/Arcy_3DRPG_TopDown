@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arcy.Management;
 using Arcy.Saving;
+using UnityEngine.InputSystem.Interactions;
+using System.Linq;
 
 namespace Arcy.Quests
 {
@@ -12,7 +14,8 @@ namespace Arcy.Quests
 		[Header("Config")]
 		[SerializeField] private bool _debugging = false;
 		[SerializeField] private bool _useSaveData;
-		[SerializeField] private List<string> _allQuests = new List<string>(); // Used only in the editor
+		[Space]
+		[SerializeField] private List<string> inEditorQuestList = new List<string>();
 
 		private static Dictionary<int, Quest> _questCache; // int = Key, Quest = Value
 
@@ -20,84 +23,62 @@ namespace Arcy.Quests
 
 		public Quest GetQuestByGuid(int questID)
 		{
-			// Create the quest map
-			_questCache ??= CreateQuestCache();
-
 			Quest quest = _questCache[questID];
 
 			if (quest == null || !_questCache.ContainsKey(questID))
 			{
-				Debug.LogError("QuestManager: ID not found in the Quest Map: " + questID);
+				Debug.LogError("QM: Quest " + questID + " could not be found in the questCache.");
 				return null;
 			}
 
-			return _questCache[questID];
+			return quest;
 		}
 
 		//MARK: PRIVATE:
 
+#if UNITY_EDITOR
+		private void Awake()
+		{
+			if (!_useSaveData && _questCache == null)
+			{
+				_questCache = CreateQuestCache();
+				if (_debugging) Debug.Log("QM: Creating QuestCache without using saveData");
+			}
+		}
+#endif
+
+		// EDITOR
+		private List<string> UpdateEditorList()
+		{
+			List<string> newList = new List<string>();
+
+			foreach (var quest in _questCache.Values)
+			{
+				string inEditorQuest = quest.QuestObject.questName + " = " + quest.CurrentStatusEnum.ToString();
+				inEditorQuestList.Add(inEditorQuest);
+			}
+
+			return newList;
+		}
+
 		private Dictionary<int, Quest> CreateQuestCache()
 		{
 			Dictionary<int, Quest> idToQuestMap = new Dictionary<int, Quest>();
+
+			// Load in all quests from folder
 			IEnumerable allQuests = Resources.LoadAll<QuestSO>("Quests");
 
 			foreach (QuestSO questSO in allQuests)
 			{
-				if (idToQuestMap.ContainsKey(questSO.questGuid))
-				{
-					Debug.LogWarning("Duplicate ID found when creating quest map: " + questSO.questGuid);
-				}
+				// if (_debugging) Debug.Log("QM: Quest " + questSO.questName + " added to questLog");
 
-				idToQuestMap.Add(questSO.questGuid, SetupQuest(questSO));
+				// Check for duplicates
+				if (idToQuestMap.ContainsKey(questSO.questGuid)) Debug.LogWarning("QM: Duplicate ID found when creating quest map: " + questSO.questGuid);
+
+				idToQuestMap.Add(questSO.questGuid, new Quest(questSO));
 			}
-
-			if (_debugging) Debug.Log("QuestManager: Quest Log created");
 
 			return idToQuestMap;
-		}
-
-		private void SetupQuestLog(SaveData loadData) // called by LoadData()
-		{
-			foreach (Quest quest in _questCache.Values)
-			{
-				if (_debugging) Debug.Log("Quest: '" + quest.QuestObject.questName + "' added to quest log and is '" + quest.CurrentStatusEnum + "'");
-
-				// _allQuests.Add(quest.QuestObject.questName.ToString() + " = " + quest.CurrentStatusEnum);
-
-				// if (quest.CurrentStatusEnum == QuestObjectiveEnum.STARTED)
-				// {
-				// 	if (_debugging) Debug.Log($"QuestManager: " + quest.QuestObject.questGuid + " is ongoing");
-
-				// 	quest.InstantiateCurrentQuestObjective(transform);
-				// }
-			}
-		}
-
-		private Quest SetupQuest(QuestSO questSO) // used by CreateQuestCache()
-		{
-			Quest quest = null;
-
-			try
-			{
-				// load quest from saved data
-				if (saveData.questLog.ContainsKey(questSO.questGuid) && _useSaveData)
-				{
-					string serializedData = saveData.questLog[questSO.questGuid].ToString();
-					QuestSaveData savedQuestData = JsonUtility.FromJson<QuestSaveData>(serializedData);
-					quest = new Quest(questSO, savedQuestData.State, savedQuestData.QuestObjectiveIndex); //, questData.QuestObjectiveStates);
-				}
-				// otherwise, initialize a new quest
-				else
-				{
-					quest = new Quest(questSO);
-				}
-			}
-			catch (System.Exception e)
-			{
-				Debug.LogError("Failed to load quest with id " + quest.QuestObject.questGuid + ": " + e);
-			}
-
-			return quest;
 		}
 
 		private void OnEnable()
@@ -149,67 +130,89 @@ namespace Arcy.Quests
 
 		private bool CheckRequirementMet(Quest quest)
 		{
-			// Start true and require to be set to false
-			bool meetsRequirement = true;
+			bool requirementMet = false;
+
+			if (quest.QuestObject.requirementsToStartQuest.Length == 0)
+			{
+				return true;
+			}
 
 			// check quest prerequisites for completion
 			foreach (QuestRequirement requirement in quest.QuestObject.requirementsToStartQuest)
 			{
 				switch (requirement.requirementType)
 				{
-					case (RequirementEnum.ItemID): // Look through inventory to see if we have all that's needed.
+					// Look through inventory to see if we have all that's needed.
+					case (RequirementEnum.ItemID):
+
+						if (Inventory.InventoryManager.ConsumableSlots == null)
+						{
+							Debug.LogError("QM: No Inventory Found");
+							return false;
+						}
+
 						foreach (Inventory.InventorySlot slot in Inventory.InventoryManager.ConsumableSlots)
 						{
-							if (slot.GetItem().GetGuid() == requirement.itemID)
+							int inventoryGuid = slot.GetItem().GetGuid();
+
+							if (inventoryGuid == requirement.requiredItem.GetGuid())
 							{
-								if (slot.GetAmount() <= requirement.requiredItemAmount)
-								{
-									meetsRequirement = false;
-								}
+								if (slot.GetAmount() >= requirement.requiredItemAmount) { requirementMet = true; }
+								else { requirementMet = false; }
+								break;
 							}
 						}
 						break;
 
-					case (RequirementEnum.DialogueID): // See if we have talked to the character
+					// See if we have talked to the character
+					case (RequirementEnum.DialogueID):
 						break;
 
-					case (RequirementEnum.BattleID): // Check battlelog to see if we have fought the required character
+					// Check battlelog to see if we have fought the required character
+					case (RequirementEnum.BattleID):
 						break;
 
-					case (RequirementEnum.PlayerLevel): // Check to see if the player is at the required level
+					// Check to see if the player is at the required level
+					case (RequirementEnum.PlayerLevel):
 						break;
 
-					case (RequirementEnum.TeamMember): // Check the battle party to see if we have the required party member
+					// Check the battle party to see if we have the required party member
+					case (RequirementEnum.TeamMember):
 						break;
 
-					case (RequirementEnum.PreviousQuestID): // Check the questLog to see if we have finished the required quests
-						if (GetQuestByGuid(requirement.requiredPreviousQuestID).CurrentStatusEnum != QuestObjectiveEnum.FINISHED) return false;
+					// Check the questLog to see if we have finished the required quests
+					case (RequirementEnum.PreviousQuestID):
+						if (GetQuestByGuid(requirement.requiredPreviousQuestID).CurrentStatusEnum == QuestObjectiveEnum.FINISHED)
+						{
+							// if (_debugging) Debug.Log("QM: " + quest.QuestObject.questName + " can't be started until quest " + GetQuestByGuid(requirement.requiredPreviousQuestID) + " has been finished");
+							requirementMet = true;
+						}
 						break;
 				}
 			}
 
-			return meetsRequirement;
+			return requirementMet;
 		}
 
-		private void StartQuest(int questID)
+		private void StartQuest(int questKey)
 		{
-			Quest quest = GetQuestByGuid(questID);
+			Quest quest = GetQuestByGuid(questKey);
 
 			quest.InstantiateCurrentQuestObjective(transform);
 			ChangeQuestState(quest.QuestObject.questGuid, QuestObjectiveEnum.STARTED);
 		}
 
-		private void ChangeQuestState(int questID, QuestObjectiveEnum state)
+		private void ChangeQuestState(int questKey, QuestObjectiveEnum state)
 		{
-			Quest quest = GetQuestByGuid(questID);
+			Quest quest = GetQuestByGuid(questKey);
 
 			quest.CurrentStatusEnum = state;
 			// GameManager.instance.gameEventManager.questEvents.QuestStateChange(quest);
 		}
 
-		private void AdvanceQuest(int questID)
+		private void AdvanceQuest(int questKey)
 		{
-			Quest quest = GetQuestByGuid(questID);
+			Quest quest = GetQuestByGuid(questKey);
 
 			// move on to the next objective
 			quest.AdvanceToNextObjective();
@@ -221,30 +224,31 @@ namespace Arcy.Quests
 			}
 			else
 			{
-				ChangeQuestState(quest.QuestObject.questGuid, QuestObjectiveEnum.CAN_FINISH);
+				//ChangeQuestState(quest.QuestObject.questGuid, QuestObjectiveEnum.CAN_FINISH);
+				FinishQuest(questKey);
 			}
 		}
 
-		private void FinishQuest(int questID)
+		private void FinishQuest(int questKey)
 		{
-			Quest quest = GetQuestByGuid(questID);
+			Quest quest = GetQuestByGuid(questKey);
 
-			ClaimRewards(quest);
+			ClaimRewards(questKey);
 			ChangeQuestState(quest.QuestObject.questGuid, QuestObjectiveEnum.FINISHED);
 		}
 
 		// Claim the rewards after finishing a quest.
-		private void ClaimRewards(Quest quest)
+		private void ClaimRewards(int questKey)
 		{
 			// TODO - Add items to inventory
 			// Remember to alert UI
 		}
 
-		private void QuestObjectiveStateChange(int questID, int objectiveIndex) //, QuestObjectiveState questObjectiveState)
+		private void QuestObjectiveStateChange(int questID, int objectiveIndex, QuestObjectiveState questObjectiveState)
 		{
 			Quest quest = GetQuestByGuid(questID);
-			// quest.StoreQuestObjectiveStatus(questObjectiveState, objectiveIndex);
-			ChangeQuestState(questID, quest.CurrentStatusEnum);
+			quest.StoreQuestObjectiveStatus(questObjectiveState, objectiveIndex);
+			// ChangeQuestState(questID, quest.CurrentStatusEnum);
 		}
 
 		// MARK: Save/Load:
@@ -252,75 +256,120 @@ namespace Arcy.Quests
 		public void LoadData(SaveData loadData)
 		{
 
-			// #if UNITY_EDITOR
-			// 			if (!SaveDataManager.GlobalOverrideSaveData)
-			// 			{
-			// 				if (!_useSaveData)
-			// 				{
-			// 					return;
-			// 				}
-			// 			}
-			// #endif
-
-			if (loadData.questLog.Count > 0)
+#if UNITY_EDITOR
+			if (!_useSaveData)
 			{
-				SetupQuestLog(loadData);
+				Debug.Log("Not using SaveData.");
+				return;
+			}
+#endif
+
+			if (_debugging) Debug.Log("QM: Setting up quest log using SaveData");
+
+			if (loadData.questLog.Count >= 0) // Convert the status of all quests according to SaveData
+			{
+				_questCache ??= CreateQuestCache();
+
+				StartCoroutine(SetupQuestLog());
+
+			}
+
+			IEnumerator SetupQuestLog()
+			{
+				yield return null;
+
+				foreach (int guid in _questCache.Keys)
+				{
+					Quest quest = GetQuestByGuid(guid);
+
+					if (_debugging) Debug.Log("Quest: " + quest.QuestObject.questName + " found in saveData");
+
+					try
+					{
+						// load quest from saved data
+						if (loadData.questLog.ContainsKey(guid))
+						{
+							string serializedData = loadData.questLog[guid].ToString();
+							QuestSaveData savedQuestData = JsonUtility.FromJson<QuestSaveData>(serializedData);
+
+							// quest = new Quest(quest.QuestObject, savedQuestData.State, savedQuestData.QuestObjectiveIndex); //, questData.QuestObjectiveStates);
+							quest.CurrentStatusEnum = savedQuestData.State;
+
+							switch (quest.CurrentStatusEnum)
+							{
+								case QuestObjectiveEnum.REQUIREMENTS_NOT_MET:
+									// Check requirements
+									if (CheckRequirementMet(quest))
+									{
+										// Start Quest
+										// ChangeQuestState(guid, QuestObjectiveEnum.STARTED);
+										Debug.Log("QM: " + quest.QuestObject.questName + " has started");
+									}
+									break;
+								case QuestObjectiveEnum.CAN_START:
+									// ??
+									break;
+								case QuestObjectiveEnum.STARTED:
+									// Set objectiveIndex to correct index
+									quest.currentQuestObjectiveIndex = savedQuestData.ObjectiveIndex;
+									// 	quest.InstantiateCurrentQuestObjective(transform);
+									// Show in UI
+									break;
+								case QuestObjectiveEnum.CAN_FINISH:
+									// ??
+									break;
+								case QuestObjectiveEnum.FINISHED:
+									// Only Show in UI
+									break;
+							}
+						}
+					}
+					catch (System.Exception e)
+					{
+						Debug.LogError("Failed to load quest with id " + quest.QuestObject.questGuid + ": " + e);
+					}
+
+					yield return null;
+				}
+
+				inEditorQuestList = UpdateEditorList();
+				yield return null;
 			}
 		}
 
 		public void SaveData(SaveData saveData)
 		{
 
-			// #if UNITY_EDITOR
-			// 			if (!_useSaveData || !SaveDataManager.GlobalOverrideSaveData)
-			// 			{
-			// 				return;
-			// 			}
-			// #endif
+#if UNITY_EDITOR
+			if (!_useSaveData) { return; }
+#endif
 
-			// 			foreach (Quest quest in _questCache.Values)
-			// 			{
-			// 				SaveQuestProgress(quest);
-			// 			}
+			if (_questCache == null)
+			{
+				Debug.Log("No quests to be saved");
+				return;
+			}
+
+			foreach (Quest quest in _questCache.Values)
+			{
+				try
+				{
+					QuestSaveData questData = quest.GetQuestData();
+					string serializedData = JsonUtility.ToJson(questData);
+
+					if (saveData.questLog.ContainsKey(quest.QuestObject.questGuid))
+					{
+						saveData.questLog.Remove(quest.QuestObject.questGuid);
+					}
+
+					saveData.questLog.Add(quest.QuestObject.questGuid, serializedData);
+				}
+				catch (System.Exception e)
+				{
+					Debug.LogError("Failed to save quest " + quest.QuestObject.questName + ": " + e);
+				}
+			}
 		}
 
-		// Convert the questData into Json
-		// private void SaveQuestProgress(Quest quest)
-		// {
-		// 	try
-		// 	{
-		// 		QuestSaveData questData = quest.GetQuestData();
-
-		// 		string serializedData = JsonUtility.ToJson(questData);
-
-		// 		// TODO: Add questStatus to SaveData.
-
-		// 		if (_debugging) Debug.Log("QuestManager: " + serializedData);
-		// 	}
-		// 	catch (System.Exception e)
-		// 	{
-		// 		Debug.LogError("Failed to save quest with id " + quest.QuestObject.questGuid + ": " + e);
-		// 	}
-
-		// }
-
-		// TODO - Switch to the implemented saving system
-		// private void SaveQuest(Quest quest)
-		// {
-		// 	try
-		// 	{
-		// 		QuestSaveData questData = quest.GetQuestData();
-
-		// 		// serialize using JsonUtility, but use whatever you want here (like JSON.NET)
-		// 		string serializedData = JsonUtility.ToJson(questData);
-		// 		// PlayerPrefs.SetString(quest.info.guid, serializedData);
-
-		// 		Debug.Log(serializedData);
-		// 	}
-		// 	catch (System.Exception e)
-		// 	{
-		// 		Debug.LogError("Failed to save quest with id " + quest.questSO.guid + ": " + e);
-		// 	}
-		// }
 	}
 }

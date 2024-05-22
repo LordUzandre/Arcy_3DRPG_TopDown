@@ -11,17 +11,17 @@ namespace Arcy.Quests
         public QuestSO QuestObject; // scriptable object info
         public QuestObjectiveEnum CurrentStatusEnum; // state-enum info
 
-        private int _currentQuestObjectiveIndex; // current objective Index
+        public int currentQuestObjectiveIndex; // current objective Index
         // private QuestObjectiveState[] _questObjectiveStates;
 
         public void AdvanceToNextObjective()
         {
-            _currentQuestObjectiveIndex++;
+            currentQuestObjectiveIndex++;
         }
 
         public bool CurrentQuestObjectiveExists()
         {
-            return _currentQuestObjectiveIndex < QuestObject.objectives.Length;
+            return currentQuestObjectiveIndex < QuestObject.objectives.Length;
         }
 
         public void InstantiateCurrentQuestObjective(Transform parentTransform)
@@ -47,7 +47,7 @@ namespace Arcy.Quests
             else
             {
                 Debug.LogWarning("Tried to get quest step prefab, but stepIndex was out of range indicating that "
-                + "there's no current step: QuestId=" + QuestObject.questName + ", stepIndex=" + _currentQuestObjectiveIndex);
+                + "there's no current step: QuestId=" + QuestObject.questName + ", stepIndex=" + currentQuestObjectiveIndex);
             }
 
             return questObjectivePrefab;
@@ -95,7 +95,7 @@ namespace Arcy.Quests
         {
             this.QuestObject = questInfo;
             CurrentStatusEnum = QuestObjectiveEnum.REQUIREMENTS_NOT_MET;
-            _currentQuestObjectiveIndex = 0;
+            currentQuestObjectiveIndex = 0;
             // _questObjectiveStates = new QuestObjectiveState[this.QuestObject.objectives.Length];
 
             // for (int i = 0; i < _questObjectiveStates.Length; i++)
@@ -109,7 +109,7 @@ namespace Arcy.Quests
         {
             this.QuestObject = questInfo;
             CurrentStatusEnum = questState;
-            _currentQuestObjectiveIndex = currentQuestObjectiveIndex;
+            this.currentQuestObjectiveIndex = currentQuestObjectiveIndex;
             // _questObjectiveStates = questObjectiveStates;
 
             // if the Quest objective states and prefabs are different lengths,
@@ -139,7 +139,7 @@ namespace Arcy.Quests
         // The data of the quest that is going to get saved/loaded
         public QuestSaveData GetQuestData()
         {
-            return new QuestSaveData(CurrentStatusEnum, _currentQuestObjectiveIndex); //, _questObjectiveStates);
+            return new QuestSaveData(CurrentStatusEnum, currentQuestObjectiveIndex); //, _questObjectiveStates);
         }
 
     }

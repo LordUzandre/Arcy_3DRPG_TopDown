@@ -10,22 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41c252ecc1cbb034fbc4621307b87bba, type: 3}
-  m_Name: My First Quest
+  m_Name: First Placeholder Quest
   m_EditorClassIdentifier: 
-  questName: My First Quest
+  questName: First Placeholder Quest
   questGuid: 295701672
-  questGiver: 
-  requirementsToStartQuest:
-  - requirementType: 3
-    requiredLvl: 0
-    requiredTeamMember: 
-    quest: {fileID: 0}
-    requiredPreviousQuestID: 0
-    requiredItem: {fileID: 11400000, guid: 9628b1a07e0e00143af4d8d973a68a53, type: 2}
-    itemID: 0
-    requiredItemAmount: 1
-    requiredDialogueID: 0
-    battleID: 0
+  questGiver: Mick the Hick
+  requirementsToStartQuest: []
   objectives:
   - {fileID: -631167579793016589, guid: af7cdd9eef1b23e4995669680f348f16, type: 3}
   - {fileID: -2905014971866791469, guid: 7e53f5e511132ce469af5ae17ed9dcea, type: 3}

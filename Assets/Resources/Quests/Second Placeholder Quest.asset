@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41c252ecc1cbb034fbc4621307b87bba, type: 3}
+  m_Name: Second Placeholder Quest
+  m_EditorClassIdentifier: 
+  questName: Second Placeholder Quest
+  questGuid: 391441411
+  questGiver: Judy Hopps
+  requirementsToStartQuest:
+  - requirementType: 3
+    requiredLvl: 10
+    requiredTeamMember: 
+    quest: {fileID: 0}
+    requiredPreviousQuestID: 0
+    requiredItem: {fileID: 11400000, guid: e830706a298af384bb1e71cb9a33bbbb, type: 2}
+    itemID: 0
+    requiredItemAmount: 100
+    requiredDialogueID: 1010
+    battleID: 0
+  objectives:
+  - {fileID: -2905014971866791469, guid: 7e53f5e511132ce469af5ae17ed9dcea, type: 3}
+  goldReward: 150
+  experienceReward: 250
+  itemRewards: []

@@ -7,10 +7,10 @@ namespace Arcy.Quests
 {
 	public enum QuestObjectiveEnum
 	{
-		REQUIREMENTS_NOT_MET,
-		CAN_START,
-		STARTED,
-		CAN_FINISH,
-		FINISHED
+		REQUIREMENTS_NOT_MET = 0,
+		CAN_START = 1,
+		STARTED = 2,
+		CAN_FINISH = 3,
+		FINISHED = 4
 	}
 }

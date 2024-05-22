@@ -14,7 +14,7 @@ namespace Arcy.Quests
 		public QuestSO quest;
 		public int requiredPreviousQuestID = 0;
 		public Inventory.InventoryItem requiredItem;
-		public int itemID = 0;
+		// public int itemID = 0;
 		public int requiredItemAmount = 1;
 		public int requiredDialogueID = 0;
 		public int battleID = 0;

@@ -4,6 +4,7 @@ using Arcy.Management;
 using Arcy.Saving;
 using UnityEngine;
 using UnityEditor;
+using Unity.VisualScripting;
 
 namespace Arcy.Inventory
 {
@@ -280,10 +281,8 @@ namespace Arcy.Inventory
 		public void SaveData(SaveData saveData)
 		{
 #if UNITY_EDITOR
-			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
-			{
-				return;
-			}
+			if (!SaveDataManager.GlobalOverrideSaveData) { if (!_useSaveData) { return; } }
+			if (ConsumableSlots.Length == 0) return;
 #endif
 
 			saveData.inventory.Clear();
@@ -292,18 +291,19 @@ namespace Arcy.Inventory
 
 			foreach (InventorySlot slot in ConsumableSlots)
 			{
-				if (slot.GetItem() != null && slot.GetAmount() > 0)
+				if (slot.IsPopulated())
 				{
-					if (saveData.inventory.ContainsKey(slot.GetItem().GetGuid()))
-					{
-						saveData.inventory.Remove(slot.GetItem().GetGuid());
-					}
+					int guid = slot.GetItem().GetGuid();
 
-					saveData.inventory.Add(slot.GetItem().GetGuid(), slot.GetAmount());
+					// if (saveData.inventory.ContainsKey(guid))
+					// {
+					// 	saveData.inventory.Remove(guid);
+					// }
+
+					saveData.inventory.Add(guid, slot.GetAmount());
 				}
-				// if (_debugging) saveDataString += slot.GetAmount() + " " + slot.GetItem().GetDisplayName() + ", ";
 			}
-			// if (_debugging) Debug.Log(saveDataString + "are saved");
+
 		}
 
 		public void LoadData(SaveData loadData)
@@ -315,10 +315,7 @@ namespace Arcy.Inventory
 			}
 
 #if UNITY_EDITOR
-			if (!_useSaveData && !SaveDataManager.GlobalOverrideSaveData)
-			{
-				return;
-			}
+			if (!SaveDataManager.GlobalOverrideSaveData) { if (!_useSaveData) { return; } }
 #endif
 
 			// Load from LoadData

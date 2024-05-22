@@ -17,6 +17,11 @@ namespace Arcy.Inventory
 			_amount = amount;
 		}
 
+		public bool IsPopulated()
+		{
+			return GetAmount() > 0 && GetItem() != null;
+		}
+
 		public InventoryItem GetItem()
 		{
 			return _item;
