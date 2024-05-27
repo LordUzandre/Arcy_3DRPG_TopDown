@@ -35,6 +35,7 @@ namespace Arcy.Saving
 			// MAC OS: ~/Library/Application Support/company name/product name (originally hidden)
 			string fullPath = System.IO.Path.Combine(_dataDirPath, _dataFileName);
 			SaveData loadedData = null;
+
 			if (File.Exists(fullPath))
 			{
 				try

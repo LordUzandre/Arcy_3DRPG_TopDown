@@ -11,47 +11,37 @@ namespace Arcy.Inventory
 		[SerializeField] private InventoryItem _item;
 		[SerializeField] private int _amount;
 
+		/*
+		MARK: GETTERS
+		------------------------------------------------------------------------------
+		*/
+
 		public InventorySlot(InventoryItem item, int amount)
 		{
 			_item = item;
 			_amount = amount;
 		}
 
-		public bool IsPopulated()
-		{
-			return GetAmount() > 0 && GetItem() != null;
-		}
+		public bool IsPopulated() { return GetAmount() > 0 && GetItem() != null; }
 
-		public InventoryItem GetItem()
-		{
-			return _item;
-		}
+		public InventoryItem GetItem() { return _item; }
 
-		public void SetItem(InventoryItem newItem)
-		{
-			_item = newItem;
-		}
+		public void SetItem(InventoryItem newItem) { _item = newItem; }
 
-		public int GetAmount()
-		{
-			return _amount;
-		}
+		public int GetAmount() { return _amount; }
 
-		public void SetAmount(int amount)
-		{
-			_amount = amount;
-		}
+		public void SetAmount(int amount) { _amount = amount; }
 
-		public void AddtoAmount(int amountToAdd)
-		{
-			_amount += amountToAdd;
-		}
+		public void AddtoAmount(int amountToAdd) { _amount += amountToAdd; }
 
-		public void SubstractFromSlot(int amountToRemove)
-		{
-			_amount -= amountToRemove;
-		}
+		public void SubstractFromSlot(int amountToRemove) { _amount -= amountToRemove; }
+
 	}
+
+	/*
+	MARK: EDITOR
+	------------------------------------------------------------------------------
+	*/
 
 #if UNITY_EDITOR
 	[CustomPropertyDrawer(typeof(InventorySlot))]
@@ -65,12 +55,10 @@ namespace Arcy.Inventory
 		{
 			EditorGUI.BeginProperty(position, label, property);
 
-			// Get the serialized property of the InventoryItem
 			_itemProperty = property.FindPropertyRelative("_item");
 			_amountProperty = property.FindPropertyRelative("_amount");
 
 			EditorGUILayout.PropertyField(_itemProperty);
-
 			EditorGUI.EndProperty();
 
 			// Access the InventoryItem instance
@@ -80,10 +68,7 @@ namespace Arcy.Inventory
 			{
 				bool itemIsStackable = inventoryItem.stackable;
 
-				if (itemIsStackable)
-				{
-					EditorGUILayout.PropertyField(_amountProperty);
-				}
+				if (itemIsStackable) { EditorGUILayout.PropertyField(_amountProperty); }
 
 				// EditorGUI.BeginChangeCheck();
 				// isStackable = EditorGUILayout.Toggle("Is Stackable", isStackable);

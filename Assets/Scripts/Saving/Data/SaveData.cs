@@ -17,6 +17,7 @@ namespace Arcy.Saving
 		public int inventorySize;
 		public SerializableDictionary<int, bool> pickupsCollected; // pickupsGuid + ifCollected
 		public SerializableDictionary<int, int> inventory; // itemGuid + amount
+		public string[] inventoryString;
 
 		// Quests
 		public SerializableDictionary<int, string> questLog;
@@ -30,6 +31,7 @@ namespace Arcy.Saving
 			inventorySize = 0;
 			pickupsCollected = new SerializableDictionary<int, bool>();
 			inventory = new SerializableDictionary<int, int>();
+			inventoryString = new string[0];
 
 			// Quests:
 			questLog = new SerializableDictionary<int, string>();

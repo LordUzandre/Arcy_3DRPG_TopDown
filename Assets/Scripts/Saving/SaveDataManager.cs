@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
 using Arcy.Management;
-using System.Data.Common;
 
 namespace Arcy.Saving
 {

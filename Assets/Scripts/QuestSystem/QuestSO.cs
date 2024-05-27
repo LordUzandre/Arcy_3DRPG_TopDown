@@ -34,6 +34,11 @@ namespace Arcy.Quests
 
 	}
 
+	/*
+	MARK: EDITOR
+	------------------------------------------------------------------------------
+	*/
+
 #if UNITY_EDITOR
 	[CustomEditor(typeof(QuestSO))]
 	public class QuestSOEditor : Editor
@@ -43,10 +48,10 @@ namespace Arcy.Quests
 			QuestSO quest = (QuestSO)target;
 
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Item Name", quest.questName.ToString()); //, EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.LabelField("Item Name", quest.questName.ToString());
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Guid", quest.questGuid.ToString()); //, EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.LabelField("Guid", quest.questGuid.ToString());
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.Space();
 

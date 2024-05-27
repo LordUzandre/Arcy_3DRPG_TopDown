@@ -29,7 +29,7 @@ namespace Arcy.UI
 			// Check if any of the slots currently contain the item in question
 			foreach (RewardSlotUi slot in _slotsCurrentlyInUse)
 			{
-				if (slot.item.GetDisplayName() == item.GetDisplayName())
+				if (slot.item.GetItemName() == item.GetItemName())
 				{
 					Debug.Log("add number to already populated slot");
 

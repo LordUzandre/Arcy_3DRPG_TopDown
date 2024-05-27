@@ -4,7 +4,7 @@ using Arcy.Management;
 using Arcy.Saving;
 using UnityEngine;
 using UnityEditor;
-using Unity.VisualScripting;
+using System.IO;
 
 namespace Arcy.Inventory
 {
@@ -38,7 +38,10 @@ namespace Arcy.Inventory
 		}
 #endif
 
-		// MARK: PUBLIC
+		/*
+		MARK: PUBLIC
+		------------------------------------------------------------------------------
+		*/
 
 		// Single item
 		public bool HasSpaceFor(InventoryItem item)
@@ -84,11 +87,6 @@ namespace Arcy.Inventory
 				}
 			}
 			return count;
-		}
-
-		public int GetInventorySize()
-		{
-			return ConsumableSlots.Length;
 		}
 
 		/// <summary>
@@ -139,16 +137,6 @@ namespace Arcy.Inventory
 			return false;
 		}
 
-		public InventoryItem GetItemInSlot(int slot)
-		{
-			return ConsumableSlots[slot].GetItem();
-		}
-
-		public int GetAmountInSlot(int slot)
-		{
-			return ConsumableSlots[slot].GetAmount();
-		}
-
 		public void RemoveFromSlot(int slot, int amount)
 		{
 			ConsumableSlots[slot].SubstractFromSlot(amount);
@@ -170,21 +158,35 @@ namespace Arcy.Inventory
 			}
 
 			int i = FindStack(item);
-			if (i >= 0)
-			{
-				slot = i;
-			}
+
+			if (i >= 0) { slot = i; }
 
 			ConsumableSlots[slot].SetItem(item);
 			ConsumableSlots[slot].AddtoAmount(amount);
 
+			// debugging
 			if (_debugging) Debug.Log("InventoryManager: " + amount + " " + item.name + " added to inventory-slot number: " + slot);
+
 			GameManager.instance.gameEventManager.inventoryEvents.InventoryUpdated();
 
 			return true;
 		}
 
-		// MARK: PRIVATE
+		/*
+		MARK: GETTERS
+		------------------------------------------------------------------------------
+		*/
+
+		public int GetInventorySize() { return ConsumableSlots.Length; }
+
+		public InventoryItem GetItemInSlot(int slot) { return ConsumableSlots[slot].GetItem(); }
+
+		public int GetAmountInSlot(int slot) { return ConsumableSlots[slot].GetAmount(); }
+
+		/*
+		MARK: PRIVATE
+		------------------------------------------------------------------------------
+		*/
 
 		private InventorySlot[] LoadFromStarterInventory()
 		{
@@ -277,7 +279,12 @@ namespace Arcy.Inventory
 			return -1;
 		}
 
-		// MARK: Save/Load
+		/*
+		MARK: Save
+		------------------------------------------------------------------------------
+		*/
+
+
 		public void SaveData(SaveData saveData)
 		{
 #if UNITY_EDITOR
@@ -287,24 +294,29 @@ namespace Arcy.Inventory
 
 			saveData.inventory.Clear();
 			saveData.inventorySize = InventorySize;
-			// string saveDataString = "";
+
+			List<string> stringListToBeSaved = new List<string>();
 
 			foreach (InventorySlot slot in ConsumableSlots)
 			{
 				if (slot.IsPopulated())
 				{
-					int guid = slot.GetItem().GetGuid();
+					// int guid = slot.GetItem().GetGuid();
+					// saveData.inventory.Add(guid, slot.GetAmount());
 
-					// if (saveData.inventory.ContainsKey(guid))
-					// {
-					// 	saveData.inventory.Remove(guid);
-					// }
-
-					saveData.inventory.Add(guid, slot.GetAmount());
+					string serializedData = JsonUtility.ToJson(slot);
+					stringListToBeSaved.Add(serializedData);
 				}
 			}
 
+			saveData.inventoryString = stringListToBeSaved.ToArray();
+
 		}
+
+		/*
+		MARK: Load
+		------------------------------------------------------------------------------
+		*/
 
 		public void LoadData(SaveData loadData)
 		{
@@ -353,6 +365,11 @@ namespace Arcy.Inventory
 		}
 	}
 
+	/*
+	MARK: EDITOR
+	------------------------------------------------------------------------------
+	*/
+
 #if UNITY_EDITOR
 	[CustomEditor(typeof(InventoryManager))]
 	public class InventoryEditor : Editor
@@ -365,37 +382,77 @@ namespace Arcy.Inventory
 
 			base.OnInspectorGUI();
 
-			if (myTarget.InEditorSlots.Length > 0)
-			{
-				EditorGUILayout.Space();
-				EditorGUI.indentLevel += 4;
-				foreach (InventorySlot slot in myTarget.InEditorSlots)
-				{
-					if (slot.GetAmount() <= 0) return;
-
-					EditorGUILayout.BeginHorizontal();
-					EditorGUILayout.LabelField(slot.GetAmount().ToString());
-					EditorGUILayout.LabelField(slot.GetItem().GetDisplayName());
-					EditorGUILayout.EndHorizontal();
-				}
-				EditorGUI.indentLevel -= 4;
-			}
+			EditorGUILayout.Space();
+			EditorGUI.indentLevel += 2;
+			EditorGUILayout.LabelField("In-Editor Inventory", EditorStyles.whiteLabel);
+			EditorGUI.indentLevel += 2;
+			EditorGUILayout.BeginHorizontal(new GUIStyle());
+			EditorGUILayout.LabelField("Item (GUID): ");
+			EditorGUILayout.LabelField("Amount: ");
+			EditorGUILayout.EndHorizontal();
 
 			if (myTarget.InEditorSlots.Length > 0)
 			{
 				EditorGUILayout.Space();
-				EditorGUI.indentLevel += 4;
 				foreach (InventorySlot slot in myTarget.InEditorSlots)
 				{
 					if (slot.GetAmount() <= 0) return;
-
 					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.LabelField(slot.GetItem().GetItemName() + " (" + slot.GetItem().GetGuid().ToString() + ")");
 					EditorGUILayout.LabelField(slot.GetAmount().ToString());
-					EditorGUILayout.LabelField(slot.GetItem().GetDisplayName());
 					EditorGUILayout.EndHorizontal();
 				}
-				EditorGUI.indentLevel -= 4;
+
 			}
+			else if (myTarget.InEditorSlots.Length <= 0)
+			{
+				// Try to get the slots from the save-file
+				string fullPath = System.IO.Path.Combine(Application.persistentDataPath, "save.game");
+				string dataToLoad = "";
+				SaveData loadedData = null;
+
+				if (File.Exists(fullPath))
+				{
+					try
+					{
+						using (FileStream stream = new FileStream(fullPath, FileMode.Open))
+						{
+							using (StreamReader reader = new StreamReader(stream))
+							{
+								dataToLoad = reader.ReadToEnd();
+							}
+						}
+
+						loadedData = JsonUtility.FromJson<SaveData>(dataToLoad);
+						Debug.Log(dataToLoad);
+
+						List<string> Items = new List<string>();
+						List<int> Values = new List<int>();
+
+
+						if (loadedData.inventory.Count < 1) return;
+
+						foreach (KeyValuePair<int, int> itemID in loadedData.inventory)
+						{
+							if (itemID.Key == 0 || itemID.Value <= 0)
+							{
+								break;
+							}
+
+							Items.Add(InventoryItem.GetFromID(itemID.Key).GetItemName());
+							Values.Add(itemID.Value);
+
+						}
+					}
+					catch (System.Exception)
+					{
+
+						Debug.LogError("Inventory: Unable to retrieve inventory from save files");
+					}
+				}
+			}
+
+			EditorGUI.indentLevel = 0;
 		}
 	}
 #endif

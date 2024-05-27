@@ -15,14 +15,11 @@ namespace Arcy.Quests
 		public QuestObjectiveEnum State; // enum
 		public int ObjectiveIndex; // int
 
-		// public QuestObjectiveState[] QuestObjectiveStates; // 
-
 		// Constructor
-		public QuestSaveData(QuestObjectiveEnum state, int questObjectiveIndex) //, QuestObjectiveState[] questObjectiveStates)
+		public QuestSaveData(QuestObjectiveEnum state, int questObjectiveIndex)
 		{
 			State = state;
 			ObjectiveIndex = questObjectiveIndex;
-			// QuestObjectiveStates = questObjectiveStates;
 		}
 	}
 

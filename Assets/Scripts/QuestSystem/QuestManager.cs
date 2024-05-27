@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arcy.Management;
 using Arcy.Saving;
-using UnityEngine.InputSystem.Interactions;
-using System.Linq;
 
 namespace Arcy.Quests
 {
@@ -303,7 +301,8 @@ namespace Arcy.Quests
 									{
 										// Start Quest
 										// ChangeQuestState(guid, QuestObjectiveEnum.STARTED);
-										Debug.Log("QM: " + quest.QuestObject.questName + " has started");
+										if (_debugging) Debug.Log("QM: " + quest.QuestObject.questName + " has started");
+										quest.currentQuestObjectiveIndex = 1;
 									}
 									break;
 								case QuestObjectiveEnum.CAN_START:

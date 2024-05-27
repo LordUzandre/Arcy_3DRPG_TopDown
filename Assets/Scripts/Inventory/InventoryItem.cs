@@ -9,50 +9,24 @@ namespace Arcy.Inventory
 	[CreateAssetMenu(fileName = "New Item", menuName = "Arcy/Inventory/Item", order = 60)]
 	public class InventoryItem : ScriptableObject
 	{
-		[HideInInspector] private string itemName = "";
-		[HideInInspector] private int guid;
+		private string _itemName = "";
+		private int _guid;
 		[SerializeField] public bool showInInventory = true; // Used by UI
 
 		[Header("UI")]
-		[SerializeField] private Sprite inventoryIcon;
+		private Sprite _inventoryIcon;
 		[Space]
 		[SerializeField] public bool stackable = false;
 		[TextArea(3, 6)]
-		[SerializeField] private string description;
+		[SerializeField] private string _description;
 
 		// static so that there is only one cache, and not one for every item
-		static Dictionary<int, InventoryItem> itemLookupCache;
+		private static Dictionary<int, InventoryItem> _itemLookupCache;
 
-		// PUBLIC:
-
-		/// Get the inventory item instance from its GUID.
-		public static InventoryItem GetFromID(int itemID)
-		{
-			// during first run:
-			if (itemLookupCache == null)
-			{
-				itemLookupCache = new Dictionary<int, InventoryItem>();
-
-				// Load all iventory items
-				IEnumerable itemList = Resources.LoadAll<InventoryItem>("");
-
-				foreach (InventoryItem item in itemList)
-				{
-					if (itemLookupCache.ContainsKey(item.guid))
-					{
-						Debug.LogError("Looks like there's a duplicate InventoryItemID for objects: " + itemLookupCache[item.guid] + " and " + item);
-						continue;
-					}
-
-					itemLookupCache[item.guid] = item;
-				}
-			}
-
-			// failsafe
-			if (itemID == 0 || !itemLookupCache.ContainsKey(itemID)) return null;
-
-			return itemLookupCache[itemID];
-		}
+		/*
+		// MARK: PUBLIC:
+		------------------------------------------------------------------------------
+		*/
 
 		// Called when the item is pressed in the inventory
 		public virtual void Use()
@@ -61,40 +35,68 @@ namespace Arcy.Inventory
 			// Something may happen
 		}
 
-		public Sprite GetIcon()
+		/*
+		// MARK: GETTERS:
+		------------------------------------------------------------------------------
+		*/
+
+		/// Get the inventory item instance from its GUID.
+		public static InventoryItem GetFromID(int itemID)
 		{
-			return inventoryIcon;
+			// during first run:
+			if (_itemLookupCache == null)
+			{
+				_itemLookupCache = new Dictionary<int, InventoryItem>();
+
+				IEnumerable itemList = Resources.LoadAll<InventoryItem>("");
+
+				foreach (InventoryItem item in itemList)
+				{
+					if (_itemLookupCache.ContainsKey(item._guid))
+					{
+						Debug.LogError("There's a duplicate InventoryItemID for objects: " + _itemLookupCache[item._guid] + " and " + item);
+						continue;
+					}
+
+					_itemLookupCache[item._guid] = item;
+				}
+			}
+
+			// failsafe
+			if (itemID == 0 || !_itemLookupCache.ContainsKey(itemID)) return null;
+
+			return _itemLookupCache[itemID];
 		}
 
-		public int GetGuid()
-		{
-			return guid;
-		}
+		public bool IsStackable() { return stackable; }
 
-		public bool IsStackable()
-		{
-			return stackable;
-		}
+		public Sprite GetIcon() { return _inventoryIcon; }
 
-		public string GetDisplayName()
-		{
-			return itemName;
-		}
+		public int GetGuid() { return _guid; }
 
-		public string GetDescription()
-		{
-			return description;
-		}
+		public string GetItemName() { return _itemName; }
+
+		public string GetDescription() { return _description; }
+
+		/*
+		// PRIVATE:
+		------------------------------------------------------------------------------
+		*/
 
 #if UNITY_EDITOR
 		private void OnValidate()
 		{
-			if (guid == 0) guid = Utils.GuidGenerator.guid(this);
-			if (itemName != name) itemName = name;
+			if (_guid == 0) _guid = Utils.GuidGenerator.guid(this);
+			if (_itemName != name) _itemName = name;
 		}
 #endif
 
 	}
+
+	/*
+	// MARK: EDITOR:
+	------------------------------------------------------------------------------
+	*/
 
 #if UNITY_EDITOR
 	[CustomEditor(typeof(InventoryItem))]
@@ -105,7 +107,7 @@ namespace Arcy.Inventory
 			InventoryItem item = (InventoryItem)target;
 
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Item Name", item.GetDisplayName().ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
+			EditorGUILayout.LabelField("Item Name", item.GetItemName().ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField("Guid", item.GetGuid().ToString(), EditorStyles.whiteLabel, GUILayout.ExpandHeight(true));
@@ -115,4 +117,5 @@ namespace Arcy.Inventory
 		}
 	}
 #endif
+
 }
