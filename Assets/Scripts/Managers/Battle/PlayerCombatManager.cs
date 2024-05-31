@@ -104,15 +104,15 @@ namespace Arcy.Battle
         {
             _curSelectionCombatAction = combatAction;
 
-            if (combatAction as CombatAction_Melee || combatAction as CombatAction_Ranged)
+            if (combatAction as CombatActionMeleeSO || combatAction as CombatActionRangedSO)
             {
                 NewTurnState(PlayerTurnState.chooseEnemy);
             }
-            else if (combatAction as CombatAction_Heal)
+            else if (combatAction as CombatActionHealSO)
             {
                 NewTurnState(PlayerTurnState.choosePlayerTeamChar);
             }
-            else if (combatAction as CombatAction_Effect)
+            else if (combatAction as CombatActionEffectSO)
             {
                 NewTurnState(PlayerTurnState.chooseAnyChar);
             }

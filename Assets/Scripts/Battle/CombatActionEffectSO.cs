@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    [CreateAssetMenu(fileName = "Effect Combat Action", menuName = "Arcy/Battle/Combat Actions/Effect Combat Action", order = 76)]
-    public class CombatAction_Effect : CombatActionBase
+    [CreateAssetMenu(fileName = "Effect Combat Action", menuName = "Arcy/Battle/Combat Actions/Effect Combat Action SO")]
+    public class CombatActionEffectSO : CombatActionBase
     {
         /// <summary>
         /// Who should the Combat Action Affect

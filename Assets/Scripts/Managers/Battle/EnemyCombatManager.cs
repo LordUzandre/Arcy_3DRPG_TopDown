@@ -51,7 +51,7 @@ namespace Arcy.Battle
 		private void DecideCombatAction()
 		{
 			// Do we need to to heal ourselves or a teammate?
-			if (HasCombatActionOfType(typeof(CombatAction_Heal)))
+			if (HasCombatActionOfType(typeof(CombatActionHealSO)))
 			{
 				BattleCharacterBase weakestEnemy = GetWeakestCharacter(BattleCharacterBase.Team.Enemy);
 
@@ -72,7 +72,7 @@ namespace Arcy.Battle
 
 			if (playerToDamage != null)
 			{
-				if (HasCombatActionOfType(typeof(CombatAction_Melee)) || HasCombatActionOfType(typeof(CombatAction_Ranged)))
+				if (HasCombatActionOfType(typeof(CombatActionMeleeSO)) || HasCombatActionOfType(typeof(CombatActionRangedSO)))
 				{
 					CastCombatAction(GetDamageCombatAction(), playerToDamage);
 					return;
@@ -125,7 +125,7 @@ namespace Arcy.Battle
 		// Returns a random melee or ranged combat action from the enemy's combat action list.
 		private CombatActionBase GetDamageCombatAction()
 		{
-			CombatActionBase[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(CombatAction_Melee) || x.GetType() == typeof(CombatAction_Ranged)).ToArray();
+			CombatActionBase[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(CombatActionMeleeSO) || x.GetType() == typeof(CombatActionRangedSO)).ToArray();
 
 			if (ca == null || ca.Length == 0)
 				return null;
@@ -136,7 +136,7 @@ namespace Arcy.Battle
 		// Returns a random heal combat action from the enemy's combat action list.
 		private CombatActionBase GetHealCombatAction()
 		{
-			CombatActionBase[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(CombatAction_Heal)).ToArray();
+			CombatActionBase[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(CombatActionHealSO)).ToArray();
 
 			if (ca == null || ca.Length == 0)
 				return null;
@@ -147,7 +147,7 @@ namespace Arcy.Battle
 		// Returns a random effect combat action from the enemy's combat action list.
 		private CombatActionBase GetEffectCombatAction()
 		{
-			CombatActionBase[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(CombatAction_Effect)).ToArray();
+			CombatActionBase[] ca = _curEnemy.combatActions.Where(x => x.GetType() == typeof(CombatActionEffectSO)).ToArray();
 
 			if (ca == null || ca.Length == 0)
 				return null;

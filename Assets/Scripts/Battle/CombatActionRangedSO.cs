@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace Arcy.Battle
 {
-    [CreateAssetMenu(fileName = "Ranged Combat Action", menuName = "Arcy/Battle/Combat Actions/Ranged Combat Action", order = 72)]
-    public class CombatAction_Ranged : CombatActionBase
+    [CreateAssetMenu(fileName = "Ranged Combat Action", menuName = "Arcy/Battle/Combat Actions/Ranged Combat Action SO")]
+    public class CombatActionRangedSO : CombatActionBase
     {
         public GameObject projectilePrefab;
 

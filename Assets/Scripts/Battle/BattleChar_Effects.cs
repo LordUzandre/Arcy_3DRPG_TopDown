@@ -53,13 +53,13 @@ namespace Arcy.Battle
         {
             effect.curTickParticle.Play();
 
-            if (effect.effect as DamageEffect)
+            if (effect.effect as DamageEffectSO)
             {
-                _character.TakeDamage((effect.effect as DamageEffect).damage);
+                _character.TakeDamage((effect.effect as DamageEffectSO).damage);
             }
-            else if (effect.effect as HealEffect)
+            else if (effect.effect as HealEffectSO)
             {
-                _character.Heal((effect.effect as HealEffect).heal);
+                _character.Heal((effect.effect as HealEffectSO).heal);
             }
 
             effect.turnRemaining--;
